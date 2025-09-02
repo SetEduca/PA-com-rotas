@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Financeiro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e8d5ff 0%, #f0e6ff 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+    
+        .half-moon-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 70px;
+            background: #59C631;
+            border-radius: 150px 150px 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            color: white;
+            padding: 15px 0;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            margin: 0 5px;
+        }
+
+        .nav-item.active {
+            background: white;
+            color: #4CAF50;
+            border-radius: 20px;
+            margin: 0 5px;
+        }
+
+        .header {
+            background-color: #59C631;
+            padding: 15px;
+            border-radius: 0px 0px 40px 40px;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .back-arrow {
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        .menu-icon {
+            width: 30px;
+            height: 30px;
+            background: #59C631;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .tab-container {
+            background:#59C631;
+            padding: 10px 25px 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            width: 100%;
+            align-items: center; 
+        }
+
+        .h1 {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            margin-right: auto; 
+            text-align: center;
+            flex: 1; 
+        }
+
+        .tab {
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .tab.active {
+            background: white;
+            color: #4CAF50;
+        }
+
+        .tab.inactive {
+            background: #66BB6A;
+            color: white;
+        }
+
+        .green-bar {
+            background: #4CAF50;
+            height: 5px;
+            margin-bottom:5px;
+            width: 100%;
+        }
+
+        .content {
+            padding: 20px;
+            padding-bottom: 100px; /* Espaço para a navegação */
+            width: 100%;
+        }
+
+        .date-search-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .date-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-section label {
+            font-weight: bold;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .date-input, .search-input {
+            padding: 8px 12px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding-right: 40px;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .btn-add {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #FF9800;
+            color: white;
+            padding: 8px 15px;
+            font-size: 12px;
+        }
+
+        .btn-save {
+            background: #2196F3;
+            color: white;
+            padding: 8px 15px;
+            font-size: 12px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .current-month-section {
+            margin: 40px 0;
+        }
+
+        .current-month-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .stats-container {
+            margin-bottom: 30px;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-card {
+            flex: 1;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            min-width: 200px;
+            max-width: 300px;
+        }
+
+        .stat-received {
+            background: #4CAF50;
+        }
+
+        .stat-pending {
+            background: #F44336;
+        }
+
+        .stat-total {
+            background: #2196F3;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+        }
+
+        .history-btn {
+            background: linear-gradient(135deg, #66BB6A, #4CAF50);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 40px auto;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(102, 187, 106, 0.3);
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+          .history-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 187, 106, 0.4);
+        }
+
+        .transactions-list {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .transaction-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            position: relative;
+        }
+
+        .transaction-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .transaction-details {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .transaction-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .edit-form {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .edit-form-group {
+            margin-bottom: 10px;
+        }
+
+        .success-message {
+            background: #E8F5E8;
+            border: 1px solid #4CAF50;
+            color: #2E7D32;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #FFEBEE;
+            border: 1px solid #F44336;
+            color: #C62828;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .admin-auth {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff3e0;
+            border-radius: 8px;
+            border: 1px solid #ff9800;
+        }
+
+        /* Modal de autenticação */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: 333;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Media Queries para Responsividade */
+        @media (min-width: 1200px) {
+            .content {
+                padding: 20px 5%;
+            }
+            
+            .date-search-section {
+                justify-content: space-between;
+            }
+            
+            .stats-row {
+                justify-content: center;
+            }
+            
+            .stat-card {
+                max-width: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px;
+                border-radius: 0px 0px 30px 30px;
+            }
+            
+            .title {
+                font-size: 16px;
+            }
+            
+            .title-section {
+                margin-left: 5px;
+            }
+            
+            .tab-container {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .h1 {
+                margin-right: 0;
+                order: -1; /* Coloca o título acima dos botões */
+            }
+            
+            .date-search-section {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            
+            .date-section {
+                justify-content: space-between;
+            }
+            
+            .search-container {
+                min-width: 100%;
+            }
+            
+            .stats-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .stat-card {
+                min-width: 100%;
+                max-width: 100%;
+            }
+            
+            .half-moon-nav {
+                width: 280px;
+                height: 60px;
+            }
+            
+            .nav-item {
+                font-size: 12px;
+                padding: 12px 0;
+            }
+
+            .transaction-details {
+                flex-direction: column;
+            }
+
+            .transaction-actions {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                padding: 15px;
+                padding-bottom: 90px;
+            }
+            
+            .title {
+                font-size: 14px;
+            }
+            
+            .menu-icon {
+                width: 25px;
+                height: 25px;
+                font-size: 12px;
+            }
+            
+            .tab {
+                padding: 6px 15px;
+                font-size: 12px;
+            }
+            
+            .h1 {
+                font-size: 18px;
+            }
+            
+            .form-title, .current-month-title {
+                font-size: 16px;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+            
+            .half-moon-nav {
+                width: 250px;
+                height: 55px;
+                bottom: 15px;
+            }
+            
+            .nav-item {
+                font-size: 11px;
+                padding: 10px 0;
+            }
+            
+            .transaction-details {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            #logo {
+                height: 30px;
+            }
+
+            .stats-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .title {
+                font-size: 13px;
+            }
+            
+            .h1 {
+                font-size: 16px;
+            }
+            
+            .half-moon-nav {
+                width: 230px;
+                height: 50px;
+            }
+            
+            .nav-item {
+                font-size: 10px;
+            }
+            
+            .tab {
+                padding: 5px 12px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="header">
+            <span class="back-arrow">←</span>
+            <div class="title-section">
+                <div class="menu-icon"><img src="imagem/Vector.relatorio.png" alt="menu-icon" height="30px"></div>
+                <span class="title">RELATÓRIO FINANCEIRO</span>
+            </div>
+            <img id="logo" src="imagem/logorel.png" alt="Logo da instituição" style="height: 40px; width: auto;"/>
+        </div> <br>
+
+        <div class="tab-container">
+            <div class="h1">Relatório de Mensalidade</div>
+            <div class="tab active" onclick="switchTab('monthly')">Mensalidade</div>
+            <div class="tab inactive" onclick="switchTab('daily')" a href="rel-diario.html">Diário</div>
+        </div>
+
+        <div class="green-bar"></div>
+
+        <div class="content">
+            <div class="date-search-section">
+                <div class="date-section">
+                    <label>Data</label>
+                    <input type="date" class="date-input" id="reportDate">
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="BUSCAR NOME" id="searchInput">
+                    <span class="search-icon" onclick="searchTransactions()">🔍</span>
+                </div>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                Nova mensalidade adicionada com sucesso!
+            </div>
+
+            <div class="error-message" id="errorMessage">
+                Senha de administrador incorreta!
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-title">Nova Mensalidade</h3>
+                <form id="monthlyForm">
+                    <div class="form-group">
+                        <label class="form-label">Nome da criança</label>
+                        <input type="text" class="form-input" placeholder="Digite o nome da criança" id="childName" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Data de pagamento</label>
+                        <input type="date" class="form-input" id="paymentDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Valor (R$)</label>
+                        <input type="number" class="form-input" placeholder="R$250,00" step="0.01" id="paymentValue" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-cancel" onclick="cancelForm()">Cancelar</button>
+                        <button type="submit" class="btn btn-add">Adicionar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="current-month-section">
+                <h3 class="current-month-title">Mês Atual</h3>
+                <div class="stats-container">
+                    <div class="stats-row">
+                        <div class="stat-card stat-received">
+                            <div class="stat-label">Total Recebido</div>
+                            <div class="stat-value" id="totalReceived">R$ 900,00</div>
+                        </div>
+                        <div class="stat-card stat-pending">
+                            <div class="stat-label">Total Pendente</div>
+                            <div class="stat-value" id="totalPending">R$ 900,00</div>
+                        </div>
+                        <div class="stat-card stat-total">
+                            <div class="stat-label">Total Geral</div>
+                            <div class="stat-value" id="totalGeneral">R$ 1800,00</div>
+                        </div>
+                    </div>
+                </div>
+
+               <button class="history-btn">
+                <i class="fas fa-history"></i> HISTÓRICO DE MOVIMENTAÇÃO<br>
+                COMPLETO (ASAS)
+            </button>
+
+                <div class="transactions-list" id="transactionsList">
+                  
+                </div>
+            </div>
+        </div>
+        
+     
+        <div class="half-moon-nav">
+            <div class="nav-item active" onclick="navigateTo('home')">Início</div>
+            <div class="nav-item" onclick="navigateTo('reports')">Relatórios</div>
+            <div class="nav-item" onclick="navigateTo('settings')">Configurações</div>
+        </div>
+
+     
+        <div class="modal" id="authModal">
+            <div class="modal-content">
+                <h3 class="modal-title">Autenticação de Administrador</h3>
+                <div class="form-group">
+                    <label class="form-label">Senha de administrador</label>
+                    <input type="password" class="form-input" id="adminPassword" placeholder="Digite a senha" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-cancel" onclick="closeAuthModal()">Cancelar</button>
+                    <button type="button" class="btn btn-add" onclick="verifyAdminPassword()">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        let lastAddedStudent = null;
+        
+        
+        let lastTransaction = null;
+
+      
+        const ADMIN_PASSWORD = "admin123";
+
+        let isAuthenticated = false;
+        let currentEditTransaction = null;
+
+    
+        document.getElementById('reportDate').valueAsDate = new Date();
+        document.getElementById('paymentDate').valueAsDate = new Date();
+
+       
+        function switchTab(type) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.add('inactive');
+            });
+            
+            if (type === 'monthly') {
+                tabs[0].classList.add('active');
+                tabs[0].classList.remove('inactive');
+            } else {
+                tabs[1].classList.add('active');
+                tabs[1].classList.remove('inactive');
+            }
+        }
+
+        function cancelForm() {
+            document.getElementById('monthlyForm').reset();
+            document.getElementById('paymentDate').valueAsDate = new Date();
+        }
+
+    
+        document.getElementById('monthlyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const childName = document.getElementById('childName').value;
+            const paymentDate = document.getElementById('paymentDate').value;
+            const paymentValue = parseFloat(document.getElementById('paymentValue').value);
+o
+            lastTransaction = {
+                name: childName,
+                date: paymentDate,
+                value: paymentValue,
+                status: 'pending'
+            };
+
+          
+            lastAddedStudent = childName;
+
+         
+            const successMessage = document.getElementById('successMessage');
+            successMessage.textContent = `Mensalidade da ${childName} foi adicionada com sucesso!`;
+            successMessage.style.display = 'block';
+            
+        
+            document.getElementById('errorMessage').style.display = 'none';
+
+        
+            this.reset();
+            document.getElementById('paymentDate').valueAsDate = new Date();
+
+            updateStats();
+            
+            if (document.getElementById('transactionsList').style.display === 'block') {
+                displayLastTransaction();
+            }
+        });
+
+        function searchTransactions() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+         
+            if (searchTerm === '') {
+                return;
+            }
+
+            // Se houver uma última transação e o nome corresponder à busca
+            if (lastTransaction && lastTransaction.name.toLowerCase().includes(searchTerm)) {
+                // Mostrar o histórico se não estiver visível
+                if (document.getElementById('transactionsList').style.display !== 'block') {
+                    document.getElementById('transactionsList').style.display = 'block';
+                }
+                
+                // Exibir a última transação
+                displayLastTransaction();
+            } else {
+
+                if (document.getElementById('transactionsList').style.display !== 'block') {
+                    document.getElementById('transactionsList').style.display = 'block';
+                }
+                
+                document.getElementById('transactionsList').innerHTML = 
+                    '<div class="transaction-item">Nenhum resultado encontrado para "' + searchTerm + '"</div>';
+            }
+        }
+
+        // Função para exibir apenas a última transação
+        function displayLastTransaction() {
+            const container = document.getElementById('transactionsList');
+            container.innerHTML = '';
+
+            if (lastTransaction) {
+                const div = document.createElement('div');
+                div.className = 'transaction-item';
+                div.id = 'last-transaction';
+                
+                const statusText = lastTransaction.status === 'paid' ? 'Pago' : 'Pendente';
+                const statusColor = lastTransaction.status === 'paid' ? '#4CAF50' : '#F44336';
+                
+                div.innerHTML = `
+                    <div class="transaction-name">${lastTransaction.name}</div>
+                    <div class="transaction-details">
+                        <span>Data: ${new Date(lastTransaction.date).toLocaleDateString('pt-BR')}</span>
+                        <span style="color: ${statusColor};">${statusText} - R$ ${lastTransaction.value.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <div class="transaction-actions">
+                        <button class="btn btn-edit" onclick="requestEditTransaction()">Editar</button>
+                    </div>
+                    <div class="edit-form" id="editForm">
+                        <div class="edit-form-group">
+                            <label class="form-label">Nome da criança</label>
+                            <input type="text" class="form-input" id="editChildName" value="${lastTransaction.name}">
+                        </div>
+                        <div class="edit-form-group">
+                            <label class="form-label">Data de pagamento</label>
+                            <input type="date" class="form-input" id="editPaymentDate" value="${lastTransaction.date}">
+                        </div>
+                        <div class="edit-form-group">
+                            <label class="form-label">Valor (R$)</label>
+                            <input type="number" class="form-input" id="editPaymentValue" value="${lastTransaction.value}" step="0.01">
+                        </div>
+                        <div class="edit-form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-input" id="editStatus">
+                                <option value="pending" ${lastTransaction.status === 'pending' ? 'selected' : ''}>Pendente</option>
+                                <option value="paid" ${lastTransaction.status === 'paid' ? 'selected' : ''}>Pago</option>
+                            </select>
+                        </div>
+                        <div class="transaction-actions">
+                            <button class="btn btn-cancel" onclick="cancelEdit()">Cancelar</button>
+                            <button class="btn btn-save" onclick="saveEditedTransaction()">Salvar</button>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            } else {
+                container.innerHTML = '<div class="transaction-item">Nenhuma transação recente</div>';
+            }
+        }
+
+        // Função para solicitar edição da transação
+        function requestEditTransaction() {
+            
+            if (isAuthenticated) {
+                document.getElementById('editForm').style.display = 'block';
+            } else {
+               
+                openAuthModal();
+            }
+        }
+
+       
+        function openAuthModal() {
+            document.getElementById('authModal').style.display = 'flex';
+            document.getElementById('adminPassword').value = '';
+        }
+
+      
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        
+        function verifyAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                isAuthenticated = true;
+                closeAuthModal();
+                document.getElementById('editForm').style.display = 'block';
+            } else {
+                document.getElementById('errorMessage').textContent = 'Senha de administrador incorreta!';
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        // Função para cancelar edição
+        function cancelEdit() {
+            document.getElementById('editForm').style.display = 'none';
+            isAuthenticated = false; 
+        }
+
+        // Função para salvar transação editada
+        function saveEditedTransaction() {
+            const editedName = document.getElementById('editChildName').value;
+            const editedDate = document.getElementById('editPaymentDate').value;
+            const editedValue = parseFloat(document.getElementById('editPaymentValue').value);
+            const editedStatus = document.getElementById('editStatus').value;
+
+         
+            lastTransaction = {
+                name: editedName,
+                date: editedDate,
+                value: editedValue,
+                status: editedStatus
+            };
+
+       
+            document.getElementById('editForm').style.display = 'none';
+          
+            isAuthenticated = false;
+            
+            displayLastTransaction();
+            
+         
+            updateStats();
+            
+
+            document.getElementById('successMessage').textContent = 'Transação atualizada com sucesso!';
+            document.getElementById('successMessage').style.display = 'block';
+        }
+
+        function toggleHistory() {
+            const historyList = document.getElementById('transactionsList');
+            if (historyList.style.display === 'none' || historyList.style.display === '') {
+                historyList.style.display = 'block';
+                displayLastTransaction();
+            } else {
+                historyList.style.display = 'none';
+            }
+        }
+
+       
+        function updateStats() {
+           
+            document.getElementById('totalReceived').textContent = 'R$ 900,00';
+            document.getElementById('totalPending').textContent = 'R$ 900,00';
+            document.getElementById('totalGeneral').textContent = 'R$ 1800,00';
+        }
+
+        function navigateTo(page) {
+            alert(`Navegando para ${page}`);
+           
+        }
+
+     
+        updateStats();
+    </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seteeduca - Trocar Senha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff4df;
+            font-family: 'Kodchasan', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .caixa4 {
+            width: 90%;
+            max-width: 800px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            box-sizing: border-box;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        #troca {
+            font-size: 2.5rem;
+            color: #000000;
+            font-family: 'Allerta', sans-serif;
+            font-weight: normal;
+        }
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        #pp {
+            color: #838181;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        #email {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            border: 2px solid #838181;
+            font-size: 1.1rem;
+            font-family: 'Kodchasan', sans-serif;
+            box-sizing: border-box;
+        }
+
+        #email:focus {
+            outline: none;
+            border-color: #94b3f5;
+        }
+
+        #clicar {
+            color: #000000;
+            font-size: 1.1rem;
+            max-width: 500px;
+            font-family: 'Allerta', sans-serif;
+        }
+
+        #enviar {
+            width: 200px;
+            height: 50px;
+            background-color: #E8ECFF;
+            color: #000000;
+            border: 2px solid #000000;
+            border-radius: 50px;
+            font-family: 'Allerta', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #enviar:hover {
+            background-color: #94b3f5;
+            color: white;
+        }
+
+        .error-message {
+            color: #94b3f5;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+            text-align: left;
+            width: 100%;
+        }
+
+        /* Estilo do Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border-top: 5px solid #94b3f5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            box-sizing: border-box;
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+        }
+
+        .modal-message {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .modal-button {
+            padding: 12px 30px;
+            background-color: #94b3f5;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Allerta', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-button:hover {
+            background-color: #7a9de0;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .caixa4 {
+                padding: 30px 20px;
+            }
+            
+            #troca {
+                font-size: 1.8rem;
+            }
+            
+            #email {
+                font-size: 1rem;
+                padding: 12px 15px;
+            }
+            
+            #clicar {
+                font-size: 1rem;
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #troca {
+                font-size: 1.5rem;
+            }
+            
+            #pp {
+                font-size: 1rem;
+            }
+            
+            #enviar {
+                width: 180px;
+                height: 45px;
+                font-size: 1rem;
+            }
+            
+            .caixa4 {
+                padding: 25px 15px;
+            }
+            
+            #email {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="caixa4">
+        <p id="troca">Quer trocar sua senha?</p>
+
+        <form id="senhaForm">
+            <div class="campo">
+                <label for="email" id="pp">E-mail:</label>
+                <input type="email" id="email" name="email" required placeholder="exemplo@email.com">
+                <div class="error-message" id="emailError">Por favor, insira um e-mail válido (deve conter @)</div>
+            </div>
+            <p id="clicar">Ao clicar no botão abaixo, você receberá um email com um código para criar uma nova senha.</p>
+            <input id="enviar" type="submit" value="Enviar">
+        </form>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <svg class="modal-icon" viewBox="0 0 24 24" fill="#4CAF50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"/>
+            </svg>
+            <p class="modal-message" id="modalMessage"></p>
+            <button class="modal-button" id="modalOkButton">Ok</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('senhaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const emailError = document.getElementById('emailError');
+            
+            if (!email.includes('@')) {
+                emailError.style.display = 'block';
+                document.getElementById('email').style.borderColor = '#94b3f5';
+            } else {
+                emailError.style.display = 'none';
+                
+                const modal = document.getElementById('confirmationModal');
+                const modalMessage = document.getElementById('modalMessage');
+                
+                modalMessage.textContent = `E-mail enviado com sucesso para: ${email}`;
+                modal.style.display = 'flex';
+            }
+        });
+
+        document.getElementById('email').addEventListener('input', function() {
+            if (this.value.includes('@')) {
+                document.getElementById('emailError').style.display = 'none';
+                this.style.borderColor = '#838181';
+            }
+        });
+
+        document.getElementById('modalOkButton').addEventListener('click', function() {
+            window.location.href = "codigo.html"; 
+        });
+
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('confirmationModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                window.location.href = "codigo.html"; 
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+<style>
+    
+        @import url('https://fonts.googleapis.com/css2?family=Konkhmer+Sleokchher&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Kodchasan:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&family=Konkhmer+Sleokchher&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan&display=swap');
+
+        body {
+    background-color: #F3E38A;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        img {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 18%;
+            transform: translate(-50%, -50%);
+        }
+
+        h1 {
+            margin: 0;
+            position: absolute;
+            font-family: 'Konkhmer Sleokchher', sans-serif;
+            color: black;
+            top: 9%;
+            left: 50%;
+            font-size: 350%;
+            font-weight: 400;
+        }
+
+        h2 {
+            margin: 0;
+            position: absolute;
+            font-family: 'Kodchasan', sans-serif;
+            color: rgb(0, 0, 0);
+            top: 23%;
+            left: 50%;
+            font-size: 150%;
+            width: 30%;
+            font-weight: 400;
+        }
+
+        form {
+            margin: 0;
+            position: absolute;
+            top: 36%;
+            left: 50%;
+        }
+
+        input {
+            width: 500px;
+            height: 70px;
+            border-radius: 15px;
+            font-size: 140%;
+            background-color: #FFF4DF;
+            color: #000000;
+        }
+
+        .label, .labe {
+            font-size: 120%;
+            position: absolute;
+            font-family: 'Allerta', sans-serif;
+            color: #838181;
+        }
+
+        .label {
+            top: -4%;
+            left: 2.5%;
+        }
+
+        .labe {
+            top: 53%;
+            left: 2.5%;
+        }
+
+        ::placeholder {
+            color: rgb(59, 59, 59);
+            font-size: 70%;
+            font-family: 'Allerta', sans-serif;
+            padding: 30px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 100%;
+            left: 2.5%;
+        }
+
+        #forml {
+            font-size: 90%;
+            position: absolute;
+            top: 100%;
+            left: 8%;
+            font-family: 'Allerta', sans-serif;
+        }
+
+        #Es {
+            font-size: 95%;
+            position: absolute;
+            top: 99%; 
+            left: 67%;
+            font-family: 'Allerta', sans-serif;
+            color: #00A6FF;
+            text-decoration: none;
+        }
+
+        #Es:hover {
+            text-decoration: underline; 
+        }
+
+        #sub {
+            position: absolute;
+            top: 132%;
+            left: 19%;
+            height: 20%;
+            width: 60%;
+            border-radius: 30px;
+            font-size: 100%;
+            font-family: 'Allerta', sans-serif;
+        }
+
+        button {
+            color: #000000;
+            background-color: #FFFFFF;
+            font-family: 'Allerta', sans-serif;
+        }
+
+        /* Media Queries para responsividade */
+        @media (max-width: 1200px) {
+            h1 {
+                font-size: 300%;
+            }
+            h2 {
+                font-size: 130%;
+                width: 35%;
+            }
+            input {
+                width: 400px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            img {
+                left: 25%;
+            }
+            h1 {
+                left: 55%;
+                font-size: 250%;
+            }
+            h2 {
+                left: 55%;
+                font-size: 120%;
+                width: 40%;
+            }
+            form {
+                left: 55%;
+            }
+            input {
+                width: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            img {
+                position: relative;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            h1, h2, form {
+                position: relative;
+                top: auto;
+                left: 50%;
+                transform: translateX(-50%);
+                text-align: center;
+                width: 80%;
+                margin-bottom: 20px;
+            }
+            h1 {
+                margin-top: 20px;
+                font-size: 200%;
+            }
+            h2 {
+                font-size: 100%;
+            }
+            input {
+                width: 100%;
+                max-width: 400px;
+            }
+            .label, .labe {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                margin-bottom: 5px;
+            }
+            input[type="checkbox"], #forml, #Es {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: inline-block;
+                margin: 10px 0;
+            }
+            #sub {
+                position: relative;
+                top: auto;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80%;
+                max-width: 300px;
+                margin-top: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 180%;
+            }
+            h2 {
+                font-size: 90%;
+            }
+            input {
+                height: 50px;
+                font-size: 120%;
+            }
+        }
+   
+</style>
+<body>
+<img src="/imagem/BV.png" height="800px" width="600px"> 
+
+
+<h1>Login</h1>
+<h2>Sentimos falta de você!</h2>
+
+
+
+
+    <form action="">
+        <label for="usu" class="label" class="usu">Usuário ou e-mail</label><br>
+        <input type="text" id="usu" name="usu" placeholder="Coloque seu e-mail"><br><br><br><br>
+        
+
+
+        <label for="senha" class="labe">Senha</label><br>
+        <input type="password" id="senha" name="senha" placeholder="Coloque sua senha"><br><br>
+
+        <input type="checkbox"  id="example">
+        <label id="forml" for="exampleCheck1">Lembrar-me</label>
+        
+  <a id="Es" href="trocar.html">Esqueceu a senha?</a>
+
+ <a href="/Home/home.html">
+    <button type="button" id="sub">Entrar</button>
+</a>
+
+   
+
+    </form>
+    
+
+
+   
+
+
+    
+</body>
+</html>

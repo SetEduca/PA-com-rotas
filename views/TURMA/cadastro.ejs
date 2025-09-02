@@ -1,0 +1,395 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;500;700&display=swap" rel="stylesheet" />
+  <title>Seteeduca - Cadastro de Turmas</title>
+  <style>
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    body {
+      font-family: 'Kodchasan', sans-serif;
+      background-color: #fff4df;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .logo-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+      padding-right: 15px;
+      z-index: 1;
+    }
+    
+    .logo { 
+      width: 90px; 
+      height: auto; 
+      max-width: 100%; 
+      position: relative; 
+      top: -15px; 
+    }
+    
+    header {
+      background-color: #D22A2A;
+      border-radius: 0 0 40px 40px;
+      padding: 10px 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      height: 60px;
+      margin-top: -15px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+   
+    
+   
+    
+    .header-title {
+      display: flex; 
+      align-items: center; 
+      gap: 10px;
+      font-size: 1.5rem; 
+      color: black; 
+      font-weight: normal; 
+      font-family: 'Kodchasan', sans-serif;
+    }
+    
+    .header-title b { 
+      font-family: 'Allerta', sans-serif; 
+    }
+    
+    .cad-icon { 
+      width: 35px; 
+      height: 35px; 
+    }
+    
+   
+    .caixa {
+      width: 90%; 
+      max-width: 800px; 
+      min-height: 500px;
+      background-color: #fff; 
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      padding: 40px; 
+      margin: 30px auto; 
+      border-left: 5px solid #D22A2A;
+      transition: transform 0.3s;
+    }
+    
+    .caixa:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    form { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 25px; 
+      width: 100%; 
+    }
+    
+    .campo { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 10px; 
+      width: 100%; 
+    }
+    
+    label { 
+      font-weight: 600; 
+      font-size: 1.1rem; 
+      color: #333;
+      margin-left: 10px;
+    }
+    
+    input, select {
+      padding: 14px 18px; 
+      border: 2px solid #D22A2A; 
+      border-radius: 15px;
+      font-family: 'Kodchasan', sans-serif; 
+      font-size: 1rem; 
+      width: 100%;
+      background-color: #fff9f0;
+      transition: all 0.3s;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: #971d1d;
+      box-shadow: 0 0 0 3px rgba(210, 42, 42, 0.2);
+    }
+    
+    .link-cadastrar {
+      width: 220px; 
+      height: 55px; 
+      background-color: #D22A2A;
+      color: white; 
+      border: none; 
+      border-radius: 15px;
+      font-family: 'Allerta', sans-serif; 
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer; 
+      margin: 30px auto 0;
+      transition: all 0.3s; 
+      box-shadow: 0 4px 8px rgba(210, 42, 42, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .link-cadastrar:hover { 
+      background-color: #971d1d; 
+      transform: scale(1.05); 
+      box-shadow: 0 6px 12px rgba(210, 42, 42, 0.4);
+    }
+    
+    .link-cadastrar::before {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>');
+    }
+    
+  
+    .modal {
+      display: none; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      right: 0; 
+      bottom: 0;
+      background-color: rgba(0,0,0,0.5); 
+      justify-content: center; 
+      align-items: center; 
+      z-index: 9999;
+      font-family: 'Kodchasan', sans-serif;
+      backdrop-filter: blur(3px);
+    }
+    
+    .modal-content {
+      background: #fff; 
+      padding: 40px; 
+      border-radius: 20px; 
+      text-align: center;
+      max-width: 400px; 
+      width: 90%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      border-top: 5px solid #4CAF50;
+      animation: modalFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+    
+    .modal-content::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      background-color: #4CAF50;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 40px;
+      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+    }
+    
+    .modal-content p {
+      font-size: 1.2rem;
+      margin: 30px 0 25px;
+      color: #333;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+    
+    .modal-content strong {
+      color: #D22A2A;
+      font-weight: 700;
+    }
+    
+    .modal-buttons { 
+      margin-top: 20px; 
+      display: flex; 
+      justify-content: center;
+    }
+    
+    .modal-buttons button {
+      padding: 12px 30px; 
+      border: none; 
+      border-radius: 15px; 
+      cursor: pointer;
+      font-family: 'Allerta', sans-serif; 
+      background-color: #D22A2A; 
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: all 0.3s;
+      box-shadow: 0 4px 8px rgba(210, 42, 42, 0.3);
+    }
+    
+    .modal-buttons button:hover { 
+      background-color: #971d1d; 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(210, 42, 42, 0.4);
+    }
+    
+    @keyframes modalFadeIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.95); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-container">
+    <img class="logo" src="/imagem/financeiro/logocomp.png" alt="Logo" />
+  </div>
+
+  <header>
+   
+    <div class="header-title">
+      <img src="/imagem/cad.svg" alt="Ícone de cadastro" class="cad-icon">
+      <span>Cadastro <b>TURMAS</b></span>
+    </div>
+  </header>
+
+  <div class="caixa">
+    <form action="/cadastrar" method="POST" id="formCadastro">
+      <div class="campo">
+        <label for="professor">Nome do Professor(a):</label>
+        <input type="text" id="professor" name="professor" placeholder="Digite o nome completo" required>
+      </div>
+      <div class="campo">
+        <label for="turma">Nome da Turma:</label>
+        <input type="text" id="turma" name="turma" placeholder="Ex: Maternal I, Berçário B" required>
+      </div>
+      <div class="campo">
+        <label for="turno">Turno:</label>
+        <select id="turno" name="turno" required>
+          <option value="" disabled selected>Selecione o turno</option>
+          <option value="Matutino">Matutino</option>
+          <option value="Vespertino">Vespertino</option>
+          <option value="Integral">Integral</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label for="quantidade_alunos">Quantidade de Alunos:</label>
+        <input type="number" id="quantidade_alunos" name="quantidade_alunos" min="1" placeholder="Número de alunos" required>
+      </div>
+      <div class="campo">
+        <label for="faixa_etaria">Faixa Etária:</label>
+        <select id="faixa_etaria" name="faixa_etaria" required>
+          <option value="" disabled selected>Selecione a faixa etária</option>
+          <option value="0 - 1 anos">0 - 1 anos</option>
+          <option value="1 - 2 anos">1 - 2 anos</option>
+          <option value="2 - 3 anos">2 - 3 anos</option>
+          <option value="3 - 4 anos">3 - 4 anos</option>
+        </select>
+      </div>
+      <button type="submit" class="link-cadastrar">Cadastrar turma</button>
+    </form>
+  </div>
+
+
+  <div class="modal" id="confirmModal">
+    <div class="modal-content">
+      <p id="modalMessage"></p>
+      <div class="modal-buttons">
+        <button class="ok">Ok</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('formCadastro');
+      const modal = document.getElementById('confirmModal');
+      const okBtn = modal.querySelector('.ok');
+      const modalMessage = document.getElementById('modalMessage');
+
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+
+        const professor = document.getElementById('professor').value.trim();
+        const turma = document.getElementById('turma').value.trim();
+        const turno = document.getElementById('turno').value;
+        const quantidade = document.getElementById('quantidade_alunos').value;
+        const faixa = document.getElementById('faixa_etaria').value;
+
+        if (!professor || !turma || turno === "" || !quantidade || faixa === "") {
+          alert("Por favor, preencha todos os campos obrigatórios!");
+          return;
+        }
+
+        
+        const novaTurma = {
+          professor: professor,
+          turma: turma,
+          turno: turno,
+          quantidade: quantidade,
+          faixa: faixa,
+          dataCadastro: new Date().toLocaleDateString()
+        };
+
+       
+        let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+        turmas.push(novaTurma);
+        localStorage.setItem('turmas', JSON.stringify(turmas));
+
+        modalMessage.innerHTML = `
+          Turma <strong>${turma}</strong> foi cadastrada com sucesso!
+          <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+            Professor(a): ${professor}<br>
+            Turno: ${turno} | Alunos: ${quantidade}
+          </div>
+        `;
+        
+      
+        modal.style.display = 'flex';
+        
+        
+        form.reset();
+      });
+
+      okBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        window.location.href = 'http://127.0.0.1:5500/Home/turma/acesso/acessar.html';
+      });
+
+   
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

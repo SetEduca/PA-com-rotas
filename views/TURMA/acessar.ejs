@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Seteeduca - Acessar Turmas</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Kodchasan', sans-serif;
+      background-color: #fff4df;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .logo-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 15px;
+      padding-right: 15px;
+      z-index: 1;
+    }
+    .logo {
+      width: 90px;
+      height: auto;
+      max-width: 100%;
+      position: relative;
+      top: -15px;
+    }
+    header {
+      background-color: #D22A2A;
+      border-radius: 0 0 40px 40px;
+      padding: 10px 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      height: 60px;
+      margin-top: -15px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+   
+   
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      color: black;
+      font-weight: normal;
+      font-family: 'Kodchasan', sans-serif;
+    }
+    .header-title b {
+      font-family: 'Allerta', sans-serif;
+    }
+    .cad-icon {
+      width: 35px;
+      height: 35px;
+    }
+   
+    .turmas-container {
+      width: 90%;
+      max-width: 800px;
+      margin: 30px auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding-bottom: 30px;
+    }
+    
+    .turma-card {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .turma-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+    
+    .turma-header {
+      background-color: #D22A2A;
+      color: white;
+      padding: 18px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .turma-header:hover {
+      background-color: #c12525;
+    }
+    
+    .turma-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+      font-family: 'Allerta', sans-serif;
+    }
+    
+    .toggle-icon {
+      font-size: 1.5rem;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+    
+    .turma-content {
+      padding: 20px 25px;
+      display: none;
+      background-color: #fff9f0;
+      border-top: 2px solid #f0e6d6;
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .turma-content p {
+      margin: 12px 0;
+      color: #333;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+    
+    .turma-content strong {
+      color: #D22A2A;
+      font-weight: 600;
+    }
+    
+    .delete-container {
+      text-align: right;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px dashed #ddd;
+    }
+    
+    .delete-icon {
+      display: inline-block;
+      cursor: pointer;
+      width: 26px;
+      height: 26px;
+      transition: transform 0.2s;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+    }
+    
+    .delete-icon:hover {
+      transform: scale(1.2);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+    
+    .empty-message {
+      text-align: center;
+      padding: 40px 20px;
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-size: 1.1rem;
+      color: #666;
+    }
+    
+    .empty-message::before {
+      content: "😕";
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 15px;
+    }
+
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-confirm {
+      background-color: #fff9f0;
+      border-radius: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      border-bottom: 5px solid #D22A2A;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .modal-confirm h3 {
+      color: #D22A2A;
+      margin-bottom: 20px;
+      font-family: 'Allerta', sans-serif;
+      font-size: 1.4rem;
+    }
+    
+    .modal-confirm p {
+      margin-bottom: 25px;
+      font-size: 1.1rem;
+      color: #333;
+      line-height: 1.5;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    
+    .modal-btn {
+      padding: 12px 25px;
+      border-radius: 20px;
+      font-family: 'Allerta', sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid #000;
+    }
+    
+    .modal-btn-confirm {
+      background-color: #D22A2A;
+      color: white;
+    }
+    
+    .modal-btn-cancel {
+      background-color: #fff;
+      color: #333;
+    }
+    
+    .modal-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+    
+    .modal-btn-confirm:hover {
+      background-color: #b82222;
+    }
+    
+    .modal-btn-cancel:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-container">
+    <img class="logo" src="/imagem/financeiro/logocomp.png" alt="Logo" />
+  </div>
+
+  <header>
+   
+    </a>
+    <div class="header-title">
+      <img src="/imagem/lupa.svg" alt="Ícone de cadastro" class="cad-icon">
+      <span>Acessar <b>TURMAS</b></span>
+    </div>
+  </header>
+
+  <div class="turmas-container" id="turmasContainer">
+ 
+  </div>
+
+
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-confirm">
+      <h3>Confirmar Exclusão</h3>
+      <p id="modalMessage">Tem certeza que deseja excluir esta turma?</p>
+      <div class="modal-buttons">
+        <button class="modal-btn modal-btn-cancel" id="cancelDelete">Cancelar</button>
+        <button class="modal-btn modal-btn-confirm" id="confirmDelete">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    let currentTurmaIndex = null;
+    const confirmModal = document.getElementById('confirmModal');
+    const modalMessage = document.getElementById('modalMessage');
+    const cancelDeleteBtn = document.getElementById('cancelDelete');
+    const confirmDeleteBtn = document.getElementById('confirmDelete');
+
+    function toggleTurma(element) {
+      const content = element.nextElementSibling;
+      const icon = element.querySelector('.toggle-icon');
+      
+      if (content.style.display === 'block') {
+        content.style.animation = 'fadeOut 0.3s ease-out';
+        setTimeout(() => {
+          content.style.display = 'none';
+        }, 250);
+        icon.textContent = '+';
+        icon.style.transform = 'rotate(0deg)';
+      } else {
+        content.style.display = 'block';
+        icon.textContent = '-';
+        icon.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    function carregarTurmas() {
+      const turmasContainer = document.getElementById('turmasContainer');
+      turmasContainer.innerHTML = '';
+      const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+
+      if (turmas.length === 0) {
+        turmasContainer.innerHTML = `
+          <div class="empty-message">
+            Nenhuma turma cadastrada ainda.<br>
+            Clique no botão "Voltar" para cadastrar uma nova turma.
+          </div>
+        `;
+      } else {
+        turmas.forEach((turma, index) => {
+          const card = document.createElement('div');
+          card.className = 'turma-card';
+
+          card.innerHTML = `
+            <div class="turma-header" onclick="toggleTurma(this)">
+              <h3>${turma.turma}</h3>
+              <span class="toggle-icon">+</span>
+            </div>
+            <div class="turma-content">
+              <p><strong>Professor(a):</strong> ${turma.professor}</p>
+              <p><strong>Turno:</strong> ${turma.turno}</p>
+              <p><strong>Quantidade de Alunos:</strong> ${turma.quantidade}</p>
+              <p><strong>Faixa Etária:</strong> ${turma.faixa}</p>
+              <div class="delete-container">
+                <img src="/imagem/trash.svg" alt="Excluir turma" class="delete-icon" 
+                     onclick="abrirModalConfirmacao(${index})" title="Excluir turma">
+              </div>
+            </div>
+          `;
+          turmasContainer.appendChild(card);
+        });
+      }
+    }
+
+    function abrirModalConfirmacao(index) {
+      const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+      const turmaNome = turmas[index].turma;
+      
+      currentTurmaIndex = index;
+      modalMessage.innerHTML = `Tem certeza que deseja excluir a turma <strong>"${turmaNome}"</strong>?`;
+      confirmModal.style.display = 'flex';
+    }
+
+ 
+    function fecharModal() {
+      confirmModal.style.display = 'none';
+      currentTurmaIndex = null;
+    }
+
+  
+    function executarExclusao() {
+      if (currentTurmaIndex !== null) {
+        const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+        const cards = document.querySelectorAll('.turma-card');
+        
+     
+        cards[currentTurmaIndex].style.transform = 'scale(0.9)';
+        cards[currentTurmaIndex].style.opacity = '0';
+        cards[currentTurmaIndex].style.transition = 'all 0.3s ease';
+        
+        setTimeout(() => {
+          turmas.splice(currentTurmaIndex, 1);
+          localStorage.setItem('turmas', JSON.stringify(turmas));
+          carregarTurmas();
+          fecharModal();
+        }, 300);
+      }
+    }
+
+ 
+    cancelDeleteBtn.addEventListener('click', fecharModal);
+    confirmDeleteBtn.addEventListener('click', executarExclusao);
+    
+    
+    confirmModal.addEventListener('click', (e) => {
+      if (e.target === confirmModal) {
+        fecharModal();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', carregarTurmas);
+  </script>
+</body>
+</html>

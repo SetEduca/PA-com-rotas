@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seteeduca - Senha Redefinida</title>
+    <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff4df;
+            font-family: 'Kodchasan', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .caixa4 {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            text-align: center;
+        }
+
+        #troca {
+            font-size: 2.2rem;
+            color: #000000;
+            font-family: 'Allerta', sans-serif;
+            margin-bottom: 10px;
+        }
+
+        #sucesso2 {
+            font-size: 1.2rem;
+            color: #000000;
+            font-family: 'Allerta', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .botoes-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .botao {
+            width: 200px;
+            height: 45px;
+            background-color: #E8ECFF;
+            color: #000000;
+            border: 2px solid #000000;
+            border-radius: 90px;
+            font-family: 'Allerta', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .botao:hover {
+            background-color: #94b3f5;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .caixa4 {
+                padding: 30px 20px;
+            }
+
+            #troca {
+                font-size: 1.8rem;
+            }
+
+            #sucesso2 {
+                font-size: 1.1rem;
+            }
+
+            .botao {
+                width: 180px;
+                height: 45px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #troca {
+                font-size: 1.6rem;
+            }
+
+            #sucesso2 {
+                font-size: 1rem;
+            }
+
+            .botoes-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .botao {
+                width: 100%;
+                max-width: 220px;
+                height: 42px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="caixa4">
+        <p id="troca">Sua senha foi redefinida</p>
+        <p id="sucesso2">Pode sair sem preocupações!</p>
+
+        <div class="botoes-container">
+            <a href="#" class="botao"> Ir para o login</a>
+           
+        </div>
+    </div>
+</body>
+</html>

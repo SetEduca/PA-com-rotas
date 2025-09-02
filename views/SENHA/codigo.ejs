@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seteeduca - Código de Verificação</title>
+    <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff4df;
+            font-family: 'Kodchasan', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .caixa4 {
+            width: 90%;
+            max-width: 800px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            text-align: center;
+        }
+
+        #troca {
+            font-size: 2.2rem;
+            color: #000000;
+            font-family: 'Allerta', sans-serif;
+            margin-bottom: 10px;
+        }
+
+        #codigo {
+            font-size: 1.1rem;
+            color: #000000;
+            max-width: 600px;
+        }
+
+        .codigo-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .codigo-input {
+            width: 60px;
+            height: 60px;
+            font-size: 26px;
+            text-align: center;
+            border: 2px solid #000;
+            border-radius: 15px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .codigo-input:focus {
+            border-color: #94b3f5;
+            box-shadow: 0 0 5px rgba(148, 179, 245, 0.7);
+        }
+
+        #enviar4 {
+            width: 200px;
+            height: 50px;
+            background-color: #E8ECFF;
+            color: #000000;
+            border: 2px solid #000000;
+            border-radius: 90px;
+            font-family: 'Allerta', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 30px;
+        }
+
+        #enviar4:hover {
+            background-color: #94b3f5;
+            color: white;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border-top: 5px solid #94b3f5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+        }
+
+        .modal-message {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .modal-button {
+            padding: 12px 30px;
+            background-color: #94b3f5;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Allerta', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-button:hover {
+            background-color: #7a9de0;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .caixa4 {
+                padding: 30px 20px;
+            }
+
+            #troca {
+                font-size: 1.8rem;
+            }
+
+            #codigo {
+                font-size: 1rem;
+            }
+
+            .codigo-input {
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+                border-radius: 10px;
+            }
+
+            #enviar4 {
+                width: 180px;
+                height: 45px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #troca {
+                font-size: 1.6rem;
+            }
+
+            #codigo {
+                font-size: 0.95rem;
+            }
+
+            .codigo-input {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+
+            #enviar4 {
+                width: 160px;
+                height: 42px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="caixa4">
+        <p id="troca">Quer trocar sua senha?</p>
+        <p id="codigo">Insira no campo abaixo o código de verificação de 5 dígitos enviado para o seu e-mail.</p>
+
+        <form id="codigoForm">
+            <div class="codigo-container">
+                <input type="text" maxlength="1" class="codigo-input">
+                <input type="text" maxlength="1" class="codigo-input">
+                <input type="text" maxlength="1" class="codigo-input">
+                <input type="text" maxlength="1" class="codigo-input">
+                <input type="text" maxlength="1" class="codigo-input">
+            </div>
+
+            <input id="enviar4" type="submit" value="Enviar">
+        </form>
+    </div>
+
+    <!-- Modal de Erro -->
+    <div class="modal" id="errorModal">
+        <div class="modal-content">
+            <svg class="modal-icon" viewBox="0 0 24 24" fill="#D22A2A" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+            </svg>
+            <p class="modal-message">Código inválido — insira apenas números.</p>
+            <button class="modal-button" id="modalOkButton">Ok</button>
+        </div>
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll(".codigo-input");
+        const codigoForm = document.getElementById("codigoForm");
+        const errorModal = document.getElementById("errorModal");
+        const modalOkButton = document.getElementById("modalOkButton");
+
+        inputs.forEach((input, index) => {
+            input.addEventListener("input", (e) => {
+                const value = e.target.value;
+
+                // Remove tudo que não for número
+                e.target.value = value.replace(/[^0-9]/g, "");
+
+                if (e.target.value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Backspace" && !e.target.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        codigoForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            let valido = true;
+
+            inputs.forEach(input => {
+                if (!/^[0-9]$/.test(input.value)) {
+                    valido = false;
+                }
+            });
+
+            if (!valido) {
+                errorModal.style.display = 'flex';
+            } else {
+                errorModal.style.display = 'none';
+                window.location.href = "senha.html"; // ✔️ Vai para a página de senha
+            }
+        });
+
+        modalOkButton.addEventListener('click', () => {
+            errorModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === errorModal) {
+                errorModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
