@@ -47,7 +47,7 @@ app.get("/opcoes-aluno", (req, res) => {
 });
 
 app.get("/cadastro-aluno", (req, res) => {
-  res.render("ALUNO/cadastro");
+  res.render("ALUNO/cadastro2");
 });
 
 app.get("/cadastro-responsavel", (req, res) => {
