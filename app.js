@@ -79,7 +79,7 @@ app.get("/fluxo-de-caixa", (req, res) => {
 });
 
 app.get("/relatorio-financeiro", (req, res) => {
-  res.render("FINANCEIRO/financial_reprt_page");
+  res.render("FINANCEIRO/financial_report_page");
 });
 
 app.get("/adimplentes-inadimplentes", (req, res) => {
