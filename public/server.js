@@ -1,35 +1,68 @@
 const express = require('express');
-const mysql = require('mysql2');
-const bodyParser = require('body-parser');
+const session = require('express-session');
 const path = require('path');
+
 const app = express();
+const PORT = 3020;
 
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.urlencoded({extended: true}));
-//app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'cimatec',
-    database: 'cadastrar2'
-});
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'sua_chave_secreta_aqui',
+    resave: false,
+    saveUninitialized: true,
+}));
+
+
+const usuariosValidos = {
+    'admin@email.com': 'admin123',
+    'usuario_teste': 'senha_segura'
+};
+
+
 
 app.get('/', (req, res) => {
-    res.sendFile(process.cwd() + '/cadastro.html')
+    res.redirect('/login');
 });
 
-app.post('/cadastrar', (req, res) => {
-    const {professor, turma, turno, quantidade_alunos, faixa_etaria} = req.body;
 
-    const sql = "INSERT INTO turma (professor, turma, turno, quantidade_alunos, faixa_etaria) VALUES (?, ?, ?, ?, ?)";
-    db.query(sql, [professor, turma, turno, quantidade_alunos, faixa_etaria], (err, result) => {
-        if (err) throw err;
-        res.send("Turma cadastrada com sucesso!");
-    });
+app.get('/login', (req, res) => {
+    const message = req.session.message;
+    req.session.message = null;
+    res.render('login', { message: message });
 });
 
-app.listen(3010, () => {
-    console.log("Servidor rodando em http://localhost:3010")
+
+app.post('/login', (req, res) => {
+    const { usu, senha } = req.body;
+
+    if (usuariosValidos[usu] && usuariosValidos[usu] === senha) {
+        req.session.isLoggedIn = true;
+        req.session.username = usu;
+        res.redirect('/home');
+    } else {
+        req.session.message = 'Usuário ou senha inválidos. Tente novamente.';
+        res.redirect('/login');
+    }
+});
+
+
+app.get('/home', (req, res) => {
+ 
+    if (req.session.isLoggedIn) {
+        
+        res.render('home', { username: req.session.username });
+    } else {
+        req.session.message = 'Por favor, faça login para acessar esta página.';
+        res.redirect('/login');
+    }
+});
+
+
+app.listen(3020, () => {
+    console.log("Servidor rodando em http://localhost:3020")
 });
