@@ -1,29 +1,23 @@
 {
-  "name": "surtos_coletivos",
+  "name": "login",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "login.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "start": "node src/login.js",
+    "dev": "nodemon src/login.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "dependencies": {
     "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SetEduca/PA-com-rotas.git"
-  },
-  "bugs": {
-    "url": "https://github.com/SetEduca/PA-com-rotas/issues"
-  },
-  "homepage": "https://github.com/SetEduca/PA-com-rotas#readme",
-  "description": ""
+  }
 }
