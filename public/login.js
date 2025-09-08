@@ -8,7 +8,7 @@ const PORT = 3020;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.get("/", (req, res) => {
+app.get("/login", (req, res) => {
   res.render("login");
 });
 
@@ -68,4 +68,5 @@ app.get('/home', (req, res) => {
 
 app.listen(3020, () => {
     console.log("Servidor rodando em http://localhost:3020")
+
 });
