@@ -7,7 +7,7 @@ const app = express();
 const PORT = 3020;
 
 app.set('view engine', 'ejs');
-
+app.use(express.static(path.join(__dirname, 'views')));
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
