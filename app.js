@@ -97,6 +97,9 @@ app.get("/cadastro-turma", (req, res) => {
 app.get("/turmas-cadastradas", (req, res) => {
   res.render("TURMA/acessar");
 });
+app.get("/editar-turmas", (req, res) => {
+  res.render("TURMA/editar");
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <title>Seteeduca - Cadastro de Turmas</title>
+  <title>Seteeduca - Editar Turma</title>
   <style>
     * { 
       margin: 0; 
@@ -21,7 +21,7 @@
       min-height: 100vh;
     }
 
-    * {
+     * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -296,34 +296,62 @@
       box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.2);
     }
     
-    .link-cadastrar {
-      width: 220px; 
+    .button-container {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    
+    .btn-action-form {
+      width: 180px; 
       height: 55px; 
-      background-color: #c1272d;
-      color: white; 
       border: none; 
       border-radius: 8px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer; 
-      margin: 30px auto 0;
       transition: all 0.3s; 
-      box-shadow: 0 4px 8px rgba(193, 39, 45, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
     }
     
-    .link-cadastrar:hover { 
-      background-color: #971d1d; 
-      transform: scale(1.05); 
-      box-shadow: 0 6px 12px rgba(193, 39, 45, 0.4);
+    .btn-save {
+      background-color: #28a745;
+      color: white;
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
     }
     
-    .link-cadastrar::before {
-      content: "+";
+    .btn-save:hover { 
+      background-color: #218838; 
+      transform: scale(1.05); 
+      box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
+    }
+    
+    .btn-cancel {
+      background-color: #6c757d;
+      color: white;
+      box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+    }
+    
+    .btn-cancel:hover { 
+      background-color: #5a6268; 
+      transform: scale(1.05); 
+      box-shadow: 0 6px 12px rgba(108, 117, 125, 0.4);
+    }
+    
+    .btn-save::before {
+      content: "✓";
+      font-size: 1.2rem;
+      line-height: 1;
+      display: inline-block;
+    }
+    
+    .btn-cancel::before {
+      content: "✕";
       font-size: 1.2rem;
       line-height: 1;
       display: inline-block;
@@ -352,7 +380,7 @@
       max-width: 400px; 
       width: 90%;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      border-top: 5px solid #4CAF50;
+      border-top: 5px solid #28a745;
       animation: modalFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
     }
@@ -365,7 +393,7 @@
       transform: translateX(-50%);
       width: 80px;
       height: 80px;
-      background-color: #4CAF50;
+      background-color: #28a745;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -374,7 +402,7 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: 40px;
-      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+      box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
     }
     
     .modal-content p {
@@ -402,18 +430,18 @@
       border-radius: 8px; 
       cursor: pointer;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background-color: #c1272d; 
+      background-color: #28a745; 
       color: white;
       font-size: 1rem;
       font-weight: 600;
       transition: all 0.3s;
-      box-shadow: 0 4px 8px rgba(193, 39, 45, 0.3);
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
     }
     
     .modal-buttons button:hover { 
-      background-color: #971d1d; 
+      background-color: #218838; 
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(193, 39, 45, 0.4);
+      box-shadow: 0 6px 12px rgba(40, 167, 69, 0.4);
     }
     
     @keyframes modalFadeIn {
@@ -428,7 +456,7 @@
     }
 
     @media (max-width: 992px) {
-      
+  
       
       .main-content {
         margin-left: 230px;
@@ -437,25 +465,34 @@
 
     @media (max-width: 768px) {
      
+      
       .main-content {
         margin-left: 70px;
       }
       
-     
       
       
+
+      .button-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .btn-action-form {
+        width: 100%;
+        max-width: 250px;
+      }
     }
 
     @media (max-width: 576px) {
-      
+    
       
       .main-content {
         margin-left: 0;
       }
       
-      
-      
-      
+     
+    
     }
   </style>
 </head>
@@ -517,13 +554,14 @@
             });
         });
     </script>
+
   <!-- Main Content -->
   <div class="main-content">
     <!-- Header -->
     <div class="header">
       <div class="header-title">
-        <i class="fas fa-user-plus"></i>
-        Cadastro de TURMAS
+        <i class="fas fa-edit"></i>
+        Editar TURMA
       </div>
       <div class="user-profile">
         <div class="profile-pic">
@@ -538,7 +576,7 @@
     <!-- Content Area -->
     <div class="content-area">
       <div class="caixa">
-        <form action="/cadastrar" method="POST" id="formCadastro">
+        <form id="formEditar">
           <div class="campo">
             <label for="professor">Nome do Professor(a):</label>
             <input type="text" id="professor" name="professor" placeholder="Digite o nome completo" required>
@@ -569,7 +607,10 @@
             <label for="quantidade_alunos">Quantidade de Alunos:</label>
             <input type="number" id="quantidade_alunos" name="quantidade_alunos" min="1" placeholder="Número de alunos" required>
           </div>
-          <button type="submit" class="link-cadastrar">Cadastrar turma</button>
+          <div class="button-container">
+            <button type="submit" class="btn-action-form btn-save">Salvar alterações</button>
+            <button type="button" class="btn-action-form btn-cancel" id="btnCancelar">Cancelar</button>
+          </div>
         </form>
       </div>
     </div>
@@ -586,10 +627,34 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('formCadastro');
+      const form = document.getElementById('formEditar');
       const modal = document.getElementById('confirmModal');
       const okBtn = modal.querySelector('.ok');
       const modalMessage = document.getElementById('modalMessage');
+      const btnCancelar = document.getElementById('btnCancelar');
+
+      // Carregar dados da turma para edição
+      const turmaParaEditar = localStorage.getItem('turmaParaEditar');
+      let turmaIndex = 0;
+      let dadosTurma = {
+        professor: "",
+        turma: "",
+        mensalidade: "",
+        quantidade: ""
+      };
+
+      if (turmaParaEditar) {
+        const { index, dados } = JSON.parse(turmaParaEditar);
+        turmaIndex = index;
+        dadosTurma = dados;
+        localStorage.removeItem('turmaParaEditar');
+      }
+
+      // Preencher formulário com dados existentes
+      document.getElementById('professor').value = dadosTurma.professor;
+      document.getElementById('turma').value = dadosTurma.turma;
+      document.getElementById('mensalidade').value = dadosTurma.mensalidade;
+      document.getElementById('quantidade_alunos').value = dadosTurma.quantidade;
 
       form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -604,26 +669,22 @@
           return;
         }
 
-        const novaTurma = {
+        const turmaEditada = {
           professor: professor,
           turma: turma,
           mensalidade: mensalidade,
           quantidade: quantidade,
-          dataCadastro: new Date().toLocaleDateString()
+          dataEdicao: new Date().toLocaleDateString()
         };
 
-        // Carregar turmas já salvas
-let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-
-// Adicionar nova turma
-turmas.push(novaTurma);
-
-// Salvar de volta
-localStorage.setItem('turmas', JSON.stringify(turmas));
-
+        // Armazenar dados editados temporariamente
+        localStorage.setItem('turmaEditada', JSON.stringify({
+          index: turmaIndex,
+          dados: turmaEditada
+        }));
 
         modalMessage.innerHTML = `
-          Turma <strong>${turma}</strong> foi cadastrada com sucesso!
+          Turma <strong>${turma}</strong> foi atualizada com sucesso!
           <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
             Professor(a): ${professor}<br>
             Mensalidade: ${mensalidade} | Alunos: ${quantidade}
@@ -631,13 +692,18 @@ localStorage.setItem('turmas', JSON.stringify(turmas));
         `;
         
         modal.style.display = 'flex';
-        form.reset();
       });
 
       okBtn.addEventListener('click', function() {
         modal.style.display = 'none';
-        // Redireciona para a página de acessar turmas
+        // Redireciona para a página de listagem
         window.location.href = '/turmas-cadastradas';
+      });
+
+      btnCancelar.addEventListener('click', function() {
+        if (confirm('Tem certeza que deseja cancelar? As alterações não serão salvas.')) {
+          window.location.href = '/turmas-cadastradas';
+        }
       });
 
       modal.addEventListener('click', function(e) {

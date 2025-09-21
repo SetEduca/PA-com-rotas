@@ -1,410 +1,378 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;600;700&display=swap" rel="stylesheet">
-  <title>Seteeduca - Acessar Turmas</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Kodchasan', sans-serif;
-      background-color: #fff4df;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .logo-container {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 15px;
-      padding-right: 15px;
-      z-index: 1;
-    }
-    .logo {
-      width: 90px;
-      height: auto;
-      max-width: 100%;
-      position: relative;
-      top: -15px;
-    }
-    header {
-      background-color: #D22A2A;
-      border-radius: 0 0 40px 40px;
-      padding: 10px 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      height: 60px;
-      margin-top: -15px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-   
-   
-    .header-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.5rem;
-      color: black;
-      font-weight: normal;
-      font-family: 'Kodchasan', sans-serif;
-    }
-    .header-title b {
-      font-family: 'Allerta', sans-serif;
-    }
-    .cad-icon {
-      width: 35px;
-      height: 35px;
-    }
-   
-    .turmas-container {
-      width: 90%;
-      max-width: 800px;
-      margin: 30px auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      padding-bottom: 30px;
-    }
-    
-    .turma-card {
-      background-color: white;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .turma-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    }
-    
-    .turma-header {
-      background-color: #D22A2A;
-      color: white;
-      padding: 18px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .turma-header:hover {
-      background-color: #c12525;
-    }
-    
-    .turma-header h3 {
-      margin: 0;
-      font-size: 1.3rem;
-      font-weight: 600;
-      font-family: 'Allerta', sans-serif;
-    }
-    
-    .toggle-icon {
-      font-size: 1.5rem;
-      font-weight: bold;
-      transition: transform 0.3s;
-    }
-    
-    .turma-content {
-      padding: 20px 25px;
-      display: none;
-      background-color: #fff9f0;
-      border-top: 2px solid #f0e6d6;
-      animation: fadeIn 0.3s ease-out;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .turma-content p {
-      margin: 12px 0;
-      color: #333;
-      font-size: 1.05rem;
-      line-height: 1.5;
-    }
-    
-    .turma-content strong {
-      color: #D22A2A;
-      font-weight: 600;
-    }
-    
-    .delete-container {
-      text-align: right;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px dashed #ddd;
-    }
-    
-    .delete-icon {
-      display: inline-block;
-      cursor: pointer;
-      width: 26px;
-      height: 26px;
-      transition: transform 0.2s;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-    }
-    
-    .delete-icon:hover {
-      transform: scale(1.2);
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    }
-    
-    .empty-message {
-      text-align: center;
-      padding: 40px 20px;
-      background-color: white;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      font-size: 1.1rem;
-      color: #666;
-    }
-    
-    .empty-message::before {
-      content: "😕";
-      font-size: 2rem;
-      display: block;
-      margin-bottom: 15px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sete Educa - Acessar TURMAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #e8e8e8; min-height: 100vh; }
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+         .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .logo {
+            padding: 0px 40px;
+            text-align: center;
+            margin-bottom: 25px;
+            margin-top: 30px;
+        }
 
 
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .modal-confirm {
-      background-color: #fff9f0;
-      border-radius: 20px;
-      padding: 30px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      text-align: center;
-      border-bottom: 5px solid #D22A2A;
-      animation: modalFadeIn 0.3s ease-out;
-    }
-    
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .modal-confirm h3 {
-      color: #D22A2A;
-      margin-bottom: 20px;
-      font-family: 'Allerta', sans-serif;
-      font-size: 1.4rem;
-    }
-    
-    .modal-confirm p {
-      margin-bottom: 25px;
-      font-size: 1.1rem;
-      color: #333;
-      line-height: 1.5;
-    }
-    
-    .modal-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
-    
-    .modal-btn {
-      padding: 12px 25px;
-      border-radius: 20px;
-      font-family: 'Allerta', sans-serif;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: 2px solid #000;
-    }
-    
-    .modal-btn-confirm {
-      background-color: #D22A2A;
-      color: white;
-    }
-    
-    .modal-btn-cancel {
-      background-color: #fff;
-      color: #333;
-    }
-    
-    .modal-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    }
-    
-    .modal-btn-confirm:hover {
-      background-color: #b82222;
-    }
-    
-    .modal-btn-cancel:hover {
-      background-color: #f0f0f0;
-    }
-  </style>
+        .menu {
+            flex: 1;
+            padding: 10 18px;
+            margin-top: 35px;
+        }
+
+        .menu-item {
+            padding: 30px 20px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            overflow: visible;
+            color: black;
+        }
+
+        .menu-item i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .menu-item span {
+            z-index: 2;
+            font-size: 15px;
+        }
+        .menu-item:hover {
+        background-color: #6c757d21;
+        }
+
+
+        .menu-item::after {
+            padding: 0 10px;
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 20px;
+            height: 2px;
+            width: 0px;
+            transition: width 0.3s ease;
+            border-radius: 1px;
+        }
+
+        .menu-item:hover::after,
+        .menu-item.active::after {
+            width: calc(100% - 40px);
+        }
+
+        .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+        .menu-item:nth-child(2)::after { background-color: #F88C12; }
+        .menu-item:nth-child(3)::after { background-color: #59C631; }
+        .menu-item:nth-child(4)::after { background-color: #D22A2A; }
+        .menu-item:nth-child(5)::after { background-color: #9747FF; }
+        .menu-item:nth-child(6)::after { background-color: #00A6FF; }
+
+
+        .menu-item.active {
+            background-color: rgba(128, 128, 128, 0.356);
+            color: #333;
+            font-weight: 600;
+        }
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            box-shadow: black;
+            z-index: 2;
+        }
+        .menu-item::after {
+            background-color: var(--item-color);
+        }
+
+        .seteeduca{
+            color: #333;
+            margin-top: 90px;
+            position: absolute;
+            margin-left: 70px;
+        }
+
+         .sidebar-footer {
+            padding: 20px 18px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1); /* Linha separadora */
+        }
+        
+        .logout-button {
+            padding: 16px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: #333;
+            width: 100%;
+        }
+
+
+       .logout-button i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(210, 42, 42, 0.1); 
+            color: #D22A2A; 
+            font-weight: 600;
+        }
+
+
+        @media (max-width: 768px) {
+            .sidebar { width: 70px; }
+            .menu-item span, .logout-button span { display: none; }
+            .menu-item i, .logout-button i { margin-right: 0; }
+        }
+        .main-content { margin-left: 280px; min-height: 100vh; }
+        .header { background: #c1272d; height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; color: white; }
+        .header-title { display: flex; align-items: center; font-size: 24px; font-weight: 600; }
+        .header-title i { margin-right: 15px; font-size: 28px; }
+        .content-area { padding: 30px; background: #e8e8e8; min-height: calc(100vh - 80px); }
+        .search-section { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+        .search-container { position: relative; width: 400px; }
+        .search-input { width: 100%; height: 50px; background: white; border: 2px solid #ddd; border-radius: 25px; padding: 0 20px 0 50px; font-size: 16px; color: #666; outline: none; }
+        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #999; font-size: 18px; }
+        .new-button { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
+        .new-button-circle { width: 45px; height: 45px; background: #e74c3c; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 200; position: relative; }
+        .new-button-circle::before { content: '+'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 28px; }
+        .new-text { font-size: 14px; color: #666; font-weight: 500; text-align: center; }
+        .stats-info { text-align: right; color: #333; font-size: 18px; font-weight: 600; }
+        .table-container { background: white; border-radius: 12px; border-top: 5px solid #c1272d; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); overflow: hidden; }
+        .table { width: 100%; border-collapse: collapse; }
+        .table-header { background: #f8f9fa; color: #666; font-weight: 600; font-size: 14px; text-transform: uppercase; }
+        .table th, .table td { padding: 20px; text-align: center; border-bottom: 1px solid #eee; }
+        .operations { display: flex; gap: 15px; justify-content: center; }
+        .btn-action { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; text-decoration: none; }
+        .btn-edit { background: #e3f2fd; color: #1976d2; }
+        .btn-edit:hover { background: #bbdefb; }
+        .btn-archive { background: #fce4ec; color: #c2185b; }
+        .btn-archive:hover { background: #f8bbd9; }
+    </style>
 </head>
 <body>
-  <div class="logo-container">
-    <img class="logo" src="/imagem/financeiro/logocomp.png" alt="Logo" />
-  </div>
-
-  <header>
-   
-    </a>
-    <div class="header-title">
-      <img src="/imagem/lupa.svg" alt="Ícone de cadastro" class="cad-icon">
-      <span>Acessar <b>TURMAS</b></span>
-    </div>
-  </header>
-
-  <div class="turmas-container" id="turmasContainer">
- 
-  </div>
-
-
-  <div class="modal-overlay" id="confirmModal">
-    <div class="modal-confirm">
-      <h3>Confirmar Exclusão</h3>
-      <p id="modalMessage">Tem certeza que deseja excluir esta turma?</p>
-      <div class="modal-buttons">
-        <button class="modal-btn modal-btn-cancel" id="cancelDelete">Cancelar</button>
-        <button class="modal-btn modal-btn-confirm" id="confirmDelete">Excluir</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-
-    let currentTurmaIndex = null;
-    const confirmModal = document.getElementById('confirmModal');
-    const modalMessage = document.getElementById('modalMessage');
-    const cancelDeleteBtn = document.getElementById('cancelDelete');
-    const confirmDeleteBtn = document.getElementById('confirmDelete');
-
-    function toggleTurma(element) {
-      const content = element.nextElementSibling;
-      const icon = element.querySelector('.toggle-icon');
-      
-      if (content.style.display === 'block') {
-        content.style.animation = 'fadeOut 0.3s ease-out';
-        setTimeout(() => {
-          content.style.display = 'none';
-        }, 250);
-        icon.textContent = '+';
-        icon.style.transform = 'rotate(0deg)';
-      } else {
-        content.style.display = 'block';
-        icon.textContent = '-';
-        icon.style.transform = 'rotate(180deg)';
-      }
-    }
-
-    function carregarTurmas() {
-      const turmasContainer = document.getElementById('turmasContainer');
-      turmasContainer.innerHTML = '';
-      const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-
-      if (turmas.length === 0) {
-        turmasContainer.innerHTML = `
-          <div class="empty-message">
-            Nenhuma turma cadastrada ainda.<br>
-            Clique no botão "Voltar" para cadastrar uma nova turma.
-          </div>
-        `;
-      } else {
-        turmas.forEach((turma, index) => {
-          const card = document.createElement('div');
-          card.className = 'turma-card';
-
-          card.innerHTML = `
-            <div class="turma-header" onclick="toggleTurma(this)">
-              <h3>${turma.turma}</h3>
-              <span class="toggle-icon">+</span>
-            </div>
-            <div class="turma-content">
-              <p><strong>Professor(a):</strong> ${turma.professor}</p>
-              <p><strong>Turno:</strong> ${turma.turno}</p>
-              <p><strong>Quantidade de Alunos:</strong> ${turma.quantidade}</p>
-              <p><strong>Faixa Etária:</strong> ${turma.faixa}</p>
-              <div class="delete-container">
-                <img src="/imagem/trash.svg" alt="Excluir turma" class="delete-icon" 
-                     onclick="abrirModalConfirmacao(${index})" title="Excluir turma">
-              </div>
-            </div>
-          `;
-          turmasContainer.appendChild(card);
-        });
-      }
-    }
-
-    function abrirModalConfirmacao(index) {
-      const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-      const turmaNome = turmas[index].turma;
-      
-      currentTurmaIndex = index;
-      modalMessage.innerHTML = `Tem certeza que deseja excluir a turma <strong>"${turmaNome}"</strong>?`;
-      confirmModal.style.display = 'flex';
-    }
-
- 
-    function fecharModal() {
-      confirmModal.style.display = 'none';
-      currentTurmaIndex = null;
-    }
-
-  
-    function executarExclusao() {
-      if (currentTurmaIndex !== null) {
-        const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-        const cards = document.querySelectorAll('.turma-card');
+     <div class="sidebar">
+        <div class="logo">
+           <img src="imagem/logo.png" alt="logo">
+        </div>
         
+        <div class="menu">
+            <div class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>INÍCIO</span>
+            </div>
+            <div class="menu-item active">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>PROFESSOR</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-dollar-sign"></i>
+                <span>FINANCEIRO</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>TURMAS</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-user-graduate"></i>
+                <span>MATRÍCULA</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-address-card"></i>
+                <span>CADASTRO</span>
+            </div>
+            <div class="seteeduca">
+                <p> @seteeduca </p>
+            </div>
+        </div>
+<div class="sidebar-footer">
+            <div class="logout-button">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Sair</span>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
      
-        cards[currentTurmaIndex].style.transform = 'scale(0.9)';
-        cards[currentTurmaIndex].style.opacity = '0';
-        cards[currentTurmaIndex].style.transition = 'all 0.3s ease';
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
         
-        setTimeout(() => {
-          turmas.splice(currentTurmaIndex, 1);
-          localStorage.setItem('turmas', JSON.stringify(turmas));
-          carregarTurmas();
-          fecharModal();
-        }, 300);
-      }
-    }
+                document.querySelectorAll('.menu-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                this.classList.add('active');
+            });
+        });
+    </script>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <div class="header-title"><i class="fas fa-users"></i> Acessar TURMAS</div>
+        </div>
+        <div class="content-area">
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="search-icon"><i class="fas fa-search"></i></div>
+                    <input type="text" class="search-input" placeholder="pesquisar">
+                </div>
+                <div class="new-button" onclick="window.location.href='/cadastro-turma'">
+                    <div class="new-button-circle"></div>
+                    <div class="new-text">Nova turma</div>
+                </div>
+                <div class="stats-info" id="totalTurmas">Total de Turmas: 0</div>
+            </div>
 
- 
-    cancelDeleteBtn.addEventListener('click', fecharModal);
-    confirmDeleteBtn.addEventListener('click', executarExclusao);
-    
-    
-    confirmModal.addEventListener('click', (e) => {
-      if (e.target === confirmModal) {
-        fecharModal();
-      }
-    });
+            <div class="table-container">
+                <table class="table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Nome da Turma</th>
+                            <th>Professor(a)</th>
+                            <th>Mensalidade</th>
+                            <th>Q. de alunos</th>
+                            <th>Ano letivo</th>
+                            <th>Operações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="turmasTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    document.addEventListener('DOMContentLoaded', carregarTurmas);
-  </script>
+    <script>
+        let turmas = [];
+
+        function carregarDoStorage() {
+            const turmasSalvas = localStorage.getItem('turmas');
+            if (turmasSalvas) {
+                turmas = JSON.parse(turmasSalvas);
+            }
+        }
+
+        function salvarNoStorage() {
+            localStorage.setItem('turmas', JSON.stringify(turmas));
+        }
+
+        function carregarTurmas() {
+            carregarDoStorage();
+            const tbody = document.getElementById('turmasTableBody');
+            const totalTurmas = document.getElementById('totalTurmas');
+            tbody.innerHTML = '';
+
+            if (turmas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#666; padding:40px;">Nenhuma turma cadastrada ainda</td></tr>';
+            } else {
+                turmas.forEach((turma, index) => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${turma.turma}</td>
+                            <td>${turma.professor}</td>
+                            <td>${turma.mensalidade}</td>
+                            <td>${turma.quantidade}</td>
+                            <td>${new Date().getFullYear()}</td>
+                            <td>
+                                <div class="operations">
+                                    <button class="btn-action btn-edit" onclick="editarTurma(${index})"><i class="fas fa-edit"></i> Editar</button>
+                                    <button class="btn-action btn-archive" onclick="arquivarTurma(${index})"><i class="fas fa-archive"></i> Arquivar</button>
+                                </div>
+                            </td>
+                        </tr>`;
+                });
+            }
+            totalTurmas.textContent = `Total de Turmas: ${turmas.length}`;
+        }
+
+        function adicionarTurma(novaTurma) {
+            turmas.push(novaTurma);
+            salvarNoStorage();
+            carregarTurmas();
+        }
+
+        function editarTurma(index) {
+            localStorage.setItem('turmaParaEditar', JSON.stringify({ index, dados: turmas[index] }));
+            window.location.href = '/editar-turmas';
+        }
+
+        function arquivarTurma(index) {
+            if (confirm('Tem certeza que deseja arquivar esta turma?')) {
+                turmas.splice(index, 1);
+                salvarNoStorage();
+                carregarTurmas();
+            }
+        }
+
+        document.querySelector('.search-input').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('#turmasTableBody tr').forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (row.children.length > 1) {
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarTurmas();
+
+            const turmaEditada = localStorage.getItem('turmaEditada');
+            if (turmaEditada) {
+                const { index, dados } = JSON.parse(turmaEditada);
+                if (index >= 0 && index < turmas.length) {
+                    turmas[index] = dados;
+                    salvarNoStorage();
+                    carregarTurmas();
+                }
+                localStorage.removeItem('turmaEditada');
+            }
+
+        });
+
+        window.adicionarTurma = adicionarTurma;
+    </script>
 </body>
 </html>
