@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #e8e8e8; min-height: 100vh; display: flex; }
+        body { background-color: #e8e8e8;
+; min-height: 100vh; display: flex; }
 
         .sidebar {
             width: 280px;
@@ -87,12 +88,12 @@
             width: calc(100% - 40px);
         }
 
-        .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-        .menu-item:nth-child(2)::after { background-color: #F88C12; }
-        .menu-item:nth-child(3)::after { background-color: #59C631; }
-        .menu-item:nth-child(4)::after { background-color: #D22A2A; }
-        .menu-item:nth-child(5)::after { background-color: #9747FF; }
-        .menu-item:nth-child(6)::after { background-color: #00A6FF; }
+    .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+    .menu-item:nth-child(2)::after { background-color: #00A6FF; }
+    .menu-item:nth-child(3)::after { background-color: #9747FF; }
+    .menu-item:nth-child(4)::after { background-color: #F88C12; }
+    .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+    .menu-item:nth-child(6)::after { background-color: #59C631; }
 
         .menu-item.active {
             background-color: rgba(128, 128, 128, 0.356);
@@ -147,7 +148,7 @@
 
         .logout-button:hover {
             background-color: rgba(210, 42, 42, 0.1); 
-            color: #D22A2A; 
+            color: #c01e26; 
             font-weight: 600;
         }
 
@@ -159,7 +160,7 @@
         }
 
         .header { 
-            background: #c1272d; 
+            background: #c01e26; 
             height: 80px; 
             display: flex; 
             align-items: center; 
@@ -213,7 +214,7 @@
         }
 
         .search-input:focus {
-            border-color: #c1272d;
+            border-color: #c01e26;
             box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.1);
         }
 
@@ -242,7 +243,7 @@
         .new-button-circle { 
             width: 45px; 
             height: 45px; 
-            background: #e74c3c; 
+            background: #c01e26; 
             border-radius: 50%; 
             display: flex; 
             align-items: center; 
@@ -255,7 +256,7 @@
         }
 
         .new-button:hover .new-button-circle {
-            background: #c0392b;
+            background: #c01e26;
         }
 
         .new-button-circle::before { 
@@ -284,7 +285,7 @@
         .table-container { 
             background: white; 
             border-radius: 12px; 
-            border-top: 5px solid #c1272d; 
+            border-top: 5px solid #c01e26; 
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
             overflow: hidden; 
         }
@@ -364,7 +365,7 @@
 
         .btn-archive { 
             background: #fce4ec; 
-            color: #c2185b;
+            color: #c01e26;
             border: 2px solid #f8bbd9;
         }
 
@@ -430,7 +431,7 @@
         }
 
         .modal-header {
-            background: #c1272d;
+            background: #c01e26;
             color: white;
             padding: 20px 30px;
             display: flex;
@@ -482,7 +483,7 @@
         }
 
         .student-card:hover {
-            border-color: #c1272d;
+            border-color: #c01e26;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(193, 39, 45, 0.15);
         }
@@ -503,7 +504,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #c1272d, #971d1d);
+            background: linear-gradient(135deg, #c01e26, #971d1d);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -598,28 +599,31 @@
                     <i class="fas fa-home"></i>
                     <span>INÍCIO</span>
                 </div>
-                <div class="menu-item" onclick="navegarPara('professor')">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>PROFESSOR</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('financeiro')">
-                    <i class="fas fa-dollar-sign"></i>
-                    <span>FINANCEIRO</span>
-                </div>
-                <div class="menu-item active">
-                    <i class="fas fa-users"></i>
-                    <span>TURMAS</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('matricula')"> 
-                    <i class="fas fa-user-graduate"></i>
-                    <span>MATRÍCULA</span>
-                </div>
                 <div class="menu-item" onclick="navegarPara('cadastro')">
                     <i class="fas fa-address-card"></i>
                     <span>CADASTRO</span>
                 </div>
+                <div class="menu-item" onclick="navegarPara('matricula')">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>MATRÍCULA</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('professor')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>PROFESSOR</span>
+                </div>
+                <div class="menu-item active" > 
+                    <i class="fas fa-users"></i>
+                    <span>TURMA</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('financeiro')">
+                     <i class="fas fa-dollar-sign"></i>
+                    <span>FINANCEIRO</span>
+                </div>
             </div>
         </div>
+        <div class="seteeduca">
+                <p> @seteeduca </p>
+            </div>
 
         <div class="sidebar-footer">
             <button class="logout-button" onclick="logout()">
@@ -694,7 +698,7 @@
         function navegarPara(pagina) {
             const rotas = {
                 'inicio': '/home',
-                'professor': '/opcoes-professor',
+                'professor': '/cadastro-professor',
                 'financeiro': '/opcoes-financeiro',
                 'turmas': '/turmas-cadastradas',
                 'matricula': '/matricula',

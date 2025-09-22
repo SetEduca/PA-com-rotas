@@ -96,14 +96,13 @@
             width: calc(100% - 40px);
         }
 
-        .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-        .menu-item:nth-child(2)::after { background-color: #F88C12; }
-        .menu-item:nth-child(3)::after { background-color: #59C631; }
-        .menu-item:nth-child(4)::after { background-color: #D22A2A; }
-        .menu-item:nth-child(5)::after { background-color: #9747FF; }
-        .menu-item:nth-child(6)::after { background-color: #00A6FF; }
-
-        .menu-item.active {
+    .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+    .menu-item:nth-child(2)::after { background-color: #00A6FF; }
+    .menu-item:nth-child(3)::after { background-color: #9747FF; }
+    .menu-item:nth-child(4)::after { background-color: #F88C12; }
+    .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+    .menu-item:nth-child(6)::after { background-color: #59C631; }
+    .menu-item.active {
             background-color: rgba(128, 128, 128, 0.356);
             color: #333;
             font-weight: 600;
@@ -153,7 +152,7 @@
         }
 
         .header {
-            background: #9747FF;
+            background: #9154e0;
             height: 80px;
             display: flex;
             align-items: center;
@@ -218,7 +217,7 @@
             border-radius: 12px;
             padding: 40px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid #9747FF;
+            border-top: 5px solid #9154e0;
             min-height: 600px;
         }
 
@@ -228,7 +227,7 @@
             border-radius: 12px;
             padding: 30px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid #9747FF;
+            border-top: 5px solid #9154e0;
             max-height: 700px;
             overflow-y: auto;
         }
@@ -259,8 +258,8 @@
         }
 
         .tab.active {
-            color: #9747FF;
-            border-bottom-color: #9747FF;
+            color: #A96BFA;
+            border-bottom-color: #9154e0;
         }
 
         .tab-content {
@@ -311,13 +310,13 @@
 
         input:focus, select:focus {
             outline: none;
-            border-color: #9747FF;
+            border-color: #9154e0;
             box-shadow: 0 0 0 3px rgba(151, 71, 255, 0.2);
         }
 
         .btn-primary {
             padding: 16px 30px;
-            background: #9747FF;
+            background: #9154e0;
             color: white;
             border: none;
             border-radius: 8px;
@@ -334,7 +333,7 @@
         }
 
         .btn-primary:hover {
-            background: #7b39d4;
+            background: #9154e0;
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(151, 71, 255, 0.4);
         }
@@ -384,7 +383,7 @@
         }
 
         .matricula-card:hover {
-            border-color: #9747FF;
+            border-color: #9154e0;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(151, 71, 255, 0.15);
         }
@@ -398,7 +397,7 @@
 
         .matricula-number {
             font-weight: 700;
-            color: #9747FF;
+            color: #9154e0;
             font-size: 1.1rem;
         }
 
@@ -514,7 +513,7 @@
         }
 
         .btn-confirm {
-            background: #9747FF;
+            background: #9154e0;
             color: white;
         }
 
@@ -592,25 +591,26 @@
                     <i class="fas fa-home"></i>
                     <span>INÍCIO</span>
                 </div>
+                <div class="menu-item" onclick="navegarPara('cadastro')">
+                    <i class="fas fa-address-card"></i>
+                    <span>CADASTRO</span>
+                </div>
+                <div class="menu-item active" >
+                    <i class="fas fa-user-graduate"></i>
+                    <span>MATRÍCULA</span>
+                </div>
                 <div class="menu-item" onclick="navegarPara('professor')">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>PROFESSOR</span>
                 </div>
+                <div class="menu-item" onclick="navegarPara('turmas')">
+                    <i class="fas fa-users"></i>
+                    <span>TURMA</span>
+                </div>
+                
                 <div class="menu-item" onclick="navegarPara('financeiro')">
                     <i class="fas fa-dollar-sign"></i>
                     <span>FINANCEIRO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('turmas')">
-                    <i class="fas fa-users"></i>
-                    <span>TURMAS</span>
-                </div>
-                <div class="menu-item active">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>MATRÍCULA</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('cadastro')">
-                    <i class="fas fa-address-card"></i>
-                    <span>CADASTRO</span>
                 </div>
             </div>
         </div>
@@ -873,7 +873,7 @@
             // Rotas baseadas no seu servidor Express
             const rotas = {
                 'inicio': '/home',                    // Rota para home
-                'professor': '/opcoes-professor',     // Adicione esta rota no seu servidor se necessário
+                'professor': '/cadastro-professor',     // Adicione esta rota no seu servidor se necessário
                 'financeiro': '/opcoes-financeiro',   // Rota existente para financeiro
                 'turmas': '/turmas-cadastradas',      // Rota existente para turmas
                 'matricula': '/matricula',            // Página atual

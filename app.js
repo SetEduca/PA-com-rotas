@@ -109,6 +109,11 @@ app.get("/matricula", (req, res) => {
   res.render("MATRICULA/matricula");
 });
 
+//PROFESSOR
+app.get("/cadastro-professor", (req, res) => {
+  res.render("PROFESSOR/cadastro");
+});
+
 //RODANDO O SERVIDOR
 
 app.listen(PORT, () => {

@@ -90,13 +90,12 @@
             width: calc(100% - 40px);
         }
 
-        .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-        .menu-item:nth-child(2)::after { background-color: #F88C12; }
-        .menu-item:nth-child(3)::after { background-color: #59C631; }
-        .menu-item:nth-child(4)::after { background-color: #D22A2A; }
-        .menu-item:nth-child(5)::after { background-color: #9747FF; }
-        .menu-item:nth-child(6)::after { background-color: #00A6FF; }
-
+    .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+    .menu-item:nth-child(2)::after { background-color: #00A6FF; }
+    .menu-item:nth-child(3)::after { background-color: #9747FF; }
+    .menu-item:nth-child(4)::after { background-color: #F88C12; }
+    .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+    .menu-item:nth-child(6)::after { background-color: #59C631; }
 
         .menu-item.active {
             background-color: rgba(128, 128, 128, 0.356);
@@ -172,31 +171,33 @@
            <img src="imagem/logo.png" alt="logo">
         </div>
         
-        <div class="menu">
-            <div class="menu-item">
-                <i class="fas fa-home"></i>
-                <span>INÍCIO</span>
+         <div class="menu">
+                <div class="menu-item" onclick="navegarPara('inicio')">
+                    <i class="fas fa-home"></i>
+                    <span>INÍCIO</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('cadastro')">
+                    <i class="fas fa-address-card"></i>
+                    <span>CADASTRO</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('matricula')">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>MATRÍCULA</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('professor')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>PROFESSOR</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('turmas')"> 
+                    <i class="fas fa-users"></i>
+                    <span>TURMA</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('financeiro')">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>FINANCEIRO</span>
+                </div>
             </div>
-            <div class="menu-item active">
-                <i class="fas fa-chalkboard-teacher"></i>
-                <span>PROFESSOR</span>
-            </div>
-            <div class="menu-item">
-                <i class="fas fa-dollar-sign"></i>
-                <span>FINANCEIRO</span>
-            </div>
-            <div class="menu-item">
-                <i class="fas fa-users"></i>
-                <span>TURMAS</span>
-            </div>
-            <div class="menu-item">
-                <i class="fas fa-user-graduate"></i>
-                <span>MATRÍCULA</span>
-            </div>
-            <div class="menu-item">
-                <i class="fas fa-address-card"></i>
-                <span>CADASTRO</span>
-            </div>
+        </div>
             <div class="seteeduca">
                 <p> @seteeduca </p>
             </div>
