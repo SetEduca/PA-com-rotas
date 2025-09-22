@@ -8,24 +8,32 @@ app.set("views", "./views");
 
 app.use(express.static('public'));
 
-// Rotas corrigidas
+//INICIO
+
 app.get("/", (req, res) => {
   res.render("INICIO/inicial");
 });
+
+//LOGIN
 
 app.get("/login", (req, res) => {
   res.render("LOGIN/login");
 });
 
+//PERFIL
+
 app.get("/perfil", (req, res) => {
   res.render("PERFIL/perfil");
 });
+
+//HOME
 
 app.get("/home", (req, res) => {
   res.render("HOME/home");
 });
 
-// URLs corrigidas - sem espaços e acentos
+// SENHA
+
 app.get("/trocar-senha", (req, res) => {
   res.render("SENHA/senha");
 });
@@ -42,9 +50,7 @@ app.get("/senha-trocada", (req, res) => {
   res.render("SENHA/pronto");
 });
 
-app.get("/opcoes-aluno", (req, res) => {
-  res.render("ALUNO/inicio");
-});
+//CADASTRO
 
 app.get("/cadastro-aluno", (req, res) => {
   res.render("ALUNO/cadastro2");
@@ -58,9 +64,7 @@ app.get("/criancas-cadastradas", (req, res) => {
   res.render("ALUNO/cria");
 });
 
-app.get("/opcoes-financeiro", (req, res) => {
-  res.render("FINANCEIRO/bot");
-});
+//FINANCEIRO
 
 app.get("/relatorio", (req, res) => {
   res.render("FINANCEIRO/relatorio");
@@ -86,9 +90,7 @@ app.get("/adimplentes-inadimplentes", (req, res) => {
   res.render("FINANCEIRO/adimplentes");
 });
 
-app.get("/opcoes-turma", (req, res) => {
-  res.render("TURMA/index");
-});
+//TURMAS
 
 app.get("/cadastro-turma", (req, res) => {
   res.render("TURMA/cadastro");
@@ -100,6 +102,14 @@ app.get("/turmas-cadastradas", (req, res) => {
 app.get("/editar-turmas", (req, res) => {
   res.render("TURMA/editar");
 });
+
+//MATRICULA
+
+app.get("/matricula", (req, res) => {
+  res.render("MATRICULA/matricula");
+});
+
+//RODANDO O SERVIDOR
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
