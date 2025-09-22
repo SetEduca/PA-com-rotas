@@ -20,6 +20,13 @@ app.get("/login", (req, res) => {
   res.render("LOGIN/login");
 });
 
+
+// CADASTROINICIAL
+
+app.get("/cadastro", (req, res) => {
+  res.render("CADASTRO/cadastro");
+});
+
 //PERFIL
 
 app.get("/perfil", (req, res) => {
