@@ -20,12 +20,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // Configuração de sessão
 app.use(session({
-    secret: 'seu-secret-key-super-seguro',
+    secret: 'minha-chave-secreta-super-segura-2024',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: false, // em produção, use true com HTTPS
-        maxAge: 24 * 60 * 60 * 1000 // 24 horas
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000
     }
 }));
 
@@ -38,7 +38,7 @@ const requireAuth = (req, res, next) => {
     }
 };
 
-// Rota principal - renderiza a página de login
+// ROTAS GET - Renderizar páginas
 app.get('/', (req, res) => {
     if (req.session.userId) {
         return res.redirect('/home');
@@ -46,69 +46,6 @@ app.get('/', (req, res) => {
     res.render('login');
 });
 
-// Rota para a página de login (GET)
-app.get('/login', (req, res) => {
-    if (req.session.userId) {
-        return res.redirect('/home.html');
-    }
-    res.render('login');
-});
-
-// Rota para processar o login (POST)
-app.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        // Validação básica
-        if (!email || !password) {
-            return res.status(400).json({
-                success: false,
-                message: 'E-mail e senha são obrigatórios.'
-            });
-        }
-
-        // Buscar usuário no array
-        const user = users.find(u => u.email === email.toLowerCase());
-        
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'Usuário não cadastrado. Por favor, crie uma conta primeiro.'
-            });
-        }
-
-        // Verificar senha
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        
-        if (!isPasswordValid) {
-            return res.status(401).json({
-                success: false,
-                message: 'E-mail ou senha inválidos.'
-            });
-        }
-
-        // Criar sessão do usuário
-        req.session.userId = user.id;
-        req.session.userEmail = user.email;
-        req.session.userName = user.name;
-
-        // Sucesso na autenticação
-        res.json({
-            success: true,
-            message: 'Login realizado com sucesso!',
-            redirect: '/home.html'
-        });
-
-    } catch (error) {
-        console.error('Erro no login:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Erro interno do servidor. Tente novamente.'
-        });
-    }
-});
-
-// Rota para a página cadastro.html
 app.get('/cadastro', (req, res) => {
     if (req.session.userId) {
         return res.redirect('/home');
@@ -116,12 +53,70 @@ app.get('/cadastro', (req, res) => {
     res.render('cadastro');
 });
 
-// Rota para processar cadastro (POST)
+app.get('/trocar', (req, res) => {
+    res.render('trocar');
+});
+
+app.get('/home', requireAuth, (req, res) => {
+    res.render('home', {
+        userName: req.session.userName,
+        userEmail: req.session.userEmail
+    });
+});
+
+// ROTAS POST - Processar dados
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'E-mail e senha são obrigatórios.'
+            });
+        }
+
+        const user = users.find(u => u.email === email.toLowerCase());
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuário não encontrado.'
+            });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                message: 'Senha incorreta.'
+            });
+        }
+
+        req.session.userId = user.id;
+        req.session.userEmail = user.email;
+        req.session.userName = user.name;
+
+        res.json({
+            success: true,
+            message: 'Login realizado com sucesso!',
+            redirect: '/home'
+        });
+
+    } catch (error) {
+        console.error('Erro no login:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Erro interno do servidor.'
+        });
+    }
+});
+
 app.post('/cadastro', async (req, res) => {
     try {
         const { name, email, password, confirmPassword } = req.body;
 
-        // Validações
         if (!name || !email || !password || !confirmPassword) {
             return res.status(400).json({
                 success: false,
@@ -143,7 +138,6 @@ app.post('/cadastro', async (req, res) => {
             });
         }
 
-        // Verificar se o usuário já existe
         const existingUser = users.find(u => u.email === email.toLowerCase());
         if (existingUser) {
             return res.status(409).json({
@@ -152,27 +146,24 @@ app.post('/cadastro', async (req, res) => {
             });
         }
 
-        // Hash da senha
-        const saltRounds = 12;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPassword = await bcrypt.hash(password, 12);
 
-        // Criar novo usuário
         const newUser = {
-            id: users.length + 1,
-            name,
-            email: email.toLowerCase(),
+            id: Date.now(),
+            name: name.trim(),
+            email: email.toLowerCase().trim(),
             password: hashedPassword,
             createdAt: new Date()
         };
 
         users.push(newUser);
 
-        console.log('Usuário cadastrado:', { name, email: email.toLowerCase() });
-        console.log('Total de usuários:', users.length);
+        console.log(`Novo usuário cadastrado: ${newUser.name} (${newUser.email})`);
+        console.log(`Total de usuários: ${users.length}`);
 
         res.json({
             success: true,
-            message: 'Cadastro realizado com sucesso! Você pode fazer login agora.',
+            message: 'Cadastro realizado com sucesso!',
             redirect: '/'
         });
 
@@ -180,26 +171,14 @@ app.post('/cadastro', async (req, res) => {
         console.error('Erro no cadastro:', error);
         res.status(500).json({
             success: false,
-            message: 'Erro interno do servidor. Tente novamente.'
+            message: 'Erro interno do servidor.'
         });
     }
 });
 
-// Rota para a página trocar.html (recuperar senha)
-app.get('/trocar.html', (req, res) => {
-    res.render('trocar');
-});
-
-// Rota para a página home.html (protegida)
-app.get('/home', requireAuth, (req, res) => {
-    res.render('/home', {
-        userName: req.session.userName,
-        userEmail: req.session.userEmail
-    });
-});
-
-// Rota para logout
 app.post('/logout', (req, res) => {
+    const userName = req.session.userName;
+    
     req.session.destroy((err) => {
         if (err) {
             console.error('Erro ao fazer logout:', err);
@@ -208,6 +187,9 @@ app.post('/logout', (req, res) => {
                 message: 'Erro ao fazer logout.'
             });
         }
+        
+        console.log(`Usuário ${userName} fez logout`);
+        
         res.json({
             success: true,
             message: 'Logout realizado com sucesso!',
@@ -216,8 +198,8 @@ app.post('/logout', (req, res) => {
     });
 });
 
-// Rota para listar usuários (apenas para desenvolvimento)
-app.get('/usuarios', (req, res) => {
+// Rota para debug - ver usuários cadastrados
+app.get('/debug/usuarios', (req, res) => {
     res.json({
         total: users.length,
         usuarios: users.map(u => ({
@@ -229,22 +211,38 @@ app.get('/usuarios', (req, res) => {
     });
 });
 
-// Middleware para lidar com rotas não encontradas
+// Middleware de erro 404
 app.use((req, res) => {
-    res.status(404).send('Página não encontrada');
+    res.status(404).render('404', { 
+        message: 'Página não encontrada',
+        url: req.originalUrl 
+    });
 });
 
-// Middleware para lidar com erros
+// Middleware de tratamento de erros
 app.use((err, req, res, next) => {
-    console.error('Erro:', err.stack);
-    res.status(500).send('Algo deu errado!');
+    console.error('Erro da aplicação:', err);
+    res.status(500).json({
+        success: false,
+        message: 'Erro interno do servidor'
+    });
 });
 
-// Iniciar servidor
+// Inicializar servidor
 app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-    console.log(`Acesse: http://localhost:${PORT}`);
-    console.log('Sistema funcionando SEM banco de dados (dados em memória)');
+    console.log('=================================');
+    console.log(`🚀 Servidor rodando na porta ${PORT}`);
+    console.log(`📱 Acesse: http://localhost:${PORT}`);
+    console.log('💾 Dados armazenados em memória');
+    console.log('🔄 Reiniciar = perder dados');
+    console.log('=================================');
+});
+
+// Processar encerramento gracioso
+process.on('SIGINT', () => {
+    console.log('\n👋 Encerrando servidor...');
+    console.log(`📊 Total de usuários cadastrados: ${users.length}`);
+    process.exit(0);
 });
 
 module.exports = app;
