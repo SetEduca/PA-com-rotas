@@ -66,7 +66,7 @@
             font-size: 1.25rem;
             font-weight: 400;
             color: #555555;
-            margin-bottom: 40px;
+            margin-bottom: 20px; /* Reduzido para dar espaço à mensagem de erro */
         }
         
         .form-group {
@@ -133,50 +133,50 @@
             text-decoration: underline;
         }
 
-        /* --- CÓDIGO ADICIONADO --- */
         .form-links p a {
             color: #FFD972;
         }
-        /* --- FIM DO CÓDIGO ADICIONADO --- */
 
-        #submit-btn {
-            display: block;
-            text-decoration: none;
-            text-align: center;
-            line-height: 65px; 
-            width: 100%;
-            height: 65px;
-            border-radius: 30px;
-            border: 1px solid #E0B400;
-            background-color: #fcdc6a;
-            font-size: 1.2rem;
-            font-weight: bold;
-            font-family: 'Kodchasan', sans-serif;
-            cursor: pointer;
-            margin-top: 35px; 
-            color: #000;
-            box-sizing: border-box;
-        }
+  #submit-btn {
+    display: block;
+    text-align: center;
+    line-height: 65px; 
+    width: 100%;
+    height: 65px;
+    border-radius: 30px;
+    border: 1px solid #E0B400;
+    background-color: #fcdc6a;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Kodchasan', sans-serif;
+    cursor: pointer;
+    margin-top: 35px; 
+    color: #000;
+    box-sizing: border-box;
+    
+    /* --- CORREÇÃO APLICADA AQUI --- */
+    -webkit-appearance: none; /* Remove estilos padrão do iOS */
+    appearance: none;         /* Remove estilos padrão em navegadores modernos */
+}
         
         .error-message {
             color: #dc3545;
             font-family: 'Allerta', sans-serif;
             font-size: 0.9rem;
             font-weight: bold;
-            margin-top: 10px;
+            margin-bottom: 15px; /* Adicionado para separar do formulário */
+            text-align: center;
         }
 
-    
         @media (max-width: 992px) {
             .left-panel {
                 display: none;
             }
-
             .right-panel {
                 flex-basis: 100%; 
                 max-width: 100%;
-                justify-content: flex-start;
-                padding-top: 4rem; 
+                justify-content: center; /* Centraliza o conteúdo */
+                padding: 2rem;
             }
         }
 
@@ -185,16 +185,13 @@
                 font-size: 2.8rem;
                 text-align: center;
             }
-
             .login-container h2 {
                 font-size: 1.1rem;
                 text-align: center;
-                margin-bottom: 30px;
+                margin-bottom: 20px;
             }
-
             .right-panel {
                 padding: 2rem 1.5rem; 
-                padding-top: 3rem;
             }
         }
     </style>
@@ -210,7 +207,11 @@
                 <h1>Login</h1>
                 <h2>Sentimos falta de você!</h2>
 
-                <form id="meuform">
+                <% if (typeof message !== 'undefined' && message) { %>
+                    <p class="error-message"><%= message %></p>
+                <% } %>
+
+                <form id="meuform" method="POST" action="/login">
                     <div class="form-group">
                         <label for="email">E-mail</label>
                         <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
@@ -229,20 +230,20 @@
                         <a href="/trocar">Esqueceu a senha?</a>
                     </div>
 
-                    <a href="/home" id="submit-btn">Entrar</a>
+                    <button type="submit" id="submit-btn">Entrar</button>
                 </form>
             </div>
         </div>
     </div>
     
     <script>
-    
         const togglePassword = document.querySelector('.toggle-password');
         const passwordInput = document.querySelector('#password');
 
         togglePassword.addEventListener('click', function () {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
+            // Alterna entre os ícones de olho aberto e fechado
             this.classList.toggle('fa-eye-slash');
         });
     </script>
