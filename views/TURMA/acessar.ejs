@@ -171,10 +171,14 @@
         }
 
         .header-title { 
-            display: flex; 
-            align-items: center; 
-            font-size: 24px; 
-            font-weight: 600; 
+             display: flex; 
+      align-items: center;
+      position: relative; 
+      top: 0.7vh;
+      gap: 10px; 
+      font-size: 1.5rem; 
+      color: rgb(255, 255, 255); 
+      font-family: 'Kodchasan', sans-serif;
         }
 
         .header-title i { 
@@ -184,7 +188,7 @@
 
         .content-area { 
             padding: 30px; 
-            background: #e8e8e8; 
+            background: #fcf8f2; 
             flex: 1;
             width: 100%;
         }
@@ -636,7 +640,10 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="header">
-            <div class="header-title"><i class="fas fa-users"></i> Acessar TURMAS</div>
+          <div class="header-title">
+        <i class="fas fa-users"></i>
+        <span>Acessar <b>TURMAS</b></span>      
+      </div>
         </div>
         <div class="content-area">
             <div class="search-section">
@@ -691,6 +698,22 @@
         let turmas = [];
         let matriculas = [];
 
+        // Dados de exemplo para teste - REMOVER EM PRODUÇÃO
+        const dadosExemplo = [
+            {
+                professor: "Maria Silva",
+                turma: "Berçário A",
+                mensalidade: "0-1/mat/R$ 150",
+                quantidade: "15"
+            },
+            {
+                professor: "João Santos",
+                turma: "Maternal I",
+                mensalidade: "2-3/int/R$ 300",
+                quantidade: "20"
+            }
+        ];
+
         // Dados de alunos disponíveis
         const alunosDisponiveis = [];
 
@@ -727,23 +750,27 @@
 
         // Função para carregar dados do storage
         function carregarDoStorage() {
-            // Carregar turmas do localStorage/sessionStorage
-            const turmasSalvas = localStorage.getItem('turmas') || sessionStorage.getItem('turmas');
+            const turmasSalvas = sessionStorage.getItem('turmas') || localStorage.getItem('turmas');
             if (turmasSalvas) {
-                turmas = JSON.parse(turmasSalvas);
+                try {
+                    return JSON.parse(turmasSalvas);
+                } catch (e) {
+                    console.error('Erro ao carregar turmas do storage:', e);
+                    return [];
+                }
             }
-
-            // Carregar matrículas do localStorage/sessionStorage
-            const matriculasSalvas = localStorage.getItem('matriculas') || sessionStorage.getItem('matriculas');
-            if (matriculasSalvas) {
-                matriculas = JSON.parse(matriculasSalvas);
-            }
+            // Se não há dados salvos, usar dados de exemplo
+            return dadosExemplo.slice();
         }
 
         // Função para salvar no storage
-        function salvarNoStorage() {
-            sessionStorage.setItem('turmas', JSON.stringify(turmas));
-            sessionStorage.setItem('matriculas', JSON.stringify(matriculas));
+        function salvarNoStorage(turmasArray) {
+            try {
+                sessionStorage.setItem('turmas', JSON.stringify(turmasArray));
+                console.log('Turmas salvas no storage:', turmasArray);
+            } catch (e) {
+                console.error('Erro ao salvar turmas:', e);
+            }
         }
 
         function contarAlunosNaTurma(nomeTurma) {
@@ -763,10 +790,12 @@
         }
 
         function carregarTurmas() {
-            carregarDoStorage();
+            turmas = carregarDoStorage();
             const tbody = document.getElementById('turmasTableBody');
             const totalTurmas = document.getElementById('totalTurmas');
             tbody.innerHTML = '';
+
+            console.log('Carregando turmas:', turmas);
 
             if (turmas.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#666; padding:40px;">Nenhuma turma cadastrada ainda</td></tr>';
@@ -865,9 +894,30 @@
         }
 
         function editarTurma(index) {
-            const turma = turmas[index];
-            sessionStorage.setItem('turmaParaEditar', JSON.stringify({ index, dados: turma }));
-            window.location.href = '/editar-turmas';
+            console.log('Editando turma no índice:', index);
+            console.log('Dados da turma:', turmas[index]);
+            
+            if (index >= 0 && index < turmas.length) {
+                const turma = turmas[index];
+                const dadosParaEdicao = {
+                    index: index,
+                    dados: turma
+                };
+                
+                // Salvar nos dois storages para garantir
+                sessionStorage.setItem('turmaParaEditar', JSON.stringify(dadosParaEdicao));
+                localStorage.setItem('turmaParaEditar', JSON.stringify(dadosParaEdicao));
+                
+                console.log('Dados salvos para edição:', dadosParaEdicao);
+                
+                // Pequeno delay para garantir que os dados foram salvos
+                setTimeout(() => {
+                    window.location.href = '/editar-turmas';
+                }, 100);
+            } else {
+                console.error('Índice inválido para edição:', index);
+                alert('Erro: Turma não encontrada para edição.');
+            }
         }
 
         function arquivarTurma(index) {
@@ -881,33 +931,34 @@
             
             if (confirm(`Tem certeza que deseja arquivar a turma "${turma.turma}"?`)) {
                 turmas.splice(index, 1);
-                salvarNoStorage();
+                salvarNoStorage(turmas);
                 carregarTurmas();
+                console.log('Turma arquivada. Turmas restantes:', turmas.length);
             }
         }
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
+            // Garantir que temos dados iniciais se necessário
+            const turmasAtuais = carregarDoStorage();
+            if (turmasAtuais.length === 0) {
+                console.log('Nenhuma turma encontrada, criando dados de exemplo');
+                salvarNoStorage(dadosExemplo);
+            }
+            
             carregarTurmas();
             
-            // Verificar se há turma editada retornando
-            const turmaEditada = localStorage.getItem('turmaEditada');
-            if (turmaEditada) {
-                const { index, dados } = JSON.parse(turmaEditada);
-                if (index >= 0 && index < turmas.length) {
-                    turmas[index] = dados;
-                    salvarNoStorage();
-                    carregarTurmas();
-                }
-                localStorage.removeItem('turmaEditada');
-            }
-
             // Verificar se há nova turma cadastrada
-            const turmaCadastrada = localStorage.getItem('novaTurma');
+            const turmaCadastrada = localStorage.getItem('novaTurma') || sessionStorage.getItem('novaTurma');
             if (turmaCadastrada) {
-                const turma = JSON.parse(turmaCadastrada);
-                adicionarTurma(turma);
-                localStorage.removeItem('novaTurma');
+                try {
+                    const turma = JSON.parse(turmaCadastrada);
+                    adicionarTurma(turma);
+                    localStorage.removeItem('novaTurma');
+                    sessionStorage.removeItem('novaTurma');
+                } catch (e) {
+                    console.error('Erro ao processar nova turma:', e);
+                }
             }
             
             // Pesquisa em tempo real
@@ -943,16 +994,26 @@
         // Funções para adicionar dados (para integração futura)
         function adicionarTurma(novaTurma) {
             turmas.push(novaTurma);
-            salvarNoStorage();
+            salvarNoStorage(turmas);
             carregarTurmas();
+            console.log('Nova turma adicionada:', novaTurma);
         }
 
         function adicionarMatricula(novaMatricula) {
             matriculas.push(novaMatricula);
-            salvarNoStorage();
-            carregarTurmas();
+            carregarTurmas(); // Recarregar para atualizar contadores
+            console.log('Nova matrícula adicionada:', novaMatricula);
         }
 
+        // Expor funções globalmente para uso em outros scripts
+        window.adicionarTurma = adicionarTurma;
+        window.adicionarMatricula = adicionarMatricula;
+        window.navegarPara = navegarPara;
+        window.logout = logout;
+        window.criarNovaTurma = criarNovaTurma;
+        window.visualizarAlunos = visualizarAlunos;
+        window.closeModal = closeModal;
+        window.editarTurma = editarTurma;
         // Expor funções globalmente para uso em outros scripts
         window.adicionarTurma = adicionarTurma;
         window.adicionarMatricula = adicionarMatricula;

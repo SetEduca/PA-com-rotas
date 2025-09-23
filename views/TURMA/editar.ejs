@@ -176,10 +176,14 @@
     }
 
     .header-title {
-      display: flex;
+    display: flex; 
       align-items: center;
-      font-size: 24px;
-      font-weight: 600;
+      position: relative; 
+      top: 0.7vh;
+      gap: 10px; 
+      font-size: 1.5rem; 
+      color: rgb(255, 255, 255); 
+      font-family: 'Kodchasan', sans-serif;
     }
 
     .header-title i {
@@ -213,7 +217,7 @@
 
     .content-area {
       padding: 30px;
-      background: #e8e8e8;
+      background: #fcf8f2;
       flex: 1;
       display: flex;
       justify-content: center;
@@ -531,9 +535,9 @@
   <div class="main-content">
     <!-- Header -->
     <div class="header">
-      <div class="header-title">
+       <div class="header-title">
         <i class="fas fa-edit"></i>
-        Editar TURMA
+        <span>Editar <b>TURMAS</b></span>      
       </div>
       <div class="user-profile">
         <div class="profile-pic">
@@ -603,12 +607,12 @@
         function navegarPara(pagina) {
             // Rotas baseadas no seu servidor Express
             const rotas = {
-                'inicio': '/home',                    // Rota para home
-                'professor': '/cadastro-professor',     // Adicione esta rota no seu servidor se necessário
-                'financeiro': '/opcoes-financeiro',   // Rota existente para financeiro
-                'turmas': '/turmas-cadastradas',      // Rota existente para turmas
-                'matricula': '/matricula',            // Página atual
-                'cadastro': '/opcoes-aluno'           // Rota existente para cadastro de aluno
+                'inicio': '/home',
+                'professor': '/cadastro-professor',
+                'financeiro': '/opcoes-financeiro',
+                'turmas': '/turmas-cadastradas',
+                'matricula': '/matricula',
+                'cadastro': '/opcoes-aluno'
             };
 
             // Navegar para a página correspondente
@@ -616,10 +620,20 @@
                 window.location.href = rotas[pagina];
             } else {
                 console.warn(`Rota não encontrada para: ${pagina}`);
-                // Fallback - mostrar modal informativo
-                showModal(`Página "${pagina.toUpperCase()}" em desenvolvimento.\nEm breve estará disponível!`);
             }
         }
+
+        // Função para carregar dados do storage
+        function carregarDoStorage() {
+            const turmasSalvas = sessionStorage.getItem('turmas') || "[]";
+            return JSON.parse(turmasSalvas);
+        }
+
+        // Função para salvar no storage
+        function salvarNoStorage(turmas) {
+            sessionStorage.setItem('turmas', JSON.stringify(turmas));
+        }
+
     document.addEventListener('DOMContentLoaded', function() {
       // Menu interativo
       document.querySelectorAll('.menu-item').forEach(item => {
@@ -638,9 +652,8 @@
       const modalMessage = document.getElementById('modalMessage');
       const btnCancelar = document.getElementById('btnCancelar');
 
-      // Carregar dados da turma para edição
-      const turmaParaEditar = localStorage.getItem('turmaParaEditar') || sessionStorage.getItem('turmaParaEditar');
-      let turmaIndex = 0;
+      // Variáveis para armazenar dados da edição
+      let turmaIndex = -1;
       let dadosTurma = {
         professor: "",
         turma: "",
@@ -648,19 +661,90 @@
         quantidade: ""
       };
 
-      if (turmaParaEditar) {
-        const { index, dados } = JSON.parse(turmaParaEditar);
-        turmaIndex = index;
-        dadosTurma = dados;
-        localStorage.removeItem('turmaParaEditar');
-        sessionStorage.removeItem('turmaParaEditar');
+      // Tentar carregar dados da turma para edição de várias fontes
+      let turmaParaEditar = sessionStorage.getItem('turmaParaEditar') || 
+                           localStorage.getItem('turmaParaEditar') ||
+                           sessionStorage.getItem('editTurma') ||
+                           localStorage.getItem('editTurma');
+      
+      console.log('Dados recebidos para edição:', turmaParaEditar);
+      
+      // Se não encontrou dados específicos para edição, tentar buscar pela URL ou outros métodos
+      if (!turmaParaEditar) {
+        console.log('Tentando métodos alternativos para carregar dados...');
+        
+        // Verificar se há dados de turma nas variáveis de URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const turmaId = urlParams.get('id') || urlParams.get('index');
+        
+        if (turmaId) {
+          console.log('ID encontrado na URL:', turmaId);
+          // Carregar todas as turmas e buscar pela ID
+          const todasTurmas = carregarDoStorage();
+          const index = parseInt(turmaId);
+          if (index >= 0 && index < todasTurmas.length) {
+            turmaParaEditar = JSON.stringify({
+              index: index,
+              dados: todasTurmas[index]
+            });
+          }
+        }
       }
-
-      // Preencher formulário com dados existentes
-      document.getElementById('professor').value = dadosTurma.professor;
-      document.getElementById('turma').value = dadosTurma.turma;
-      document.getElementById('mensalidade').value = dadosTurma.mensalidade;
-      document.getElementById('quantidade_alunos').value = dadosTurma.quantidade;
+      
+      if (turmaParaEditar) {
+        try {
+          const { index, dados } = JSON.parse(turmaParaEditar);
+          turmaIndex = parseInt(index);
+          dadosTurma = dados;
+          
+          console.log('Índice da turma:', turmaIndex);
+          console.log('Dados da turma:', dadosTurma);
+          
+          // Validar dados antes de preencher
+          if (turmaIndex >= 0 && dadosTurma && dadosTurma.turma) {
+            // Verificar se a turma ainda existe no storage
+            const turmasAtuais = carregarDoStorage();
+            if (turmaIndex < turmasAtuais.length && turmasAtuais[turmaIndex]) {
+              // Preencher formulário com dados existentes
+              document.getElementById('professor').value = dadosTurma.professor || '';
+              document.getElementById('turma').value = dadosTurma.turma || '';
+              document.getElementById('mensalidade').value = dadosTurma.mensalidade || '';
+              document.getElementById('quantidade_alunos').value = dadosTurma.quantidade || '';
+              
+              console.log('Formulário preenchido com sucesso');
+              
+              // Limpar os storages após carregar
+              sessionStorage.removeItem('turmaParaEditar');
+              localStorage.removeItem('turmaParaEditar');
+              sessionStorage.removeItem('editTurma');
+              localStorage.removeItem('editTurma');
+            } else {
+              throw new Error('Turma não encontrada no storage atual');
+            }
+          } else {
+            throw new Error('Dados incompletos ou índice inválido');
+          }
+        } catch (error) {
+          console.error('Erro ao carregar dados da turma:', error);
+          // Tentar carregar dados de exemplo para demonstração
+          console.log('Carregando dados de exemplo...');
+          document.getElementById('professor').value = 'Jéssica Figueiredo';
+          document.getElementById('turma').value = 'Infantil 2';
+          document.getElementById('mensalidade').value = '3-4/int/R$ 320';
+          document.getElementById('quantidade_alunos').value = '20';
+          turmaIndex = 0; // Definir índice padrão
+          alert('Erro: Não foi possível encontrar a turma para atualizar. Por favor, tente novamente.');
+        }
+      } else {
+        console.warn('Nenhum dado de turma encontrado');
+        // Carregar dados de exemplo para demonstração
+        document.getElementById('professor').value = 'Jéssica Figueiredo';
+        document.getElementById('turma').value = 'Infantil 2';
+        document.getElementById('mensalidade').value = '3-4/int/R$ 320';
+        document.getElementById('quantidade_alunos').value = '20';
+        turmaIndex = 0;
+        alert('Nenhuma turma selecionada para edição. Dados de exemplo carregados.');
+      }
 
       form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -675,6 +759,74 @@
           return;
         }
 
+        console.log('Salvando alterações...');
+        console.log('Dados atualizados:', { professor, turma, mensalidade, quantidade });
+
+        // Carregar lista de turmas atual
+        let turmas = carregarDoStorage();
+        console.log('Turmas atuais:', turmas);
+        console.log('Atualizando turma no índice:', turmaIndex);
+        console.log('Total de turmas:', turmas.length);
+
+        // Se não há turmas ou índice inválido, criar dados de exemplo
+        if (!Array.isArray(turmas) || turmas.length === 0) {
+          console.log('Criando turma inicial...');
+          turmas = [{
+            professor: professor,
+            turma: turma,
+            mensalidade: mensalidade,
+            quantidade: quantidade
+          }];
+          turmaIndex = 0;
+        } else if (turmaIndex < 0 || turmaIndex >= turmas.length) {
+          console.log('Índice inválido, tentando encontrar turma por nome...');
+          
+          // Tentar encontrar a turma pelo nome original se disponível
+          if (dadosTurma && dadosTurma.turma) {
+            const novoIndice = turmas.findIndex(t => t.turma === dadosTurma.turma);
+            if (novoIndice >= 0) {
+              turmaIndex = novoIndice;
+              console.log('Turma encontrada no novo índice:', turmaIndex);
+            } else {
+              console.log('Turma não encontrada, adicionando como nova...');
+              turmas.push({
+                professor: professor,
+                turma: turma,
+                mensalidade: mensalidade,
+                quantidade: quantidade
+              });
+              turmaIndex = turmas.length - 1;
+            }
+          } else {
+            console.log('Adicionando como nova turma...');
+            turmas.push({
+              professor: professor,
+              turma: turma,
+              mensalidade: mensalidade,
+              quantidade: quantidade
+            });
+            turmaIndex = turmas.length - 1;
+          }
+        } else {
+          // Atualizar a turma específica no índice correto
+          turmas[turmaIndex] = {
+            professor: professor,
+            turma: turma,
+            mensalidade: mensalidade,
+            quantidade: quantidade
+          };
+        }
+
+        console.log('Turma atualizada:', turmas[turmaIndex]);
+        
+        // Salvar no storage
+        salvarNoStorage(turmas);
+        
+        // Confirmar que foi salvo
+        const turmasVerificacao = carregarDoStorage();
+        console.log('Verificação - turmas após salvar:', turmasVerificacao);
+        console.log('Turma específica após salvar:', turmasVerificacao[turmaIndex]);
+
         modalMessage.innerHTML = `
           Turma <strong>${turma}</strong> foi atualizada com sucesso!
           <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
@@ -688,12 +840,13 @@
 
       okBtn.addEventListener('click', function() {
         modal.style.display = 'none';
-        alert('Redirecionando para a página de turmas...');
+        // Redirecionar de volta para a lista de turmas
+        window.location.href = '/turmas-cadastradas';
       });
 
       btnCancelar.addEventListener('click', function() {
         if (confirm('Tem certeza que deseja cancelar? As alterações não serão salvas.')) {
-          alert('Redirecionando para a página de turmas...');
+          window.location.href = '/turmas-cadastradas';
         }
       });
 
