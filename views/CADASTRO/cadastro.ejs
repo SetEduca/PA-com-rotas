@@ -339,6 +339,21 @@
             border: 2px dashed #fff;
         }
 
+        /* Mensagem de sucesso do cadastro */
+        .success-cadastro {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+        }
+
         @media (max-width: 850px) {
             body, html {
                 overflow-y: auto;
@@ -416,12 +431,18 @@
             <div class="main-content">
                 
                 <form id="cadastro-form" class="form-area" method="POST" action="/cadastro" enctype="multipart/form-data">
-                    <% if (typeof error !== 'undefined' && error) { %>
-                        <div class="error-message">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <%= error %>
-                        </div>
-                    <% } %>
+                    
+                    <!-- Mensagem de sucesso -->
+                    <div id="success-cadastro" class="success-cadastro" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Cadastro realizado com sucesso! Redirecionando para o login...</span>
+                    </div>
+
+                    <!-- Mensagem de erro do servidor -->
+                    <div id="error-message" style="display: none;" class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span id="error-text"></span>
+                    </div>
 
                     <div class="name-and-photo-group">
                         <div class="photo-upload-container">
@@ -443,7 +464,6 @@
                                 id="nome_creche" 
                                 name="nome_creche" 
                                 placeholder="Ex: Saber de luz" 
-                                value="<%= typeof dados !== 'undefined' ? dados.nome_creche || '' : '' %>"
                                 required
                             >
                         </div>
@@ -457,7 +477,6 @@
                                 id="cnpj" 
                                 name="cnpj" 
                                 placeholder="Ex: 57.545.222/0001-40" 
-                                value="<%= typeof dados !== 'undefined' ? dados.cnpj || '' : '' %>"
                                 required
                             >
                         </div>
@@ -468,7 +487,6 @@
                                 id="telefone" 
                                 name="telefone" 
                                 placeholder="Ex: (71) 98888-8888" 
-                                value="<%= typeof dados !== 'undefined' ? dados.telefone || '' : '' %>"
                                 required
                             >
                         </div>
@@ -479,7 +497,6 @@
                                 id="cep" 
                                 name="cep" 
                                 placeholder="Ex: 40140-650" 
-                                value="<%= typeof dados !== 'undefined' ? dados.cep || '' : '' %>"
                                 required
                             >
                         </div>
@@ -490,7 +507,6 @@
                                 id="rua" 
                                 name="rua" 
                                 placeholder="Ex: Rua das Flores" 
-                                value="<%= typeof dados !== 'undefined' ? dados.rua || '' : '' %>"
                                 required
                             >
                         </div>
@@ -501,7 +517,6 @@
                                 id="bairro" 
                                 name="bairro" 
                                 placeholder="Ex: Ipitanga" 
-                                value="<%= typeof dados !== 'undefined' ? dados.bairro || '' : '' %>"
                                 required
                             >
                         </div>
@@ -512,7 +527,6 @@
                                 id="cidade" 
                                 name="cidade" 
                                 placeholder="Ex: Salvador" 
-                                value="<%= typeof dados !== 'undefined' ? dados.cidade || '' : '' %>"
                                 required
                             >
                         </div>
@@ -523,7 +537,6 @@
                                 id="email" 
                                 name="email" 
                                 placeholder="Ex: saberdaluz@gmail.com" 
-                                value="<%= typeof dados !== 'undefined' ? dados.email || '' : '' %>"
                                 required
                             >
                         </div>
@@ -555,7 +568,6 @@
                         <button type="submit" class="submit-btn">Cadastrar</button>
                     </div>
 
-                </form>
 
             </div>
 
@@ -662,6 +674,9 @@
                 cameraIcon.style.display = 'block';
                 removePhoto.style.display = 'none';
                 successMessage.style.display = 'none';
+                // Limpar mensagens de erro
+                document.getElementById('error-message').style.display = 'none';
+                document.getElementById('success-cadastro').style.display = 'none';
             }
         }
 
@@ -720,20 +735,27 @@
             }
         });
 
-        // **** SCRIPT PARA VERIFICAR SENHAS ****
+        // ========== VALIDAÇÃO E SUBMIT DO FORMULÁRIO ==========
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('cadastro-form');
             const senhaInput = document.getElementById('senha');
             const confirmarSenhaInput = document.getElementById('confirmar_senha');
             const errorMessageDiv = document.getElementById('password-error-message');
+            const cadastrarBtn = document.getElementById('cadastrar-btn');
+            const successCadastro = document.getElementById('success-cadastro');
+            const errorMessage = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
 
-            form.addEventListener('submit', (event) => {
+            // Interceptar o submit do formulário
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Previne o submit padrão
+                
                 const senha = senhaInput.value;
                 const confirmarSenha = confirmarSenhaInput.value;
                 errorMessageDiv.textContent = '';
                 
+                // Validação das senhas
                 if (senha !== confirmarSenha) {
-                    event.preventDefault();
                     errorMessageDiv.textContent = 'As senhas não coincidem. Tente novamente.';
                     confirmarSenhaInput.classList.add('error');
                     
@@ -741,7 +763,63 @@
                         errorMessageDiv.textContent = '';
                         confirmarSenhaInput.classList.remove('error');
                     }, 3000);
+                    return;
                 }
+
+                // Desabilitar botão durante o processo
+                cadastrarBtn.disabled = true;
+                cadastrarBtn.textContent = 'Cadastrando...';
+
+                try {
+                    // Criar FormData com todos os dados
+                    const formData = new FormData(form);
+                    
+                    // Fazer a requisição
+                    const response = await fetch('/cadastro', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        // Se deu certo, mostrar sucesso e redirecionar
+                        successCadastro.style.display = 'block';
+                        errorMessage.style.display = 'none';
+                        form.style.opacity = '0.7';
+                        
+                        // Redirecionar para login após 2 segundos
+                        setTimeout(() => {
+                            window.location.href = '/login?status=success';
+                        }, 2000);
+                        
+                    } else {
+                        // Se deu erro, tentar pegar a mensagem de erro
+                        const errorHtml = await response.text();
+                        
+                        // Tentar extrair a mensagem de erro do HTML retornado
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(errorHtml, 'text/html');
+                        const errorElement = doc.querySelector('.error-message');
+                        
+                        if (errorElement) {
+                            errorText.textContent = errorElement.textContent.replace('⚠', '').trim();
+                        } else {
+                            errorText.textContent = 'Erro no cadastro. Tente novamente.';
+                        }
+                        
+                        errorMessage.style.display = 'block';
+                        successCadastro.style.display = 'none';
+                    }
+                    
+                } catch (error) {
+                    console.error('Erro na requisição:', error);
+                    errorText.textContent = 'Erro de conexão. Tente novamente.';
+                    errorMessage.style.display = 'block';
+                    successCadastro.style.display = 'none';
+                }
+
+                // Reabilitar botão
+                cadastrarBtn.disabled = false;
+                cadastrarBtn.textContent = 'Cadastrar';
             });
         });
 
