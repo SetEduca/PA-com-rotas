@@ -117,8 +117,16 @@ app.get("/matricula", (req, res) => {
 });
 
 //PROFESSOR
-app.get("/cadastro-professor", (req, res) => {
-  res.render("PROFESSOR/cadastro");
+
+app.get("/cadastro-prof", (req, res) => {
+  res.render("PROFESSOR/cadastrop");
+});
+
+app.get("/prof-cadastrados", (req, res) => {
+  res.render("PROFESSOR/acessop");
+});
+app.get("/editar-prof", (req, res) => {
+  res.render("PROFESSOR/editarp");
 });
 
 //RODANDO O SERVIDOR
