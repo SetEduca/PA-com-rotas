@@ -55,8 +55,26 @@
         .error-message i { color: #dc3545; }
         .success-message { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 8px 12px; border-radius: 8px; margin-top: 0.5rem; font-size: 0.8rem; display: none; text-align: center; }
         .password-error-message { color: #D8000C; font-size: 0.8rem; font-weight: 500; margin-top: 5px; height: 15px; }
-        .photo-circle.drag-over { background-color: #f0c355; border: 2px dashed #fff; }
+        .password-requirements { background-color: #e7f3ff; border: 1px solid #bee5eb; border-radius: 8px; padding: 10px; margin-top: 5px; font-size: 0.75rem; color: #0c5460; display: none; }
+        .password-requirements ul { margin: 0; padding-left: 15px; }
+        .password-requirements li { margin: 2px 0; }
+        .password-requirements li.valid { color: #28a745; }
+        .password-requirements li.invalid { color: #dc3545; }
+        .terms-container { margin: 1.5rem 0; display: flex; align-items: flex-start; gap: 0.75rem; }
+        .terms-checkbox { width: 18px; height: 18px; margin: 0; margin-top: 2px; cursor: pointer; }
+        .terms-text { font-size: 0.85rem; color: #555; line-height: 1.4; }
+        .terms-text a { color: #007bff; text-decoration: none; }
+        .terms-text a:hover { text-decoration: underline; }
         .success-cadastro { background-color: #d4edda; color: #155724; padding: 1rem; border: 1px solid #c3e6cb; border-radius: 10px; margin-bottom: 1.5rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; text-align: center; }
+        
+        /* NOVOS ESTILOS PARA O QUADRADO DE SUCESSO */
+        .success-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; display: none; justify-content: center; align-items: center; }
+        .success-box { background-color: #d4edda; border: 2px solid #c3e6cb; border-radius: 15px; padding: 2rem; text-align: center; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .success-box h2 { color: #155724; font-size: 1.5rem; margin-bottom: 1rem; font-weight: 600; }
+        .success-box p { color: #155724; margin-bottom: 1.5rem; font-size: 1rem; }
+        .success-box .login-btn { background-color: #28a745; color: white; padding: 0.8rem 2rem; border: none; border-radius: 25px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease; text-decoration: none; display: inline-block; }
+        .success-box .login-btn:hover { background-color: #218838; }
+        
         @media (max-width: 850px) {
             body, html { overflow-y: auto; height: auto; }
             .container { flex-direction: column; height: auto;  }
@@ -145,6 +163,15 @@
                         <div class="form-group">
                             <label for="senha">Senha</label>
                             <input type="password" id="senha" name="senha" placeholder="Crie a sua senha" required>
+                            <div class="password-requirements" id="password-requirements">
+                                <strong>Sua senha deve ter:</strong>
+                                <ul>
+                                    <li id="req-length" class="invalid">Pelo menos 6 caracteres</li>
+                                    <li id="req-lowercase" class="invalid">Pelo menos 1 letra minúscula</li>
+                                    <li id="req-uppercase" class="invalid">Pelo menos 1 letra MAIÚSCULA</li>
+                                    <li id="req-number" class="invalid">Pelo menos 1 número</li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="confirmar_senha">Confirme a senha</label>
@@ -152,6 +179,15 @@
                             <div id="password-error-message" class="password-error-message"></div>
                         </div>
                     </div>
+                    
+                    <!-- NOVO: Termos de Serviço -->
+                    <div class="terms-container">
+                        <input type="checkbox" id="terms" name="terms" class="terms-checkbox" required>
+                        <label for="terms" class="terms-text">
+                            Eu concordo com os <a href="#" target="_blank">Termos de Serviço do Seteeduca</a>
+                        </label>
+                    </div>
+                    
                     <div class="form-actions">
                         <button type="button" class="cancel-btn" onclick="cancelarCadastro()">Cancelar</button>
                         <button type="submit" class="submit-btn" id="cadastrar-btn">Cadastrar</button>
@@ -161,6 +197,16 @@
         </div>
     </div>
 
+    <!-- NOVO: Overlay de sucesso -->
+    <div id="success-overlay" class="success-overlay">
+        <div class="success-box">
+            <h2><i class="fas fa-check-circle" style="color: #28a745; margin-right: 10px;"></i>Cadastrado com sucesso!</h2>
+            <p>Sua creche foi cadastrada com sucesso no sistema.</p>
+            <a href="/login" class="login-btn">Volte para fazer o login</a>
+        </div>
+    </div>
+
+    <script src="sistema-cadastro-login.js"></script>
     <script>
         function cancelarCadastro() {
             if (confirm("Deseja cancelar o cadastro e limpar todos os dados?")) {
@@ -193,6 +239,60 @@
             const successCadastro = document.getElementById('success-cadastro');
             const errorMessage = document.getElementById('error-message');
             const errorText = document.getElementById('error-text');
+            const successOverlay = document.getElementById('success-overlay'); // NOVO
+            const passwordRequirements = document.getElementById('password-requirements'); // NOVO
+
+            // ========== VALIDAÇÃO DE SENHA EM TEMPO REAL ==========
+            senhaInput.addEventListener('focus', function() {
+                passwordRequirements.style.display = 'block';
+            });
+
+            senhaInput.addEventListener('blur', function() {
+                if (this.value === '') {
+                    passwordRequirements.style.display = 'none';
+                }
+            });
+
+            function validatePassword(password) {
+                const requirements = {
+                    length: password.length >= 6,
+                    lowercase: /[a-z]/.test(password),
+                    uppercase: /[A-Z]/.test(password),
+                    number: /\d/.test(password)
+                };
+
+                // Atualizar visual dos requisitos
+                document.getElementById('req-length').className = requirements.length ? 'valid' : 'invalid';
+                document.getElementById('req-lowercase').className = requirements.lowercase ? 'valid' : 'invalid';
+                document.getElementById('req-uppercase').className = requirements.uppercase ? 'valid' : 'invalid';
+                document.getElementById('req-number').className = requirements.number ? 'valid' : 'invalid';
+
+                return requirements.length && requirements.lowercase && requirements.uppercase && requirements.number;
+            }
+
+            senhaInput.addEventListener('input', function() {
+                const password = this.value;
+                validatePassword(password);
+                
+                // Limpar erro de confirmação se existir
+                if (errorMessageDiv.textContent) {
+                    errorMessageDiv.textContent = '';
+                    confirmarSenhaInput.classList.remove('error');
+                }
+            });
+
+            confirmarSenhaInput.addEventListener('input', function() {
+                const senha = senhaInput.value;
+                const confirmarSenha = this.value;
+                
+                if (confirmarSenha && senha !== confirmarSenha) {
+                    errorMessageDiv.textContent = 'As senhas não coincidem';
+                    this.classList.add('error');
+                } else {
+                    errorMessageDiv.textContent = '';
+                    this.classList.remove('error');
+                }
+            });
 
             // ========== FUNCIONALIDADE DE UPLOAD DE FOTO ==========
             photoCircle.addEventListener('click', function(e) {
@@ -343,57 +443,148 @@
                 }
             });
 
-            // ========== VALIDAÇÃO E SUBMIT DO FORMULÁRIO ==========
+            // ========== VALIDAÇÃO E SUBMIT DO FORMULÁRIO (MODIFICADO) ==========
             form.addEventListener('submit', async (event) => {
                 event.preventDefault();
+                
+                // Limpar mensagens anteriores
+                errorMessageDiv.textContent = '';
+                errorMessage.style.display = 'none';
+                successCadastro.style.display = 'none';
+                
                 const senha = senhaInput.value;
                 const confirmarSenha = confirmarSenhaInput.value;
-                errorMessageDiv.textContent = '';
+                
+                // Validar senhas
                 if (senha !== confirmarSenha) {
                     errorMessageDiv.textContent = 'As senhas não coincidem. Tente novamente.';
                     confirmarSenhaInput.classList.add('error');
+                    confirmarSenhaInput.focus();
                     setTimeout(() => {
                         errorMessageDiv.textContent = '';
                         confirmarSenhaInput.classList.remove('error');
                     }, 3000);
                     return;
                 }
+
+                // Validar senha com os requisitos
+                if (!validatePassword(senha)) {
+                    errorText.textContent = 'A senha não atende aos requisitos de segurança.';
+                    errorMessage.style.display = 'block';
+                    senhaInput.focus();
+                    senhaInput.classList.add('error');
+                    passwordRequirements.style.display = 'block';
+                    setTimeout(() => senhaInput.classList.remove('error'), 3000);
+                    return;
+                }
+
+                // Validar se os termos foram aceitos
+                const termsCheckbox = document.getElementById('terms');
+                if (!termsCheckbox.checked) {
+                    errorText.textContent = 'Você deve aceitar os Termos de Serviço para continuar.';
+                    errorMessage.style.display = 'block';
+                    termsCheckbox.focus();
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    return;
+                }
+
+                // Validar campos obrigatórios
+                const camposObrigatorios = [
+                    { id: 'nome_creche', nome: 'Nome da Creche' },
+                    { id: 'cnpj', nome: 'CNPJ/CPF' },
+                    { id: 'telefone', nome: 'Telefone' },
+                    { id: 'cep', nome: 'CEP' },
+                    { id: 'rua', nome: 'Rua' },
+                    { id: 'bairro', nome: 'Bairro' },
+                    { id: 'cidade', nome: 'Cidade' },
+                    { id: 'email', nome: 'E-mail' }
+                ];
+
+                for (let campo of camposObrigatorios) {
+                    const input = document.getElementById(campo.id);
+                    if (!input.value.trim()) {
+                        errorText.textContent = `O campo "${campo.nome}" é obrigatório.`;
+                        errorMessage.style.display = 'block';
+                        input.focus();
+                        input.classList.add('error');
+                        setTimeout(() => input.classList.remove('error'), 3000);
+                        return;
+                    }
+                }
+
+                // Validar formato do e-mail
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(document.getElementById('email').value)) {
+                    errorText.textContent = 'Por favor, digite um e-mail válido.';
+                    errorMessage.style.display = 'block';
+                    document.getElementById('email').focus();
+                    document.getElementById('email').classList.add('error');
+                    setTimeout(() => document.getElementById('email').classList.remove('error'), 3000);
+                    return;
+                }
+
+                // Validar CNPJ/CPF
+                const cnpjValue = document.getElementById('cnpj').value.replace(/\D/g, '');
+                if (cnpjValue.length !== 11 && cnpjValue.length !== 14) {
+                    errorText.textContent = 'CNPJ/CPF deve ter 11 ou 14 dígitos.';
+                    errorMessage.style.display = 'block';
+                    document.getElementById('cnpj').focus();
+                    document.getElementById('cnpj').classList.add('error');
+                    setTimeout(() => document.getElementById('cnpj').classList.remove('error'), 3000);
+                    return;
+                }
+
+                // Validar CEP
+                const cepValue = document.getElementById('cep').value.replace(/\D/g, '');
+                if (cepValue.length !== 8) {
+                    errorText.textContent = 'CEP deve ter 8 dígitos.';
+                    errorMessage.style.display = 'block';
+                    document.getElementById('cep').focus();
+                    document.getElementById('cep').classList.add('error');
+                    setTimeout(() => document.getElementById('cep').classList.remove('error'), 3000);
+                    return;
+                }
+
                 cadastrarBtn.disabled = true;
                 cadastrarBtn.textContent = 'Cadastrando...';
+                cadastrarBtn.style.opacity = '0.7';
+                
                 try {
                     const formData = new FormData(form);
-                    const response = await fetch('/cadastro', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    if (response.ok) {
-                        successCadastro.style.display = 'flex';
+                    
+                    // Log para debug
+                    console.log('Dados do formulário:');
+                    for (let [key, value] of formData.entries()) {
+                        console.log(`${key}:`, value);
+                    }
+                    
+                    // NOVO: Usar sistema de armazenamento local
+                    const resultado = await window.CrecheDB.processarCadastro(formData);
+                    
+                    if (resultado.success) {
+                        console.log('✅ Cadastro realizado com sucesso!');
+                        successOverlay.style.display = 'flex';
                         errorMessage.style.display = 'none';
                         form.style.opacity = '0.7';
-                        setTimeout(() => {
-                            window.location.href = '/login?status=success';
-                        }, 2000);
+                        form.style.pointerEvents = 'none';
                     } else {
-                        const errorHtml = await response.text();
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(errorHtml, 'text/html');
-                        const errorElement = doc.querySelector('.error-message');
-                        if (errorElement) {
-                            errorText.textContent = errorElement.textContent.replace('⚠', '').trim();
-                        } else {
-                            errorText.textContent = 'Erro no cadastro. Tente novamente.';
-                        }
-                        errorMessage.style.display = 'flex';
+                        console.log('❌ Erro no cadastro:', resultado.message);
+                        errorText.textContent = resultado.message;
+                        errorMessage.style.display = 'block';
                         successCadastro.style.display = 'none';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
-                } catch (error) {
-                    console.error('Erro na requisição:', error);
-                    errorText.textContent = 'Erro de conexão. Tente novamente.';
-                    errorMessage.style.display = 'flex';
+                } catch (networkError) {
+                    console.error('Erro de rede:', networkError);
+                    errorText.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
+                    errorMessage.style.display = 'block';
                     successCadastro.style.display = 'none';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
+                
                 cadastrarBtn.disabled = false;
                 cadastrarBtn.textContent = 'Cadastrar';
+                cadastrarBtn.style.opacity = '1';
             });
         });
     </script>
