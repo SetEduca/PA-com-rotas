@@ -750,24 +750,24 @@
                 <img src="imagem/logo.png" alt="logo">
             </div>
             <div class="menu">
-                <a href="#" class="menu-item active" onclick="navegarPara('inicio')">
+                <a href="/home" class="menu-item active" onclick="navegarPara('inicio')">
                     <i class="fas fa-home"></i>
                     <span>INÍCIO</span>
                 </a>
-                <a href="#" class="menu-item" onclick="navegarPara('cadastro')">
+                <a href="/criancas-cadastradas" class="menu-item" onclick="navegarPara('cadastro')">
                     <i class="fas fa-address-card"></i>
                     <span>CADASTRO</span>
                 </a>
-                <a href="#" class="menu-item" onclick="navegarPara('matricula')">
+                <a href="/matricula" class="menu-item" onclick="navegarPara('matricula')">
                     <i class="fas fa-user-graduate"></i>
                     <span>MATRÍCULA</span>
                 </a>
-                <a href="#" class="menu-item" id="professor-link">
+                <a href="/cadastro-prof" class="menu-item" id="professor-link">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>PROFESSOR</span>
                 </a>
     
-                <a href="#" class="menu-item" onclick="navegarPara('turmas')"> 
+                <a href="/turmas-cadastradas" class="menu-item" onclick="navegarPara('turmas')"> 
                     <i class="fas fa-users"></i>
                     <span>TURMA</span>
                 </a>
@@ -1053,7 +1053,7 @@
             // Ação de confirmar o logout
             confirmLogoutBtn.addEventListener('click', function() {
                 console.log("Usuário deslogado! Redirecionando...");
-                window.location.href = 'login.html';
+                window.location.href = '/login';
             });
 
 

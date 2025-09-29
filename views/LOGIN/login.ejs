@@ -133,11 +133,9 @@
             text-decoration: underline;
         }
 
-        /* --- CÓDIGO ADICIONADO --- */
         .form-links p a {
             color: #FFD972;
         }
-        /* --- FIM DO CÓDIGO ADICIONADO --- */
 
         #submit-btn {
             display: block;
@@ -164,9 +162,134 @@
             font-size: 0.9rem;
             font-weight: bold;
             margin-top: 10px;
+            padding: 10px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
         }
 
-    
+        .success-message {
+            color: #155724;
+            font-family: 'Allerta', sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+        }
+
+        /* --- MODAL DE RECUPERAÇÃO DE SENHA --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #FFFFFF;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 520px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #838181;
+            background: none;
+            border: none;
+        }
+
+        .modal-close:hover {
+            color: #000;
+        }
+
+        .modal-content h3 {
+            font-family: 'Konkhmer Sleokchher', cursive;
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin: 0 0 10px 0;
+            color: #000000;
+        }
+
+        .modal-content p {
+            font-family: 'Kodchasan', sans-serif;
+            font-size: 1rem;
+            color: #555555;
+            margin-bottom: 30px;
+        }
+
+        .recovery-step {
+            display: none;
+        }
+
+        .recovery-step.active {
+            display: block;
+        }
+
+        .submit-btn {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            line-height: 65px; 
+            width: 100%;
+            height: 65px;
+            border-radius: 30px;
+            border: 1px solid #E0B400;
+            background-color: #fcdc6a;
+            font-size: 1.2rem;
+            font-weight: bold;
+            font-family: 'Kodchasan', sans-serif;
+            cursor: pointer;
+            margin-top: 25px; 
+            color: #000;
+            box-sizing: border-box;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: #e9ecef;
+            border-color: #ced4da;
+        }
+
+        .modal-links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .modal-links a {
+            color: #00A6FF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .modal-links a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 992px) {
             .left-panel {
                 display: none;
@@ -175,7 +298,6 @@
             .right-panel {
                 flex-basis: 100%; 
                 max-width: 100%;
-                justify-content: flex-start;
                 padding-top: 4rem; 
             }
         }
@@ -193,8 +315,15 @@
             }
 
             .right-panel {
-                padding: 2rem 1.5rem; 
-                padding-top: 3rem;
+                padding: 3rem 1.5rem; 
+            }
+
+            .modal-content {
+                padding: 30px 20px;
+            }
+
+            .modal-content h3 {
+                font-size: 2rem;
             }
         }
     </style>
@@ -210,7 +339,7 @@
                 <h1>Login</h1>
                 <h2>Sentimos falta de você!</h2>
 
-                <form id="meuform">
+                <form id="loginForm">
                     <div class="form-group">
                         <label for="email">E-mail</label>
                         <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
@@ -220,30 +349,270 @@
                         <label for="password">Senha</label>
                         <div class="password-wrapper">
                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
-                           <i class="fas fa-eye toggle-password"></i>
+                           <i class="fas fa-eye toggle-password" data-target="password"></i>
                         </div>
                     </div>
                     
                     <div class="form-links">
                         <p>Não é cadastrado? <a href="/cadastro">Cadastro</a></p>
-                        <a href="trocar">Esqueceu a senha?</a>
+                        <a href="#" id="forgot-password-link">Esqueceu a senha?</a>
                     </div>
 
-                    <a href="/home" id="submit-btn">Entrar</a>
+                    <button type="submit" id="submit-btn">Entrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="recoveryModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            
+            <div id="modalMessage"></div>
+
+            <div id="step1" class="recovery-step active">
+                <h3>Recuperar Senha</h3>
+                <p>Digite seu e-mail para receber o código de verificação.</p>
+                
+                <form id="emailForm">
+                    <div class="form-group">
+                        <label for="recoveryEmail">E-mail</label>
+                        <input type="email" id="recoveryEmail" name="recoveryEmail" placeholder="Digite seu e-mail cadastrado" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Enviar Código</button>
+                </form>
+            </div>
+
+            <div id="step2" class="recovery-step">
+                <h3>Código Enviado</h3>
+                <p>Digite o código de 6 dígitos enviado para o seu e-mail.</p>
+                
+                <form id="codeForm">
+                    <div class="form-group">
+                        <label for="verificationCode">Código de Verificação</label>
+                        <input type="text" id="verificationCode" name="verificationCode" placeholder="Digite o código" required maxlength="6" pattern="\d{6}">
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Verificar Código</button>
+                    
+                    <div class="modal-links">
+                        <a href="#" id="resendCode">Reenviar código</a>
+                    </div>
+                </form>
+            </div>
+
+            <div id="step3" class="recovery-step">
+                <h3>Nova Senha</h3>
+                <p>Crie uma nova senha para sua conta.</p>
+                
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <label for="newPassword">Nova Senha</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="newPassword" name="newPassword" placeholder="Mínimo 6 caracteres" required>
+                            <i class="fas fa-eye toggle-password" data-target="newPassword"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Nova Senha</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme sua nova senha" required>
+                            <i class="fas fa-eye toggle-password" data-target="confirmPassword"></i>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Redefinir Senha</button>
                 </form>
             </div>
         </div>
     </div>
     
     <script>
-    
-        const togglePassword = document.querySelector('.toggle-password');
-        const passwordInput = document.querySelector('#password');
+        document.addEventListener('DOMContentLoaded', () => {
+            // Toggle password visibility
+            document.querySelectorAll('.toggle-password').forEach(icon => {
+                icon.addEventListener('click', function () {
+                    const targetId = this.dataset.target;
+                    const input = document.getElementById(targetId);
+                    if (input) {
+                        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                        input.setAttribute('type', type);
+                        this.classList.toggle('fa-eye-slash');
+                    }
+                });
+            });
 
-        togglePassword.addEventListener('click', function () {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.classList.toggle('fa-eye-slash');
+            // Modal variables
+            const modal = document.getElementById('recoveryModal');
+            const forgotPasswordLink = document.getElementById('forgot-password-link');
+            const closeModalBtn = document.getElementById('closeModal');
+            let currentEmail = '';
+            let currentCode = '';
+
+            // Open modal
+            forgotPasswordLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.classList.add('active');
+                resetModal();
+            });
+
+            // Close modal functions
+            const closeModal = () => {
+                modal.classList.remove('active');
+            };
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Utility functions
+            const showStep = (step) => {
+                document.querySelectorAll('.recovery-step').forEach(s => s.classList.remove('active'));
+                document.getElementById(`step${step}`).classList.add('active');
+                clearMessages();
+            };
+
+            const showMessage = (message, type) => {
+                const messageDiv = document.getElementById('modalMessage');
+                messageDiv.innerHTML = `<div class="${type}-message">${message}</div>`;
+            };
+
+            const clearMessages = () => {
+                document.getElementById('modalMessage').innerHTML = '';
+            };
+
+            const resetModal = () => {
+                showStep(1);
+                document.getElementById('emailForm').reset();
+                document.getElementById('codeForm').reset();
+                document.getElementById('passwordForm').reset();
+                currentEmail = '';
+                currentCode = '';
+            };
+
+            const disableButton = (form) => {
+                const button = form.querySelector('button[type="submit"]');
+                if(button) button.disabled = true;
+            };
+
+            const enableButton = (form) => {
+                const button = form.querySelector('button[type="submit"]');
+                if(button) button.disabled = false;
+            };
+
+            // Step 1: Send recovery code
+            const emailForm = document.getElementById('emailForm');
+            emailForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                disableButton(emailForm);
+                clearMessages();
+                const email = document.getElementById('recoveryEmail').value;
+                
+                try {
+                    const response = await fetch('/api/forgot-password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        currentEmail = email;
+                        showMessage('Código enviado para seu e-mail!', 'success');
+                        setTimeout(() => showStep(2), 1500);
+                    } else {
+                        showMessage(data.message || 'Erro desconhecido.', 'error');
+                    }
+                } catch (error) {
+                    showMessage('Erro de conexão. Tente novamente.', 'error');
+                } finally {
+                    enableButton(emailForm);
+                }
+            });
+
+            // Step 2: Verify code
+            const codeForm = document.getElementById('codeForm');
+            codeForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                disableButton(codeForm);
+                clearMessages();
+                const code = document.getElementById('verificationCode').value;
+                
+                try {
+                    const response = await fetch('/api/verify-code', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: currentEmail, code })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        currentCode = code;
+                        showMessage('Código verificado com sucesso!', 'success');
+                        setTimeout(() => showStep(3), 1500);
+                    } else {
+                        showMessage(data.message || 'Código inválido.', 'error');
+                    }
+                } catch (error) {
+                    showMessage('Erro de conexão. Tente novamente.', 'error');
+                } finally {
+                    enableButton(codeForm);
+                }
+            });
+
+            // Resend code link
+            document.getElementById('resendCode').addEventListener('click', async (e) => {
+                e.preventDefault();
+                showMessage('Reenviando código...', 'success');
+                // Simply re-trigger the email form's logic
+                emailForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            });
+
+            // Step 3: Reset password
+            const passwordForm = document.getElementById('passwordForm');
+            passwordForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                disableButton(passwordForm);
+                clearMessages();
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (newPassword !== confirmPassword) {
+                    showMessage('As senhas não coincidem!', 'error');
+                    enableButton(passwordForm);
+                    return;
+                }
+                if (newPassword.length < 6) {
+                    showMessage('A senha deve ter pelo menos 6 caracteres!', 'error');
+                    enableButton(passwordForm);
+                    return;
+                }
+                
+                try {
+                    const response = await fetch('/api/reset-password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            email: currentEmail, 
+                            code: currentCode,
+                            newPassword 
+                        })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showMessage('Senha redefinida com sucesso! Você já pode fazer login com a nova senha.', 'success');
+                        setTimeout(closeModal, 3000);
+                    } else {
+                        showMessage(data.message || 'Não foi possível redefinir a senha.', 'error');
+                    }
+                } catch (error) {
+                    showMessage('Erro de conexão. Tente novamente.', 'error');
+                } finally {
+                    enableButton(passwordForm);
+                }
+            });
         });
     </script>
 </body>
