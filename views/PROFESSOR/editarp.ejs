@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <title>Seteeduca - Editar Turma</title>
+  <title>Seteeduca - Editar Professor</title>
   <style>
     * { 
       margin: 0; 
@@ -153,7 +153,7 @@
 
     .logout-button:hover {
       background-color: rgba(210, 42, 42, 0.1); 
-      color: #c01e26; 
+      color: #ef7215; 
       font-weight: 600;
     }
 
@@ -165,7 +165,7 @@
     }
 
     .header {
-      background: #c01e26;
+      background: #ef7215;
       height: 80px;
       display: flex;
       align-items: center;
@@ -234,7 +234,7 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       padding: 40px; 
       margin-top: 20px;
-      border-top: 5px solid #c01e26;
+      border-top: 5px solid #ef7215;
       transition: transform 0.3s;
       flex: 1;
       max-width: none;
@@ -280,7 +280,7 @@
     
     input:focus, select:focus {
       outline: none;
-      border-color: #c01e26;
+      border-color: #ef7215;
       box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.2);
     }
     
@@ -402,7 +402,7 @@
     }
     
     .modal-content strong {
-      color: #c01e26;
+      color: #ef7215;
       font-weight: 700;
     }
     
@@ -504,11 +504,11 @@
                     <i class="fas fa-user-graduate"></i>
                     <span>MATRÍCULA</span>
                 </div>
-                <div class="menu-item" onclick="navegarPara('professor')">
+                <div class="menu-item active">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>PROFESSOR</span>
                 </div>
-                <div class="menu-item active" > 
+                <div class="menu-item " onclick="navegarPara('turma')"> 
                     <i class="fas fa-users"></i>
                     <span>TURMA</span>
                 </div>
@@ -537,7 +537,7 @@
     <div class="header">
        <div class="header-title">
         <i class="fas fa-edit"></i>
-        <span>Editar <b>TURMAS</b></span>      
+        <span>Editar <b>PROFESSOR</b></span>      
       </div>
       <div class="user-profile">
         <div class="profile-pic">
@@ -554,12 +554,12 @@
       <div class="caixa">
         <form id="formEditar">
           <div class="campo">
-            <label for="professor">Nome do Professor(a):</label>
-            <input type="text" id="professor" name="professor" placeholder="Digite o nome completo" required>
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" name="nome" placeholder="Digite o nome completo do professor" required>
           </div>
           <div class="campo">
-            <label for="turma">Nome da Turma:</label>
-            <input type="text" id="turma" name="turma" placeholder="Ex: Maternal I, Berçário B" required>
+            <label for="cpf">CPF:</label>
+            <input type="text" id="cpf" name="cpf" placeholder="cpf do professor" required>
           </div>
           <div class="campo">
             <label for="mensalidade">Mensalidade:</label>
@@ -608,7 +608,7 @@
             // Rotas baseadas no seu servidor Express
             const rotas = {
                 'inicio': '/home',
-                'professor': '/cadastro-professor',
+                'professor': '/acessar-prof',
                 'financeiro': '/opcoes-financeiro',
                 'turmas': '/turmas-cadastradas',
                 'matricula': '/matricula',
