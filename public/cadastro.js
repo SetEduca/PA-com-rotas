@@ -42,6 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cidadeInput = document.getElementById('cidade');
     const emailInput = document.getElementById('email');
     const cnpjInput = document.getElementById('cnpj');
+    const successOverlay = document.getElementById('success-overlay');
+    const passwordRequirements = document.getElementById('password-requirements');
 
     // ========== FUNCIONALIDADE DE UPLOAD DE FOTO ==========
     if (photoCircle) {
@@ -158,9 +160,48 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ==========================================================
-    // CÓDIGO DO CNPJ INSERIDO AQUI
-    // ==========================================================
+    // ========== VALIDAÇÃO DE SENHA EM TEMPO REAL ==========
+    if (senhaInput && passwordRequirements) {
+        senhaInput.addEventListener('focus', function() {
+            passwordRequirements.style.display = 'block';
+        });
+
+        senhaInput.addEventListener('blur', function() {
+            if (this.value === '') {
+                passwordRequirements.style.display = 'none';
+            }
+        });
+
+        function validatePassword(password) {
+            const requirements = {
+                length: password.length >= 6,
+                lowercase: /[a-z]/.test(password),
+                uppercase: /[A-Z]/.test(password),
+                number: /\d/.test(password)
+            };
+
+            // Atualizar visual dos requisitos
+            document.getElementById('req-length').className = requirements.length ? 'valid' : 'invalid';
+            document.getElementById('req-lowercase').className = requirements.lowercase ? 'valid' : 'invalid';
+            document.getElementById('req-uppercase').className = requirements.uppercase ? 'valid' : 'invalid';
+            document.getElementById('req-number').className = requirements.number ? 'valid' : 'invalid';
+
+            return requirements.length && requirements.lowercase && requirements.uppercase && requirements.number;
+        }
+
+        senhaInput.addEventListener('input', function() {
+            const password = this.value;
+            validatePassword(password);
+            
+            // Limpar erro de confirmação se existir
+            if (errorMessageDiv.textContent) {
+                errorMessageDiv.textContent = '';
+                confirmarSenhaInput.classList.remove('error');
+            }
+        });
+    }
+
+    // ========== BUSCA AUTOMÁTICA DE CNPJ ==========
     if(cnpjInput) {
         cnpjInput.addEventListener('blur', async function() {
             const cnpjValue = this.value.replace(/\D/g, '');
@@ -191,9 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ==============================================================================
-    // ========== BUSCA AUTOMÁTICA DE CEP (VERSÃO MELHORADA E INTEGRADA) ==========
-    // ==============================================================================
+    // ========== BUSCA AUTOMÁTICA DE CEP ==========
     const configurarCamposEndereco = (estado, texto = '') => {
         ruaInput.disabled = estado;
         bairroInput.disabled = estado;
@@ -219,9 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 bairroInput.value = data.bairro || '';
                 cidadeInput.value = data.localidade || '';
                 configurarCamposEndereco(false);
-                ruaInput.value = data.logradouro || '';
-                bairroInput.value = data.bairro || '';
-                cidadeInput.value = data.localidade || '';
             }
         } catch (error) {
             console.error('Falha ao buscar CEP:', error);
@@ -241,56 +277,78 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ========== VALIDAÇÃO DE CONFIRMAÇÃO DE SENHA ==========
+    if (confirmarSenhaInput) {
+        confirmarSenhaInput.addEventListener('input', function() {
+            const senha = senhaInput.value;
+            const confirmarSenha = confirmarSenhaInput.value;
+            if (confirmarSenha && senha !== confirmarSenha) {
+                errorMessageDiv.textContent = 'As senhas não coincidem';
+                confirmarSenhaInput.classList.add('error');
+            } else {
+                errorMessageDiv.textContent = '';
+                confirmarSenhaInput.classList.remove('error');
+            }
+        });
+    }
 
     // ========== VALIDAÇÃO E SUBMIT DO FORMULÁRIO ==========
     if (form) {
-        if (confirmarSenhaInput) {
-            confirmarSenhaInput.addEventListener('input', function() {
-                const senha = senhaInput.value;
-                const confirmarSenha = confirmarSenhaInput.value;
-                if (confirmarSenha && senha !== confirmarSenha) {
-                    errorMessageDiv.textContent = 'As senhas não coincidem';
-                    confirmarSenhaInput.classList.add('error');
-                } else {
-                    errorMessageDiv.textContent = '';
-                    confirmarSenhaInput.classList.remove('error');
-                }
-            });
-        }
-        
-        if (senhaInput) {
-            senhaInput.addEventListener('input', function() {
-                if (errorMessageDiv.textContent) {
-                    errorMessageDiv.textContent = '';
-                    confirmarSenhaInput.classList.remove('error');
-                }
-            });
-        }
-
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             
-            const senha = senhaInput.value;
-            const confirmarSenha = confirmarSenhaInput.value;
-            
+            // Limpar mensagens anteriores
             errorMessageDiv.textContent = '';
             errorMessage.style.display = 'none';
             successCadastro.style.display = 'none';
             
+            const senha = senhaInput.value;
+            const confirmarSenha = confirmarSenhaInput.value;
+            
+            // Validar senhas
             if (senha !== confirmarSenha) {
                 errorMessageDiv.textContent = 'As senhas não coincidem. Tente novamente.';
                 confirmarSenhaInput.classList.add('error');
                 confirmarSenhaInput.focus();
+                setTimeout(() => {
+                    errorMessageDiv.textContent = '';
+                    confirmarSenhaInput.classList.remove('error');
+                }, 3000);
                 return;
             }
 
-            if (senha.length < 6) {
-                errorMessageDiv.textContent = 'A senha deve ter no mínimo 6 caracteres.';
-                senhaInput.classList.add('error');
+            // Validar senha com os requisitos (se a função existir)
+            if (typeof validatePassword === 'function' && !validatePassword(senha)) {
+                errorText.textContent = 'A senha não atende aos requisitos de segurança.';
+                errorMessage.style.display = 'block';
                 senhaInput.focus();
+                senhaInput.classList.add('error');
+                if (passwordRequirements) passwordRequirements.style.display = 'block';
+                setTimeout(() => senhaInput.classList.remove('error'), 3000);
                 return;
             }
 
+            // Validar senha básica (mínimo 6 caracteres)
+            if (senha.length < 6) {
+                errorText.textContent = 'A senha deve ter no mínimo 6 caracteres.';
+                errorMessage.style.display = 'block';
+                senhaInput.focus();
+                senhaInput.classList.add('error');
+                setTimeout(() => senhaInput.classList.remove('error'), 3000);
+                return;
+            }
+
+            // Validar se os termos foram aceitos
+            const termsCheckbox = document.getElementById('terms');
+            if (termsCheckbox && !termsCheckbox.checked) {
+                errorText.textContent = 'Você deve aceitar os Termos de Serviço para continuar.';
+                errorMessage.style.display = 'block';
+                termsCheckbox.focus();
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                return;
+            }
+
+            // Validar campos obrigatórios
             const camposObrigatorios = [
                 { id: 'nome_creche', nome: 'Nome da Creche' },
                 { id: 'cnpj', nome: 'CNPJ/CPF' },
@@ -314,55 +372,98 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // Validar formato do e-mail
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(document.getElementById('email').value)) {
+                errorText.textContent = 'Por favor, digite um e-mail válido.';
+                errorMessage.style.display = 'block';
+                document.getElementById('email').focus();
+                document.getElementById('email').classList.add('error');
+                setTimeout(() => document.getElementById('email').classList.remove('error'), 3000);
+                return;
+            }
+
+            // Validar CNPJ/CPF
+            const cnpjValue = document.getElementById('cnpj').value.replace(/\D/g, '');
+            if (cnpjValue.length !== 11 && cnpjValue.length !== 14) {
+                errorText.textContent = 'CNPJ/CPF deve ter 11 ou 14 dígitos.';
+                errorMessage.style.display = 'block';
+                document.getElementById('cnpj').focus();
+                document.getElementById('cnpj').classList.add('error');
+                setTimeout(() => document.getElementById('cnpj').classList.remove('error'), 3000);
+                return;
+            }
+
+            // Validar CEP
+            const cepValue = document.getElementById('cep').value.replace(/\D/g, '');
+            if (cepValue.length !== 8) {
+                errorText.textContent = 'CEP deve ter 8 dígitos.';
+                errorMessage.style.display = 'block';
+                document.getElementById('cep').focus();
+                document.getElementById('cep').classList.add('error');
+                setTimeout(() => document.getElementById('cep').classList.remove('error'), 3000);
+                return;
+            }
+
             cadastrarBtn.disabled = true;
             cadastrarBtn.textContent = 'Cadastrando...';
             cadastrarBtn.style.opacity = '0.7';
-
+            
             try {
                 const formData = new FormData(form);
+                
+                // Log para debug
+                console.log('Enviando dados para o servidor...');
+                
                 const response = await fetch('/cadastro', {
                     method: 'POST',
                     body: formData
                 });
-
+                
                 if (response.ok) {
-                    successCadastro.style.display = 'block';
+                    console.log('Cadastro realizado com sucesso!');
+                    if (successOverlay) {
+                        successOverlay.style.display = 'flex';
+                    } else {
+                        successCadastro.style.display = 'block';
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2000);
+                    }
                     errorMessage.style.display = 'none';
-                    form.style.opacity = '0.5';
+                    form.style.opacity = '0.7';
                     form.style.pointerEvents = 'none';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    console.log('✅ Cadastro realizado com sucesso!');
-                    setTimeout(() => {
-                        window.location.href = '/login?status=success';
-                    }, 3000);
                 } else {
                     const contentType = response.headers.get('content-type');
+                    let mensagemErro = 'Erro no cadastro. Tente novamente.';
+                    
                     if (contentType && contentType.includes('application/json')) {
                         const errorData = await response.json();
-                        errorText.textContent = errorData.message || 'Erro no cadastro. Tente novamente.';
+                        mensagemErro = errorData.message || mensagemErro;
                     } else {
                         const errorHtml = await response.text();
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(errorHtml, 'text/html');
                         const errorElement = doc.querySelector('.error-message');
                         if (errorElement) {
-                            errorText.textContent = errorElement.textContent.replace(/[⚠✖]/g, '').trim();
-                        } else {
-                            errorText.textContent = 'Erro no cadastro. Tente novamente.';
+                            mensagemErro = errorElement.textContent.replace(/[⚠✖]/g, '').trim();
                         }
                     }
+                    
+                    console.log('Erro no cadastro:', mensagemErro);
+                    errorText.textContent = mensagemErro;
                     errorMessage.style.display = 'block';
                     successCadastro.style.display = 'none';
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-            } catch (error) {
-                console.error('Erro na requisição:', error);
+            } catch (networkError) {
+                console.error('Erro de rede:', networkError);
                 errorText.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
                 errorMessage.style.display = 'block';
                 successCadastro.style.display = 'none';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
-
+            
             cadastrarBtn.disabled = false;
             cadastrarBtn.textContent = 'Cadastrar';
             cadastrarBtn.style.opacity = '1';
@@ -397,15 +498,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ========== CONSOLE LOG PARA DEBUG ==========
-    console.log('🚀 JavaScript do cadastro carregado com sucesso!');
-    console.log('📋 Funcionalidades ativas:');
-    console.log('   ✅ Upload de foto com drag & drop');
-    console.log('   ✅ Máscaras para CNPJ/CPF, telefone e CEP');
-    console.log('   ✅ Busca automática de CNPJ');
-    console.log('   ✅ Busca automática de endereço por CEP');
-    console.log('   ✅ Validação de senhas em tempo real');
-    console.log('   ✅ Submit com AJAX e redirecionamento condicional');
-    console.log('   ✅ Validações de campos obrigatórios');
-    console.log('   ✅ Tratamento de erros do servidor');
+    console.log('JavaScript do cadastro carregado com sucesso!');
+    console.log('Funcionalidades ativas:');
+    console.log('   - Upload de foto com drag & drop');
+    console.log('   - Máscaras para CNPJ/CPF, telefone e CEP');
+    console.log('   - Busca automática de CNPJ');
+    console.log('   - Busca automática de endereço por CEP');
+    console.log('   - Validação de senhas em tempo real');
+    console.log('   - Submit direto para o servidor via fetch');
+    console.log('   - Validações de campos obrigatórios');
 
-}); // Fim do DOMContentLoaded
+});
