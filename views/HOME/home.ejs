@@ -1,196 +1,1080 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-
-    
-     <style>
-
-
-#meuPerfilBtn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: #D22A2A;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  font-size: 0.9em;
-  cursor: pointer;
-  z-index: 1000;
-  margin-left: 20px;
-}
-
-#meuPerfilBtn:hover {
-  background-color: #555555;
-}
-
-    
-
-    .user-greeting {
-      margin-left: auto;
-      margin-right: auto;
-      font-weight: bold;
-      font-size: 20px;
-    }
-  </style>
-</head>
-<body>
-
-  
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seteeduca</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #ffffff;
-      text-align: center;
-      
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seteeduca - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos Gerais */
+        :root {
+            --orange: #F88C12;
+            --blue: #00A6FF;
+            --green: #59C631;
+            --background: #FCFAFF; 
+            --text-primary: #333;
+            --text-secondary: #6c757d;
+            --sidebar-bg: #FFF4DF;
+            --sidebar-width: 280px; 
+        }
 
-    .logo-top-right {
-  position: absolute;
-  top: 15px;
-  right: 50px;
-  width: 90px;
-  height: auto;
-  z-index: 1000;
-}
+        /* SEU CÓDIGO CSS DA SIDEBAR (INTEGRADO E AJUSTADO PARA O LAYOUT GLOBAL) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background); 
+            min-height: 100vh;
+            display: flex; 
+        }
 
-    header {
-      background-color: #F3E38A;
-      border-bottom-right-radius: 90px;
-      border-bottom-left-radius: 90px;
-      padding: 20px;
-      font-size: 1.5em;
-      margin-top: 60px;
-      text-align: left;
-      padding-left: 150px;
-    }
+        .sidebar {
+            width: var(--sidebar-width); 
+            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+            flex-shrink: 0; 
+            position: fixed; 
+            left: 0;
+            top: 0;
+            z-index: 1000;
+        }
 
-    
+        .logo {
+            padding: 0px 40px;
+            text-align: center;
+            margin-bottom: 25px;
+            margin-top: 30px;
+        }
+        .logo img {
+            max-width: 150px; 
+        }
 
-    header strong {
-      color: #333;
-    }
+        .menu {
+            flex: 1; 
+            padding: 20px 18px;
+            overflow-y: auto; 
+        }
 
-    .container {
-      margin-top: 30px;
-    }
+        .menu-item {
+            padding: 30px 20px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            overflow: visible;
+            color: black;
+            text-decoration: none; 
+        }
 
-    .titulo {
-      font-size: 1.2em;
-      margin-top: 60px;
-      
-    }
+        .menu-item i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            z-index: 2;
+        }
 
-    .botoes {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
+        .menu-item span {
+            z-index: 2;
+            font-size: 15px;
+        }
 
-    .botao {
-      width: 150px;
-      height: 150px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 20px;
-      color: rgb(0, 0, 0);
-      font-weight: bold;
-      font-size: 1em;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
+        .menu-item:hover {
+            background-color: #6c757d21;
+        }
 
-    .botao:hover {
-      transform: scale(1.05);
-    }
+        .menu-item::after {
+            padding: 0 10px;
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 20px;
+            height: 2px;
+            width: 0px;
+            transition: width 0.3s ease;
+            border-radius: 1px;
+        }
 
-    .cadastro {
-      background-color: #00a2ff;
-      margin-top: 5%;
-       width: 15%;
-    }
+        .menu-item:hover::after,
+        .menu-item.active::after {
+            width: calc(100% - 40px);
+        }
 
-    .turmas {
-      background-color: #D22A2A;
-      margin-top: 5%;
-       width: 15%;
-    }
+        /* Cores das barrinhas inferiores dos itens do menu */
+        .menu-item:nth-child(1)::after { background-color: #F4BF27; } 
+        .menu-item:nth-child(2)::after { background-color: #00A6FF; } 
+        .menu-item:nth-child(3)::after { background-color: #9747FF; } 
+        .menu-item:nth-child(4)::after { background-color: #F88C12; } 
+        .menu-item:nth-child(5)::after { background-color: #D22A2A; } 
+        .menu-item:nth-child(6)::after { background-color: #59C631; } 
 
-    .financeiro {
-      background-color: #32cd32;
-      margin-top: 5%;
-      width: 15%;
-    }
+        .menu-item.active {
+            background-color: rgba(128, 128, 128, 0.356);
+            color: #333;
+            font-weight: 600;
+        }
 
-    .botao i {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-    }
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor; 
+            z-index: 2;
+        }
 
-    /* Ícones via Font Awesome */
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
-  </style>
+        .sidebar-footer {
+            padding: 20px 18px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .logout-button {
+            padding: 16px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: #333;
+            width: 100%;
+            text-decoration: none;
+        }
+
+        .logout-button i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(210, 42, 42, 0.1); 
+            color: #D22A2A; 
+            font-weight: 600;
+        }
+
+        /* CONTEÚDO PRINCIPAL */
+        .main-content {
+            margin-left: var(--sidebar-width); 
+            padding: 30px 25px; 
+            width: calc(100% - var(--sidebar-width));
+            flex-grow: 1; 
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .header-title h1 {
+            color: var(--text-primary);
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        
+        /* Perfil do Usuário e Dropdown */
+        .profile {
+            position: relative;
+            cursor: pointer;
+            z-index: 10; 
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            border-radius: 50px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .profile-header:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .profile-icon {
+            font-size: 38px;
+            color: #333;
+        }
+        
+        .profile-arrow {
+            font-size: 14px;
+            margin-left: 8px;
+            color: #555;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%; 
+            right: 0;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            z-index: 1001;
+            overflow: hidden;
+            padding: 8px 0;
+            border: 1px solid #eee;
+        }
+
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            text-decoration: none;
+            color: #444;
+            font-size: 15px;
+            transition: background-color 0.2s ease;
+        }
+
+        .profile-dropdown a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .profile-dropdown a i {
+            width: 20px;
+            margin-right: 15px;
+            color: #666;
+            text-align: center;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 8px 0;
+        }
+
+        /* ====================================================== */
+        /* ============== ESTILOS DO CARROSSEL DE BOAS-VINDAS ============== */
+        /* ====================================================== */
+
+        .welcome-banner {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden; 
+            margin-bottom: 40px;
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            position: relative;
+            background-size: cover;
+            background-position: center center;
+            padding: 85px 60px; /* Padding interno do slide */
+            min-height: 450px; /* Altura do banner */
+            display: flex;
+            align-items: center;
+        }
+
+        /* Overlay escuro para legibilidade */
+        .carousel-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 100%); /* Gradiente sutil */
+            z-index: 1;
+        }
+
+        .banner-text {
+            position: relative;
+            z-index: 2;
+            max-width: 60%; /* Limita a largura do texto */
+        }
+
+        .banner-text h2 {
+            font-size: 35px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .banner-text p {
+           font-size: 16px;
+           line-height: 1.6;
+           margin-bottom: 25px;
+           max-width: 500px;
+        }
+        
+        .banner-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+        
+        .banner-features li {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+        }
+        
+        .banner-features li i {
+            margin-right: 10px;
+            width: 15px;
+            color: var(--orange); /* Usa a cor laranja para destaque */
+        }
+        
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s ease;
+            color: #333;
+        }
+
+        .carousel-button:hover {
+            background-color: #fff;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-button.prev { left: 20px; }
+        .carousel-button.next { right: 20px; }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .indicator-dot.active {
+            background-color: #fff;
+            transform: scale(1.1);
+        }
+        /* ====================================================== */
+        /* ================ FIM DOS ESTILOS DO CARROSSEL ================ */
+        /* ====================================================== */
+
+        /* Cards de Informações Rápidas */
+        .quick-info-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            margin-top: 80px; /* Diminuí a margem superior */
+        }
+        
+        .info-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .info-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            border-bottom: 5px solid;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: 270px;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .card-header .icon {
+            font-size: 24px;
+            padding: 12px;
+            border-radius: 10px;
+        }
+        
+        .card-number {
+            font-size: 42px;
+            font-weight: 700;
+        }
+
+        .card-label {
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+        
+        .card-professores { border-color: var(--orange); }
+        .card-professores .icon { background-color: #fdecd9; color: var(--orange); }
+        .card-professores .card-number { color: var(--orange); }
+        
+        .card-alunos { border-color: var(--blue); }
+        .card-alunos .icon { background-color: #e0f3ff; color: var(--blue); }
+        .card-alunos .card-number { color: var(--blue); }
+
+        .card-turmas { border-color: var(--green); }
+        .card-turmas .icon { background-color: #e6f6e1; color: var(--green); }
+        .card-turmas .card-number { color: var(--green); }
+        
+        .page-footer {
+            margin-top: 53px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+            text-decoration: underline;
+        }
+
+        /* --- NOVOS ESTILOS PARA O MODAL DE CONFIRMAÇÃO --- */
+        .modal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none; /* Escondido por padrão */
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease, display 0.3s ease;
+        }
+        .modal-container.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: var(--sidebar-bg);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-container.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-content p {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .modal-buttons button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .modal-buttons button:hover {
+            transform: scale(1.05);
+        }
+        .btn-cancel {
+            background-color: #D22A2A; /* Vermelho */
+        }
+        .btn-confirm {
+            background-color: var(--green); /* Verde */
+        }
+        /* --- FIM DOS ESTILOS DO MODAL --- */
+
+         main {
+            flex-grow: 1; /* Faz com que o conteúdo principal ocupe o espaço restante */
+            padding: 20px; /* Apenas para simular conteúdo */
+            background-color: #f0f0f0;
+        }
+
+            .main-footer {
+            background-color:  #f0f0f0; /* Ou a cor de fundo atual do seu rodapé */
+            color: #ecf0f1;
+            padding: 40px 20px 25px;
+            font-size: 0.9em;
+            border-top: 1px solid #b8b8b8; /* Uma linha sólida sutil */
+            margin-top: 170px;
+        
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: space-around; 
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 30px; 
+            padding-bottom: 30px; 
+            border-bottom: 3px solid rgba(255, 255, 255, 0.1); 
+        }
+
+        .footer-section {
+            flex: 1; 
+            min-width: 150px; 
+            margin-bottom: 20px;
+        }
+
+        .footer-section.logo-area {
+            flex: 1.5; 
+            min-width: 180px;
+            display: flex;
+            align-items: center;
+            font-size: 2.5em; 
+            font-weight: bold;
+            color:#333;
+        }
+
+        .footer-section h4 {
+            color:#333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-transform: uppercase;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a,
+        .footer-section p {
+            color: #333; /* Cor dos links e parágrafos */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #333;
+        }
+
+        .footer-social-contact {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Alinha os itens à esquerda */
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .footer-social-icons {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .footer-social-icons a {
+            color: #333;
+            font-size: 1.5em;
+            margin-right: 15px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social-icons a:hover {
+            color: #f0c040; /* Cor de destaque ao passar o mouse */
+        }
+
+        .contact-info p {
+            margin: 0 0 8px 0;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .contact-button {
+            background-color: #e91e63; /* Cor do botão similar à imagem */
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block; /* Permite padding e width */
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-button:hover {
+            background-color: #d81b60;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            color: #333;
+            font-size: 0.85em;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Responsividade básica */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .footer-section, .footer-section.logo-area, .footer-social-contact {
+                min-width: unset; /* Remove largura mínima em telas pequenas */
+                width: 100%; /* Ocupa toda a largura */
+                text-align: center;
+            }
+            .footer-social-icons {
+                justify-content: center; /* Centraliza ícones em telas menores */
+                width: 100%;
+            }
+            .footer-social-contact {
+                align-items: center;
+            }
+        }
+
+        /* Media Queries para Responsividade */
+        @media (max-width: 1024px) {
+            .banner-text { max-width: 100%; }
+            .carousel-slide { padding: 60px 40px; text-align: center; }
+            .banner-features { justify-content: center; grid-template-columns: 1fr; }
+        }
+        
+        @media (max-width: 768px) {
+            :root { --sidebar-width: 70px; }
+            .menu-item span, .logout-button span, .seteeduca { display: none; }
+            .menu-item i, .logout-button i { margin-right: 0; }
+            .sidebar .logo { padding: 0 10px; } 
+            .sidebar .logo img { max-width: 50px; } 
+            .sidebar-footer { padding: 10px 5px; } 
+            .menu { padding: 10px 5px; } 
+            .menu-item { padding: 15px 5px; justify-content: center; } 
+            .menu-item::after { display: none; } 
+            .menu-item.active::before { right: 5px; } 
+            .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
+            .header-title h1 { font-size: 22px; }
+            .header-title p { font-size: 14px; }
+            
+            .carousel-slide { min-height: 450px; padding: 40px 25px; }
+            .banner-text h2 { font-size: 28px; }
+            .banner-text p { font-size: 15px; }
+
+            .page-footer { flex-direction: column; justify-content: center; text-align: center; }
+            .footer-links a { margin: 0 10px; }
+        }
+    </style>
 </head>
-<a href="/perfil" target="_blank">
-  <button id="meuPerfilBtn">
-    <i class="bi bi-person-circle"></i> Meu Perfil
-  </button>
-</a>
 <body>
+    
+    <div class="sidebar">
+        <div>
+            <div class="logo">
+                <img src="imagem/logo.png" alt="logo">
+            </div>
+            <div class="menu">
+                <a href="#" class="menu-item active" onclick="navegarPara('inicio')">
+                    <i class="fas fa-home"></i>
+                    <span>INÍCIO</span>
+                </a>
+                <a href="#" class="menu-item" onclick="navegarPara('cadastro')">
+                    <i class="fas fa-address-card"></i>
+                    <span>CADASTRO</span>
+                </a>
+                <a href="#" class="menu-item" onclick="navegarPara('matricula')">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>MATRÍCULA</span>
+                </a>
+                <a href="#" class="menu-item" id="professor-link">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>PROFESSOR</span>
+                </a>
+    
+                <a href="#" class="menu-item" onclick="navegarPara('turmas')"> 
+                    <i class="fas fa-users"></i>
+                    <span>TURMA</span>
+                </a>
+                <a href="#" class="menu-item" onclick="navegarPara('financeiro')">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>FINANCEIRO</span>
+                </a>
+            </div>
+        </div>
+        <div>
+            <div class="sidebar-footer">
+                <a href="#" class="logout-button logout-trigger">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Sair</span>
+                </a>
+            </div>
+        </div>
+    </div>  
 
-<img src="/imagem/logocomp.png" alt="Logo" class="logo-top-right">
+    <main class="main-content">
+        <header class="header">
+            <div class="header-title">
+                <h1>Olá, Usuário!</h1>
+                <p>Como podemos te ajudar?</p>
+            </div>
+            <div class="profile" id="profile-toggle">
+                <div class="profile-header">
+                    <i class="fas fa-user-circle profile-icon"></i>
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
+                <div class="profile-dropdown" id="profile-dropdown-menu">
+                    <a href="#" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
+                    <a href="#" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+                    <a href="#" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" onclick="navegarPara('ajuda')"><i class="fas fa-question-circle"></i> Ajuda</a>
+                </div>
+            </div>
+        </header>
 
-  <header>
-    Olá, <strong>Usuário!</strong> 
-  </header>
+        <div class="welcome-banner">
+            <div class="carousel-slides">
+                <div class="carousel-slide" style="background-image: url('imagem/creche.png');">
+                    <div class="banner-text">
+                        <h2>Gerencie sua creche de forma completa!</h2>
+                        <p>Simplifique matrículas, organize turmas e professores e visualize as finanças em um único painel intuitivo.</p>
+                        <ul class="banner-features">
+                            <li><i class="fas fa-check-circle"></i>Cadastro de alunos</li>
+                            <li><i class="fas fa-check-circle"></i>Gestão de professores</li>
+                            <li><i class="fas fa-check-circle"></i>Matrículas online</li>
+                             <li><i class="fas fa-check-circle"></i>Organização turmas</li>
+                            <li><i class="fas fa-check-circle"></i>Administração financeira</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="carousel-slide" style="background-image: url('imagem/kids.png');">
+                    <div class="banner-text">
+                        <h2>Otimize Cada Detalhe da Sua Instituição</h2>
+                        <p>Automatize tarefas e libere tempo para o que realmente importa: a educação.</p>
+                    </div>
+                </div>
+                 <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1588075592446-265fd1e6e76f?q=80&w=2072&auto=format&fit=crop');">
+                    <div class="banner-text">
+                        <h2>Relatórios e Insights</h2>
+                        <p>Tome decisões baseadas em dados com relatórios detalhados sobre matrículas, finanças e desempenho.</p>
+                         <ul class="banner-features">
+                            <li><i class="fas fa-check-circle"></i>Relatórios financeiros</li>
+                            <li><i class="fas fa-check-circle"></i>Visão geral de turmas</li>
+                            <li><i class="fas fa-check-circle"></i>Acompanhamento de matrículas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-button prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="carousel-button next"><i class="fas fa-chevron-right"></i></button>
+
+            <div class="carousel-indicators"></div>
+        </div>
+
+        <h3 class="quick-info-title">Informações rápidas</h3>
+        <div class="info-cards-container">
+            <div class="info-card card-professores">
+                <div class="card-header"><div class="icon"><i class="fas fa-chalkboard-teacher"></i></div></div>
+                <div class="card-number" id="prof-count">...</div>
+                <div class="card-label">Professores cadastrados</div>
+            </div>
+            <div class="info-card card-alunos">
+                <div class="card-header"><div class="icon"><i class="fas fa-user-graduate"></i></div></div>
+                <div class="card-number" id="alunos-count">...</div>
+                <div class="card-label">Alunos matriculados</div>
+            </div>
+            <div class="info-card card-turmas">
+                <div class="card-header"><div class="icon"><i class="fas fa-users"></i></div></div>
+                <div class="card-number" id="turmas-count">...</div>
+                <div class="card-label">Turmas ativas</div>
+            </div>
+        </div>
 
 
+    <footer class="main-footer">
+        <div class="footer-content">
+           <div class="sete">
+            <img src="imagem/sete.png" alt="sete" style="height: 250px; margin: -30px; margin-right: 20px;">
+           </div>
 
-  </div>
+            <div class="footer-section">
+                <h4>Início</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Cadastro</a></li>
+                    <li><a href="#">Matrícula</a></li>
+                    <li><a href="#">Professor</a></li>
+                    <li><a href="#">Turma</a></li>
+                    <li><a href="#">Financeiro</a></li>
+                </ul>
+            </div>
 
+            <div class="footer-section">
+                <h4>Sobre Nós</h4>
+                <ul>
+                    <li><a href="#">Quem Somos</a></li>
+                    <li><a href="#">Equipe</a></li>
+                    <li><a href="#">Parceiros - SENAI CIMATEC/ SESI</a></li>
+                </ul>
+            </div>
 
+            <div class="footer-social-contact">
+                <div class="footer-social-icons">
+                    <a href="#" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
 
-  <div class="container">
-    <div class="titulo">Como podemos te ajudar?</div>
-    <div class="botoes">
-      <div class="botao cadastro">
-       <a href="/opcoes-aluno"> <img src="/imagem/cadastro.png" alt="Ícone Cadastro" style="width: 90px; height: 90px; margin-bottom: 10px;"> </a>
-        <i class="fas fa-user-plus"></i>
-        CADASTRO
-      </div>
-      <div class="botao turmas">
-       <a href="/opcoes-turma"> <img src="/imagem/mesa.png" alt="Ícone turmas" style="width: 80px; height: 80px; margin-bottom: 10px;"> </a>
-        <i class="fas fa-users"></i>
-        TURMAS
-      </div>
-      <div class="botao financeiro">
-     <a href= "/opcoes-financeiro">  <img src="/imagem/dinheiro.png" alt="Ícone financeiro" style="width: 90px; height: 90px; margin-bottom: 10px;"> </a>
-        <i class="fas fa-money-bill-wave"></i>
-        FINANCEIRO
-      </div>
+                <div class="contact-info">
+                    <p>Telefone: (71) 98765-4321</p>
+                    <p>Email: contato@seteeduca.com.br</p>
+                </div>
+                <a href="#" class="contact-button">Entre em Contato</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Seteeduca. Todos os direitos reservados. Design e Desenvolvimento Seteeduca.</p>
+        </div>
+    </footer>
+
+    </main>
+
+    <div id="logout-modal" class="modal-container">
+        <div class="modal-content">
+            <p>Tem certeza que deseja sair dessa conta?</p>
+            <div class="modal-buttons">
+                <button id="cancel-logout" class="btn-cancel">Cancelar</button>
+                <button id="confirm-logout" class="btn-confirm">Confirmar</button>
+            </div>
+        </div>
     </div>
-  </div>
 
+
+    <script>
+        // Função dummy para simular navegação
+        function navegarPara(pagina) {
+            console.log("Navegando para: " + pagina);
+            // Aqui você implementaria a lógica real de navegação (SPA, redirecionamento, etc.)
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- LÓGICA DO MENU DROPDOWN DO PERFIL ---
+            const profileToggle = document.getElementById('profile-toggle');
+            const dropdownMenu = document.getElementById('profile-dropdown-menu');
+            const profileArrow = profileToggle.querySelector('.profile-arrow');
+
+            profileToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+                profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+
+            window.addEventListener('click', function() {
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                    profileArrow.style.transform = 'rotate(0deg)';
+                }
+            });
+
+          
+            // ============== INÍCIO DA LÓGICA DO CARROSSEL ==============
+          
+            const carouselContainer = document.querySelector('.welcome-banner');
+            const slidesContainer = carouselContainer.querySelector('.carousel-slides');
+            const slides = carouselContainer.querySelectorAll('.carousel-slide');
+            const prevButton = carouselContainer.querySelector('.carousel-button.prev');
+            const nextButton = carouselContainer.querySelector('.carousel-button.next');
+            const indicatorsContainer = carouselContainer.querySelector('.carousel-indicators');
+
+            if (slides.length > 0) { // Garante que o script só rode se houver slides
+                let currentIndex = 0;
+                let slideInterval;
+
+                // Criar os pontos indicadores
+                slides.forEach((_, index) => {
+                    const dot = document.createElement('div');
+                    dot.classList.add('indicator-dot');
+                    dot.addEventListener('click', () => {
+                        goToSlide(index);
+                        resetInterval();
+                    });
+                    indicatorsContainer.appendChild(dot);
+                });
+
+                const dots = indicatorsContainer.querySelectorAll('.indicator-dot');
+
+                function updateIndicators() {
+                    dots.forEach((dot, index) => {
+                        if (index === currentIndex) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+                }
+
+                function goToSlide(index) {
+                    currentIndex = (index + slides.length) % slides.length;
+                    slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    updateIndicators();
+                }
+
+                function resetInterval() {
+                    clearInterval(slideInterval);
+                    slideInterval = setInterval(() => goToSlide(currentIndex + 1), 5000); // Muda a cada 5 segundos
+                }
+
+                prevButton.addEventListener('click', () => {
+                    goToSlide(currentIndex - 1);
+                    resetInterval();
+                });
+
+                nextButton.addEventListener('click', () => {
+                    goToSlide(currentIndex + 1);
+                    resetInterval();
+                });
+                
+                carouselContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
+                carouselContainer.addEventListener('mouseleave', () => resetInterval());
+
+                // Iniciar
+                goToSlide(0);
+                resetInterval();
+            }
+        
+            // ================ FIM DA LÓGICA DO CARROSSEL ================
+       
+
+            // --- NOVA LÓGICA PARA O MODAL DE LOGOUT ---
+            const logoutModal = document.getElementById('logout-modal');
+            const logoutTriggers = document.querySelectorAll('.logout-trigger');
+            const cancelLogoutBtn = document.getElementById('cancel-logout');
+            const confirmLogoutBtn = document.getElementById('confirm-logout');
+
+            // Abrir o modal
+            logoutTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    logoutModal.classList.add('active');
+                });
+            });
+
+            // Fechar o modal com o botão "Cancelar"
+            cancelLogoutBtn.addEventListener('click', function() {
+                logoutModal.classList.remove('active');
+            });
+
+            // Fechar o modal clicando fora dele
+            logoutModal.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    logoutModal.classList.remove('active');
+                }
+            });
+
+            // Ação de confirmar o logout
+            confirmLogoutBtn.addEventListener('click', function() {
+                console.log("Usuário deslogado! Redirecionando...");
+                window.location.href = 'login.html';
+            });
+
+
+            // --- BUSCAR DADOS DO BACKEND ---
+            fetch('/api/dashboard-data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('prof-count').textContent = data.professores;
+                    document.getElementById('alunos-count').textContent = data.alunos;
+                    document.getElementById('turmas-count').textContent = data.turmas;
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados (usando dados de exemplo):', error);
+                    document.getElementById('prof-count').textContent = 10;
+                    document.getElementById('alunos-count').textContent = 10;
+                    document.getElementById('turmas-count').textContent = 10;
+                });
+            });
+
+            // O segundo DOMContentLoaded é redundante e pode causar problemas. A lógica foi unificada no primeiro.
+
+    </script>
 </body>
 </html>
