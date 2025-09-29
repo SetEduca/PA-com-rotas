@@ -169,54 +169,61 @@
             color: #D22A2A; 
             font-weight: 600;
         }
+         @media (max-width: 768px) {
+            :root { --sidebar-width: 70px; }
+            .menu-item span, .logout-button span, .seteeduca { display: none; }
+            .menu-item i, .logout-button i { margin-right: 0; }
+            .sidebar .logo { padding: 0 10px; } 
+            .sidebar .logo img { max-width: 50px; } 
+            .sidebar-footer { padding: 10px 5px; } 
+            .menu { padding: 10px 5px; } 
+            .menu-item { padding: 15px 5px; justify-content: center; } 
+            .menu-item::after { display: none; } 
+            .menu-item.active::before { right: 5px; } 
+            .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
+            .header-title h1 { font-size: 22px; }
+            .header-title p { font-size: 14px; }
+         }
 
     </style>
 </head>
 <body>
     
     <div class="sidebar">
-        <div class="logo">
-           <img src="imagem/logo.png" alt="logo">
-        </div>
-        
-         <div class="menu">
-                <div class="menu-item" onclick="navegarPara('inicio')">
+        <div>
+            <div class="logo">
+                <img src="imagem/logo.png" alt="logo">
+            </div>
+            <div class="menu">
+                <a href="/home" class="menu-item active" onclick="navegarPara('inicio')">
                     <i class="fas fa-home"></i>
                     <span>INÍCIO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('cadastro')">
+                </a>
+                <a href="/criancas-cadastradas" class="menu-item" onclick="navegarPara('cadastro')">
                     <i class="fas fa-address-card"></i>
                     <span>CADASTRO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('matricula')">
+                </a>
+                <a href="/matricula" class="menu-item" onclick="navegarPara('matricula')">
                     <i class="fas fa-user-graduate"></i>
                     <span>MATRÍCULA</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('professor')">
+                </a>
+                <a href="/cadastro-prof" class="menu-item" id="professor-link">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>PROFESSOR</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('turmas')"> 
+                </a>
+    
+                <a href="/turmas-cadastradas" class="menu-item" onclick="navegarPara('turmas')"> 
                     <i class="fas fa-users"></i>
                     <span>TURMA</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('financeiro')">
+                </a>
+                <a href="#" class="menu-item" onclick="navegarPara('financeiro')">
                     <i class="fas fa-dollar-sign"></i>
                     <span>FINANCEIRO</span>
-                </div>
+                </a>
             </div>
         </div>
-            <div class="seteeduca">
-                <p> @seteeduca </p>
-            </div>
-        </div>
-<div class="sidebar-footer">
-            <div class="logout-button">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Sair</span>
-            </div>
-        </div>
-    </div>
+        <div>
+
 
 
     <script>
@@ -235,3 +242,4 @@
 </body>
 
 </html>
+
