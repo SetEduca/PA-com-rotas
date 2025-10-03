@@ -59,8 +59,8 @@ app.get("/senha-trocada", (req, res) => {
 
 //CADASTRO
 
-app.get("/cadastro-aluno", (req, res) => {
-  res.render("ALUNO/cadastro2");
+app.get("/acessar-aluno", (req, res) => {
+  res.render("ALUNO/acessar-aluno");
 });
 
 app.get("/cadastro-responsavel", (req, res) => {
