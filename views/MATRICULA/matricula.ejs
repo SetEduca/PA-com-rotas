@@ -96,13 +96,14 @@
             width: calc(100% - 40px);
         }
 
-    .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-    .menu-item:nth-child(2)::after { background-color: #00A6FF; }
-    .menu-item:nth-child(3)::after { background-color: #9747FF; }
-    .menu-item:nth-child(4)::after { background-color: #F88C12; }
-    .menu-item:nth-child(5)::after { background-color: #D22A2A; }
-    .menu-item:nth-child(6)::after { background-color: #59C631; }
-    .menu-item.active {
+        .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+        .menu-item:nth-child(2)::after { background-color: #00A6FF; }
+        .menu-item:nth-child(3)::after { background-color: #9747FF; }
+        .menu-item:nth-child(4)::after { background-color: #F88C12; }
+        .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+        .menu-item:nth-child(6)::after { background-color: #59C631; }
+        
+        .menu-item.active {
             background-color: rgba(128, 128, 128, 0.356);
             color: #333;
             font-weight: 600;
@@ -205,31 +206,17 @@
 
         .container {
             width: 100%;
-            max-width: 1200px;
-            display: flex;
-            gap: 30px;
-            align-items: flex-start;
+            max-width: 900px;
         }
 
         .form-section {
-            flex: 1;
+            width: 100%;
             background: white;
             border-radius: 12px;
             padding: 40px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             border-top: 5px solid #9154e0;
             min-height: 600px;
-        }
-
-        .list-section {
-            flex: 1;
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid #9154e0;
-            max-height: 700px;
-            overflow-y: auto;
         }
 
         .section-title {
@@ -338,19 +325,6 @@
             box-shadow: 0 6px 12px rgba(151, 71, 255, 0.4);
         }
 
-        .btn-reload {
-            background: #59C631;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 8px 15px;
-            margin-left: 10px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            display: none; /* Oculto por padrão */
-        }
-
         .student-info {
             background: #f8f9fa;
             border: 2px solid #e9ecef;
@@ -371,95 +345,6 @@
             gap: 10px;
             color: #666;
             font-size: 0.95rem;
-        }
-
-        .matricula-card {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-
-        .matricula-card:hover {
-            border-color: #9154e0;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(151, 71, 255, 0.15);
-        }
-
-        .matricula-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .matricula-number {
-            font-weight: 700;
-            color: #9154e0;
-            font-size: 1.1rem;
-        }
-
-        .matricula-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-action {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .btn-edit {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .btn-edit:hover {
-            background: #bbdefb;
-            transform: translateY(-1px);
-        }
-
-        .btn-delete {
-            background: #ffebee;
-            color: #d32f2f;
-        }
-
-        .btn-delete:hover {
-            background: #ffcdd2;
-            transform: translateY(-1px);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .status-ativa {
-            background: #e8f5e8;
-            color: #2e7d32;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        .empty-state i {
-            font-size: 48px;
-            color: #ddd;
-            margin-bottom: 15px;
         }
 
         .modal {
@@ -522,38 +407,12 @@
             color: white;
         }
 
-        .error-message {
-            background: #fff3cd;
-            border: 1px solid #ffecb5;
-            color: #664d03;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin: 10px 0;
-        }
-
-        .success-message {
-            background: #d1edff;
-            border: 1px solid #b6effb;
-            color: #055160;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin: 10px 0;
-        }
-
-        .turmas-info {
-            display: none; /* Oculta o painel de informações */
-        }
-
         @keyframes modalFadeIn {
             from { opacity: 0; transform: scale(0.9); }
             to { opacity: 1; transform: scale(1); }
         }
 
         @media (max-width: 1024px) {
-            .container {
-                flex-direction: column;
-            }
-            
             .field-row {
                 flex-direction: column;
                 gap: 10px;
@@ -580,7 +439,6 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
     <div class="sidebar">
         <div>
             <div class="logo">
@@ -595,7 +453,7 @@
                     <i class="fas fa-address-card"></i>
                     <span>CADASTRO</span>
                 </div>
-                <div class="menu-item active" >
+                <div class="menu-item active">
                     <i class="fas fa-user-graduate"></i>
                     <span>MATRÍCULA</span>
                 </div>
@@ -607,7 +465,6 @@
                     <i class="fas fa-users"></i>
                     <span>TURMA</span>
                 </div>
-                
                 <div class="menu-item" onclick="navegarPara('financeiro')">
                     <i class="fas fa-dollar-sign"></i>
                     <span>FINANCEIRO</span>
@@ -628,7 +485,6 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content">
         <div class="header">
             <div class="header-title">
@@ -644,10 +500,7 @@
 
         <div class="content-area">
             <div class="container">
-                <!-- Form Section -->
                 <div class="form-section">
-                    <!-- Removido o painel de informações -->
-
                     <div class="tabs">
                         <div class="tab active" onclick="switchTab('matricula')">
                             <i class="fas fa-plus-circle"></i> Nova Matrícula
@@ -657,7 +510,6 @@
                         </div>
                     </div>
 
-                    <!-- Nova Matrícula -->
                     <div class="tab-content active" id="matricula-content">
                         <form id="matriculaForm">
                             <div class="field-group">
@@ -697,7 +549,6 @@
                         </form>
                     </div>
 
-                    <!-- Rematrícula -->
                     <div class="tab-content" id="rematricula-content">
                         <form id="rematriculaForm" style="display: none;">
                             <div class="field-group">
@@ -737,28 +588,16 @@
 
                         <div id="selectMatriculaMessage">
                             <p style="text-align: center; color: #666; margin-top: 50px;">
-                                <i class="fas fa-arrow-right" style="font-size: 2rem; margin-bottom: 20px;"></i><br>
-                                Selecione uma matrícula na lista ao lado para editar
+                                <i class="fas fa-clipboard-list" style="font-size: 2rem; margin-bottom: 20px;"></i><br>
+                                Clique em uma matrícula cadastrada para realizar a rematrícula
                             </p>
                         </div>
                     </div>
-                </div>
-
-                <!-- List Section -->
-                <div class="list-section">
-                    <div class="section-title">
-                        <i class="fas fa-list"></i>
-                        Matrículas Ativas
-                        <span style="font-size: 0.8rem; color: #666; font-weight: normal;" id="matriculasCounter">(0)</span>
-                    </div>
-                    
-                    <div id="matriculasList"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
     <div class="modal" id="confirmModal">
         <div class="modal-content">
             <p id="modalMessage"></p>
@@ -774,12 +613,9 @@
         let matriculas = [];
         let matriculaEditando = null;
 
-        // Dados de estudantes carregados do sistema
         const estudantesDisponiveis = [];
 
-        // Função para carregar estudantes do sistema
         function carregarEstudantes() {
-            // Tentar carregar estudantes cadastrados
             const estudantesStorage = sessionStorage.getItem('estudantes') || localStorage.getItem('estudantes');
             if (estudantesStorage) {
                 try {
@@ -794,13 +630,10 @@
         function carregarDados() {
             console.log('Carregando dados...');
             
-            // Carregar estudantes do sistema
             carregarEstudantes();
             
-            // Carregar turmas usando a mesma estratégia do sistema de turmas
             let turmasEncontradas = [];
             
-            // 1. Tentar sessionStorage primeiro (mais recente)
             const turmasSession = sessionStorage.getItem('turmas');
             if (turmasSession) {
                 try {
@@ -811,7 +644,6 @@
                 }
             }
             
-            // 2. Se não encontrou no sessionStorage, tentar localStorage
             if (turmasEncontradas.length === 0) {
                 const turmasLocal = localStorage.getItem('turmas');
                 if (turmasLocal) {
@@ -824,7 +656,6 @@
                 }
             }
             
-            // 3. Se ainda não encontrou, tentar window.turmas
             if (turmasEncontradas.length === 0 && typeof window.turmas !== 'undefined') {
                 turmasEncontradas = window.turmas;
                 console.log('Turmas carregadas do window.turmas:', turmasEncontradas.length);
@@ -833,7 +664,6 @@
             turmas = turmasEncontradas;
             estudantes = estudantesDisponiveis;
 
-            // Carregar matrículas (apenas em memória)
             const matriculasSession = sessionStorage.getItem('matriculas');
             const matriculasLocal = localStorage.getItem('matriculas');
             
@@ -856,60 +686,39 @@
             }
             
             console.log(`Dados carregados - Estudantes: ${estudantes.length}, Turmas: ${turmas.length}, Matrículas: ${matriculas.length}`);
-            atualizarContadores();
         }
 
-        function atualizarContadores() {
-            // Função simplificada - apenas atualiza o contador de matrículas
-            document.getElementById('matriculasCounter').textContent = `(${matriculas.length})`;
-        }
-
-        function recarregarTurmas() {
-            // Aqui você pode implementar a lógica para recarregar as turmas, se necessário.
-        }
-
-        // Função para navegação entre páginas
         function navegarPara(pagina) {
-            // Rotas baseadas no seu servidor Express
             const rotas = {
-                'inicio': '/home',                    // Rota para home
-                'professor': '/cadastro-professor',     // Adicione esta rota no seu servidor se necessário
-                'financeiro': '/opcoes-financeiro',   // Rota existente para financeiro
-                'turmas': '/turmas-cadastradas',      // Rota existente para turmas
-                'matricula': '/matricula',            // Página atual
-                'cadastro': '/opcoes-aluno'           // Rota existente para cadastro de aluno
+                'inicio': '/home',
+                'professor': '/cadastro-professor',
+                'financeiro': '/opcoes-financeiro',
+                'turmas': '/turmas-cadastradas',
+                'matricula': '/matricula',
+                'cadastro': '/opcoes-aluno'
             };
 
-            // Navegar para a página correspondente
             if (rotas[pagina]) {
                 window.location.href = rotas[pagina];
             } else {
                 console.warn(`Rota não encontrada para: ${pagina}`);
-                // Fallback - mostrar modal informativo
                 showModal(`Página "${pagina.toUpperCase()}" em desenvolvimento.\nEm breve estará disponível!`);
             }
         }
 
-        // Função para logout
         function logout() {
             if (confirm('Deseja realmente sair do sistema?')) {
-                // Limpar dados da sessão se necessário
                 sessionStorage.clear();
                 localStorage.clear();
-                // Redirecionar para página de login
                 window.location.href = '/login';
             }
         }
 
         function formatarCPF(cpf) {
-            // Remove tudo que não é dígito
             cpf = cpf.replace(/\D/g, '');
-            
-            // Aplica a formatação
             cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
             cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
             cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            
             return cpf;
         }
 
@@ -919,42 +728,39 @@
             if (cpf.length === 11) {
                 const estudante = estudantes.find(e => e.cpf && e.cpf.replace(/\D/g, '') === cpf);
             
-            if (!estudante) {
-                if (estudantes.length === 0) {
-                    showModal('Nenhum estudante cadastrado no sistema!\nCadastre estudantes primeiro antes de realizar matrículas.');
-                } else {
-                    showModal('Estudante não encontrado!\nVerifique se o CPF está correto ou se o estudante está cadastrado no sistema.');
+                if (!estudante) {
+                    if (estudantes.length === 0) {
+                        showModal('Nenhum estudante cadastrado no sistema!\nCadastre estudantes primeiro antes de realizar matrículas.');
+                    } else {
+                        showModal('Estudante não encontrado!\nVerifique se o CPF está correto ou se o estudante está cadastrado no sistema.');
+                    }
+                    document.getElementById('studentInfo').style.display = 'none';
+                    document.getElementById('anoLetivo').value = '';
+                    return;
                 }
-                document.getElementById('studentInfo').style.display = 'none';
-                document.getElementById('anoLetivo').value = '';
-                return;
-            }
 
-            // Verificar se já está matriculado
-            const jaMatriculado = matriculas.some(matricula => matricula.alunoId === estudante.id);
-            
-            if (jaMatriculado) {
-                showModal('Este estudante já possui uma matrícula ativa!');
-                document.getElementById('cpfEstudante').value = '';
-                document.getElementById('studentInfo').style.display = 'none';
-                return;
-            }
-            
-            // Mostrar informações do estudante
-            document.getElementById('studentName').textContent = estudante.nome;
-            document.getElementById('studentDetails').innerHTML = `
-                <div><strong>CPF:</strong> ${estudante.cpf || 'N/A'}</div>
-                <div><strong>Data Nascimento:</strong> ${estudante.dataNascimento || estudante.dataNasc || 'N/A'}</div>
-                <div><strong>Idade:</strong> ${estudante.idade || 'N/A'} anos</div>
-                <div><strong>Responsáveis:</strong> ${estudante.responsaveis ? estudante.responsaveis.join(', ') : 'N/A'}</div>
-                <div><strong>Telefone:</strong> ${estudante.telefone || 'N/A'}</div>
-                <div><strong>Endereço:</strong> ${estudante.endereco || 'N/A'}</div>
-            `;
-            document.getElementById('studentInfo').style.display = 'block';
-            
-            // Preencher dados automáticos
-            document.getElementById('anoLetivo').value = new Date().getFullYear();
-            document.getElementById('dataMatricula').value = new Date().toISOString().split('T')[0];
+                const jaMatriculado = matriculas.some(matricula => matricula.alunoId === estudante.id);
+                
+                if (jaMatriculado) {
+                    showModal('Este estudante já possui uma matrícula ativa!');
+                    document.getElementById('cpfEstudante').value = '';
+                    document.getElementById('studentInfo').style.display = 'none';
+                    return;
+                }
+                
+                document.getElementById('studentName').textContent = estudante.nome;
+                document.getElementById('studentDetails').innerHTML = `
+                    <div><strong>CPF:</strong> ${estudante.cpf || 'N/A'}</div>
+                    <div><strong>Data Nascimento:</strong> ${estudante.dataNascimento || estudante.dataNasc || 'N/A'}</div>
+                    <div><strong>Idade:</strong> ${estudante.idade || 'N/A'} anos</div>
+                    <div><strong>Responsáveis:</strong> ${estudante.responsaveis ? estudante.responsaveis.join(', ') : 'N/A'}</div>
+                    <div><strong>Telefone:</strong> ${estudante.telefone || 'N/A'}</div>
+                    <div><strong>Endereço:</strong> ${estudante.endereco || 'N/A'}</div>
+                `;
+                document.getElementById('studentInfo').style.display = 'block';
+                
+                document.getElementById('anoLetivo').value = new Date().getFullYear();
+                document.getElementById('dataMatricula').value = new Date().toISOString().split('T')[0];
             } else if (cpf.length > 0) {
                 document.getElementById('studentInfo').style.display = 'none';
                 document.getElementById('anoLetivo').value = '';
@@ -992,58 +798,12 @@
             return `${ano}${String(numero).padStart(4, '0')}`;
         }
 
-        function listarMatriculas() {
-            const container = document.getElementById('matriculasList');
-            
-            if (matriculas.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h3>Nenhuma matrícula encontrada</h3>
-                        <p>Ainda não há estudantes matriculados</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = matriculas.map(matricula => {
-                const estudante = estudantes.find(e => e.id === matricula.alunoId);
-                const turmaInfo = turmas.find(t => t.turma === matricula.turma);
-                return `
-                    <div class="matricula-card">
-                        <div class="matricula-header">
-                            <div class="matricula-number">#${matricula.numeroMatricula}</div>
-                            <div class="matricula-actions">
-                                <button class="btn-action btn-edit" onclick="editarMatricula('${matricula.numeroMatricula}')" title="Editar matrícula">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn-action btn-delete" onclick="excluirMatricula('${matricula.numeroMatricula}')" title="Excluir matrícula">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div>
-                            <strong>${estudante ? estudante.nome : 'Estudante não encontrado'}</strong><br>
-                            <span style="color: #666;">Turma: ${matricula.turma}</span><br>
-                            <span style="color: #666;">Professor: ${turmaInfo ? turmaInfo.professor : 'N/A'}</span><br>
-                            <span style="color: #666;">Data: ${new Date(matricula.dataMatricula).toLocaleDateString('pt-BR')}</span><br>
-                            <span class="status-badge status-ativa">Ativa</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             
             document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
             document.getElementById(`${tab}-content`).classList.add('active');
-            
-            if (tab === 'rematricula') {
-                listarMatriculas();
-            }
         }
 
         function editarMatricula(numeroMatricula) {
@@ -1064,15 +824,6 @@
             }
         }
 
-        function excluirMatricula(numeroMatricula) {
-            if (confirm('Tem certeza que deseja excluir esta matrícula?')) {
-                matriculas = matriculas.filter(m => m.numeroMatricula !== numeroMatricula);
-                listarMatriculas();
-                atualizarContadores();
-                showModal('Matrícula excluída com sucesso!');
-            }
-        }
-
         function showModal(message) {
             document.getElementById('modalMessage').textContent = message;
             document.getElementById('confirmModal').style.display = 'flex';
@@ -1082,12 +833,8 @@
             document.getElementById('confirmModal').style.display = 'none';
         }
 
-        // Event Listeners
         document.getElementById('cpfEstudante').addEventListener('input', function(e) {
-            // Formatação automática do CPF
             e.target.value = formatarCPF(e.target.value);
-            
-            // Busca automática quando CPF está completo
             buscarEstudantePorCPF();
         });
 
@@ -1110,7 +857,6 @@
                 return;
             }
 
-            // Verificar se a turma tem vagas disponíveis
             const turmaInfo = turmas.find(t => t.turma === turma);
             if (!turmaInfo) {
                 showModal('Turma não encontrada!');
@@ -1140,8 +886,6 @@
             showModal(`Matrícula realizada com sucesso!\nEstudante: ${estudante.nome}\nNúmero: ${numeroMatricula}`);
             document.getElementById('matriculaForm').reset();
             document.getElementById('studentInfo').style.display = 'none';
-            listarMatriculas();
-            atualizarContadores();
         });
 
         document.getElementById('rematriculaForm').addEventListener('submit', function(e) {
@@ -1160,7 +904,6 @@
                 return;
             }
 
-            // Verificar vagas na nova turma
             const turmaInfo = turmas.find(t => t.turma === novaTurma);
             const alunosMatriculados = matriculas.filter(m => m.turma === novaTurma).length;
             
@@ -1169,7 +912,6 @@
                 return;
             }
 
-            // Atualizar matrícula
             const index = matriculas.findIndex(m => m.numeroMatricula === matriculaEditando.numeroMatricula);
             if (index !== -1) {
                 matriculas[index].turma = novaTurma;
@@ -1179,19 +921,16 @@
                 document.getElementById('rematriculaForm').reset();
                 document.getElementById('rematriculaForm').style.display = 'none';
                 document.getElementById('selectMatriculaMessage').style.display = 'block';
-                listarMatriculas();
                 matriculaEditando = null;
             }
         });
 
-        // Fechar modal ao clicar fora
         document.getElementById('confirmModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeModal();
             }
         });
 
-        // Menu interativo
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', function() {
                 document.querySelectorAll('.menu-item').forEach(i => {
@@ -1201,11 +940,9 @@
             });
         });
 
-        // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             carregarDados();
             preencherSelectTurmas();
-            listarMatriculas();
         });
     </script>
 </body>
