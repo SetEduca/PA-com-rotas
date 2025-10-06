@@ -29,9 +29,18 @@ app.get("/cadastro", (req, res) => {
 
 //PERFIL
 
-app.get("/perfil", (req, res) => {
-  res.render("PERFIL/perfil");
+app.get("/meuperfil", (req, res) => {
+  res.render("PERFIL/meuperfil");
 });
+
+app.get("/mensalidade", (req, res) => {
+  res.render("PERFIL/mensalidade");
+});
+
+app.get("/arquivados", (req, res) => {
+  res.render("PERFIL/arquivados");
+});
+
 
 //HOME
 
