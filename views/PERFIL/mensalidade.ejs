@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensalidade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background-image: url(imagem/ChatGPT\ Image\ 22_09_2025\,\ 17_12_14.png);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* Padronizado com perfil.html: Adicionado font-family aqui */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #FCFCFC;
+            background-image: var(--background-image);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            /* Padronizado com perfil.html: Removido min-height: 100vh; */
+        }
+        
+        .header {
+            background-color: #fade939f;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Padronizado com perfil.html: Removido position e z-index */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 35px;
+            font-weight: 550;
+            color: #2c3e50;
+        }
+
+        /* Novo estilo para padronizar o ícone/logo no header-left */
+        .header-left .logo-icon {
+            width: 60px; /* Estilo similar ao .header-left .user-icon em perfil.html */
+            height: auto;
+            object-fit: contain;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* INÍCIO: ESTILOS DE ÍCONES E DROPDOWN */
+
+        .header-icon {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .profile {
+            position: relative;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* Padronizado com perfil.html: Adicionado margem zero no ícone do perfil */
+        .profile .header-icon {
+            margin: 0;
+        }
+        
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 200px;
+            display: none;
+            padding: 10px 0;
+            margin-top: 10px;
+        }
+        
+        .profile-dropdown a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .profile-dropdown a:hover {
+            background-color: #f1f1f1;
+            /* Padronizado com perfil.html: Corrigido para a cor #f0ad4e */
+            color: #f0ad4e;
+        }
+
+        .profile-dropdown a.active-link {
+            background-color: #f1f1f1;
+            font-weight: 700;
+            /* Padronizado com perfil.html: Mantido o #ffbb00 como cor de link ativo */
+            color: #ffbb00; 
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            margin: 8px 0;
+            overflow: hidden;
+            background-color: #e9ecef;
+        }
+        /* FIM: ESTILOS DE ÍCONES E DROPDOWN */
+
+        /* Main Content */
+        .container {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 6000px;
+            margin: 0 auto;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .section-title {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            height: 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 0 20px;
+            font-size: 14px;
+            color: #2c3e50;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        
+        .form-input:focus {
+            border-color: #ffbb00;
+            background-color: #f8fff9;
+            box-shadow: 0 0 0 3px rgba(168, 213, 197, 0.1);
+        }
+
+        .form-input:hover {
+            border-color: #c0c0c0;
+        }
+        
+        .form-select {
+            width: 100%;
+            height: 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 0 20px;
+            font-size: 14px;
+            color: #2c3e50;
+            outline: none;
+            background-color: white;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232c3e50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            background-size: 16px;
+            transition: all 0.3s ease;
+            padding-right: 50px;
+        }
+        
+        .form-select:focus {
+            border-color: #ffbb00 ;
+            background-color: #f8fff9;
+            box-shadow: 0 0 0 3px rgba(168, 213, 197, 0.1);
+        }
+
+        .form-select:hover {
+            border-color: #c0c0c0;
+        }
+
+        .form-select option {
+            padding: 10px;
+            color: #2c3e50;
+        }
+        
+        .submit-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn-cadastrar {
+            background: linear-gradient(135deg, #ffbb00 0%, #ffbb00 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            justify-content: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-cadastrar:hover {
+            background: linear-gradient(135deg, #fcd66e 0%, #ffbb00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(97, 79, 0, 0.4);
+        }
+
+        .btn-cadastrar:active {
+            transform: translateY(0);
+        }
+        
+        .btn-cadastrar::before {
+            content: "+";
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        /* Lista de mensalidades cadastradas */
+        .mensalidades-section {
+            margin-top: 40px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 30px;
+        }
+
+        .mensalidades-lista {
+            margin-top: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-style: italic;
+            display: none;
+        }
+
+        .empty-state.show {
+            display: block;
+        }
+        
+        /* INÍCIO: ESTILO LIMPO PARA O ITEM DE MENSALIDADE */
+        .mensalidade-item {
+            background: white; /* Fundo branco e limpo */
+            border: 1px solid #e0e0e0; /* Borda cinza suave */
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mensalidade-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05); /* Sombra mais sutil */
+            border-color: #ffbb00; /* Borda da cor de destaque no hover */
+        }
+        /* FIM: ESTILO LIMPO PARA O ITEM DE MENSALIDADE */
+        
+        .mensalidade-info {
+            color: #2c3e50;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .mensalidade-details {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            background: rgba(168, 213, 197, 0.1);
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .detail-value {
+            color: #666;
+        }
+
+        .price-highlight {
+            color: #ffbb00 ;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .btn-alterar {
+            background: linear-gradient(135deg, #fcd66e 0%, #f1c40f 100%);
+            color: #2c3e50;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-alterar:hover {
+            background: linear-gradient(135deg, #f1c40f 0%, #e67e22 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(252, 214, 110, 0.4);
+        }
+
+        .btn-alterar:active {
+            transform: translateY(0);
+        }
+
+        /* Animações */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(-100%); }
+        }
+
+        .slide-in { animation: slideIn 0.4s ease-out; }
+        .slide-out { animation: slideOut 0.3s ease-in; }
+
+        /* Estados de validação */
+        .form-input.error, .form-select.error {
+            border-color: #e74c3c;
+            background-color: #fdf2f2;
+        }
+        
+        .form-input.success, .form-select.success {
+            border-color: #ffbb00 ;
+            background-color: #f0f9f4;
+        }
+
+        /* ESTILO DO CONTADOR (Contorno Simples) */
+        .counter {
+            background: white;
+            color: #2c3e50;
+            border: 2px solid #ffbb00; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .counter:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header { padding: 15px 20px; }
+            .header-left { font-size: 24px; }
+            /* Padronizado: Ajuste para o novo seletor */
+            .header-left .logo-icon { width: 50px; height: 50px; font-size: 20px; }
+            .header-icon { width: 40px; height: 40px; }
+            .container { margin: 20px auto; padding: 0 15px; }
+            .form-container { padding: 30px 20px; }
+            .mensalidade-details { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .mensalidade-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .btn-alterar { align-self: flex-end; }
+            .section-title { font-size: 18px; }
+        }
+
+        @media (max-width: 480px) {
+            .form-input, .form-select { height: 50px; font-size: 16px; }
+            .btn-cadastrar { width: 100%; padding: 18px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <img 
+                src="imagem/relatorio-mensal.png" 
+                class="logo-icon" 
+                alt="Logo Mensalidade"
+            >
+            <span>Mensalidade</span>
+        </div>
+        <div class="header-right">
+            <img 
+                src="imagem/home3.png" 
+                class="header-icon" 
+                onclick="window.location.href='/home'" 
+                alt="Home Icon" 
+                title="Início"
+            >
+            
+            <div class="profile">
+                <img 
+                    src="imagem/perfil2.png" 
+                    class="header-icon" 
+                    onclick="toggleDropdown(event)" 
+                    alt="Profile Icon" 
+                    title="Perfil" 
+                >
+                <div class="profile-dropdown" id="profile-dropdown-menu">
+                    <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
+                    <a href="/mensalidade" onclick="navegarPara('mensalidade')" class="active-link"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+                    <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/login" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="section-title">Cadastrar Nova Mensalidade</h2>
+            <form id="mensalidadeForm">
+                <div class="form-group">
+                    <label class="form-label">Faixa etária:</label>
+                    <input type="text" class="form-input" id="faixaEtaria" placeholder="Ex: 0-2 anos, 3-5 anos">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Turno:</label>
+                    <select class="form-select" id="turno">
+                        <option value="" disabled selected>Selecione o Turno</option>
+                        <option value="integral">Integral</option>
+                        <option value="matutino">Matutino</option>
+                        <option value="vespertino">Vespertino</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Valor (R$):</label>
+                    <input type="number" class="form-input" id="valor" placeholder="Ex: 500.00" min="0" step="0.01">
+                </div>
+                <div class="submit-button">
+                    <button type="submit" class="btn-cadastrar">Cadastrar Mensalidade</button>
+                </div>
+            </form>
+
+            <div class="mensalidades-section">
+                <h3 class="section-title">Mensalidades Cadastradas</h3>
+                <span class="counter" id="mensalidadeCounter">Total de Mensalidades: 0</span>
+                <div class="mensalidades-lista" id="mensalidadesLista">
+                    <div class="empty-state show">
+                        Nenhuma mensalidade cadastrada ainda.
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('mensalidadeForm');
+        const lista = document.getElementById('mensalidadesLista');
+        const counter = document.getElementById('mensalidadeCounter');
+        let mensalidades = carregarMensalidades();
+
+        // Mapeamento de rotas para navegação local em arquivos HTML
+        const rotas = {
+            'inicio': 'index.html', // Assumindo que a home é index.html
+            'meu-perfil': 'perfil.html', 
+            'mensalidade': 'mensalidade.html', 
+            'arquivados': 'inativos.html', 
+        };
+
+        function carregarMensalidades() {
+            const salvas = sessionStorage.getItem('mensalidades');
+            return salvas ? JSON.parse(salvas) : [];
+        }
+
+        function salvarMensalidades() {
+            sessionStorage.setItem('mensalidades', JSON.stringify(mensalidades));
+        }
+
+        function updateCounter() {
+            counter.textContent = `Total de Mensalidades: ${mensalidades.length}`;
+            const emptyState = document.querySelector('.empty-state');
+            if (mensalidades.length === 0) {
+                emptyState.classList.add('show');
+            } else {
+                emptyState.classList.remove('show');
+            }
+        }
+
+        function renderizarMensalidades() {
+            lista.innerHTML = '';
+            if (mensalidades.length === 0) {
+                updateCounter();
+                return;
+            }
+
+            mensalidades.forEach((m, index) => {
+                const item = document.createElement('div');
+                item.className = 'mensalidade-item slide-in';
+                item.setAttribute('data-index', index);
+                
+                // Ajuste no HTML renderizado para não mostrar a data de vencimento
+                item.innerHTML = `
+                    <div class="mensalidade-info">
+                        <strong>Mensalidade ${index + 1}:</strong>
+                        <div class="mensalidade-details">
+                            <span class="detail-item"><span class="detail-label">Faixa Etária:</span> <span class="detail-value">${m.faixaEtaria}</span></span>
+                            <span class="detail-item"><span class="detail-label">Turno:</span> <span class="detail-value">${m.turno}</span></span>
+                            <span class="detail-item"><span class="detail-label">Valor:</span> <span class="price-highlight">R$ ${m.valor}</span></span>
+                        </div>
+                    </div>
+                    <button class="btn-alterar" onclick="removerMensalidade(event, ${index})">Remover</button>
+                `;
+                lista.appendChild(item);
+            });
+            updateCounter();
+        }
+
+        function removerMensalidade(event, index) {
+            event.stopPropagation();
+            if (confirm('Tem certeza que deseja remover esta mensalidade?')) {
+                const item = event.target.closest('.mensalidade-item');
+                item.classList.remove('slide-in');
+                item.classList.add('slide-out');
+
+                setTimeout(() => {
+                    mensalidades.splice(index, 1);
+                    salvarMensalidades();
+                    renderizarMensalidades();
+                }, 300);
+            }
+        }
+
+        function validarCampo(campo) {
+            // Se o campo for um 'input type="number"', checa se é maior que zero
+            if (campo.type === 'number') {
+                if (campo.value.trim() === '' || parseFloat(campo.value) <= 0) {
+                    campo.classList.add('error');
+                    campo.classList.remove('success');
+                    return false;
+                }
+            } else {
+                // Checa se está vazio para outros campos (text, select)
+                if (campo.value.trim() === '') {
+                    campo.classList.add('error');
+                    campo.classList.remove('success');
+                    return false;
+                }
+            }
+            
+            campo.classList.add('success');
+            campo.classList.remove('error');
+            return true;
+        }
+
+        function cadastrarMensalidade(event) {
+            if (event) event.preventDefault();
+
+            const faixaEtaria = document.getElementById('faixaEtaria');
+            const turno = document.getElementById('turno');
+            const valor = document.getElementById('valor');
+
+            let isValid = true;
+
+            // Validação de Faixa Etária
+            if (!validarCampo(faixaEtaria)) isValid = false;
+
+            // Validação de Turno
+            if (!validarCampo(turno) || turno.value === "") isValid = false;
+
+            // Validação de Valor
+            if (!validarCampo(valor) || parseFloat(valor.value) <= 0) isValid = false;
+            
+            if (!isValid) {
+                alert('Por favor, preencha todos os campos corretamente.');
+                return;
+            }
+
+            const novaMensalidade = {
+                faixaEtaria: faixaEtaria.value.trim(),
+                turno: turno.value,
+                valor: parseFloat(valor.value).toFixed(2),
+                dataCadastro: new Date().toISOString()
+            };
+
+            mensalidades.push(novaMensalidade);
+            salvarMensalidades();
+            renderizarMensalidades();
+            form.reset(); // Limpa o formulário
+
+            // Remove classes de sucesso após o cadastro
+            document.querySelectorAll('.form-input, .form-select').forEach(field => {
+                field.classList.remove('success');
+            });
+            alert('Mensalidade cadastrada com sucesso!');
+        }
+
+        form.addEventListener('submit', cadastrarMensalidade);
+
+        // Inicializar a lista
+        renderizarMensalidades();
+
+        // Validação em tempo real (on blur)
+        document.querySelectorAll('.form-input, .form-select').forEach(field => {
+            field.addEventListener('blur', function() {
+                validarCampo(this);
+            });
+            
+            field.addEventListener('focus', function() {
+                this.classList.remove('error', 'success');
+            });
+        });
+
+        // Submissão por Enter
+        document.getElementById('mensalidadeForm').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                cadastrarMensalidade();
+            }
+        });
+
+        // Efeito de foco suave nos campos
+        document.querySelectorAll('.form-input, .form-select').forEach(field => {
+            field.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+
+        /* INÍCIO: FUNÇÕES E LÓGICA DO DROPDOWN */
+
+        function toggleDropdown(event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById('profile-dropdown-menu');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        const navegarPara = (pagina) => {
+            if (rotas[pagina]) {
+                const dropdown = document.getElementById('profile-dropdown-menu');
+                if (dropdown) dropdown.style.display = 'none';
+                
+                if (pagina === 'mensalidade') return;
+                window.location.href = rotas[pagina];
+            } else {
+                console.warn(`Rota não encontrada para: ${pagina}`);
+                if (pagina === 'inicio') window.location.href = 'index.html';
+            }
+        }
+
+        function logout() {
+            if (confirm('Deseja realmente sair do sistema?')) {
+                window.location.href = 'login.html'; 
+            }
+        }
+
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profile-dropdown-menu');
+            const profileIcon = document.querySelector('.profile .header-icon');
+            
+            if (dropdown && profileIcon && !profileIcon.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        window.toggleDropdown = toggleDropdown;
+        window.navegarPara = navegarPara;
+        window.logout = logout;
+
+        /* FIM: FUNÇÕES E LÓGICA DO DROPDOWN */
+    </script>
+</body>
+</html>
