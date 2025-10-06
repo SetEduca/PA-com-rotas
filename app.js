@@ -67,8 +67,8 @@ app.get("/cadastro-responsavel", (req, res) => {
   res.render("ALUNO/cadastro1");
 });
 
-app.get("/criancas-cadastradas", (req, res) => {
-  res.render("ALUNO/cria");
+app.get("/cadastro-aluno", (req, res) => {
+  res.render("ALUNO/cadastro-aluno");
 });
 
 //FINANCEIRO
