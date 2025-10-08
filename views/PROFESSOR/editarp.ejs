@@ -554,35 +554,42 @@
       <div class="caixa">
         <form id="formEditar">
           <div class="campo">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" placeholder="Digite o nome completo do professor" required>
+            <label for="professor">Nome:</label>
+            <input type="text" id="professor" name="professor" placeholder="Nome completo do professor" required>
           </div>
           <div class="campo">
             <label for="cpf">CPF:</label>
-            <input type="text" id="cpf" name="cpf" placeholder="cpf do professor" required>
+            <input type="text" id="cpf" name="cpf" placeholder="CPF do professor" required>
           </div>
           <div class="campo">
-            <label for="mensalidade">Mensalidade:</label>
-            <select id="mensalidade" name="mensalidade" required>
-              <option value="" disabled selected>Selecione a mensalidade</option>
-              <option value="0-1/mat/R$ 150">0-1 anos / Matutino / R$ 150,00</option>
-              <option value="0-1/ves/R$ 150">0-1 anos / Vespertino / R$ 150,00</option>
-              <option value="0-1/int/R$ 250">0-1 anos / Integral / R$ 250,00</option>
-              <option value="1-2/mat/R$ 180">1-2 anos / Matutino / R$ 180,00</option>
-              <option value="1-2/ves/R$ 180">1-2 anos / Vespertino / R$ 180,00</option>
-              <option value="1-2/int/R$ 280">1-2 anos / Integral / R$ 280,00</option>
-              <option value="2-3/mat/R$ 200">2-3 anos / Matutino / R$ 200,00</option>
-              <option value="2-3/ves/R$ 200">2-3 anos / Vespertino / R$ 200,00</option>
-              <option value="2-3/int/R$ 300">2-3 anos / Integral / R$ 300,00</option>
-              <option value="3-4/mat/R$ 220">3-4 anos / Matutino / R$ 220,00</option>
-              <option value="3-4/ves/R$ 220">3-4 anos / Vespertino / R$ 220,00</option>
-              <option value="3-4/int/R$ 320">3-4 anos / Integral / R$ 320,00</option>
+            <label for="Telefone">Telefone:</label>
+            <input type="text" id="Telefone" name="Telefone" placeholder="Telefone para contato do professor" required>
+          </div>
+
+          <div class="campo">
+            <label for="Email">Email:</label>
+            <input type="text" id="Email" name="Email" placeholder="Email do professor" required>
+          </div>
+
+          <div class="campo">
+            <label for="Endereço">Endereço:</label>
+            <input type="text" id="Endereço" name="Endereço" placeholder="Endereço do professor" required>
+          </div>
+
+          <div class="campo">
+            <label for="classificação">Classificação:</label>
+            <select id="classificação" name="classificação" required>
+              <option value="" disabled selected>Selecione o tipo do trabalho</option>
+              <option value="Mensal">Mensal</option>
+              <option value="Diarista">Diarista</option>
+              <option value="Horista">Horista</option>
+              <option value="Semanal">Semanal</option>
+            
             </select>
           </div>
-          <div class="campo">
-            <label for="quantidade_alunos">Quantidade de Alunos:</label>
-            <input type="number" id="quantidade_alunos" name="quantidade_alunos" min="1" placeholder="Número de alunos" required>
-          </div>
+           
+          
+      
           <div class="button-container">
             <button type="submit" class="btn-action-form btn-save">Salvar alterações</button>
             <button type="button" class="btn-action-form btn-cancel" id="btnCancelar">Cancelar</button>
@@ -623,239 +630,6 @@
             }
         }
 
-        // Função para carregar dados do storage
-        function carregarDoStorage() {
-            const turmasSalvas = sessionStorage.getItem('turmas') || "[]";
-            return JSON.parse(turmasSalvas);
-        }
-
-        // Função para salvar no storage
-        function salvarNoStorage(turmas) {
-            sessionStorage.setItem('turmas', JSON.stringify(turmas));
-        }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      // Menu interativo
-      document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', function() {
-          document.querySelectorAll('.menu-item').forEach(i => {
-            i.classList.remove('active');
-          });
-          this.classList.add('active');
-        });
-      });
-
-      // Formulário
-      const form = document.getElementById('formEditar');
-      const modal = document.getElementById('confirmModal');
-      const okBtn = modal.querySelector('.ok');
-      const modalMessage = document.getElementById('modalMessage');
-      const btnCancelar = document.getElementById('btnCancelar');
-
-      // Variáveis para armazenar dados da edição
-      let turmaIndex = -1;
-      let dadosTurma = {
-        professor: "",
-        turma: "",
-        mensalidade: "",
-        quantidade: ""
-      };
-
-      // Tentar carregar dados da turma para edição de várias fontes
-      let turmaParaEditar = sessionStorage.getItem('turmaParaEditar') || 
-                           localStorage.getItem('turmaParaEditar') ||
-                           sessionStorage.getItem('editTurma') ||
-                           localStorage.getItem('editTurma');
-      
-      console.log('Dados recebidos para edição:', turmaParaEditar);
-      
-      // Se não encontrou dados específicos para edição, tentar buscar pela URL ou outros métodos
-      if (!turmaParaEditar) {
-        console.log('Tentando métodos alternativos para carregar dados...');
-        
-        // Verificar se há dados de turma nas variáveis de URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const turmaId = urlParams.get('id') || urlParams.get('index');
-        
-        if (turmaId) {
-          console.log('ID encontrado na URL:', turmaId);
-          // Carregar todas as turmas e buscar pela ID
-          const todasTurmas = carregarDoStorage();
-          const index = parseInt(turmaId);
-          if (index >= 0 && index < todasTurmas.length) {
-            turmaParaEditar = JSON.stringify({
-              index: index,
-              dados: todasTurmas[index]
-            });
-          }
-        }
-      }
-      
-      if (turmaParaEditar) {
-        try {
-          const { index, dados } = JSON.parse(turmaParaEditar);
-          turmaIndex = parseInt(index);
-          dadosTurma = dados;
-          
-          console.log('Índice da turma:', turmaIndex);
-          console.log('Dados da turma:', dadosTurma);
-          
-          // Validar dados antes de preencher
-          if (turmaIndex >= 0 && dadosTurma && dadosTurma.turma) {
-            // Verificar se a turma ainda existe no storage
-            const turmasAtuais = carregarDoStorage();
-            if (turmaIndex < turmasAtuais.length && turmasAtuais[turmaIndex]) {
-              // Preencher formulário com dados existentes
-              document.getElementById('professor').value = dadosTurma.professor || '';
-              document.getElementById('turma').value = dadosTurma.turma || '';
-              document.getElementById('mensalidade').value = dadosTurma.mensalidade || '';
-              document.getElementById('quantidade_alunos').value = dadosTurma.quantidade || '';
-              
-              console.log('Formulário preenchido com sucesso');
-              
-              // Limpar os storages após carregar
-              sessionStorage.removeItem('turmaParaEditar');
-              localStorage.removeItem('turmaParaEditar');
-              sessionStorage.removeItem('editTurma');
-              localStorage.removeItem('editTurma');
-            } else {
-              throw new Error('Turma não encontrada no storage atual');
-            }
-          } else {
-            throw new Error('Dados incompletos ou índice inválido');
-          }
-        } catch (error) {
-          console.error('Erro ao carregar dados da turma:', error);
-          // Tentar carregar dados de exemplo para demonstração
-          console.log('Carregando dados de exemplo...');
-          document.getElementById('professor').value = 'Jéssica Figueiredo';
-          document.getElementById('turma').value = 'Infantil 2';
-          document.getElementById('mensalidade').value = '3-4/int/R$ 320';
-          document.getElementById('quantidade_alunos').value = '20';
-          turmaIndex = 0; // Definir índice padrão
-          alert('Erro: Não foi possível encontrar a turma para atualizar. Por favor, tente novamente.');
-        }
-      } else {
-        console.warn('Nenhum dado de turma encontrado');
-        // Carregar dados de exemplo para demonstração
-        document.getElementById('professor').value = 'Jéssica Figueiredo';
-        document.getElementById('turma').value = 'Infantil 2';
-        document.getElementById('mensalidade').value = '3-4/int/R$ 320';
-        document.getElementById('quantidade_alunos').value = '20';
-        turmaIndex = 0;
-        alert('Nenhuma turma selecionada para edição. Dados de exemplo carregados.');
-      }
-
-      form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const professor = document.getElementById('professor').value.trim();
-        const turma = document.getElementById('turma').value.trim();
-        const mensalidade = document.getElementById('mensalidade').value;
-        const quantidade = document.getElementById('quantidade_alunos').value;
-
-        if (!professor || !turma || mensalidade === "" || !quantidade) {
-          alert("Por favor, preencha todos os campos obrigatórios!");
-          return;
-        }
-
-        console.log('Salvando alterações...');
-        console.log('Dados atualizados:', { professor, turma, mensalidade, quantidade });
-
-        // Carregar lista de turmas atual
-        let turmas = carregarDoStorage();
-        console.log('Turmas atuais:', turmas);
-        console.log('Atualizando turma no índice:', turmaIndex);
-        console.log('Total de turmas:', turmas.length);
-
-        // Se não há turmas ou índice inválido, criar dados de exemplo
-        if (!Array.isArray(turmas) || turmas.length === 0) {
-          console.log('Criando turma inicial...');
-          turmas = [{
-            professor: professor,
-            turma: turma,
-            mensalidade: mensalidade,
-            quantidade: quantidade
-          }];
-          turmaIndex = 0;
-        } else if (turmaIndex < 0 || turmaIndex >= turmas.length) {
-          console.log('Índice inválido, tentando encontrar turma por nome...');
-          
-          // Tentar encontrar a turma pelo nome original se disponível
-          if (dadosTurma && dadosTurma.turma) {
-            const novoIndice = turmas.findIndex(t => t.turma === dadosTurma.turma);
-            if (novoIndice >= 0) {
-              turmaIndex = novoIndice;
-              console.log('Turma encontrada no novo índice:', turmaIndex);
-            } else {
-              console.log('Turma não encontrada, adicionando como nova...');
-              turmas.push({
-                professor: professor,
-                turma: turma,
-                mensalidade: mensalidade,
-                quantidade: quantidade
-              });
-              turmaIndex = turmas.length - 1;
-            }
-          } else {
-            console.log('Adicionando como nova turma...');
-            turmas.push({
-              professor: professor,
-              turma: turma,
-              mensalidade: mensalidade,
-              quantidade: quantidade
-            });
-            turmaIndex = turmas.length - 1;
-          }
-        } else {
-          // Atualizar a turma específica no índice correto
-          turmas[turmaIndex] = {
-            professor: professor,
-            turma: turma,
-            mensalidade: mensalidade,
-            quantidade: quantidade
-          };
-        }
-
-        console.log('Turma atualizada:', turmas[turmaIndex]);
-        
-        // Salvar no storage
-        salvarNoStorage(turmas);
-        
-        // Confirmar que foi salvo
-        const turmasVerificacao = carregarDoStorage();
-        console.log('Verificação - turmas após salvar:', turmasVerificacao);
-        console.log('Turma específica após salvar:', turmasVerificacao[turmaIndex]);
-
-        modalMessage.innerHTML = `
-          Turma <strong>${turma}</strong> foi atualizada com sucesso!
-          <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
-            Professor(a): ${professor}<br>
-            Mensalidade: ${mensalidade} | Alunos: ${quantidade}
-          </div>
-        `;
-        
-        modal.style.display = 'flex';
-      });
-
-      okBtn.addEventListener('click', function() {
-        modal.style.display = 'none';
-        // Redirecionar de volta para a lista de turmas
-        window.location.href = '/turmas-cadastradas';
-      });
-
-      btnCancelar.addEventListener('click', function() {
-        if (confirm('Tem certeza que deseja cancelar? As alterações não serão salvas.')) {
-          window.location.href = '/turmas-cadastradas';
-        }
-      });
-
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-          modal.style.display = 'none';
-        }
-      });
-    });
   </script>
 </body>
 </html>

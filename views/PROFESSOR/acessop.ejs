@@ -671,7 +671,37 @@
                             <th>Turma responsável</th>
                         </tr>
                     </thead>
-                    <tbody id="professoresTableBody"></tbody>
+                    <tbody id="professoresTableBody">
+    <% if (professores && professores.length > 0) { %>
+        <% professores.forEach(professor => { %>
+            <tr>
+                <td><%= professor.nome %></td>
+                <td><%= professor.cpf %></td>
+                <td><%= professor.telefone %></td>
+                <td><%= professor.email || 'N/A' %></td>
+                <td><%= professor.endereco %></td>
+                <td><%= professor.classificacao %></td>
+                <td><%= professor.turma_responsavel || 'N/A' %></td>
+                <td class="operations">
+                    <a href="/editar-prof/<%= professor.id %>" class="btn-action btn-edit">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <form action="/excluir-prof/<%= professor.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja excluir este professor?');">
+                        <button type="submit" class="btn-action btn-archive">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        <% }) %>
+    <% } else { %>
+        <tr>
+            <td colspan="8" style="text-align: center; padding: 20px;">
+                Nenhum professor cadastrado.
+            </td>
+        </tr>
+    <% } %>
+</tbody>
                 </table>
             </div>
         </div>
