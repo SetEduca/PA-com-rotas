@@ -1,4 +1,5 @@
 import express from 'express';
+import supabase from './supabase.js';
 
 const app = express();
 const PORT = 3020;
@@ -138,8 +139,34 @@ app.get("/editar-prof", (req, res) => {
   res.render("PROFESSOR/editarp");
 });
 
-//RODANDO O SERVIDOR
+//TESTANDO O BANCO
 
+app.get('/testar-banco', async (req, res) => {
+  try{
+        const { error, count } = await supabase
+            .from('professor') 
+            .select('*', { count: 'exact', head: true });
+
+        if (error) {
+            throw error;
+        };
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Deu bom meninas',
+            details: `Tabela "professor" acessível e possui ${count} registros.`
+        });
+
+  }catch(error){
+    res.status(500).json({
+        status: 'error',
+        message: 'Deu ruim meninas',
+        error: error.message
+    });
+  }
+});
+
+//RODANDO O SERVIDOR
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
