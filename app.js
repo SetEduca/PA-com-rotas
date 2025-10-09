@@ -139,6 +139,11 @@ app.get("/editar-prof", (req, res) => {
   res.render("PROFESSOR/editarp");
 });
 
+// FINANCEIRO
+app.get("/financeiro", (req, res) => {
+  res.render("FINANCEIRO/financeiro");
+});
+
 //TESTANDO O BANCO
 
 app.get('/testar-banco', async (req, res) => {
