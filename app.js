@@ -9,6 +9,9 @@ app.set("views", "./views");
 
 app.use(express.static('public'));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 //INICIO
 
 app.get("/", (req, res) => {
@@ -41,7 +44,6 @@ app.get("/mensalidade", (req, res) => {
 app.get("/arquivados", (req, res) => {
   res.render("PERFIL/arquivados");
 });
-
 
 //HOME
 
@@ -162,6 +164,77 @@ app.get('/testar-banco', async (req, res) => {
         status: 'error',
         message: 'Deu ruim meninas',
         error: error.message
+    });
+  }
+});
+
+// === API DE TURMAS ===
+
+// POST - Cadastrar nova turma
+app.post('/api/turmas', async (req, res) => {
+  try {
+    const { professor, turma, mensalidade, quantidade } = req.body;
+
+    // Validação
+    if (!professor || !turma || !mensalidade || !quantidade) {
+      return res.status(400).json({
+        success: false,
+        message: 'Todos os campos são obrigatórios'
+      });
+    }
+
+    // Inserir no Supabase
+    const { data, error } = await supabase
+      .from('turmas') // nome da sua tabela no Supabase
+      .insert([
+        {
+          nome_professor: professor,
+          nome_turma: turma,
+          mensalidade: mensalidade,
+          capacidade_maxima: parseInt(quantidade)
+        }
+      ])
+      .select();
+
+    if (error) throw error;
+
+    res.status(201).json({
+      success: true,
+      message: 'Turma cadastrada com sucesso',
+      data: data[0]
+    });
+
+  } catch (error) {
+    console.error('Erro ao cadastrar turma:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erro ao cadastrar turma',
+      error: error.message
+    });
+  }
+});
+
+// GET - Listar todas as turmas
+app.get('/api/turmas', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('turmas')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      data: data || []
+    });
+
+  } catch (error) {
+    console.error('Erro ao buscar turmas:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erro ao buscar turmas',
+      error: error.message
     });
   }
 });
