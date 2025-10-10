@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #e8e8e8;
-; min-height: 100vh; display: flex; }
+        body { background-color: #e8e8e8; min-height: 100vh; display: flex; }
 
         .sidebar {
             width: 280px;
@@ -88,12 +87,12 @@
             width: calc(100% - 40px);
         }
 
-    .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-    .menu-item:nth-child(2)::after { background-color: #00A6FF; }
-    .menu-item:nth-child(3)::after { background-color: #9747FF; }
-    .menu-item:nth-child(4)::after { background-color: #F88C12; }
-    .menu-item:nth-child(5)::after { background-color: #D22A2A; }
-    .menu-item:nth-child(6)::after { background-color: #59C631; }
+        .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+        .menu-item:nth-child(2)::after { background-color: #00A6FF; }
+        .menu-item:nth-child(3)::after { background-color: #9747FF; }
+        .menu-item:nth-child(4)::after { background-color: #F88C12; }
+        .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+        .menu-item:nth-child(6)::after { background-color: #59C631; }
 
         .menu-item.active {
             background-color: rgba(128, 128, 128, 0.356);
@@ -171,19 +170,96 @@
         }
 
         .header-title { 
-             display: flex; 
-      align-items: center;
-      position: relative; 
-      top: 0.7vh;
-      gap: 10px; 
-      font-size: 1.5rem; 
-      color: rgb(255, 255, 255); 
-      font-family: 'Kodchasan', sans-serif;
+            display: flex; 
+            align-items: center;
+            position: relative; 
+            top: 0.7vh;
+            gap: 10px; 
+            font-size: 1.5rem; 
+            color: rgb(255, 255, 255); 
+            font-family: 'Kodchasan', sans-serif;
         }
 
         .header-title i { 
             margin-right: 15px; 
             font-size: 28px; 
+        }
+
+        /* Perfil do Usuário e Dropdown */
+        .profile {
+            position: relative;
+            cursor: pointer;
+            z-index: 10; 
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            border-radius: 50px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .profile-header:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile-icon {
+            font-size: 38px;
+            color: white;
+        }
+        
+        .profile-arrow {
+            font-size: 14px;
+            margin-left: 8px;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 110%; 
+            right: 0;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            z-index: 1001;
+            overflow: hidden;
+            padding: 8px 0;
+            border: 1px solid #eee;
+        }
+
+        .profile-dropdown.show {
+            display: block;
+        }
+
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            padding: 12px 18px;
+            text-decoration: none;
+            color: #444;
+            font-size: 15px;
+            transition: background-color 0.2s ease;
+        }
+
+        .profile-dropdown a:hover {
+            background-color: #f5f5f5;
+        }
+
+        .profile-dropdown a i {
+            width: 20px;
+            margin-right: 15px;
+            color: #666;
+            text-align: center;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 8px 0;
         }
 
         .content-area { 
@@ -260,7 +336,7 @@
         }
 
         .new-button:hover .new-button-circle {
-            background: #c01e26;
+            background: #a01820;
         }
 
         .new-button-circle::before { 
@@ -640,10 +716,22 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="header">
-          <div class="header-title">
-        <i class="fas fa-users"></i>
-        <span>Acessar <b>TURMAS</b></span>      
-      </div>
+            <div class="header-title">
+                <i class="fas fa-users"></i>
+                <span>Acessar <b>TURMAS</b></span>      
+            </div>
+            <div class="profile" id="profile-toggle">
+                <div class="profile-header">
+                    <i class="fas fa-user-circle profile-icon"></i>
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
+                <div class="profile-dropdown" id="profile-dropdown-menu">
+                    <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a>
+                    <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+                    <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
+                    <div class="dropdown-divider"></div>
+                </div>
+            </div>
         </div>
         <div class="content-area">
             <div class="search-section">
@@ -698,7 +786,7 @@
         let turmas = [];
         let matriculas = [];
 
-        // Dados de exemplo para teste - REMOVER EM PRODUÇÃO
+        // Dados de exemplo para teste
         const dadosExemplo = [
             {
                 professor: "Maria Silva",
@@ -737,9 +825,6 @@
 
         function logout() {
             if (confirm('Deseja realmente sair do sistema?')) {
-                // Limpar dados da sessão se necessário
-                sessionStorage.clear();
-                // Redirecionar para página de login
                 window.location.href = '/login';
             }
         }
@@ -750,7 +835,7 @@
 
         // Função para carregar dados do storage
         function carregarDoStorage() {
-            const turmasSalvas = sessionStorage.getItem('turmas') || localStorage.getItem('turmas');
+            const turmasSalvas = localStorage.getItem('turmas');
             if (turmasSalvas) {
                 try {
                     return JSON.parse(turmasSalvas);
@@ -759,14 +844,13 @@
                     return [];
                 }
             }
-            // Se não há dados salvos, usar dados de exemplo
             return dadosExemplo.slice();
         }
 
         // Função para salvar no storage
         function salvarNoStorage(turmasArray) {
             try {
-                sessionStorage.setItem('turmas', JSON.stringify(turmasArray));
+                localStorage.setItem('turmas', JSON.stringify(turmasArray));
                 console.log('Turmas salvas no storage:', turmasArray);
             } catch (e) {
                 console.error('Erro ao salvar turmas:', e);
@@ -904,13 +988,10 @@
                     dados: turma
                 };
                 
-                // Salvar nos dois storages para garantir
-                sessionStorage.setItem('turmaParaEditar', JSON.stringify(dadosParaEdicao));
                 localStorage.setItem('turmaParaEditar', JSON.stringify(dadosParaEdicao));
                 
                 console.log('Dados salvos para edição:', dadosParaEdicao);
                 
-                // Pequeno delay para garantir que os dados foram salvos
                 setTimeout(() => {
                     window.location.href = '/editar-turmas';
                 }, 100);
@@ -939,6 +1020,24 @@
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
+            // --- LÓGICA DO MENU DROPDOWN DO PERFIL ---
+            const profileToggle = document.getElementById('profile-toggle');
+            const dropdownMenu = document.getElementById('profile-dropdown-menu');
+            const profileArrow = profileToggle.querySelector('.profile-arrow');
+
+            profileToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+                profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+
+            window.addEventListener('click', function() {
+                if (dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                    profileArrow.style.transform = 'rotate(0deg)';
+                }
+            });
+
             // Garantir que temos dados iniciais se necessário
             const turmasAtuais = carregarDoStorage();
             if (turmasAtuais.length === 0) {
@@ -949,13 +1048,12 @@
             carregarTurmas();
             
             // Verificar se há nova turma cadastrada
-            const turmaCadastrada = localStorage.getItem('novaTurma') || sessionStorage.getItem('novaTurma');
+            const turmaCadastrada = localStorage.getItem('novaTurma');
             if (turmaCadastrada) {
                 try {
                     const turma = JSON.parse(turmaCadastrada);
                     adicionarTurma(turma);
                     localStorage.removeItem('novaTurma');
-                    sessionStorage.removeItem('novaTurma');
                 } catch (e) {
                     console.error('Erro ao processar nova turma:', e);
                 }
@@ -968,7 +1066,7 @@
                 const rows = document.querySelectorAll('#turmasTableBody tr');
                 
                 rows.forEach(row => {
-                    if (row.children.length > 1) { // Ignora a linha de "nenhuma turma"
+                    if (row.children.length > 1) {
                         const text = row.textContent.toLowerCase();
                         row.style.display = text.includes(searchTerm) ? '' : 'none';
                     }
@@ -991,7 +1089,7 @@
             });
         });
 
-        // Funções para adicionar dados (para integração futura)
+        // Funções para adicionar dados
         function adicionarTurma(novaTurma) {
             turmas.push(novaTurma);
             salvarNoStorage(turmas);
@@ -1001,20 +1099,11 @@
 
         function adicionarMatricula(novaMatricula) {
             matriculas.push(novaMatricula);
-            carregarTurmas(); // Recarregar para atualizar contadores
+            carregarTurmas();
             console.log('Nova matrícula adicionada:', novaMatricula);
         }
 
-        // Expor funções globalmente para uso em outros scripts
-        window.adicionarTurma = adicionarTurma;
-        window.adicionarMatricula = adicionarMatricula;
-        window.navegarPara = navegarPara;
-        window.logout = logout;
-        window.criarNovaTurma = criarNovaTurma;
-        window.visualizarAlunos = visualizarAlunos;
-        window.closeModal = closeModal;
-        window.editarTurma = editarTurma;
-        // Expor funções globalmente para uso em outros scripts
+        // Expor funções globalmente
         window.adicionarTurma = adicionarTurma;
         window.adicionarMatricula = adicionarMatricula;
         window.navegarPara = navegarPara;

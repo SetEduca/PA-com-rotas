@@ -40,6 +40,11 @@
       margin-top: 30px;
     }
 
+    .logo img {
+      max-width: 100%;
+      height: auto;
+    }
+
     .menu {
       flex: 1;
       padding: 20px 18px;
@@ -58,6 +63,7 @@
       font-weight: 500;
       overflow: visible;
       color: black;
+      text-decoration: none;
     }
 
     .menu-item i {
@@ -94,7 +100,6 @@
       width: calc(100% - 40px);
     }
 
-
     .menu-item:nth-child(1)::after { background-color: #F4BF27; }
     .menu-item:nth-child(2)::after { background-color: #00A6FF; }
     .menu-item:nth-child(3)::after { background-color: #9747FF; }
@@ -117,7 +122,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      box-shadow: black;
+      background-color: #333;
       z-index: 2;
     }
 
@@ -142,6 +147,8 @@
       font-weight: 500;
       color: #333;
       width: 100%;
+      border: none;
+      background: transparent;
     }
 
     .logout-button i {
@@ -153,7 +160,7 @@
 
     .logout-button:hover {
       background-color: rgba(210, 42, 42, 0.1); 
-      color: #CE2029; 
+      color: #c01e26; 
       font-weight: 600;
     }
 
@@ -171,6 +178,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 30px;
+      color: white;
       width: 100%;
     }
 
@@ -190,28 +198,81 @@
       font-size: 28px;
     }
 
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 15px;
+    /* Perfil do Usuário e Dropdown */
+    .profile {
+      position: relative;
       cursor: pointer;
+      z-index: 10; 
     }
-
-    .profile-pic {
-      width: 45px;
-      height: 45px;
-      background: #333;
-      border-radius: 50%;
+    
+    .profile-header {
       display: flex;
       align-items: center;
-      justify-content: center;
+      padding: 5px;
+      border-radius: 50px;
+      transition: background-color 0.2s ease;
+    }
+    
+    .profile-header:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .profile-icon {
+      font-size: 38px;
       color: white;
-      font-size: 18px;
+    }
+    
+    .profile-arrow {
+      font-size: 14px;
+      margin-left: 8px;
+      color: white;
+      transition: transform 0.3s ease;
     }
 
-    .profile-arrow {
-      color: white;
-      font-size: 16px;
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      top: 110%; 
+      right: 0;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 200px;
+      z-index: 1001;
+      overflow: hidden;
+      padding: 8px 0;
+      border: 1px solid #eee;
+    }
+
+    .profile-dropdown.show {
+      display: block;
+    }
+
+    .profile-dropdown a {
+      display: flex;
+      align-items: center;
+      padding: 12px 18px;
+      text-decoration: none;
+      color: #444;
+      font-size: 15px;
+      transition: background-color 0.2s ease;
+    }
+
+    .profile-dropdown a:hover {
+      background-color: #f5f5f5;
+    }
+
+    .profile-dropdown a i {
+      width: 20px;
+      margin-right: 15px;
+      color: #666;
+      text-align: center;
+    }
+    
+    .dropdown-divider {
+      height: 1px;
+      background-color: #eee;
+      margin: 8px 0;
     }
 
     .content-area {
@@ -301,7 +362,7 @@
     }
     
     .link-cadastrar:hover { 
-      background-color: #c01e26; 
+      background-color: #a01820; 
       transform: scale(1.05); 
       box-shadow: 0 6px 12px rgba(193, 39, 45, 0.4);
     }
@@ -395,7 +456,7 @@
     }
     
     .modal-buttons button:hover { 
-      background-color: #c01e26; 
+      background-color: #a01820; 
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(193, 39, 45, 0.4);
     }
@@ -423,6 +484,15 @@
       .menu-item i, .logout-button i { 
         margin-right: 0; 
       }
+
+      .caixa {
+        width: 95%;
+        padding: 25px;
+      }
+
+      .header-title {
+        font-size: 1.2rem;
+      }
     }
   </style>
 </head>
@@ -433,42 +503,42 @@
       <div class="logo">
         <img src="imagem/logo.png" alt="logo">
       </div>
-     <div class="menu">
-                <div class="menu-item" onclick="navegarPara('inicio')">
-                    <i class="fas fa-home"></i>
-                    <span>INÍCIO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('cadastro')">
-                    <i class="fas fa-address-card"></i>
-                    <span>CADASTRO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('matricula')">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>MATRÍCULA</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('professor')">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>PROFESSOR</span>
-                </div>
-                <div class="menu-item active" > 
-                    <i class="fas fa-users"></i>
-                    <span>TURMA</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('financeiro')">
-                    <i class="fas fa-dollar-sign"></i>
-                    <span>FINANCEIRO</span>
-                </div>
-            </div>
+      <div class="menu">
+        <div class="menu-item" onclick="navegarPara('inicio')">
+          <i class="fas fa-home"></i>
+          <span>INÍCIO</span>
         </div>
+        <div class="menu-item" onclick="navegarPara('cadastro')">
+          <i class="fas fa-address-card"></i>
+          <span>CADASTRO</span>
+        </div>
+        <div class="menu-item" onclick="navegarPara('matricula')">
+          <i class="fas fa-user-graduate"></i>
+          <span>MATRÍCULA</span>
+        </div>
+        <div class="menu-item" onclick="navegarPara('professor')">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>PROFESSOR</span>
+        </div>
+        <div class="menu-item active"> 
+          <i class="fas fa-users"></i>
+          <span>TURMA</span>
+        </div>
+        <div class="menu-item" onclick="navegarPara('financeiro')">
+          <i class="fas fa-dollar-sign"></i>
+          <span>FINANCEIRO</span>
+        </div>
+      </div>
+    </div>
     <div>
       <div class="seteeduca">
         <p>@seteeduca</p>
       </div>
       <div class="sidebar-footer">
-        <div class="logout-button">
+        <button class="logout-button" onclick="logout()">
           <i class="fa-solid fa-right-from-bracket"></i>
-          <span>Sair</span>
-        </div>
+          <span>SAIR</span>
+        </button>
       </div>
     </div>
   </div>
@@ -481,12 +551,16 @@
         <i class="fas fa-user-plus"></i>
         <span>Cadastro <b>TURMAS</b></span>      
       </div>
-      <div class="user-profile">
-        <div class="profile-pic">
-          <i class="fas fa-user"></i>
+      <div class="profile" id="profile-toggle">
+        <div class="profile-header">
+          <i class="fas fa-user-circle profile-icon"></i>
+          <i class="fas fa-chevron-down profile-arrow"></i>
         </div>
-        <div class="profile-arrow">
-          <i class="fas fa-chevron-down"></i>
+        <div class="profile-dropdown" id="profile-dropdown-menu">
+          <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a>
+          <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+          <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
+          <div class="dropdown-divider"></div>
         </div>
       </div>
     </div>
@@ -540,6 +614,108 @@
     </div>
   </div>
 
+  <script> 
+    function navegarPara(pagina) { 
+      const rotas = { 
+        'inicio': '/home',
+        'professor': '/cadastro-professor', 
+        'financeiro': '/opcoes-financeiro', 
+        'turmas': '/turmas-cadastradas',    
+        'matricula': '/matricula',        
+        'cadastro': '/opcoes-aluno'       
+      }; 
 
+      if (rotas[pagina]) { 
+        window.location.href = rotas[pagina]; 
+      } else { 
+        console.warn(`Rota não encontrada para: ${pagina}`); 
+      } 
+    }
+
+    function logout() {
+      if (confirm('Deseja realmente sair do sistema?')) {
+        window.location.href = '/login';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // --- LÓGICA DO MENU DROPDOWN DO PERFIL ---
+      const profileToggle = document.getElementById('profile-toggle');
+      const dropdownMenu = document.getElementById('profile-dropdown-menu');
+      const profileArrow = profileToggle.querySelector('.profile-arrow');
+
+      profileToggle.addEventListener('click', function(event) {
+        event.stopPropagation();
+        dropdownMenu.classList.toggle('show');
+        profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
+
+      window.addEventListener('click', function() {
+        if (dropdownMenu.classList.contains('show')) {
+          dropdownMenu.classList.remove('show');
+          profileArrow.style.transform = 'rotate(0deg)';
+        }
+      });
+
+      // Formulário de cadastro
+      const form = document.getElementById('formCadastro');
+      const modal = document.getElementById('confirmModal');
+      const okBtn = modal.querySelector('.ok');
+      const modalMessage = document.getElementById('modalMessage');
+
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const professor = document.getElementById('professor').value.trim();
+        const turma = document.getElementById('turma').value.trim();
+        const mensalidade = document.getElementById('mensalidade').value;
+        const quantidade = document.getElementById('quantidade_alunos').value;
+
+        if (!professor || !turma || mensalidade === "" || !quantidade) {
+          alert("Por favor, preencha todos os campos obrigatórios!");
+          return;
+        }
+
+        const novaTurma = {
+          professor: professor,
+          turma: turma,
+          mensalidade: mensalidade,
+          quantidade: quantidade,
+          dataCadastro: new Date().toLocaleDateString()
+        };
+
+        // Carregar turmas já salvas
+        let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+
+        // Adicionar nova turma
+        turmas.push(novaTurma);
+
+        // Salvar de volta
+        localStorage.setItem('turmas', JSON.stringify(turmas));
+
+        modalMessage.innerHTML = `
+          Turma <strong>${turma}</strong> foi cadastrada com sucesso!
+          <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+            Professor(a): ${professor}<br>
+            Mensalidade: ${mensalidade} | Alunos: ${quantidade}
+          </div>
+        `;
+        
+        modal.style.display = 'flex';
+        form.reset();
+      });
+
+      okBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+        window.location.href = '/turmas-cadastradas';
+      });
+
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
