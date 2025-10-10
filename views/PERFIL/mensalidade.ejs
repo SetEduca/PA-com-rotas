@@ -6,15 +6,15 @@
     <title>Mensalidade</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --background-image: url(imagem/ChatGPT\ Image\ 22_09_2025\,\ 17_12_14.png);
-        }
+       :root {
+    --background-image: url('imagem/ChatGPT Image 22_09_2025, 17_12_14.png'); 
+}
+
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* Padronizado com perfil.html: Adicionado font-family aqui */
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
@@ -25,7 +25,6 @@
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
-            /* Padronizado com perfil.html: Removido min-height: 100vh; */
         }
         
         .header {
@@ -35,7 +34,6 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            /* Padronizado com perfil.html: Removido position e z-index */
         }
 
         .header-left {
@@ -47,9 +45,8 @@
             color: #2c3e50;
         }
 
-        /* Novo estilo para padronizar o ícone/logo no header-left */
         .header-left .logo-icon {
-            width: 60px; /* Estilo similar ao .header-left .user-icon em perfil.html */
+            width: 60px;
             height: auto;
             object-fit: contain;
         }
@@ -79,9 +76,46 @@
             z-index: 10;
         }
 
-        /* Padronizado com perfil.html: Adicionado margem zero no ícone do perfil */
-        .profile .header-icon {
+        /* **BORDAS MEIO QUADRADO** */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 8px; 
+            cursor: pointer;
+            padding: 5px; 
+            border-radius: 10px; /* Alterado para "meio quadrado" */
+            transition: background-color 0.3s;
+        }
+
+        .profile-header:hover {
+            background-color: rgba(0, 0, 0, 0.05); 
+        }
+
+        /* Garante que o ícone dentro do profile-header use o estilo do header-icon, mas sem margem */
+        .profile-header .header-icon {
             margin: 0;
+            cursor: pointer;
+        }
+
+        /* Estilo para a seta do dropdown */
+        .profile-arrow {
+            color: #2c3e50;
+            font-size: 14px;
+            transition: transform 0.3s ease;
+            padding-right: 5px;
+        }
+
+        /* Estilo para quando o dropdown estiver aberto (Gira a seta) */
+        .profile-header.open .profile-arrow {
+            transform: rotate(180deg);
+        }
+
+        .profile-header .header-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-header .profile-arrow:hover {
+            transform: none; /* Desativa a escala no ícone de seta */
         }
         
         .profile-dropdown {
@@ -111,14 +145,12 @@
 
         .profile-dropdown a:hover {
             background-color: #f1f1f1;
-            /* Padronizado com perfil.html: Corrigido para a cor #f0ad4e */
             color: #f0ad4e;
         }
 
         .profile-dropdown a.active-link {
             background-color: #f1f1f1;
             font-weight: 700;
-            /* Padronizado com perfil.html: Mantido o #ffbb00 como cor de link ativo */
             color: #ffbb00; 
         }
 
@@ -169,11 +201,12 @@
             margin-bottom: 8px;
         }
         
+        /* **BORDAS MEIO QUADRADO** */
         .form-input {
             width: 100%;
             height: 45px;
             border: 2px solid #e0e0e0;
-            border-radius: 25px;
+            border-radius: 10px; /* Alterado para "meio quadrado" */
             padding: 0 20px;
             font-size: 14px;
             color: #2c3e50;
@@ -192,11 +225,12 @@
             border-color: #c0c0c0;
         }
         
+        /* **BORDAS MEIO QUADRADO** */
         .form-select {
             width: 100%;
             height: 45px;
             border: 2px solid #e0e0e0;
-            border-radius: 25px;
+            border-radius: 10px; /* Alterado para "meio quadrado" */
             padding: 0 20px;
             font-size: 14px;
             color: #2c3e50;
@@ -233,12 +267,13 @@
             margin-top: 30px;
         }
         
+        /* **BORDAS MEIO QUADRADO** */
         .btn-cadastrar {
             background: linear-gradient(135deg, #ffbb00 0%, #ffbb00 100%);
             color: white;
             border: none;
             padding: 15px 35px;
-            border-radius: 25px;
+            border-radius: 10px; /* Alterado para "meio quadrado" */
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
@@ -295,7 +330,7 @@
         .mensalidade-item {
             background: white; /* Fundo branco e limpo */
             border: 1px solid #e0e0e0; /* Borda cinza suave */
-            border-radius: 12px;
+            border-radius: 10px; /* Alterado para "meio quadrado" */
             padding: 20px;
             margin-bottom: 15px;
             display: flex;
@@ -329,13 +364,14 @@
             flex-wrap: wrap;
         }
 
+        /* **BORDAS MEIO QUADRADO** */
         .detail-item {
             display: flex;
             align-items: center;
             gap: 8px;
             padding: 4px 12px;
             background: rgba(168, 213, 197, 0.1);
-            border-radius: 20px;
+            border-radius: 10px; /* Alterado para "meio quadrado" */
             font-size: 14px;
         }
 
@@ -354,12 +390,13 @@
             font-size: 18px;
         }
         
+        /* **BORDAS MEIO QUADRADO** */
         .btn-alterar {
             background: linear-gradient(135deg, #fcd66e 0%, #f1c40f 100%);
             color: #2c3e50;
             border: none;
             padding: 12px 20px;
-            border-radius: 25px;
+            border-radius: 10px; /* Alterado para "meio quadrado" */
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -411,7 +448,7 @@
             border: 2px solid #ffbb00; 
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
             padding: 10px 20px;
-            border-radius: 25px;
+            border-radius: 10px; /* Alterado para "meio quadrado" */
             font-size: 14px;
             font-weight: 700;
             display: inline-block;
@@ -428,7 +465,6 @@
         @media (max-width: 768px) {
             .header { padding: 15px 20px; }
             .header-left { font-size: 24px; }
-            /* Padronizado: Ajuste para o novo seletor */
             .header-left .logo-icon { width: 50px; height: 50px; font-size: 20px; }
             .header-icon { width: 40px; height: 40px; }
             .container { margin: 20px auto; padding: 0 15px; }
@@ -456,31 +492,33 @@
             <span>Mensalidade</span>
         </div>
         <div class="header-right">
-            <img 
-                src="imagem/home3.png" 
-                class="header-icon" 
-                onclick="window.location.href='/home'" 
-                alt="Home Icon" 
-                title="Início"
-            >
-            
-            <div class="profile">
+            <a href="/home" title="Início">
                 <img 
-                    src="imagem/perfil2.png" 
+                    src="imagem/home3.png" 
                     class="header-icon" 
-                    onclick="toggleDropdown(event)" 
-                    alt="Profile Icon" 
-                    title="Perfil" 
+                    alt="Home Icon" 
                 >
+            </a>
+            
+            <div class="profile" id="profile-toggle">
+                <div class="profile-header" onclick="toggleDropdown(event)">
+                    <img 
+                        src="imagem/perfil2.png" 
+                        class="header-icon" 
+                        alt="Profile Icon" 
+                        title="Perfil"
+                    >
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
                 <div class="profile-dropdown" id="profile-dropdown-menu">
-                    <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
-                    <a href="/mensalidade" onclick="navegarPara('mensalidade')" class="active-link"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
-                    <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
+                    <a href="/meuperfil" onclick="toggleDropdown(event)"><i class="fas fa-user"></i> Meu perfil</a>
+                    <a href="/mensalidade" onclick="toggleDropdown(event)" class="active-link"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+                    <a href="/arquivados" onclick="toggleDropdown(event)"><i class="fas fa-archive"></i> Arquivados</a>
                     <div class="dropdown-divider"></div>
-                    <a href="/login" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                    <a href="/login" onclick="login()"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
             </div>
-        </div>
+            </div>
     </header>
     <div class="container">
         <div class="form-container">
@@ -526,13 +564,7 @@
         const counter = document.getElementById('mensalidadeCounter');
         let mensalidades = carregarMensalidades();
 
-        // Mapeamento de rotas para navegação local em arquivos HTML
-        const rotas = {
-            'inicio': 'index.html', // Assumindo que a home é index.html
-            'meu-perfil': 'perfil.html', 
-            'mensalidade': 'mensalidade.html', 
-            'arquivados': 'inativos.html', 
-        };
+        // **A lógica de rotas/navegação (navegarPara e rotas) foi removida para usar as rotas EJS (href).**
 
         function carregarMensalidades() {
             const salvas = sessionStorage.getItem('mensalidades');
@@ -695,45 +727,51 @@
             });
         });
 
-        /* INÍCIO: FUNÇÕES E LÓGICA DO DROPDOWN */
+        /* INÍCIO: FUNÇÕES E LÓGICA DO DROPDOWN (AJUSTADA) */
 
         function toggleDropdown(event) {
             if (event) event.stopPropagation();
             const dropdown = document.getElementById('profile-dropdown-menu');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        }
+            const profileHeader = document.querySelector('.profile-header');
 
-        const navegarPara = (pagina) => {
-            if (rotas[pagina]) {
-                const dropdown = document.getElementById('profile-dropdown-menu');
-                if (dropdown) dropdown.style.display = 'none';
-                
-                if (pagina === 'mensalidade') return;
-                window.location.href = rotas[pagina];
-            } else {
-                console.warn(`Rota não encontrada para: ${pagina}`);
-                if (pagina === 'inicio') window.location.href = 'index.html';
+            // Alterna a exibição do dropdown
+            const isOpen = dropdown.style.display === 'block';
+            dropdown.style.display = isOpen ? 'none' : 'block';
+
+            // Alterna a classe para girar a seta
+            if (profileHeader) {
+                if (isOpen) {
+                    profileHeader.classList.remove('open');
+                } else {
+                    profileHeader.classList.add('open');
+                }
             }
         }
 
-        function logout() {
+        function login() {
             if (confirm('Deseja realmente sair do sistema?')) {
-                window.location.href = 'login.html'; 
+                // A navegação real será feita pelo href="/login"
+                // Esta função apenas confirma e permite que o link funcione
+            } else {
+                // Se o usuário cancelar, impedimos o comportamento padrão do link
+                event.preventDefault(); 
             }
         }
 
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('profile-dropdown-menu');
-            const profileIcon = document.querySelector('.profile .header-icon');
+            const profileToggle = document.getElementById('profile-toggle'); // Usando o elemento pai
             
-            if (dropdown && profileIcon && !profileIcon.contains(event.target) && !dropdown.contains(event.target)) {
+            if (dropdown && profileToggle && !profileToggle.contains(event.target)) {
                 dropdown.style.display = 'none';
+                // Remove a classe 'open' ao fechar
+                const profileHeader = document.querySelector('.profile-header');
+                if (profileHeader) profileHeader.classList.remove('open');
             }
         });
 
         window.toggleDropdown = toggleDropdown;
-        window.navegarPara = navegarPara;
-        window.logout = logout;
+        window.login = login;
 
         /* FIM: FUNÇÕES E LÓGICA DO DROPDOWN */
     </script>

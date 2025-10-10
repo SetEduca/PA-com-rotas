@@ -56,11 +56,6 @@
             gap: 15px;
         }
 
-        /* Removendo estilos antigos dos SVGs */
-        .home-icon, .profile-icon {
-            display: none; /* Esconde os SVGs antigos */
-        }
-        
         /* Adicionando estilos para as novas imagens de ícone */
         .header-icon {
             width: 50px; /* Tamanho dos ícones */
@@ -80,6 +75,46 @@
             z-index: 10;
         }
         
+        /* NOVO CSS ADICIONADO PARA O PERFIL */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0 10px; 
+            border-radius: 25px; /* Arredondado por padrão */
+            background-color: transparent; 
+            /* CORREÇÃO: Adicionando transição para o border-radius */
+            transition: background-color 0.3s ease, border-radius 0.3s ease;
+        }
+        
+        /* CORREÇÃO DE HOVER: Aplica o formato quadrado e a cor no hover */
+        .profile-header:hover {
+            background-color: #55555521; /* Exemplo de fundo suave no hover */
+            border-radius: 8px; /* Mais quadrado no hover, conforme solicitado */
+        }
+        
+        .profile-icon {
+            font-size: 43px; 
+            color: #000000;
+        }
+        
+        .profile-arrow {
+            font-size: 14px; 
+            color: #2c3e50;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Mudar a cor do ícone e da seta no hover para dar destaque */
+        .profile-header:hover .profile-icon,
+        .profile-header:hover .profile-arrow {
+           
+        }
+
+        .profile.active .profile-arrow {
+            transform: rotate(180deg);
+        }
+        /* FIM NOVO CSS */
+
         /* Garante que o ícone ainda tenha o tamanho correto quando envolvido por .profile */
         .profile .header-icon {
             margin: 0;
@@ -487,30 +522,28 @@
             <img 
                 src="imagem/home3.png" 
                 class="header-icon" 
-                   onclick="window.location.href='/home'" 
+                onclick="navegarPara('inicio')" 
                 alt="Home Icon" 
                 title="Início"
             >
             
-            <div class="profile">
-                <img 
-                    src="imagem/perfil2.png" 
-                    class="header-icon" 
-                    onclick="toggleDropdown(event)" 
-                    alt="Profile Icon" 
-                    title="Perfil"
-                >
+            <div class="profile" onclick="toggleDropdown(event)" id="profile-toggle">
+                <div class="profile-header">
+                    <i class="fas fa-user-circle profile-icon" title="Perfil"></i> 
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
                 
                 <div class="profile-dropdown" id="profile-dropdown-menu">
-                    <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
+                    <a href="/meuperfil" onclick="navegarPara('meuperfil')"><i class="fas fa-user"></i> Meu perfil</a>
                     <a href="/mensalidade" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
                     <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
                     <div class="dropdown-divider"></div>
+                    
                    
-                    <a href="/login" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                    <a href="/login" onclick="login()"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
             </div>
-        </div>
+            </div>
     </header>
 
     <div class="content-area">
@@ -625,16 +658,23 @@
             return `${idade} anos`;
         }
         
-        // CÓDIGO NOVO: Função para alternar o dropdown
+        // CORREÇÃO: Função para alternar o dropdown (adiciona/remove classe 'active' para a seta)
         function toggleDropdown(event) {
-            // Para evitar que o evento de clique se propague para o document (e feche o dropdown imediatamente)
             if (event) event.stopPropagation();
             
             const dropdown = document.getElementById('profile-dropdown-menu');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            const profile = document.getElementById('profile-toggle');
+            
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+                if (profile) profile.classList.remove('active'); // Remove a classe 'active' para reverter a seta
+            } else {
+                dropdown.style.display = 'block';
+                if (profile) profile.classList.add('active'); // Adiciona a classe 'active' para girar a seta
+            }
         }
 
-        // CÓDIGO ATUALIZADO: Função navegarPara com novas rotas
+        // CORREÇÃO 2: Função navegarPara mantendo rotas EJS (absolutas)
         function navegarPara(pagina) {
             const rotas = {
                 'inicio': '/home',
@@ -644,8 +684,8 @@
                 'matricula': '/matricula',
                 'cadastro': '/opcoes-aluno',
                 
-                // Novas rotas do dropdown
-                'meu-perfil': '/perfil',
+                // Rotas EJS mantidas
+                'meuperfil': '/meuperfil', 
                 'mensalidade': '/mensalidade',
                 'arquivados': '/arquivados', // Rota para a tela de Arquivados
                 'ajuda': '/ajuda'
@@ -654,7 +694,9 @@
             if (rotas[pagina]) {
                 // Antes de navegar, feche o dropdown
                 const dropdown = document.getElementById('profile-dropdown-menu');
+                const profile = document.getElementById('profile-toggle');
                 if (dropdown) dropdown.style.display = 'none';
+                if (profile) profile.classList.remove('active');
                 
                 window.location.href = rotas[pagina];
             } else {
@@ -662,9 +704,10 @@
             }
         }
 
-        function logout() {
+        function login() {
+             // CORREÇÃO: Usando a rota de login absoluta
             if (confirm('Deseja realmente sair do sistema?')) {
-                window.location.href = '/login';
+                window.location.href = '/login'; 
             }
         }
 
@@ -915,11 +958,12 @@
             // CÓDIGO NOVO: Fechar o dropdown quando clicar fora dele
             document.addEventListener('click', function(event) {
                 const dropdown = document.getElementById('profile-dropdown-menu');
-                const profileIcon = document.querySelector('.profile .header-icon');
+                const profileToggle = document.getElementById('profile-toggle');
                 
-                // Verifica se o clique não foi no dropdown e nem no ícone de perfil
-                if (dropdown && dropdown.style.display === 'block' && event.target !== profileIcon && !dropdown.contains(event.target)) {
+                // Verifica se o clique não foi no dropdown e nem no elemento pai
+                if (dropdown && dropdown.style.display === 'block' && event.target !== profileToggle && !profileToggle.contains(event.target)) {
                     dropdown.style.display = 'none';
+                    profileToggle.classList.remove('active');
                 }
             });
         });
@@ -954,7 +998,7 @@
         window.toggleDropdown = toggleDropdown; // Expondo a nova função
         window.adicionarCrianca = adicionarCrianca;
         window.navegarPara = navegarPara;
-        window.logout = logout;
+        window.login = login;
         window.criarNovoCadastro = criarNovoCadastro;
         window.visualizarCrianca = visualizarCrianca;
         window.closeModal = closeModal;
