@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SeteEduca - Painel de Cadastramento</title>
+    <title>SeteEduca - Editar Cadastro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -23,7 +23,6 @@
             color: #2d3748;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 280px;
             height: 100vh;
@@ -147,7 +146,7 @@
             padding: 20px 18px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
-        
+       
         .logout-button {
             padding: 16px 20px;
             border-radius: 8px;
@@ -168,12 +167,11 @@
         }
 
         .logout-button:hover {
-            background-color: rgba(210, 42, 42, 0.1); 
-            color: #D22A2A; 
+            background-color: rgba(210, 42, 42, 0.1);
+            color: #D22A2A;
             font-weight: 600;
         }
 
-        /* Mobile Menu Toggle */
         .mobile-menu-toggle {
             display: none;
             position: fixed;
@@ -193,7 +191,6 @@
             color: #306bc2;
         }
 
-        /* Overlay for mobile menu */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -209,7 +206,6 @@
             display: block;
         }
 
-        /* Main Content */
         .main-content {
             margin-left: 280px;
             min-height: 100vh;
@@ -220,22 +216,24 @@
 
         .header {
             background: #306bc2;
-            height: 70px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 30px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            color: white;
+            width: 100%;
         }
 
         .header-title {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 18px;
-            color: white;
-            font-weight: 600;
-            letter-spacing: -0.025em;
+            position: relative;
+            top: 0.7vh;
+            gap: 10px;
+            font-size: 1.5rem;
+            color: rgb(255, 255, 255);
+            font-family: 'Kodchasan', sans-serif;
         }
 
         .header-title i {
@@ -245,44 +243,36 @@
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 20px;
-            transition: background 0.2s;
-        }
-
-        .user-profile:hover {
-            background: rgba(255, 255, 255, 0.1);
         }
 
         .profile-pic {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.2);
+            width: 45px;
+            height: 45px;
+            background: #333;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 14px;
+            font-size: 18px;
         }
 
         .profile-arrow {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 12px;
+            color: white;
+            font-size: 16px;
         }
 
         .content-area {
             padding: 40px;
-            background: #fcf8f2;
+            background: #fafafa;
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: flex-start;
         }
 
-        /* Registration Panel */
         .registration-panel {
             width: 100%;
             max-width: 900px;
@@ -293,23 +283,11 @@
         }
 
         .panel-header {
-            padding: 32px 40px 24px;
-            background: linear-gradient(135deg, #306bc2 0%, #306bc2 100%);
-            color: white;
-            text-align: center;
-        }
-
-        .panel-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -0.025em;
-        }
-
-        .panel-subtitle {
-            font-size: 14px;
-            opacity: 0.9;
-            font-weight: 400;
+            background: white;
+            border-radius: 12px;
+            border-top: 5px solid #306bc2;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
 
         .panel-content {
@@ -508,7 +486,6 @@
             background: #edf2f7;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -534,7 +511,7 @@
             animation: modalSlideIn 0.3s ease;
         }
 
-        .modal-content::before {
+        .modal-content.success::before {
             content: "✓";
             display: block;
             width: 60px;
@@ -589,7 +566,6 @@
             }
         }
 
-        /* Responsive Styles */
         @media (max-width: 1024px) {
             .sidebar {
                 width: 240px;
@@ -641,18 +617,6 @@
                 padding: 20px;
             }
 
-            .panel-header {
-                padding: 24px 24px 20px;
-            }
-
-            .panel-title {
-                font-size: 20px;
-            }
-
-            .panel-subtitle {
-                font-size: 13px;
-            }
-
             .panel-content {
                 padding: 24px;
             }
@@ -694,14 +658,6 @@
 
             .content-area {
                 padding: 15px;
-            }
-
-            .panel-header {
-                padding: 20px 20px 16px;
-            }
-
-            .panel-title {
-                font-size: 18px;
             }
 
             .panel-content {
@@ -757,20 +713,17 @@
     </style>
 </head>
 <body>
-    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
         <i class="fas fa-bars"></i>
     </button>
 
-    <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
-    <!-- Sidebar -->
     <div class="sidebar mobile-hidden" id="sidebar">
         <div class="logo">
            <img src="imagem/logo.png" alt="logo" onerror="this.style.display='none'">
         </div>
-        
+       
         <div class="menu">
             <div class="menu-item" onclick="navegarPara('inicio')">
                 <i class="fas fa-home"></i>
@@ -788,7 +741,7 @@
                 <i class="fas fa-chalkboard-teacher"></i>
                 <span>PROFESSOR</span>
             </div>
-            <div class="menu-item" onclick="navegarPara('turmas')"> 
+            <div class="menu-item" onclick="navegarPara('turmas')">
                 <i class="fas fa-users"></i>
                 <span>TURMA</span>
             </div>
@@ -808,14 +761,13 @@
                 <span>Sair</span>
             </div>
         </div>
-    </div> 
+    </div>
 
     <div class="main-content">
-        <!-- Header -->
         <div class="header">
             <div class="header-title">
-                <i class="fas fa-address-card"></i>
-                <span>Painel de Cadastramento</span>
+                <i class="fas fa-edit"></i>
+                <span>Editar <b>CADASTRO</b></span>
             </div>
             <div class="user-profile">
                 <div class="profile-pic">
@@ -827,27 +779,21 @@
             </div>
         </div>
 
-        <!-- Content Area -->
         <div class="content-area">
             <div class="registration-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title">Novo Cadastro</h1>
-                    <p class="panel-subtitle">Preencha as informações da criança</p>
-                </div>
+                <div class="panel-header"></div>
 
                 <div class="panel-content">
                     <form id="registrationForm">
-                        <!-- Photo Upload -->
                         <div class="photo-upload-section">
                             <div class="photo-preview" id="photoPreview">
                                 <i class="fas fa-camera"></i>
                             </div>
                             <button type="button" class="upload-btn" onclick="uploadPhoto()">
-                                Adicionar Foto
+                                Alterar Foto
                             </button>
                         </div>
 
-                        <!-- Personal Information -->
                         <div class="form-section">
                             <h3 class="section-title">
                                 <i class="fas fa-user"></i>
@@ -882,7 +828,6 @@
                             </div>
                         </div>
 
-                        <!-- Contact Information -->
                         <div class="form-section">
                             <h3 class="section-title">
                                 <i class="fas fa-phone"></i>
@@ -904,7 +849,6 @@
                             </div>
                         </div>
 
-                        <!-- Address -->
                         <div class="form-section">
                             <h3 class="section-title">
                                 <i class="fas fa-map-marker-alt"></i>
@@ -934,13 +878,12 @@
                             </div>
                         </div>
 
-                        <!-- Health Information -->
                         <div class="form-section">
                             <h3 class="section-title">
-                                <i class="fas fa-notes-medical"></i>
+                               <i class="fas fa-address-card"></i>
                                 Informações de Saúde
                             </h3>
-                            <div class="form-grid">
+                            <div class="form-grid two-columns">
                                 <div class="form-field full-width">
                                     <label class="form-label">Observações</label>
                                     <textarea class="form-textarea" name="observacoes" placeholder="Informações adicionais, alergias, medicações..."></textarea>
@@ -948,13 +891,12 @@
                             </div>
                         </div>
 
-                        <!-- Action Buttons -->
                         <div class="action-buttons">
-                            <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                                Limpar
+                            <button type="button" class="btn btn-secondary" onclick="cancelarEdicao()">
+                                Cancelar
                             </button>
                             <button type="submit" class="btn btn-primary">
-                                Cadastrar Criança
+                                Salvar Alterações
                             </button>
                         </div>
                     </form>
@@ -963,41 +905,82 @@
         </div>
     </div>
 
-    <!-- Success Modal -->
     <div class="modal" id="successModal">
-        <div class="modal-content">
-            <h3>Cadastro Realizado!</h3>
-            <p id="successMessage">A criança foi cadastrada com sucesso no sistema.</p>
-            <button class="modal-btn" onclick="redirecionarParaListagem()">Ver Lista de Crianças</button>
+        <div class="modal-content success">
+            <h3>Alterações Salvas!</h3>
+            <p id="successMessage">Os dados foram atualizados com sucesso.</p>
+            <button class="modal-btn" onclick="closeModal()">Entendi</button>
         </div>
     </div>
 
     <script>
-        // Mobile menu toggle
+        // Simulação de dados do cadastro (em um sistema real, viria do backend)
+        const dadosOriginais = {
+            nome: 'Maria Silva Santos',
+            dataNascimento: '2018-05-15',
+            cpf: '123.456.789-00',
+            sexo: 'feminino',
+            responsavel: 'João Silva Santos',
+            telefone: '(71) 98765-4321',
+            email: 'joao.silva@email.com',
+            cep: '40000-000',
+            cidade: 'Salvador',
+            logradouro: 'Rua das Flores',
+            numero: '123',
+            bairro: 'Centro',
+            observacoes: 'Alergia a lactose',
+            fotoUrl: null
+        };
+
+        // Carregar dados ao iniciar a página
+        window.addEventListener('DOMContentLoaded', function() {
+            carregarDados();
+        });
+
+        function carregarDados() {
+            // Preencher todos os campos do formulário
+            document.querySelector('input[name="nome"]').value = dadosOriginais.nome;
+            document.querySelector('input[name="dataNascimento"]').value = dadosOriginais.dataNascimento;
+            document.querySelector('input[name="cpf"]').value = dadosOriginais.cpf;
+            document.querySelector(`input[name="sexo"][value="${dadosOriginais.sexo}"]`).checked = true;
+            document.querySelector('input[name="responsavel"]').value = dadosOriginais.responsavel;
+            document.querySelector('input[name="telefone"]').value = dadosOriginais.telefone;
+            document.querySelector('input[name="email"]').value = dadosOriginais.email;
+            document.querySelector('input[name="cep"]').value = dadosOriginais.cep;
+            document.querySelector('input[name="cidade"]').value = dadosOriginais.cidade;
+            document.querySelector('input[name="logradouro"]').value = dadosOriginais.logradouro;
+            document.querySelector('input[name="numero"]').value = dadosOriginais.numero;
+            document.querySelector('input[name="bairro"]').value = dadosOriginais.bairro;
+            document.querySelector('textarea[name="observacoes"]').value = dadosOriginais.observacoes;
+
+            // Carregar foto se existir
+            if (dadosOriginais.fotoUrl) {
+                document.getElementById('photoPreview').innerHTML = `<img src="${dadosOriginais.fotoUrl}" alt="Foto da criança">`;
+            }
+        }
+
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
-            
+           
             sidebar.classList.toggle('mobile-hidden');
             overlay.classList.toggle('active');
         }
 
-        // Close mobile menu when clicking on menu items
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', function() {
                 if (window.innerWidth <= 768) {
                     toggleMobileMenu();
                 }
-                
+               
                 document.querySelectorAll('.menu-item').forEach(i => {
                     i.classList.remove('active');
                 });
-                
+               
                 this.classList.add('active');
             });
         });
 
-        // Navigation function
         function navegarPara(pagina) {
             const rotas = {
                 'inicio': '/home',
@@ -1013,7 +996,6 @@
             }
         }
 
-        // Photo upload functionality
         function uploadPhoto() {
             const input = document.createElement('input');
             input.type = 'file';
@@ -1024,7 +1006,7 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         const preview = document.getElementById('photoPreview');
-                        preview.innerHTML = <img src="${e.target.result}" alt="Foto da criança">;
+                        preview.innerHTML = `<img src="${e.target.result}" alt="Foto da criança">`;
                     };
                     reader.readAsDataURL(file);
                 }
@@ -1032,120 +1014,58 @@
             input.click();
         }
 
-        // Form reset
-        function resetForm() {
-            document.getElementById('registrationForm').reset();
-            document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
+        function cancelarEdicao() {
+            if (confirm('Deseja cancelar as alterações e voltar?')) {
+                window.location.href = '/criancas-cadastradas';
+            }
         }
 
-        // Modal functions
         function closeModal() {
             document.getElementById('successModal').style.display = 'none';
-        }
-
-        // Redirecionar para a listagem de crianças
-        function redirecionarParaListagem() {
+            // Redirecionar para a lista após fechar o modal
             window.location.href = '/criancas-cadastradas';
         }
 
-        // Função para formatar data no padrão brasileiro
-        function formatarDataBrasileira(dataISO) {
-            if (!dataISO) return '';
-            const [ano, mes, dia] = dataISO.split('-');
-            return ${dia}/${mes}/${ano};
-        }
-
-        // Função para carregar crianças existentes do storage
-        function carregarCriancasExistentes() {
-            const criancasSalvas = sessionStorage.getItem('criancas') || localStorage.getItem('criancas');
-            if (criancasSalvas) {
-                try {
-                    return JSON.parse(criancasSalvas);
-                } catch (e) {
-                    console.error('Erro ao carregar crianças:', e);
-                    return [];
-                }
-            }
-            return [];
-        }
-
-        // Função para salvar no storage
-        function salvarNoStorage(criancasArray) {
-            try {
-                sessionStorage.setItem('criancas', JSON.stringify(criancasArray));
-                localStorage.setItem('criancas', JSON.stringify(criancasArray));
-                console.log('Crianças salvas no storage:', criancasArray);
-            } catch (e) {
-                console.error('Erro ao salvar crianças:', e);
-            }
-        }
-
-        // Form submission
         document.getElementById('registrationForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const formData = new FormData(this);
-            
-            // Formatar data de nascimento para o padrão brasileiro
-            const dataNascimentoISO = formData.get('dataNascimento');
-            const dataNascimentoBR = formatarDataBrasileira(dataNascimentoISO);
-            
-            // Criar objeto com os dados da criança no formato esperado
-            const novaCrianca = {
-                id: Date.now(),
+            const dadosAtualizados = {
                 nome: formData.get('nome'),
-                dataNasc: dataNascimentoBR,
+                dataNascimento: formData.get('dataNascimento'),
                 cpf: formData.get('cpf'),
                 sexo: formData.get('sexo'),
-                responsavelPrincipal: formData.get('responsavel'),
-                responsavelSecundario: '',
+                responsavel: formData.get('responsavel'),
                 telefone: formData.get('telefone'),
                 email: formData.get('email'),
-                endereco: ${formData.get('logradouro')}, ${formData.get('numero')} - ${formData.get('bairro')},
                 cep: formData.get('cep'),
                 cidade: formData.get('cidade'),
-                turma: '',
-                status: 'ativo',
-                observacoes: formData.get('observacoes') || '',
-                dataMatricula: new Date().toLocaleDateString('pt-BR'),
-                dataCadastro: new Date().toLocaleDateString('pt-BR')
+                logradouro: formData.get('logradouro'),
+                numero: formData.get('numero'),
+                bairro: formData.get('bairro'),
+                observacoes: formData.get('observacoes'),
+                dataAtualizacao: new Date().toLocaleDateString()
             };
 
-            console.log('Nova criança cadastrada:', novaCrianca);
+            // Aqui seria feita a requisição PUT/PATCH para atualizar no backend
+            console.log('Dados atualizados:', dadosAtualizados);
 
-            // Carregar lista existente e adicionar nova criança
-            let criancas = carregarCriancasExistentes();
-            criancas.push(novaCrianca);
-            
-            // Salvar no storage
-            salvarNoStorage(criancas);
-
-            // Marcar que há uma nova criança para ser exibida
-            sessionStorage.setItem('novaCriancaCadastrada', 'true');
+            // Atualizar os dados originais
+            Object.assign(dadosOriginais, dadosAtualizados);
 
             // Mostrar modal de sucesso
-            document.getElementById('successMessage').textContent = 
-                ${novaCrianca.nome} foi cadastrada com sucesso!;
+            document.getElementById('successMessage').textContent =
+                `Os dados de ${dadosAtualizados.nome} foram atualizados com sucesso!`;
             document.getElementById('successModal').style.display = 'flex';
-
-            // Limpar formulário
-            this.reset();
-            document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
-
-            // Redirecionar automaticamente após 2 segundos
-            setTimeout(() => {
-                redirecionarParaListagem();
-            }, 2000);
         });
 
-        // Logout functionality
         document.querySelector('.logout-button').addEventListener('click', function() {
             if (confirm('Tem certeza que deseja sair?')) {
                 window.location.href = '/login';
             }
         });
 
-        // Format inputs
+        // Máscaras para os campos
         document.querySelector('input[name="cpf"]').addEventListener('input', function() {
             let value = this.value.replace(/\D/g, '');
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
@@ -1167,7 +1087,6 @@
             this.value = value;
         });
 
-        // Handle window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 document.getElementById('sidebar').classList.remove('mobile-hidden');
@@ -1177,57 +1096,10 @@
             }
         });
 
-        // Close modal when clicking outside
+        // Fechar modal ao clicar fora dele
         document.getElementById('successModal').addEventListener('click', function(e) {
             if (e.target === this) {
-                redirecionarParaListagem();
-            }
-        });
-
-        // Verificar se há dados para carregar (caso esteja editando)
-        document.addEventListener('DOMContentLoaded', function() {
-            const dadosParaEditar = sessionStorage.getItem('criancaParaEditar') || localStorage.getItem('criancaParaEditar');
-            
-            if (dadosParaEditar) {
-                try {
-                    const { dados } = JSON.parse(dadosParaEditar);
-                    
-                    // Preencher o formulário com os dados existentes
-                    if (dados.nome) document.querySelector('input[name="nome"]').value = dados.nome;
-                    if (dados.dataNasc) {
-                        const [dia, mes, ano] = dados.dataNasc.split('/');
-                        document.querySelector('input[name="dataNascimento"]').value = ${ano}-${mes}-${dia};
-                    }
-                    if (dados.cpf) document.querySelector('input[name="cpf"]').value = dados.cpf;
-                    if (dados.sexo) {
-                        document.getElementById(dados.sexo.toLowerCase()).checked = true;
-                    }
-                    if (dados.responsavelPrincipal) document.querySelector('input[name="responsavel"]').value = dados.responsavelPrincipal;
-                    if (dados.telefone) document.querySelector('input[name="telefone"]').value = dados.telefone;
-                    if (dados.email) document.querySelector('input[name="email"]').value = dados.email;
-                    if (dados.cep) document.querySelector('input[name="cep"]').value = dados.cep;
-                    if (dados.cidade) document.querySelector('input[name="cidade"]').value = dados.cidade;
-                    if (dados.turma) document.querySelector('select[name="turma"]').value = dados.turma;
-                    if (dados.observacoes) document.querySelector('textarea[name="observacoes"]').value = dados.observacoes;
-                    
-                    // Extrair informações do endereço
-                    if (dados.endereco) {
-                        const enderecoMatch = dados.endereco.match(/^(.+?),\s*(\d+)\s*-\s*(.+)$/);
-                        if (enderecoMatch) {
-                            document.querySelector('input[name="logradouro"]').value = enderecoMatch[1];
-                            document.querySelector('input[name="numero"]').value = enderecoMatch[2];
-                            document.querySelector('input[name="bairro"]').value = enderecoMatch[3];
-                        }
-                    }
-                    
-                    // Mudar título do painel
-                    document.querySelector('.panel-title').textContent = 'Novo cadastro';
-                    document.querySelector('.panel-subtitle').textContent = 'Insira as informações da criança';
-                    document.querySelector('.btn-primary').textContent = 'Confirmar Cadastro';
-                    
-                } catch (e) {
-                    console.error('Erro ao carregar dados para edição:', e);
-                }
+                closeModal();
             }
         });
     </script>
