@@ -12,83 +12,544 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-        /* Seu CSS (sem alterações) */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; font-family: 'Poppins', sans-serif; overflow: hidden; background-color: #FFFFFF; }
-        .container { display: flex; width: 100vw; height: 100vh; }
-        .left-column { flex-basis: 45%; background-color: #f0f0f0; background-image: url(/imagem/ca.png); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; padding: 2rem; position: relative; }
-        .welcome-card { background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); padding: 4rem 3rem; text-align: center; border-radius: 20px; max-width: 400px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; }
-        .welcome-card h1 { font-family: 'Poppins', sans-serif; font-size: 3rem; font-weight: 600; color: #111; }
-        .welcome-card p { font-family: 'Poppins', sans-serif; font-size: 1.1rem; color: #333; margin-top: 0.5rem; }
-        .right-column { flex-basis: 55%; background-color: #FFFFFF; padding: 2.5rem 7rem; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; position: relative; }
-        .login-section { position: absolute; top: 2.5rem; right: 7rem; font-size: 1rem; color: #555; }
-        .login-section a { font-weight: bold; color: #FFC72C; text-decoration: none; }
-        .main-content { display: flex; align-items: flex-start; gap: 2.5rem; width: 100%; }
-        .form-area { flex-grow: 1; width: 100%; }
-        .name-and-photo-group { display: flex; align-items: flex-end; gap: 1.5rem; margin-bottom: 1.5rem; }
-        .name-and-photo-group .form-group { width: 700px; margin-bottom: 0; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem 1.2rem; width: 100%; margin-top: 0; }
-        .form-group { display: flex; flex-direction: column; }
-        .full-width { grid-column: 1 / -1; }
-        .form-group label { font-size: 0.9rem; color: #333; margin-bottom: 0.4rem; font-weight: 500; }
-        .form-group input { width: 100%; padding: 0.8rem 1rem; border: 1.5px solid #D4BBAA; border-radius: 10px; background-color: #FFF4DF; font-size: 0.9rem; font-family: 'Poppins', sans-serif; color: #333; transition: border-color 0.2s ease-in-out; }
-        .form-group input::placeholder { color: #aaa; }
-        .form-group input:focus { outline: none; border-color: #FFD972; box-shadow: 0 0 0 3px rgba(255, 217, 114, 0.5); }
-        .form-group input:disabled { background-color: #f2eadd; cursor: not-allowed; } /* NOVO: Estilo para campo desabilitado */
-        .form-group input.error { border-color: #dc3545; background-color: #fff5f5; }
-        .photo-upload-container { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-top: 0; flex-shrink: 0; width: 160px; text-align: center; position: relative; }
-        .photo-circle { width: 140px; height: 140px; background-color: #FFD972; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .photo-circle:hover { transform: scale(1.05); background-color: #f0c355; }
-        .photo-circle .camera-icon { font-size: 4rem; color: white; transition: opacity 0.3s ease; }
-        .photo-preview { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none; }
-        .remove-photo { position: absolute; top: 5px; right: 5px; background: #dc3545; color: white; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 16px; display: none; align-items: center; justify-content: center; z-index: 10; transition: background-color 0.3s ease; }
-        .remove-photo:hover { background-color: #c82333; }
-        .file-input { display: none; }
-        .photo-upload-container p { font-size: 0.8rem; color: #555; margin-top: 0; }
-        .form-actions { display: flex; gap: 1rem; margin-top: 2rem; }
-        .submit-btn, .cancel-btn { flex: 1; padding: 0.7rem; border-radius: 25px; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease; text-align: center; text-decoration: none; border: none; }
-        .submit-btn { background-color: #FFD972; color: #333; }
-        .submit-btn:hover { background-color: #f0c355; }
-        .cancel-btn { background-color: #f0f0f0; color: #555; border: 1px solid #ddd; }
-        .cancel-btn:hover { background-color: #e0e0e0; }
-        .error-message { background-color: #f8d7da; color: #721c24; padding: 1rem; border: 1px solid #f5c6cb; border-radius: 10px; margin-bottom: 1.5rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; }
-        .error-message i { color: #dc3545; }
-        .success-message { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 8px 12px; border-radius: 8px; margin-top: 0.5rem; font-size: 0.8rem; display: none; text-align: center; }
-        .password-error-message { color: #D8000C; font-size: 0.8rem; font-weight: 500; margin-top: 5px; height: 15px; }
-        .password-requirements { background-color: #e7f3ff; border: 1px solid #bee5eb; border-radius: 8px; padding: 10px; margin-top: 5px; font-size: 0.75rem; color: #0c5460; display: none; }
-        .password-requirements ul { margin: 0; padding-left: 15px; }
-        .password-requirements li { margin: 2px 0; }
-        .password-requirements li.valid { color: #28a745; }
-        .password-requirements li.invalid { color: #dc3545; }
-        .terms-container { margin: 1.5rem 0; display: flex; align-items: flex-start; gap: 0.75rem; }
-        .terms-checkbox { width: 18px; height: 18px; margin: 0; margin-top: 2px; cursor: pointer; }
-        .terms-text { font-size: 0.85rem; color: #555; line-height: 1.4; }
-        .terms-text a { color: #007bff; text-decoration: none; }
-        .terms-text a:hover { text-decoration: underline; }
-        .success-cadastro { background-color: #d4edda; color: #155724; padding: 1rem; border: 1px solid #c3e6cb; border-radius: 10px; margin-bottom: 1.5rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; text-align: center; }
-        
-        /* NOVOS ESTILOS PARA O QUADRADO DE SUCESSO */
-        .success-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; display: none; justify-content: center; align-items: center; }
-        .success-box { background-color: #d4edda; border: 2px solid #c3e6cb; border-radius: 15px; padding: 2rem; text-align: center; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .success-box h2 { color: #155724; font-size: 1.5rem; margin-bottom: 1rem; font-weight: 600; }
-        .success-box p { color: #155724; margin-bottom: 1.5rem; font-size: 1rem; }
-        .success-box .login-btn { background-color: #28a745; color: white; padding: 0.8rem 2rem; border: none; border-radius: 25px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease; text-decoration: none; display: inline-block; }
-        .success-box .login-btn:hover { background-color: #218838; }
-        
-        @media (max-width: 850px) {
-            body, html { overflow-y: auto; height: auto; }
-            .container { flex-direction: column; height: auto;  }
-            .left-column { display: block; flex-basis: auto; height: 300px; }
-            .welcome-card { display: none; }
-            .right-column { flex-basis: 100%; padding: 2rem 1.5rem; justify-content: flex-start; overflow-y: visible; position: static; }
-            .login-section { position: static; text-align: center; margin-bottom: 2rem; }
-            .main-content { flex-direction: column; align-items: center;  }
-            .form-area { width: 100%; order: 2; }
-            .form-grid { grid-template-columns: 1fr; gap: 1.1rem; }
-            .name-and-photo-group { flex-direction: column; align-items: center; gap: 1rem; margin-bottom: 2rem; }
-            .name-and-photo-group .form-group { width: 100%; }
-            .photo-upload-container { order: 1; margin-top: 0; padding-top: 0; margin-bottom: 0; }
-        }
+       /* =========================================
+   1. RESET E ESTILOS GERAIS
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    background-color: #FFFFFF;
+}
+
+/* =========================================
+   2. LAYOUT PRINCIPAL (COLUNAS)
+   ========================================= */
+.container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.left-column {
+    flex-basis: 45%;
+    background-color: #f0f0f0;
+    background-image: url(/imagem/ca.png);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+}
+
+.right-column {
+    flex-basis: 55%;
+    background-color: #FFFFFF;
+    padding: 2.5rem 7rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* =========================================
+   3. COMPONENTES DE CONTEÚDO
+   ========================================= */
+.welcome-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: 4rem 3rem;
+    text-align: center;
+    border-radius: 20px;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+.welcome-card h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 3rem;
+    font-weight: 600;
+    color: #111;
+}
+
+.welcome-card p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    margin-top: 0.5rem;
+}
+
+.login-section {
+    position: absolute;
+    top: 2.5rem;
+    right: 7rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+.login-section a {
+    font-weight: bold;
+    color: #FFC72C;
+    text-decoration: none;
+}
+
+.main-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 2.5rem;
+    width: 100%;
+}
+
+/* =========================================
+   4. ESTRUTURA DO FORMULÁRIO
+   ========================================= */
+.form-area {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.name-and-photo-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.name-and-photo-group .form-group {
+    width: 700px;
+    margin-bottom: 0;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem 1.2rem;
+    width: 100%;
+    margin-top: 0;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* =========================================
+   5. ELEMENTOS DO FORMULÁRIO (INPUTS, LABELS)
+   ========================================= */
+.form-group label {
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1.5px solid #D4BBAA;
+    border-radius: 10px;
+    background-color: #FFF4DF;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.form-group input::placeholder {
+    color: #aaa;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #FFD972;
+    box-shadow: 0 0 0 3px rgba(255, 217, 114, 0.5);
+}
+
+.form-group input:disabled {
+    background-color: #f2eadd;
+    cursor: not-allowed;
+    /* NOVO: Estilo para campo desabilitado */
+}
+
+.form-group input.error {
+    border-color: #dc3545;
+    background-color: #fff5f5;
+}
+
+/* =========================================
+   6. COMPONENTE DE UPLOAD DE FOTO
+   ========================================= */
+.photo-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0;
+    flex-shrink: 0;
+    width: 160px;
+    text-align: center;
+    position: relative;
+}
+
+.photo-circle {
+    width: 140px;
+    height: 140px;
+    background-color: #FFD972;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.photo-circle:hover {
+    transform: scale(1.05);
+    background-color: #f0c355;
+}
+
+.photo-circle .camera-icon {
+    font-size: 4rem;
+    color: white;
+    transition: opacity 0.3s ease;
+}
+
+.photo-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: none;
+}
+
+.remove-photo {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+}
+
+.remove-photo:hover {
+    background-color: #c82333;
+}
+
+.file-input {
+    display: none;
+}
+
+.photo-upload-container p {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 0;
+}
+
+/* =========================================
+   7. TERMOS E CONDIÇÕES
+   ========================================= */
+.terms-container {
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.terms-checkbox {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    margin-top: 2px;
+    cursor: pointer;
+}
+
+.terms-text {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.4;
+}
+
+.terms-text a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.terms-text a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================
+   8. BOTÕES DE AÇÃO
+   ========================================= */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.submit-btn,
+.cancel-btn {
+    flex: 1;
+    padding: 0.7rem;
+    border-radius: 25px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+}
+
+.submit-btn {
+    background-color: #FFD972;
+    color: #333;
+}
+
+.submit-btn:hover {
+    background-color: #f0c355;
+}
+
+.cancel-btn {
+    background-color: #f0f0f0;
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+.cancel-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* =========================================
+   9. MENSAGENS DE FEEDBACK (ERRO, SUCESSO)
+   ========================================= */
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border: 1px solid #f5c6cb;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.error-message i {
+    color: #dc3545;
+}
+
+.success-message {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    display: none;
+    text-align: center;
+}
+
+.password-error-message {
+    color: #D8000C;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 5px;
+    height: 15px;
+}
+
+.password-requirements {
+    background-color: #e7f3ff;
+    border: 1px solid #bee5eb;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 0.75rem;
+    color: #0c5460;
+    display: none;
+}
+
+.password-requirements ul {
+    margin: 0;
+    padding-left: 15px;
+}
+
+.password-requirements li {
+    margin: 2px 0;
+}
+
+.password-requirements li.valid {
+    color: #28a745;
+}
+
+.password-requirements li.invalid {
+    color: #dc3545;
+}
+
+.success-cadastro {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border: 1px solid #c3e6cb;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+/* =========================================
+   10. ESTILOS PARA O OVERLAY DE SUCESSO
+   ========================================= */
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.success-box {
+    background-color: #d4edda;
+    border: 2px solid #c3e6cb;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.success-box h2 {
+    color: #155724;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.success-box p {
+    color: #155724;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.success-box .login-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.success-box .login-btn:hover {
+    background-color: #218838;
+}
+
+/* =========================================
+   11. MEDIA QUERIES (RESPONSIVIDADE)
+   ========================================= */
+@media (max-width: 850px) {
+    body,
+    html {
+        overflow-y: auto;
+        height: auto;
+    }
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+    .left-column {
+        display: block;
+        flex-basis: auto;
+        height: 300px;
+    }
+    .welcome-card {
+        display: none;
+    }
+    .right-column {
+        flex-basis: 100%;
+        padding: 2rem 1.5rem;
+        justify-content: flex-start;
+        overflow-y: visible;
+        position: static;
+    }
+    .login-section {
+        position: static;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .main-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    .form-area {
+        width: 100%;
+        order: 2;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1.1rem;
+    }
+    .name-and-photo-group {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .name-and-photo-group .form-group {
+        width: 100%;
+    }
+    .photo-upload-container {
+        order: 1;
+        margin-top: 0;
+        padding-top: 0;
+        margin-bottom: 0;
+    }
+}
     </style>
 </head>
 <body>
