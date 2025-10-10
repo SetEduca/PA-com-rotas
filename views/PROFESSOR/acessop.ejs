@@ -344,7 +344,7 @@
         <div class="menu-item" onclick="navegarPara('financeiro')"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></div>
       </div>
     </div>
-    <div class="seteeduca"><p>@seteeduca</p></div>
+    <div class="seteeduca"><p></p></div>
     <div class="sidebar-footer">
       <button class="logout-button" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>SAIR</span></button>
     </div>
@@ -418,10 +418,10 @@
       const rotas = {
         'inicio': '/home',
         'professor': '/cadastro-professor',
-        'financeiro': '/opcoes-financeiro',
+        'financeiro': '/financeiro',
         'turmas': '/turmas-cadastradas',
         'matricula': '/matricula',
-        'cadastro': '/opcoes-aluno'
+        'cadastro': '/acessar-aluno'
       };
       if (rotas[pagina]) window.location.href = rotas[pagina];
     }
