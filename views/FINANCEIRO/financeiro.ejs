@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-     <style>
+    <style>
        body { font-family: 'Poppins', sans-serif; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -264,16 +264,34 @@
     <aside class="sidebar hidden lg:flex">
          <div>
             <div class="logo">
-                <img src="imagem/logo.png" alt="logo">
+                <img src="logo.png" alt="logo">
             </div>
-              </div>
-                <div class="menu">
-                <a href="#" class="menu-item active"><i class="fas fa-home"></i><span>INÍCIO</span></a>
-                <a href="#" class="menu-item"><i class="fas fa-address-card"></i><span>CADASTRO</span></a>
-                <a href="#" class="menu-item"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
-                <a href="#" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></a>
-                <a href="#" class="menu-item"><i class="fas fa-users"></i><span>TURMA</span></a>
-                <a href="#" class="menu-item"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></a>
+             <div class="menu">
+                <a href="/home" class="menu-item active" onclick="navegarPara('inicio')">
+                    <i class="fas fa-home"></i>
+                    <span>INÍCIO</span>
+                </a>
+                <a href="/criancas-cadastradas" class="menu-item" onclick="navegarPara('cadastro')">
+                    <i class="fas fa-address-card"></i>
+                    <span>CADASTRO</span>
+                </a>
+                <a href="/matricula" class="menu-item" onclick="navegarPara('matricula')">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>MATRÍCULA</span>
+                </a>
+                <a href="/cadastro-prof" class="menu-item" id="professor-link">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>PROFESSOR</span>
+                </a>
+   
+                <a href="/turmas-cadastradas" class="menu-item" onclick="navegarPara('turmas')">
+                    <i class="fas fa-users"></i>
+                    <span>TURMA</span>
+                </a>
+                <a href="#" class="menu-item" onclick="navegarPara('financeiro')">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>FINANCEIRO</span>
+                </a>
             </div>
         </div>
         <div class="sidebar-footer">
@@ -281,11 +299,8 @@
         </div>
     </aside>
     
-
-      <!-- Main Content Wrapper -->
     <div class="flex flex-col flex-1 lg:ml-[280px] min-h-screen">
         
-        <!-- Sticky Header -->
         <header class="bg-brand-green-header text-brand-text p-4 md:p-5 flex justify-between items-center w-full shadow-md sticky top-0 z-30" style="background-color: #59C631;">
             <div class="flex items-center gap-4">
                 <h1 class="text-2xl flex items-center gap-2">
@@ -299,7 +314,6 @@
             </div>
         </header>
 
-        <!-- Page Content -->
         <main class="flex-1 p-4 md:p-6 lg:p-8 flex flex-col">
             <nav class="mb-6">
                 <ul class="flex items-center gap-2 md:gap-4 border-b border-gray-200">
@@ -371,37 +385,94 @@
             }
             
             let relatoriosData = [
-                { id: 1, date: '2024-05-01', description: 'Mensalidade - João Silva', category: 'Mensalidade', value: 500.00, type: 'Receita', status: 'ativo' },
-                { id: 2, date: '2024-05-02', description: 'Pagamento de Salário - Prof.ª Ana', category: 'Salários', value: -1500.00, type: 'Despesa', status: 'ativo' },
-                { id: 3, date: '2024-05-03', description: 'Conta de Luz', category: 'Contas', value: -250.00, type: 'Despesa', status: 'ativo' },
-                { id: 4, date: '2024-04-15', description: 'Compra de Material de Limpeza', category: 'Materiais', value: -150.00, type: 'Despesa', status: 'arquivado' },
-                { id: 5, date: '2024-04-01', description: 'Mensalidade - Ana Souza', category: 'Mensalidade', value: 500.00, type: 'Receita', status: 'arquivado' },
+                { id: 1, date: '2025-10-01', description: 'Mensalidade - João Silva', category: 'Mensalidade', value: 550.00, type: 'Receita', status: 'ativo' },
+                { id: 2, date: '2025-10-02', description: 'Pagamento de Salário - Prof.ª Ana', category: 'Salários', value: -1800.00, type: 'Despesa', status: 'ativo' },
+                { id: 3, date: '2025-10-03', description: 'Conta de Luz', category: 'Contas', value: -350.00, type: 'Despesa', status: 'ativo' },
+                { id: 9, date: '2025-10-04', description: 'Mensalidade - Maria Oliveira', category: 'Mensalidade', value: 550.00, type: 'Receita', status: 'ativo' },
+                { id: 10, date: '2025-10-05', description: 'Compra de Alimentos', category: 'Alimentação', value: -800.00, type: 'Despesa', status: 'ativo' },
+                { id: 4, date: '2025-09-15', description: 'Compra de Material de Limpeza', category: 'Materiais', value: -150.00, type: 'Despesa', status: 'arquivado' },
+                { id: 5, date: '2025-09-01', description: 'Mensalidade - Ana Souza', category: 'Mensalidade', value: 500.00, type: 'Receita', status: 'arquivado' },
+                { id: 6, date: '2025-08-05', description: 'Pagamento de Aluguel', category: 'Aluguel', value: -2500.00, type: 'Despesa', status: 'arquivado' },
+                { id: 7, date: '2025-08-01', description: 'Mensalidade - Pedro Costa', category: 'Mensalidade', value: 500.00, type: 'Receita', status: 'arquivado' },
+                { id: 8, date: '2025-07-02', description: 'Conta de Internet', category: 'Contas', value: -120.00, type: 'Despesa', status: 'arquivado' },
             ];
 
             const getAlunos = async () => [
-                { id: 1, studentName: 'João Silva', parentName: 'Maria Silva', phone: '11987654321', status: 'pago' },
-                { id: 2, studentName: 'Ana Souza', parentName: 'Carlos Souza', phone: '11987654322', status: 'pendente' },
-                { id: 3, studentName: 'Pedro Costa', parentName: 'Beatriz Costa', phone: '11987654323', status: 'atrasado' },
+                { id: 1, studentName: 'João Silva', parentName: 'Maria Silva', mensalidade: 550.00, vencimento: '10/10/2025', status: 'pago' },
+                { id: 2, studentName: 'Ana Souza', parentName: 'Carlos Souza', mensalidade: 550.00, vencimento: '10/09/2025', status: 'pago' },
+                { id: 3, studentName: 'Pedro Costa', parentName: 'Beatriz Costa', mensalidade: 550.00, vencimento: '10/11/2025', status: 'pendente' },
+                { id: 4, studentName: 'Mariana Lima', parentName: 'Felipe Lima', mensalidade: 550.00, vencimento: '10/08/2025', status: 'atrasado' },
             ];
             
             const dashboardTemplate = `
-                <div class="space-y-8 h-full flex flex-col">
+                <div class="space-y-6">
                     <section>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="bg-white p-6 rounded-lg shadow-sm"><h3 class="text-lg font-semibold text-gray-500">Receita Total (Mês)</h3><p class="text-3xl font-bold text-green-600">R$ 15.250,00</p></div>
-                            <div class="bg-white p-6 rounded-lg shadow-sm"><h3 class="text-lg font-semibold text-gray-500">Despesas Totais (Mês)</h3><p class="text-3xl font-bold text-red-600">R$ 8.980,00</p></div>
-                            <div class="bg-white p-6 rounded-lg shadow-sm"><h3 class="text-lg font-semibold text-gray-500">Lucro Líquido (Mês)</h3><p class="text-3xl font-bold text-brand-text">R$ 6.270,00</p></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
+                                <div class="bg-green-100 p-3 rounded-full"><i class="fas fa-arrow-up text-green-600 text-2xl"></i></div>
+                                <div>
+                                    <h3 class="text-md font-semibold text-gray-500">Receita Total (Mês)</h3>
+                                    <p class="text-2xl font-bold text-green-600">R$ 15.250,00</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
+                                <div class="bg-red-100 p-3 rounded-full"><i class="fas fa-arrow-down text-red-600 text-2xl"></i></div>
+                                <div>
+                                    <h3 class="text-md font-semibold text-gray-500">Despesas Totais (Mês)</h3>
+                                    <p class="text-2xl font-bold text-red-600">R$ 8.980,00</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
+                                 <div class="bg-blue-100 p-3 rounded-full"><i class="fas fa-balance-scale text-blue-600 text-2xl"></i></div>
+                                <div>
+                                    <h3 class="text-md font-semibold text-gray-500">Lucro Líquido (Mês)</h3>
+                                    <p class="text-2xl font-bold text-brand-text">R$ 6.270,00</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
+                                <div class="bg-yellow-100 p-3 rounded-full"><i class="fas fa-users text-yellow-600 text-2xl"></i></div>
+                                <div>
+                                    <h3 class="text-md font-semibold text-gray-500">Alunos Ativos</h3>
+                                    <p class="text-2xl font-bold text-brand-text">32</p>
+                                </div>
+                            </div>
                         </div>
                     </section>
-                    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
-                        <div class="bg-white p-6 rounded-lg shadow-sm flex flex-col"><h3 class="text-xl font-semibold mb-4 text-brand-text">Fluxo de Caixa Mensal</h3><div class="relative flex-1 h-64 md:h-auto"><canvas id="cashflow-chart"></canvas></div></div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm flex flex-col"><h3 class="text-xl font-semibold mb-4 text-brand-text">Status das Mensalidades</h3><div class="relative flex-1 h-64 md:h-auto"><canvas id="status-chart"></canvas></div></div>
+                    
+                    <section class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                        <div class="lg:col-span-3 bg-white p-6 rounded-lg shadow-sm flex flex-col">
+                            <h3 class="text-xl font-semibold mb-4 text-brand-text">Fluxo de Caixa (Últimos 6 meses)</h3>
+                            <div class="relative flex-1 min-h-[300px]"><canvas id="cashflow-chart"></canvas></div>
+                        </div>
+                        <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm flex flex-col">
+                            <h3 class="text-xl font-semibold mb-4 text-brand-text">Distribuição de Despesas</h3>
+                            <div class="relative flex-1 min-h-[300px]"><canvas id="expenses-chart"></canvas></div>
+                        </div>
+                    </section>
+                    
+                     <section class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-semibold mb-4 text-brand-text">Atividade Recente</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="p-3 font-semibold text-sm">Descrição</th>
+                                        <th class="p-3 font-semibold text-sm">Data</th>
+                                        <th class="p-3 font-semibold text-sm">Tipo</th>
+                                        <th class="p-3 font-semibold text-sm text-right">Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-activity-body">
+                                    </tbody>
+                            </table>
+                        </div>
                     </section>
                 </div>`;
+
             const alunosTemplate = `
                 <div class="bg-white p-6 rounded-lg shadow-sm h-full">
                     <h2 class="text-2xl font-bold mb-4 text-brand-text">Situação Financeira dos Alunos</h2>
-                    <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Nome do Aluno</th><th class="p-3">Responsável</th><th class="p-3">Contato</th><th class="p-3">Status da Mensalidade</th><th class="p-3">Ações</th></tr></thead><tbody id="alunos-table-body"></tbody></table></div>
+                    <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Nome do Aluno</th><th class="p-3">Responsável</th><th class="p-3">Mensalidade</th><th class="p-3">Vencimento</th><th class="p-3">Status da Mensalidade</th></tr></thead><tbody id="alunos-table-body"></tbody></table></div>
                 </div>`;
             const relatoriosTemplate = `
                 <div class="bg-white p-6 rounded-lg shadow-sm h-full">
@@ -416,12 +487,108 @@
                     <h2 class="text-2xl font-bold mb-4 text-brand-text">Histórico de Relatórios Arquivados</h2>
                     <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Data</th><th class="p-3">Descrição</th><th class="p-3">Categoria</th><th class="p-3">Valor</th><th class="p-3">Tipo</th><th class="p-3">Ações</th></tr></thead><tbody id="historico-table-body"></tbody></table></div>
                 </div>`;
+            
+            let cashflowChartInstance;
+            let expensesChartInstance;
 
-            function setupCharts() { /* ... Chart.js setup ... */ }
-            async function renderAlunos() { /* ... Alunos rendering ... */ }
+            function setupCharts() {
+                // Destruir gráficos antigos se existirem para evitar sobreposição
+                if (cashflowChartInstance) cashflowChartInstance.destroy();
+                if (expensesChartInstance) expensesChartInstance.destroy();
+
+                // Gráfico de Fluxo de Caixa
+                const cashflowCtx = document.getElementById('cashflow-chart')?.getContext('2d');
+                if(cashflowCtx) {
+                    cashflowChartInstance = new Chart(cashflowCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'],
+                            datasets: [{
+                                label: 'Receitas',
+                                data: [12500, 13000, 14200, 13800, 15500, 15250],
+                                backgroundColor: '#A8D5BA',
+                                borderRadius: 4,
+                            }, {
+                                label: 'Despesas',
+                                data: [8000, 8200, 9500, 8100, 9200, 8980],
+                                backgroundColor: '#FFB6B6',
+                                borderRadius: 4,
+                            }]
+                        },
+                        options: { maintainAspectRatio: false, responsive: true, scales: { y: { beginAtZero: true } } }
+                    });
+                }
+                
+                // Gráfico de Despesas
+                const expensesCtx = document.getElementById('expenses-chart')?.getContext('2d');
+                if(expensesCtx) {
+                    expensesChartInstance = new Chart(expensesCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Salários', 'Aluguel', 'Contas', 'Alimentação', 'Materiais', 'Outros'],
+                            datasets: [{
+                                data: [4500, 2500, 600, 800, 350, 230],
+                                backgroundColor: ['#3D8C5B', '#FF6B6B', '#4A90E2', '#F2C94C', '#9B51E0', '#8A8A8A'],
+                            }]
+                        },
+                        options: { maintainAspectRatio: false, responsive: true, plugins: { legend: { position: 'bottom' } } }
+                    });
+                }
+            }
+            
+            function renderRecentActivity() {
+                const tbody = document.getElementById('recent-activity-body');
+                if (!tbody) return;
+                
+                // Pega os 5 lançamentos mais recentes (já que os novos são adicionados no início)
+                const recentData = relatoriosData.filter(r => r.status === 'ativo').slice(0, 5);
+                tbody.innerHTML = '';
+                
+                if (recentData.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Nenhuma atividade recente.</td></tr>`;
+                    return;
+                }
+                
+                recentData.forEach(item => {
+                    const valueClass = item.type === 'Receita' ? 'text-green-600' : 'text-red-600';
+                    const formattedValue = `R$ ${Math.abs(item.value).toFixed(2).replace('.', ',')}`;
+                    
+                    const row = `
+                        <tr class="border-b">
+                            <td class="p-3">${item.description}</td>
+                            <td class="p-3">${new Date(item.date).toLocaleDateString('pt-BR')}</td>
+                            <td class="p-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${item.type === 'Receita' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${item.type}</span></td>
+                            <td class="p-3 font-medium text-right ${valueClass}">${formattedValue}</td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            }
+
+            async function renderAlunos() {
+                const alunos = await getAlunos();
+                const tbody = document.getElementById('alunos-table-body');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+                const statusClasses = {
+                    pago: 'bg-green-100 text-green-700',
+                    pendente: 'bg-yellow-100 text-yellow-700',
+                    atrasado: 'bg-red-100 text-red-700',
+                };
+                alunos.forEach(aluno => {
+                    const row = `<tr>
+                        <td class="p-3">${aluno.studentName}</td>
+                        <td class="p-3">${aluno.parentName}</td>
+                        <td class="p-3">R$ ${aluno.mensalidade.toFixed(2).replace('.', ',')}</td>
+                        <td class="p-3">${aluno.vencimento}</td>
+                        <td class="p-3"><span class="px-2 py-1 rounded-full text-sm font-medium ${statusClasses[aluno.status]}">${aluno.status.charAt(0).toUpperCase() + aluno.status.slice(1)}</span></td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            }
 
             function renderRelatorios(filterStatus = 'ativo') {
-                const relatorios = relatoriosData.filter(r => r.status === filterStatus);
+                const relatorios = relatoriosData.filter(r => r.status === filterStatus).sort((a, b) => new Date(b.date) - new Date(a.date));
                 const tbodyId = filterStatus === 'ativo' ? 'relatorios-table-body' : 'historico-table-body';
                 const tbody = document.getElementById(tbodyId);
                 if(!tbody) return;
@@ -456,7 +623,7 @@
                 const customerField = document.getElementById('customer-field');
                 
                 const revenueCategories = ['Mensalidade', 'Matrícula', 'Outras Receitas'];
-                const expenseCategories = ['Salários', 'Contas', 'Materiais', 'Alimentação', 'Outras Despesas'];
+                const expenseCategories = ['Salários', 'Contas', 'Materiais', 'Alimentação', 'Aluguel', 'Outras Despesas'];
 
                 if (type === 'Receita') {
                     categorySelect.innerHTML = revenueCategories.map(c => `<option value="${c}">${c}</option>`).join('');
@@ -486,10 +653,14 @@
             }
 
             function renderContent(tabId) {
-                contentArea.removeEventListener('click', handleReportAction); // Clean up old listener
+                contentArea.removeEventListener('click', handleReportAction);
                 if (tabId === 'btn-dashboard') {
                     contentArea.innerHTML = dashboardTemplate;
-                    setupCharts();
+                    // Usar um pequeno timeout para garantir que o DOM foi atualizado antes de renderizar os gráficos
+                    setTimeout(() => {
+                        setupCharts();
+                        renderRecentActivity();
+                    }, 0);
                 } else if (tabId === 'btn-alunos') {
                     contentArea.innerHTML = alunosTemplate;
                     renderAlunos();
@@ -549,6 +720,3 @@
     </script>
 </body>
 </html>
-
-
-
