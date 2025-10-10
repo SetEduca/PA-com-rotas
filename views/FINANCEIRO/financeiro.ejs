@@ -192,18 +192,14 @@ content: '';
 
 
         /* Cores das barrinhas inferiores dos itens do menu */
-        .menu-item:nth-child(1)::after { background-color: #F4BF27;
-}
-        .menu-item:nth-child(2)::after { background-color: #00A6FF;
-}
-        .menu-item:nth-child(3)::after { background-color: #9747FF;
-}
-        .menu-item:nth-child(4)::after { background-color: #F88C12;
-}
-        .menu-item:nth-child(5)::after { background-color: #D22A2A;
-}
-        .menu-item:nth-child(6)::after { background-color: #59C631;
-}
+
+
+        .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+        .menu-item:nth-child(2)::after { background-color: #306bc2; }
+        .menu-item:nth-child(3)::after { background-color: #9747FF; }
+        .menu-item:nth-child(4)::after { background-color: #F88C12; }
+        .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+        .menu-item:nth-child(6)::after { background-color: #59C631; }
 
 
         .menu-item.active {
@@ -377,6 +373,9 @@ color: #D22A2A;
                 </a>
  
                <a href="/criancas-cadastradas" class="menu-item" onclick="navegarPara('cadastro')">
+
+                <a href="/cadastro-aluno" class="menu-item" onclick="navegarPara('cadastro')">
+
                     <i class="fas fa-address-card"></i>
                     <span>CADASTRO</span>
                 </a>
@@ -385,7 +384,7 @@ color: #D22A2A;
                <i class="fas fa-user-graduate"></i>
                     <span>MATRÍCULA</span>
                 </a>
-                <a href="/cadastro-prof" class="menu-item" id="professor-link">
+                <a href="/cadastrop" class="menu-item" id="professor-link">
                     <i class="fas fa-chalkboard-teacher"></i>
       
               <span>PROFESSOR</span>
@@ -394,9 +393,13 @@ color: #D22A2A;
                 <a href="/turmas-cadastradas" class="menu-item" onclick="navegarPara('turmas')">
                     <i class="fas fa-users"></i>
                     <span>TURMA</span>
+
       
           </a>
                 <a href="#" class="menu-item active" onclick="navegarPara('financeiro')">
+
+                </a>
+                <a href="/financeiro" class="menu-item active" onclick="navegarPara('financeiro')">
                     <i class="fas fa-dollar-sign"></i>
                     <span>FINANCEIRO</span>
                 </a>
