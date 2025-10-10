@@ -75,8 +75,8 @@ app.get("/acessar-aluno", (req, res) => {
   res.render("ALUNO/acessar-aluno");
 });
 
-app.get("/cadastro-responsavel", (req, res) => {
-  res.render("ALUNO/cadastro1");
+app.get("/editar-aluno", (req, res) => {
+  res.render("ALUNO/editar-aluno");
 });
 
 app.get("/cadastro-aluno", (req, res) => {
@@ -130,14 +130,14 @@ app.get("/matricula", (req, res) => {
 
 //PROFESSOR
 
-app.get("/cadastro-prof", (req, res) => {
+app.get("/cadastrop", (req, res) => {
   res.render("PROFESSOR/cadastrop");
 });
 
-app.get("/prof-cadastrados", (req, res) => {
+app.get("/acessop", (req, res) => {
   res.render("PROFESSOR/acessop");
 });
-app.get("/editar-prof", (req, res) => {
+app.get("/editarp", (req, res) => {
   res.render("PROFESSOR/editarp");
 });
 

@@ -616,7 +616,7 @@ padding: 8px 10px;
 </div>
 </div>
 <div class="seteeduca">
-<p>@seteeduca</p>
+<p></p>
 </div>
 <div class="sidebar-footer">
 <button class="logout-button" onclick="logout()">
@@ -730,11 +730,11 @@ return `${idade} anos`;
 function navegarPara(pagina) {
 const rotas = {
 'inicio': '/home',
-'professor': '/cadastro-professor',
-'financeiro': '/opcoes-financeiro',
+'professor': '/acessop',
+'financeiro': '/financeiro',
 'turma': '/turmas-cadastradas',
 'matricula': '/matricula',
-'cadastro': '/opcoes-aluno'
+'cadastro': '/acessar-aluno'
 };
 
 if (rotas[pagina]) {
@@ -751,7 +751,7 @@ window.location.href = '/login';
 }
 
 function criarNovoCadastro() {
-window.location.href = '/novo-cadastro';
+window.location.href = '/cadastro-aluno';
 }
 
 function carregarDoMemoria() {
@@ -884,7 +884,8 @@ document.getElementById('childDetailsModal').style.display = 'none';
 
 function editarCrianca(index) {
 if (index >= 0 && index < criancas.length) {
-alert(`Funcionalidade de edição será implementada para: ${criancas[index].nome}`);
+const criancaId = criancas[index].id;
+window.location.href = `/editar-aluno?id=${criancaId}`;
 }
 }
 

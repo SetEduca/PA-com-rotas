@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SeteEduca - Painel de Cadastramento</title>
+    <title>SeteEduca - Editar Cadastro</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -146,7 +146,7 @@
             padding: 20px 18px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
-        
+       
         .logout-button {
             padding: 16px 20px;
             border-radius: 8px;
@@ -167,8 +167,8 @@
         }
 
         .logout-button:hover {
-            background-color: rgba(210, 42, 42, 0.1); 
-            color: #D22A2A; 
+            background-color: rgba(210, 42, 42, 0.1);
+            color: #D22A2A;
             font-weight: 600;
         }
 
@@ -215,24 +215,24 @@
         }
 
         .header {
-            background: #306bc2; 
-            height: 80px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 0 30px; 
+            background: #306bc2;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
             color: white;
             width: 100%;
         }
 
         .header-title {
-            display: flex; 
+            display: flex;
             align-items: center;
-            position: relative; 
+            position: relative;
             top: 0.7vh;
-            gap: 10px; 
-            font-size: 1.5rem; 
-            color: rgb(255, 255, 255); 
+            gap: 10px;
+            font-size: 1.5rem;
+            color: rgb(255, 255, 255);
             font-family: 'Kodchasan', sans-serif;
         }
 
@@ -283,10 +283,10 @@
         }
 
         .panel-header {
-            background: white; 
-            border-radius: 12px; 
-            border-top: 5px solid #306bc2; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+            background: white;
+            border-radius: 12px;
+            border-top: 5px solid #306bc2;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -511,7 +511,7 @@
             animation: modalSlideIn 0.3s ease;
         }
 
-        .modal-content::before {
+        .modal-content.success::before {
             content: "✓";
             display: block;
             width: 60px;
@@ -723,7 +723,7 @@
         <div class="logo">
            <img src="imagem/logo.png" alt="logo" onerror="this.style.display='none'">
         </div>
-        
+       
         <div class="menu">
             <div class="menu-item" onclick="navegarPara('inicio')">
                 <i class="fas fa-home"></i>
@@ -741,7 +741,7 @@
                 <i class="fas fa-chalkboard-teacher"></i>
                 <span>PROFESSOR</span>
             </div>
-            <div class="menu-item" onclick="navegarPara('turmas')"> 
+            <div class="menu-item" onclick="navegarPara('turmas')">
                 <i class="fas fa-users"></i>
                 <span>TURMA</span>
             </div>
@@ -761,13 +761,13 @@
                 <span>Sair</span>
             </div>
         </div>
-    </div> 
+    </div>
 
     <div class="main-content">
         <div class="header">
             <div class="header-title">
-                <i class="fas fa-address-card"></i>
-                <span>Painel <b>CADASTRAMENTO</b></span>
+                <i class="fas fa-edit"></i>
+                <span>Editar <b>CADASTRO</b></span>
             </div>
             <div class="user-profile">
                 <div class="profile-pic">
@@ -790,7 +790,7 @@
                                 <i class="fas fa-camera"></i>
                             </div>
                             <button type="button" class="upload-btn" onclick="uploadPhoto()">
-                                Adicionar Foto
+                                Alterar Foto
                             </button>
                         </div>
 
@@ -892,11 +892,11 @@
                         </div>
 
                         <div class="action-buttons">
-                            <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                                Limpar
+                            <button type="button" class="btn btn-secondary" onclick="cancelarEdicao()">
+                                Cancelar
                             </button>
                             <button type="submit" class="btn btn-primary">
-                                Cadastrar Criança
+                                Salvar Alterações
                             </button>
                         </div>
                     </form>
@@ -906,18 +906,63 @@
     </div>
 
     <div class="modal" id="successModal">
-        <div class="modal-content">
-            <h3>Cadastro Realizado!</h3>
-            <p id="successMessage">A criança foi cadastrada com sucesso no sistema.</p>
+        <div class="modal-content success">
+            <h3>Alterações Salvas!</h3>
+            <p id="successMessage">Os dados foram atualizados com sucesso.</p>
             <button class="modal-btn" onclick="closeModal()">Entendi</button>
         </div>
     </div>
 
     <script>
+        // Simulação de dados do cadastro (em um sistema real, viria do backend)
+        const dadosOriginais = {
+            nome: 'Maria Silva Santos',
+            dataNascimento: '2018-05-15',
+            cpf: '123.456.789-00',
+            sexo: 'feminino',
+            responsavel: 'João Silva Santos',
+            telefone: '(71) 98765-4321',
+            email: 'joao.silva@email.com',
+            cep: '40000-000',
+            cidade: 'Salvador',
+            logradouro: 'Rua das Flores',
+            numero: '123',
+            bairro: 'Centro',
+            observacoes: 'Alergia a lactose',
+            fotoUrl: null
+        };
+
+        // Carregar dados ao iniciar a página
+        window.addEventListener('DOMContentLoaded', function() {
+            carregarDados();
+        });
+
+        function carregarDados() {
+            // Preencher todos os campos do formulário
+            document.querySelector('input[name="nome"]').value = dadosOriginais.nome;
+            document.querySelector('input[name="dataNascimento"]').value = dadosOriginais.dataNascimento;
+            document.querySelector('input[name="cpf"]').value = dadosOriginais.cpf;
+            document.querySelector(`input[name="sexo"][value="${dadosOriginais.sexo}"]`).checked = true;
+            document.querySelector('input[name="responsavel"]').value = dadosOriginais.responsavel;
+            document.querySelector('input[name="telefone"]').value = dadosOriginais.telefone;
+            document.querySelector('input[name="email"]').value = dadosOriginais.email;
+            document.querySelector('input[name="cep"]').value = dadosOriginais.cep;
+            document.querySelector('input[name="cidade"]').value = dadosOriginais.cidade;
+            document.querySelector('input[name="logradouro"]').value = dadosOriginais.logradouro;
+            document.querySelector('input[name="numero"]').value = dadosOriginais.numero;
+            document.querySelector('input[name="bairro"]').value = dadosOriginais.bairro;
+            document.querySelector('textarea[name="observacoes"]').value = dadosOriginais.observacoes;
+
+            // Carregar foto se existir
+            if (dadosOriginais.fotoUrl) {
+                document.getElementById('photoPreview').innerHTML = `<img src="${dadosOriginais.fotoUrl}" alt="Foto da criança">`;
+            }
+        }
+
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
-            
+           
             sidebar.classList.toggle('mobile-hidden');
             overlay.classList.toggle('active');
         }
@@ -927,11 +972,11 @@
                 if (window.innerWidth <= 768) {
                     toggleMobileMenu();
                 }
-                
+               
                 document.querySelectorAll('.menu-item').forEach(i => {
                     i.classList.remove('active');
                 });
-                
+               
                 this.classList.add('active');
             });
         });
@@ -943,7 +988,7 @@
                 'financeiro': '/financeiro',
                 'turmas': '/turmas-cadastradas',
                 'matricula': '/matricula',
-                'cadastro': '/cadastro-aluno'
+                'cadastro': '/editar-aluno'
             };
 
             if (rotas[pagina]) {
@@ -969,20 +1014,23 @@
             input.click();
         }
 
-        function resetForm() {
-            document.getElementById('registrationForm').reset();
-            document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
+        function cancelarEdicao() {
+            if (confirm('Deseja cancelar as alterações e voltar?')) {
+                window.location.href = '/criancas-cadastradas';
+            }
         }
 
         function closeModal() {
             document.getElementById('successModal').style.display = 'none';
+            // Redirecionar para a lista após fechar o modal
+            window.location.href = '/criancas-cadastradas';
         }
 
         document.getElementById('registrationForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const formData = new FormData(this);
-            const dadosCrianca = {
+            const dadosAtualizados = {
                 nome: formData.get('nome'),
                 dataNascimento: formData.get('dataNascimento'),
                 cpf: formData.get('cpf'),
@@ -996,21 +1044,19 @@
                 numero: formData.get('numero'),
                 bairro: formData.get('bairro'),
                 observacoes: formData.get('observacoes'),
-                dataCadastro: new Date().toLocaleDateString(),
-                status: 'Ativo'
+                dataAtualizacao: new Date().toLocaleDateString()
             };
 
-            if (!window.criancasCadastradas) {
-                window.criancasCadastradas = [];
-            }
-            window.criancasCadastradas.push(dadosCrianca);
+            // Aqui seria feita a requisição PUT/PATCH para atualizar no backend
+            console.log('Dados atualizados:', dadosAtualizados);
 
-            document.getElementById('successMessage').textContent = 
-                `${dadosCrianca.nome} foi cadastrada com sucesso!`;
+            // Atualizar os dados originais
+            Object.assign(dadosOriginais, dadosAtualizados);
+
+            // Mostrar modal de sucesso
+            document.getElementById('successMessage').textContent =
+                `Os dados de ${dadosAtualizados.nome} foram atualizados com sucesso!`;
             document.getElementById('successModal').style.display = 'flex';
-
-            this.reset();
-            document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
         });
 
         document.querySelector('.logout-button').addEventListener('click', function() {
@@ -1019,6 +1065,7 @@
             }
         });
 
+        // Máscaras para os campos
         document.querySelector('input[name="cpf"]').addEventListener('input', function() {
             let value = this.value.replace(/\D/g, '');
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
@@ -1049,8 +1096,12 @@
             }
         });
 
+        // Fechar modal ao clicar fora dele
         document.getElementById('successModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeModal();
             }
         });
+    </script>
+</body>
+</html>
