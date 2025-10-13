@@ -13,29 +13,26 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #fcf8f2; min-height: 100vh; display: flex; }
 
-    /* CSS da Sidebar (Padrão de Matrícula) */
+    /* --- CSS da Sidebar (Idêntico ao 'acessar.ejs') --- */
     .sidebar { 
         width: var(--sidebar-width); 
         background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%); 
-        display: flex; 
-        flex-direction: column; 
-        justify-content: space-between; 
+        display: flex; flex-direction: column; justify-content: space-between; 
         box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1); 
-        min-height: 100vh; 
-        flex-shrink: 0; 
-        position: fixed; 
-        left: 0; 
-        top: 0; 
-        z-index: 1000;
+        min-height: 100vh; flex-shrink: 0; position: fixed; left: 0; top: 0; z-index: 1000; 
     }
     .logo { padding: 0px 40px; text-align: center; margin-bottom: 25px; margin-top: 30px; }
     .logo img { max-width: 150px; }
-    .menu { flex: 1; padding: 20px 18px; overflow-y: auto; }
-    .menu-item { padding: 16px 20px; margin-bottom: 6px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; position: relative; display: flex; align-items: center; font-weight: 500; color: black; text-decoration: none; }
+    .menu { flex: 1; padding: 20px 18px; 
+    overflow-y: auto; } 
+    .menu-item { padding: 16px 20px; margin-bottom: 6px; border-radius: 8px; cursor: pointer; 
+    transition: all 0.3s ease; position: relative; display: flex; align-items: center; font-weight: 500; color: black; text-decoration: none; }
     .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
     .menu-item:hover { background-color: #6c757d21; }
-    .menu-item.active { background-color: rgba(128, 128, 128, 0.1); color: #333; font-weight: 600; }
-    .menu-item::after { padding: 0 10px; content: ''; position: absolute; bottom: -3px; left: 20px; height: 2px; width: 0px; transition: width 0.3s ease; border-radius: 1px; }
+    .menu-item.active { background-color: rgba(128, 128, 128, 0.1); 
+    color: #333; font-weight: 600; } 
+    .menu-item::after { padding: 0 10px; content: ''; position: absolute; bottom: -3px; 
+    left: 20px; height: 2px; width: 0px; transition: width 0.3s ease; border-radius: 1px; }
     .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
     .menu-item:nth-child(1)::after { background-color: #F4BF27; }
     .menu-item:nth-child(2)::after { background-color: #00A6FF; }
@@ -43,36 +40,69 @@
     .menu-item:nth-child(4)::after { background-color: #F88C12; }
     .menu-item:nth-child(5)::after { background-color: #D22A2A; }
     .menu-item:nth-child(6)::after { background-color: #59C631; }
-    .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); }
-    .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; text-decoration: none; background: transparent; border: none; }
+    .sidebar-footer { padding: 20px 18px; 
+    border-top: 1px solid rgba(0, 0, 0, 0.1); } 
+    .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; 
+    transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; text-decoration: none; background: transparent; border: none; }
     .logout-button i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
     .logout-button:hover { background-color: rgba(210, 42, 42, 0.1); color: #D22A2A; font-weight: 600; }
     
-    /* CSS do Conteúdo Principal */
-    .main-content { flex: 1; display: flex; flex-direction: column; min-height: 100vh; margin-left: var(--sidebar-width); }
-    .header { background: #c01e26; height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; color: white; width: 100%; }
-    .header-title { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; color: white; font-family: 'Kodchasan', sans-serif; }
-    .header-title i { font-size: 28px; margin-right: 15px; }
+    /* --- CSS do Conteúdo Principal (Idêntico ao 'acessar.ejs') --- */
+    .main-content { flex: 1; 
+    display: flex; flex-direction: column; min-height: 100vh; margin-left: var(--sidebar-width); } 
+    .header { background: #c01e26; height: 80px; display: flex; 
+    align-items: center; justify-content: space-between; padding: 0 30px; color: white; width: 100%; } 
+    .header-title { display: flex; 
+    align-items: center; gap: 10px; font-size: 1.5rem; color: white; font-family: 'Kodchasan', sans-serif; } 
+    .header-title i { font-size: 28px; 
+    margin-right: 15px; } 
     .profile { position: relative; cursor: pointer; z-index: 10; }
     .profile-header { display: flex; align-items: center; padding: 5px; border-radius: 50px; transition: background-color 0.2s ease; }
     .profile-header:hover { background-color: rgba(255, 255, 255, 0.1); }
-    .profile-icon { font-size: 38px; color: white; }
+    .profile-icon { font-size: 38px; 
+    color: white; } 
     .profile-arrow { font-size: 14px; margin-left: 8px; color: white; transition: transform 0.3s ease; }
-    .profile-dropdown { display: none; position: absolute; top: 110%; right: 0; background-color: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); width: 200px; z-index: 1001; overflow: hidden; padding: 8px 0; border: 1px solid #eee; }
+    .profile-dropdown { display: none; position: absolute; top: 110%; right: 0; background-color: white; border-radius: 10px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); width: 200px; z-index: 1001; overflow: hidden; padding: 8px 0; 
+    border: 1px solid #eee; } 
     .profile-dropdown.show { display: block; }
-    .profile-dropdown a { display: flex; align-items: center; padding: 12px 18px; text-decoration: none; color: #444; font-size: 15px; transition: background-color 0.2s ease; }
+    .profile-dropdown a { display: flex; align-items: center; padding: 12px 18px; text-decoration: none; color: #444; font-size: 15px; 
+    transition: background-color 0.2s ease; } 
     .profile-dropdown a:hover { background-color: #f5f5f5; }
     .profile-dropdown a i { width: 20px; margin-right: 15px; color: #666; text-align: center; }
+    
+    /* --- Estilos da Área de Conteúdo e Formulário --- */
     .content-area { padding: 30px; background: #fcf8f2; flex: 1; width: 100%; display: flex; justify-content: center; align-items: flex-start; }
-    .caixa { width: 90%; max-width: 1100px; min-height: 500px; background-color: #fff; border-radius: 12px; box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1); padding: 40px; margin-top: 20px; border-top: 5px solid #c01e26; }
+    /* A "caixa" branca que contém o formulário */
+    .caixa { 
+        width: 90%; max-width: 1100px; min-height: 500px; background-color: #fff; border-radius: 12px; 
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1); padding: 40px; margin-top: 20px; border-top: 5px solid #c01e26; 
+    }
     form { display: flex; flex-direction: column; gap: 25px; width: 100%; }
+    /* Container para cada campo do formulário (label + input) */
     .campo { display: flex; flex-direction: column; gap: 10px; width: 100%; }
     label { font-weight: 600; font-size: 1.1rem; color: #333; margin-left: 10px; }
-    input, select { padding: 14px 18px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; width: 100%; background-color: #fff; transition: all 0.3s; }
-    input:focus, select:focus { outline: none; border-color: #c01e26; box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.2); }
-    .link-cadastrar { width: 220px; height: 55px; background-color: #c01e26; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin: 30px auto 0; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 8px rgba(193, 39, 45, 0.3); }
-    .link-cadastrar:hover { background-color: #a01820; transform: scale(1.05); }
-    .link-cadastrar::before { content: "+"; font-size: 1.2rem; line-height: 1; }
+    /* Estilo para os campos de texto e seleção */
+    input, select { 
+        padding: 14px 18px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; width: 100%; 
+        background-color: #fff; transition: all 0.3s; 
+    }
+    /* Efeito de foco nos campos */
+    input:focus, select:focus { 
+        outline: none; /* Remove a borda padrão do navegador */ 
+        border-color: #c01e26; 
+        box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.2); /* Adiciona um brilho suave */ 
+    }
+    /* Botão de Cadastrar */
+    .link-cadastrar { 
+        width: 220px; height: 55px; 
+        background-color: #c01e26; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin: 30px auto 0; 
+        transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 8px rgba(193, 39, 45, 0.3); 
+    }
+    .link-cadastrar:hover { background-color: #a01820; transform: scale(1.05); /* Efeito de zoom no hover */ }
+    /* Adiciona o sinal de '+' antes do texto do botão */
+    .link-cadastrar::before { content: "+"; font-size: 1.2rem; 
+    line-height: 1; } 
   </style>
 </head>
 <body>
@@ -84,15 +114,15 @@
             </div>
             <div class="menu">
                 <a href="/home" class="menu-item"><i class="fas fa-home"></i><span>INÍCIO</span></a>
-                <a href="/acessar-aluno" class="menu-item"><i class="fas fa-address-card"></i><span>CADASTRO</span></a>
+                <a href="/acessar-aluno" class="menu-item"><i class="fas fa-address-card"></i><span>CADASTRO</span></a> 
                 <a href="/matriculas" class="menu-item"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
                 <a href="/professores" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></a>
                 <a href="/turmas" class="menu-item active"><i class="fas fa-users"></i><span>TURMA</span></a>
                 <a href="/financeiro" class="menu-item"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></a>
-            </div>
+            </div> 
         </div>
         <div>
-            <div class="seteeduca" style="color: #333; text-align: center; margin-bottom: 10px;">@Seteeduca</div>
+            <div class="seteeduca" style="color: #333; text-align: center; margin-bottom: 10px;">@Seteeduca</div> 
             <div class="sidebar-footer">
                 <button class="logout-button" onclick="logout()">
                     <i class="fa-solid fa-right-from-bracket"></i><span>Sair</span>
@@ -102,7 +132,7 @@
     </aside>
 
   <div class="main-content">
-    <div class="header">
+    <div class="header"> 
       <div class="header-title"><i class="fas fa-user-plus"></i><span>Cadastro <b>TURMAS</b></span></div>
       <div class="profile" id="profile-toggle">
         <div class="profile-header">
@@ -111,7 +141,7 @@
         </div>
         <div class="profile-dropdown" id="profile-dropdown-menu">
           <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a>
-          <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+          <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a> 
           <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
         </div>
       </div>
@@ -121,43 +151,43 @@
         <form action="/turmas/cadastro" method="POST">
           <div class="campo">
             <label for="nome_turma">Nome da Turma:</label>
-            <input type="text" id="nome_turma" name="nome_turma" placeholder="Ex: Maternal I, Berçário B" required>
+            <input type="text" id="nome_turma" name="nome_turma" placeholder="Ex: Maternal I, Berçário B" required> 
           </div>
           <div class="campo">
             <label for="professor_id">Professor(a) Responsável:</label>
             <select id="professor_id" name="professor_id" required>
                <option value="" disabled selected>Selecione um(a) professor(a)</option>
               <% if (professores && professores.length > 0) { %>
-                <% professores.forEach(professor => { %>
+                <% professores.forEach(professor => { %> 
                   <option value="<%= professor.id %>"><%= professor.nome %></option>
                 <% }) %>
               <% } else { %>
-                <option value="" disabled>Nenhum professor cadastrado. Cadastre um primeiro.</option>
+                <option value="" disabled>Nenhum professor cadastrado. Cadastre um primeiro.</option> 
               <% } %>
             </select>
           </div>
           <div class="campo">
             <label for="mensalidade_id">Plano de Mensalidade:</label>
             <select id="mensalidade_id" name="mensalidade_id" required>
-              <option value="" disabled selected>Selecione um plano</option>
+              <option value="" disabled selected>Selecione um plano</option> 
               <% if (mensalidades && mensalidades.length > 0) { %>
                 <% mensalidades.forEach(plano => { %>
                   <option value="<%= plano.id %>">
                     <%= plano.faixa_etaria %> - <%= plano.turno %> - R$ <%= plano.valor %>
-                  </option>
+                  </option> 
                 <% }) %>
               <% } else { %>
                 <option value="" disabled>Nenhum plano cadastrado.</option>
               <% } %>
             </select>
-          </div>
+          </div> 
           <div class="campo">
             <label for="ano_letivo">Ano Letivo:</label>
             <input type="number" id="ano_letivo" name="ano_letivo" placeholder="Ex: 2025" required value="<%= new Date().getFullYear() %>">
           </div>
           <div class="campo">
             <label for="limite_vagas">Limite de Vagas:</label>
-            <input type="number" id="limite_vagas" name="limite_vagas" min="1" placeholder="Número máximo de alunos" required>
+            <input type="number" id="limite_vagas" name="limite_vagas" min="1" placeholder="Número máximo de alunos" required> 
           </div>
           <button type="submit" class="link-cadastrar">Cadastrar turma</button>
         </form>
@@ -171,28 +201,29 @@
         'inicio': '/home',
         'cadastro': '/acessar-aluno',
         'matricula': '/matriculas',
-        'professor': '/professores',
+        'professor': '/professores', 
         'turmas': '/turmas',
         'financeiro': '/financeiro'
       };
-      if (rotas[pagina]) {
-        window.location.href = rotas[pagina];
+      if (rotas[pagina]) { 
+        window.location.href = rotas[pagina]; 
       }
     }
     function logout() {
       if (confirm('Deseja realmente sair do sistema?')) {
-        window.location.href = '/login';
+        window.location.href = '/login'; 
       }
     }
     document.addEventListener('DOMContentLoaded', function() {
         const profileToggle = document.getElementById('profile-toggle');
         const dropdownMenu = document.getElementById('profile-dropdown-menu');
         const profileArrow = profileToggle.querySelector('.profile-arrow');
+        // Lógica para o dropdown do perfil (exatamente igual às outras páginas)
         profileToggle.addEventListener('click', function(event) {
             event.stopPropagation();
             dropdownMenu.classList.toggle('show');
             profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-        });
+        }); 
         window.addEventListener('click', function() {
             if (dropdownMenu.classList.contains('show')) {
                 dropdownMenu.classList.remove('show');
@@ -200,6 +231,6 @@
             }
         });
     });
-  </script>
+  </script> 
 </body>
 </html>

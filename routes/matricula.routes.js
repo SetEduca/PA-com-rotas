@@ -1,3 +1,8 @@
+//EM DESENVLVIMENTO, FAVOR NÂO USAR E NEM MEXER AINDA
+
+
+
+
 import express from 'express';
 import supabase from '../supabase.js';
 
@@ -35,7 +40,7 @@ router.get('/api/buscar-aluno', async (req, res) => {
     }
 
     const { data, error } = await supabase
-        .from('aluno')
+        .from('cadastro_crianca')
         .select('id, nome, cpf')
         .ilike('nome', `%${nome}%`) // Busca case-insensitive
         .eq('ativo', true)
@@ -49,17 +54,20 @@ router.get('/api/buscar-aluno', async (req, res) => {
     res.json(data);
 });
 
+// DENTRO DE routes/matricula.routes.js
+
 // 3. PROCESSAR A NOVA MATRÍCULA
 router.post('/', async (req, res) => {
+    // Esta parte continua igual, pois 'aluno_id' é o nome que vem do formulário
     const { aluno_id, turma_id, data_matricula } = req.body;
     const ano_letivo = new Date(data_matricula).getFullYear();
 
     try {
         // Validação 1: O aluno já está matriculado?
-        const { data: matriculaExistente, error: matriculaError } = await supabase
+        const { data: matriculaExistente } = await supabase
             .from('matricula')
             .select('id')
-            .eq('aluno_id', aluno_id)
+            .eq('crianca_id', aluno_id) // MUDANÇA 1: Usando o nome de coluna correto 'crianca_id'
             .eq('ativo', true)
             .single();
 
@@ -67,14 +75,14 @@ router.post('/', async (req, res) => {
             return res.status(400).send('Erro: Este aluno já possui uma matrícula ativa.');
         }
 
-        // Validação 2: A turma ainda tem vagas?
-        const { data: turma, error: turmaError } = await supabase
+        // Validação 2 (continua igual)
+        const { data: turma } = await supabase
             .from('turma')
             .select('limite_vagas, quantidade_alunos')
             .eq('id', turma_id)
             .single();
         
-        if (turmaError || !turma) throw new Error("Turma não encontrada.");
+        if (!turma) throw new Error("Turma não encontrada.");
 
         if (turma.quantidade_alunos >= turma.limite_vagas) {
             return res.status(400).send('Erro: A turma selecionada não possui mais vagas.');
@@ -84,11 +92,17 @@ router.post('/', async (req, res) => {
         // Ação 1: Inserir na tabela de matrícula
         const { error: insertError } = await supabase
             .from('matricula')
-            .insert({ aluno_id, turma_id, data_matricula, ano_letivo, ativo: true });
+            .insert({ 
+                crianca_id: aluno_id, // MUDANÇA 2: Mapeando a variável 'aluno_id' para a coluna 'crianca_id'
+                turma_id: turma_id, 
+                data_matricula: data_matricula, 
+                ano_letivo: ano_letivo, 
+                ativo: true 
+            });
 
         if (insertError) throw insertError;
         
-        // Ação 2: Atualizar a contagem de alunos na turma
+        // Ação 2 (continua igual)
         const { error: updateError } = await supabase
             .from('turma')
             .update({ quantidade_alunos: turma.quantidade_alunos + 1 })
@@ -96,7 +110,6 @@ router.post('/', async (req, res) => {
 
         if (updateError) throw updateError;
         
-        // Redireciona para a lista de turmas para ver o resultado
         res.redirect('/turmas');
 
     } catch (error) {
@@ -104,5 +117,4 @@ router.post('/', async (req, res) => {
         res.status(500).send('Ocorreu um erro interno ao realizar a matrícula.');
     }
 });
-
 export default router;
