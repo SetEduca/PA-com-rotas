@@ -1,16 +1,17 @@
-import express from 'express';
-import supabase from './supabase.js';
+ import express from 'express';
+ import supabase from './supabase.js';
+ import turmasRouter from './routes/turmas.routes.js';
+ import matriculasRouter from './routes/matricula.routes.js';
 
-const app = express();
-const PORT = 3020;
+ const app = express();
+ const PORT = 3020;
 
-app.set("view engine", "ejs");
-app.set("views", "./views");
-
-app.use(express.static('public'));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// --- CONFIGURAÇÕES GERAIS ---
+ app.set("view engine", "ejs");
+ app.set("views", "./views");
+ app.use(express.static('public'));
+ app.use(express.json());
+ app.use(express.urlencoded({ extended: true }));
 
 //INICIO
 
@@ -111,22 +112,11 @@ app.get("/adimplentes-inadimplentes", (req, res) => {
 
 //TURMAS
 
-app.get("/cadastro-turma", (req, res) => {
-  res.render("TURMA/cadastro");
-});
-
-app.get("/turmas-cadastradas", (req, res) => {
-  res.render("TURMA/acessar");
-});
-app.get("/editar-turmas", (req, res) => {
-  res.render("TURMA/editar");
-});
+app.use('/turmas', turmasRouter);
 
 //MATRICULA
 
-app.get("/matricula", (req, res) => {
-  res.render("MATRICULA/matricula");
-});
+app.use('/matriculas', matriculasRouter);
 
 //PROFESSOR
 
@@ -173,76 +163,6 @@ app.get('/testar-banco', async (req, res) => {
   }
 });
 
-// === API DE TURMAS ===
-
-// POST - Cadastrar nova turma
-app.post('/api/turmas', async (req, res) => {
-  try {
-    const { professor, turma, mensalidade, quantidade } = req.body;
-
-    // Validação
-    if (!professor || !turma || !mensalidade || !quantidade) {
-      return res.status(400).json({
-        success: false,
-        message: 'Todos os campos são obrigatórios'
-      });
-    }
-
-    // Inserir no Supabase
-    const { data, error } = await supabase
-      .from('turmas') // nome da sua tabela no Supabase
-      .insert([
-        {
-          nome_professor: professor,
-          nome_turma: turma,
-          mensalidade: mensalidade,
-          capacidade_maxima: parseInt(quantidade)
-        }
-      ])
-      .select();
-
-    if (error) throw error;
-
-    res.status(201).json({
-      success: true,
-      message: 'Turma cadastrada com sucesso',
-      data: data[0]
-    });
-
-  } catch (error) {
-    console.error('Erro ao cadastrar turma:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Erro ao cadastrar turma',
-      error: error.message
-    });
-  }
-});
-
-// GET - Listar todas as turmas
-app.get('/api/turmas', async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from('turmas')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    res.json({
-      success: true,
-      data: data || []
-    });
-
-  } catch (error) {
-    console.error('Erro ao buscar turmas:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Erro ao buscar turmas',
-      error: error.message
-    });
-  }
-});
 
 //RODANDO O SERVIDOR
 app.listen(PORT, () => {

@@ -3,554 +3,137 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <title>Seteeduca - Cadastro de Turmas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <style>
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    :root {
+        --sidebar-width: 280px; 
     }
-    
-    body {
-      background-color: #e8e8e8;
-      min-height: 100vh;
-      display: flex;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #fcf8f2; min-height: 100vh; display: flex; }
 
-    .sidebar {
-      width: 280px;
-      background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-      min-height: 100vh;
-      flex-shrink: 0;
+    /* --- CSS da Sidebar (Idêntico ao 'acessar.ejs') --- */
+    .sidebar { 
+        width: var(--sidebar-width); 
+        background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%); 
+        display: flex; flex-direction: column; justify-content: space-between; 
+        box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1); 
+        min-height: 100vh; flex-shrink: 0; position: fixed; left: 0; top: 0; z-index: 1000; 
     }
-
-    .logo {
-      padding: 0px 40px;
-      text-align: center;
-      margin-bottom: 25px;
-      margin-top: 30px;
-    }
-
-    .logo img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    .menu {
-      flex: 1;
-      padding: 20px 18px;
-      overflow-y: auto;
-    }
-
-    .menu-item {
-      padding: 30px 20px;
-      margin-bottom: 6px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      display: flex;
-      align-items: center;
-      font-weight: 500;
-      overflow: visible;
-      color: black;
-      text-decoration: none;
-    }
-
-    .menu-item i {
-      margin-right: 15px;
-      font-size: 18px;
-      width: 24px;
-      text-align: center;
-      z-index: 2;
-    }
-
-    .menu-item span {
-      z-index: 2;
-      font-size: 15px;
-    }
-
-    .menu-item:hover {
-      background-color: #6c757d21;
-    }
-
-    .menu-item::after {
-      padding: 0 10px;
-      content: '';
-      position: absolute;
-      bottom: -3px;
-      left: 20px;
-      height: 2px;
-      width: 0px;
-      transition: width 0.3s ease;
-      border-radius: 1px;
-    }
-
-    .menu-item:hover::after,
-    .menu-item.active::after {
-      width: calc(100% - 40px);
-    }
-
+    .logo { padding: 0px 40px; text-align: center; margin-bottom: 25px; margin-top: 30px; }
+    .logo img { max-width: 150px; }
+    .menu { flex: 1; padding: 20px 18px; 
+    overflow-y: auto; } 
+    .menu-item { padding: 16px 20px; margin-bottom: 6px; border-radius: 8px; cursor: pointer; 
+    transition: all 0.3s ease; position: relative; display: flex; align-items: center; font-weight: 500; color: black; text-decoration: none; }
+    .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
+    .menu-item:hover { background-color: #6c757d21; }
+    .menu-item.active { background-color: rgba(128, 128, 128, 0.1); 
+    color: #333; font-weight: 600; } 
+    .menu-item::after { padding: 0 10px; content: ''; position: absolute; bottom: -3px; 
+    left: 20px; height: 2px; width: 0px; transition: width 0.3s ease; border-radius: 1px; }
+    .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
     .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-    .menu-item:nth-child(2)::after { background-color: #306bc2; }
+    .menu-item:nth-child(2)::after { background-color: #00A6FF; }
     .menu-item:nth-child(3)::after { background-color: #9747FF; }
     .menu-item:nth-child(4)::after { background-color: #F88C12; }
     .menu-item:nth-child(5)::after { background-color: #D22A2A; }
     .menu-item:nth-child(6)::after { background-color: #59C631; }
-
-    .menu-item.active {
-      background-color: rgba(128, 128, 128, 0.356);
-      color: #333;
-      font-weight: 600;
-    }
-
-    .menu-item.active::before {
-      content: '';
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: #333;
-      z-index: 2;
-    }
-
-    .seteeduca {
-      color: #333;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .sidebar-footer {
-      padding: 20px 18px;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
+    .sidebar-footer { padding: 20px 18px; 
+    border-top: 1px solid rgba(0, 0, 0, 0.1); } 
+    .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; 
+    transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; text-decoration: none; background: transparent; border: none; }
+    .logout-button i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
+    .logout-button:hover { background-color: rgba(210, 42, 42, 0.1); color: #D22A2A; font-weight: 600; }
     
-    .logout-button {
-      padding: 16px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      font-weight: 500;
-      color: #333;
-      width: 100%;
-      border: none;
-      background: transparent;
-    }
-
-    .logout-button i {
-      margin-right: 15px;
-      font-size: 18px;
-      width: 24px;
-      text-align: center;
-    }
-
-    .logout-button:hover {
-      background-color: rgba(210, 42, 42, 0.1); 
-      color: #c01e26; 
-      font-weight: 600;
-    }
-
-    .main-content {
-      flex: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header {
-      background: #c01e26;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 30px;
-      color: white;
-      width: 100%;
-    }
-
-    .header-title {
-      display: flex; 
-      align-items: center;
-      position: relative; 
-      top: 0.7vh;
-      gap: 10px; 
-      font-size: 1.5rem; 
-      color: rgb(255, 255, 255); 
-      font-family: 'Kodchasan', sans-serif;
-    }
-
-    .header-title i {
-      margin-right: 15px;
-      font-size: 28px;
-    }
-
-    /* Perfil do Usuário e Dropdown */
-    .profile {
-      position: relative;
-      cursor: pointer;
-      z-index: 10; 
-    }
+    /* --- CSS do Conteúdo Principal (Idêntico ao 'acessar.ejs') --- */
+    .main-content { flex: 1; 
+    display: flex; flex-direction: column; min-height: 100vh; margin-left: var(--sidebar-width); } 
+    .header { background: #c01e26; height: 80px; display: flex; 
+    align-items: center; justify-content: space-between; padding: 0 30px; color: white; width: 100%; } 
+    .header-title { display: flex; 
+    align-items: center; gap: 10px; font-size: 1.5rem; color: white; font-family: 'Kodchasan', sans-serif; } 
+    .header-title i { font-size: 28px; 
+    margin-right: 15px; } 
+    .profile { position: relative; cursor: pointer; z-index: 10; }
+    .profile-header { display: flex; align-items: center; padding: 5px; border-radius: 50px; transition: background-color 0.2s ease; }
+    .profile-header:hover { background-color: rgba(255, 255, 255, 0.1); }
+    .profile-icon { font-size: 38px; 
+    color: white; } 
+    .profile-arrow { font-size: 14px; margin-left: 8px; color: white; transition: transform 0.3s ease; }
+    .profile-dropdown { display: none; position: absolute; top: 110%; right: 0; background-color: white; border-radius: 10px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); width: 200px; z-index: 1001; overflow: hidden; padding: 8px 0; 
+    border: 1px solid #eee; } 
+    .profile-dropdown.show { display: block; }
+    .profile-dropdown a { display: flex; align-items: center; padding: 12px 18px; text-decoration: none; color: #444; font-size: 15px; 
+    transition: background-color 0.2s ease; } 
+    .profile-dropdown a:hover { background-color: #f5f5f5; }
+    .profile-dropdown a i { width: 20px; margin-right: 15px; color: #666; text-align: center; }
     
-    .profile-header {
-      display: flex;
-      align-items: center;
-      padding: 5px;
-      border-radius: 50px;
-      transition: background-color 0.2s ease;
+    /* --- Estilos da Área de Conteúdo e Formulário --- */
+    .content-area { padding: 30px; background: #fcf8f2; flex: 1; width: 100%; display: flex; justify-content: center; align-items: flex-start; }
+    /* A "caixa" branca que contém o formulário */
+    .caixa { 
+        width: 90%; max-width: 1100px; min-height: 500px; background-color: #fff; border-radius: 12px; 
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1); padding: 40px; margin-top: 20px; border-top: 5px solid #c01e26; 
     }
-    
-    .profile-header:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+    form { display: flex; flex-direction: column; gap: 25px; width: 100%; }
+    /* Container para cada campo do formulário (label + input) */
+    .campo { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    label { font-weight: 600; font-size: 1.1rem; color: #333; margin-left: 10px; }
+    /* Estilo para os campos de texto e seleção */
+    input, select { 
+        padding: 14px 18px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; width: 100%; 
+        background-color: #fff; transition: all 0.3s; 
     }
-    
-    .profile-icon {
-      font-size: 38px;
-      color: white;
+    /* Efeito de foco nos campos */
+    input:focus, select:focus { 
+        outline: none; /* Remove a borda padrão do navegador */ 
+        border-color: #c01e26; 
+        box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.2); /* Adiciona um brilho suave */ 
     }
-    
-    .profile-arrow {
-      font-size: 14px;
-      margin-left: 8px;
-      color: white;
-      transition: transform 0.3s ease;
+    /* Botão de Cadastrar */
+    .link-cadastrar { 
+        width: 220px; height: 55px; 
+        background-color: #c01e26; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin: 30px auto 0; 
+        transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 8px rgba(193, 39, 45, 0.3); 
     }
-
-    .profile-dropdown {
-      display: none;
-      position: absolute;
-      top: 110%; 
-      right: 0;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      width: 200px;
-      z-index: 1001;
-      overflow: hidden;
-      padding: 8px 0;
-      border: 1px solid #eee;
-    }
-
-    .profile-dropdown.show {
-      display: block;
-    }
-
-    .profile-dropdown a {
-      display: flex;
-      align-items: center;
-      padding: 12px 18px;
-      text-decoration: none;
-      color: #444;
-      font-size: 15px;
-      transition: background-color 0.2s ease;
-    }
-
-    .profile-dropdown a:hover {
-      background-color: #f5f5f5;
-    }
-
-    .profile-dropdown a i {
-      width: 20px;
-      margin-right: 15px;
-      color: #666;
-      text-align: center;
-    }
-    
-    .dropdown-divider {
-      height: 1px;
-      background-color: #eee;
-      margin: 8px 0;
-    }
-
-    .content-area {
-      padding: 30px;
-      background: #fcf8f2;
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      width: 100%;
-    }
-    
-    .caixa {
-      width: 90%; 
-      max-width: 1100px; 
-      min-height: 500px;
-      background-color: #fff; 
-      border-radius: 12px;
-      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
-      padding: 40px; 
-      margin-top: 20px;
-      border-top: 5px solid #c01e26;
-      transition: transform 0.3s;
-    }
-    
-    .caixa:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-    
-    form { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 25px; 
-      width: 100%; 
-    }
-    
-    .campo { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 10px; 
-      width: 100%; 
-    }
-    
-    label { 
-      font-weight: 600; 
-      font-size: 1.1rem; 
-      color: #333;
-      margin-left: 10px;
-    }
-    
-    input, select {
-      padding: 14px 18px; 
-      border: 2px solid #ddd; 
-      border-radius: 8px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      font-size: 1rem; 
-      width: 100%;
-      background-color: #fff;
-      transition: all 0.3s;
-    }
-    
-    input:focus, select:focus {
-      outline: none;
-      border-color: #c01e26;
-      box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.2);
-    }
-    
-    .link-cadastrar {
-      width: 220px; 
-      height: 55px; 
-      background-color: #c01e26;
-      color: white; 
-      border: none; 
-      border-radius: 8px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      font-size: 1.1rem;
-      font-weight: 600;
-      cursor: pointer; 
-      margin: 30px auto 0;
-      transition: all 0.3s; 
-      box-shadow: 0 4px 8px rgba(193, 39, 45, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    
-    .link-cadastrar:hover { 
-      background-color: #a01820; 
-      transform: scale(1.05); 
-      box-shadow: 0 6px 12px rgba(193, 39, 45, 0.4);
-    }
-    
-    .link-cadastrar::before {
-      content: "+";
-      font-size: 1.2rem;
-      line-height: 1;
-      display: inline-block;
-    }
-  
-    .modal {
-      display: none; 
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      right: 0; 
-      bottom: 0;
-      background-color: rgba(0,0,0,0.5); 
-      justify-content: center; 
-      align-items: center; 
-      z-index: 9999;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      backdrop-filter: blur(3px);
-    }
-    
-    .modal-content {
-      background: #fff; 
-      padding: 40px; 
-      border-radius: 12px; 
-      text-align: center;
-      max-width: 400px; 
-      width: 90%;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      border-top: 5px solid #4CAF50;
-      animation: modalFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      position: relative;
-    }
-    
-    .modal-content::before {
-      content: "";
-      position: absolute;
-      top: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 80px;
-      background-color: #4CAF50;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 40px;
-      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
-    }
-    
-    .modal-content p {
-      font-size: 1.2rem;
-      margin: 30px 0 25px;
-      color: #333;
-      font-weight: 500;
-      line-height: 1.5;
-    }
-    
-    .modal-content strong {
-      color: #c01e26;
-      font-weight: 700;
-    }
-    
-    .modal-buttons { 
-      margin-top: 20px; 
-      display: flex; 
-      justify-content: center;
-    }
-    
-    .modal-buttons button {
-      padding: 12px 30px; 
-      border: none; 
-      border-radius: 8px; 
-      cursor: pointer;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background-color: #c01e26; 
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: all 0.3s;
-      box-shadow: 0 4px 8px rgba(193, 39, 45, 0.3);
-    }
-    
-    .modal-buttons button:hover { 
-      background-color: #a01820; 
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(193, 39, 45, 0.4);
-    }
-    
-    @keyframes modalFadeIn {
-      from { 
-        opacity: 0; 
-        transform: translateY(20px) scale(0.95); 
-      }
-      to { 
-        opacity: 1; 
-        transform: translateY(0) scale(1); 
-      }
-    }
-
-    @media (max-width: 768px) {
-      .sidebar { 
-        width: 70px; 
-      }
-      
-      .menu-item span, .logout-button span { 
-        display: none; 
-      }
-      
-      .menu-item i, .logout-button i { 
-        margin-right: 0; 
-      }
-
-      .caixa {
-        width: 95%;
-        padding: 25px;
-      }
-
-      .header-title {
-        font-size: 1.2rem;
-      }
-    }
+    .link-cadastrar:hover { background-color: #a01820; transform: scale(1.05); /* Efeito de zoom no hover */ }
+    /* Adiciona o sinal de '+' antes do texto do botão */
+    .link-cadastrar::before { content: "+"; font-size: 1.2rem; 
+    line-height: 1; } 
   </style>
 </head>
 <body>
   
-  <div class="sidebar">
-    <div>
-      <div class="logo">
-        <img src="imagem/logo.png" alt="logo">
-      </div>
-      <div class="menu">
-        <div class="menu-item" onclick="navegarPara('inicio')">
-          <i class="fas fa-home"></i>
-          <span>INÍCIO</span>
+    <aside class="sidebar">
+        <div>
+            <div class="logo">
+                <img src="/imagem/logo.png" alt="logo">
+            </div>
+            <div class="menu">
+                <a href="/home" class="menu-item"><i class="fas fa-home"></i><span>INÍCIO</span></a>
+                <a href="/acessar-aluno" class="menu-item"><i class="fas fa-address-card"></i><span>CADASTRO</span></a> 
+                <a href="/matriculas" class="menu-item"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
+                <a href="/professores" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></a>
+                <a href="/turmas" class="menu-item active"><i class="fas fa-users"></i><span>TURMA</span></a>
+                <a href="/financeiro" class="menu-item"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></a>
+            </div> 
         </div>
-        <div class="menu-item" onclick="navegarPara('cadastro')">
-          <i class="fas fa-address-card"></i>
-          <span>CADASTRO</span>
+        <div>
+            <div class="seteeduca" style="color: #333; text-align: center; margin-bottom: 10px;">@Seteeduca</div> 
+            <div class="sidebar-footer">
+                <button class="logout-button" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i><span>Sair</span>
+                </button>
+            </div>
         </div>
-        <div class="menu-item" onclick="navegarPara('matricula')">
-          <i class="fas fa-user-graduate"></i>
-          <span>MATRÍCULA</span>
-        </div>
-        <div class="menu-item" onclick="navegarPara('professor')">
-          <i class="fas fa-chalkboard-teacher"></i>
-          <span>PROFESSOR</span>
-        </div>
-        <div class="menu-item active"> 
-          <i class="fas fa-users"></i>
-          <span>TURMA</span>
-        </div>
-        <div class="menu-item" onclick="navegarPara('financeiro')">
-          <i class="fas fa-dollar-sign"></i>
-          <span>FINANCEIRO</span>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div class="seteeduca">
-        <p></p>
-      </div>
-      <div class="sidebar-footer">
-        <button class="logout-button" onclick="logout()">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span>SAIR</span>
-        </button>
-      </div>
-    </div>
-  </div>
+    </aside>
 
-  <!-- Main Content -->
   <div class="main-content">
-    <!-- Header -->
-    <div class="header">
-      <div class="header-title">
-        <i class="fas fa-user-plus"></i>
-        <span>Cadastro <b>TURMAS</b></span>      
-      </div>
+    <div class="header"> 
+      <div class="header-title"><i class="fas fa-user-plus"></i><span>Cadastro <b>TURMAS</b></span></div>
       <div class="profile" id="profile-toggle">
         <div class="profile-header">
           <i class="fas fa-user-circle profile-icon"></i>
@@ -558,46 +141,53 @@
         </div>
         <div class="profile-dropdown" id="profile-dropdown-menu">
           <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a>
-          <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+          <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a> 
           <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
-          <div class="dropdown-divider"></div>
         </div>
       </div>
     </div>
-
-    <!-- Content Area -->
     <div class="content-area">
       <div class="caixa">
-        <form action="/cadastrar" method="POST" id="formCadastro">
+        <form action="/turmas/cadastro" method="POST">
           <div class="campo">
-            <label for="professor">Nome do Professor(a):</label>
-            <input type="text" id="professor" name="professor" placeholder="Digite o nome completo" required>
+            <label for="nome_turma">Nome da Turma:</label>
+            <input type="text" id="nome_turma" name="nome_turma" placeholder="Ex: Maternal I, Berçário B" required> 
           </div>
           <div class="campo">
-            <label for="turma">Nome da Turma:</label>
-            <input type="text" id="turma" name="turma" placeholder="Ex: Maternal I, Berçário B" required>
-          </div>
-          <div class="campo">
-            <label for="mensalidade">Mensalidade:</label>
-            <select id="mensalidade" name="mensalidade" required>
-              <option value="" disabled selected>Selecione a mensalidade</option>
-              <option value="0-1/mat/R$ 150">0-1 anos / Matutino / R$ 150,00</option>
-              <option value="0-1/ves/R$ 150">0-1 anos / Vespertino / R$ 150,00</option>
-              <option value="0-1/int/R$ 250">0-1 anos / Integral / R$ 250,00</option>
-              <option value="1-2/mat/R$ 180">1-2 anos / Matutino / R$ 180,00</option>
-              <option value="1-2/ves/R$ 180">1-2 anos / Vespertino / R$ 180,00</option>
-              <option value="1-2/int/R$ 280">1-2 anos / Integral / R$ 280,00</option>
-              <option value="2-3/mat/R$ 200">2-3 anos / Matutino / R$ 200,00</option>
-              <option value="2-3/ves/R$ 200">2-3 anos / Vespertino / R$ 200,00</option>
-              <option value="2-3/int/R$ 300">2-3 anos / Integral / R$ 300,00</option>
-              <option value="3-4/mat/R$ 220">3-4 anos / Matutino / R$ 220,00</option>
-              <option value="3-4/ves/R$ 220">3-4 anos / Vespertino / R$ 220,00</option>
-              <option value="3-4/int/R$ 320">3-4 anos / Integral / R$ 320,00</option>
+            <label for="professor_id">Professor(a) Responsável:</label>
+            <select id="professor_id" name="professor_id" required>
+               <option value="" disabled selected>Selecione um(a) professor(a)</option>
+              <% if (professores && professores.length > 0) { %>
+                <% professores.forEach(professor => { %> 
+                  <option value="<%= professor.id %>"><%= professor.nome %></option>
+                <% }) %>
+              <% } else { %>
+                <option value="" disabled>Nenhum professor cadastrado. Cadastre um primeiro.</option> 
+              <% } %>
             </select>
           </div>
           <div class="campo">
-            <label for="quantidade_alunos">Quantidade de Alunos:</label>
-            <input type="number" id="quantidade_alunos" name="quantidade_alunos" min="1" placeholder="Número de alunos" required>
+            <label for="mensalidade_id">Plano de Mensalidade:</label>
+            <select id="mensalidade_id" name="mensalidade_id" required>
+              <option value="" disabled selected>Selecione um plano</option> 
+              <% if (mensalidades && mensalidades.length > 0) { %>
+                <% mensalidades.forEach(plano => { %>
+                  <option value="<%= plano.id %>">
+                    <%= plano.faixa_etaria %> - <%= plano.turno %> - R$ <%= plano.valor %>
+                  </option> 
+                <% }) %>
+              <% } else { %>
+                <option value="" disabled>Nenhum plano cadastrado.</option>
+              <% } %>
+            </select>
+          </div> 
+          <div class="campo">
+            <label for="ano_letivo">Ano Letivo:</label>
+            <input type="number" id="ano_letivo" name="ano_letivo" placeholder="Ex: 2025" required value="<%= new Date().getFullYear() %>">
+          </div>
+          <div class="campo">
+            <label for="limite_vagas">Limite de Vagas:</label>
+            <input type="number" id="limite_vagas" name="limite_vagas" min="1" placeholder="Número máximo de alunos" required> 
           </div>
           <button type="submit" class="link-cadastrar">Cadastrar turma</button>
         </form>
@@ -605,117 +195,42 @@
     </div>
   </div>
 
-  <div class="modal" id="confirmModal">
-    <div class="modal-content">
-      <p id="modalMessage"></p>
-      <div class="modal-buttons">
-        <button class="ok">Ok</button>
-      </div>
-    </div>
-  </div>
-
-  <script> 
-    function navegarPara(pagina) { 
-      const rotas = { 
+  <script>
+    function navegarPara(pagina) {
+      const rotas = {
         'inicio': '/home',
-        'professor': '/cadastro-professor', 
-        'financeiro': '/opcoes-financeiro', 
-        'turmas': '/turmas-cadastradas',    
-        'matricula': '/matricula',        
-        'cadastro': '/opcoes-aluno'       
-      }; 
-
+        'cadastro': '/acessar-aluno',
+        'matricula': '/matriculas',
+        'professor': '/professores', 
+        'turmas': '/turmas',
+        'financeiro': '/financeiro'
+      };
       if (rotas[pagina]) { 
         window.location.href = rotas[pagina]; 
-      } else { 
-        console.warn(`Rota não encontrada para: ${pagina}`); 
-      } 
-    }
-
-    function logout() {
-      if (confirm('Deseja realmente sair do sistema?')) {
-        window.location.href = '/login';
       }
     }
-
+    function logout() {
+      if (confirm('Deseja realmente sair do sistema?')) {
+        window.location.href = '/login'; 
+      }
+    }
     document.addEventListener('DOMContentLoaded', function() {
-      // --- LÓGICA DO MENU DROPDOWN DO PERFIL ---
-      const profileToggle = document.getElementById('profile-toggle');
-      const dropdownMenu = document.getElementById('profile-dropdown-menu');
-      const profileArrow = profileToggle.querySelector('.profile-arrow');
-
-      profileToggle.addEventListener('click', function(event) {
-        event.stopPropagation();
-        dropdownMenu.classList.toggle('show');
-        profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-      });
-
-      window.addEventListener('click', function() {
-        if (dropdownMenu.classList.contains('show')) {
-          dropdownMenu.classList.remove('show');
-          profileArrow.style.transform = 'rotate(0deg)';
-        }
-      });
-
-      // Formulário de cadastro
-      const form = document.getElementById('formCadastro');
-      const modal = document.getElementById('confirmModal');
-      const okBtn = modal.querySelector('.ok');
-      const modalMessage = document.getElementById('modalMessage');
-
-      form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const professor = document.getElementById('professor').value.trim();
-        const turma = document.getElementById('turma').value.trim();
-        const mensalidade = document.getElementById('mensalidade').value;
-        const quantidade = document.getElementById('quantidade_alunos').value;
-
-        if (!professor || !turma || mensalidade === "" || !quantidade) {
-          alert("Por favor, preencha todos os campos obrigatórios!");
-          return;
-        }
-
-        const novaTurma = {
-          professor: professor,
-          turma: turma,
-          mensalidade: mensalidade,
-          quantidade: quantidade,
-          dataCadastro: new Date().toLocaleDateString()
-        };
-
-        // Carregar turmas já salvas
-        let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-
-        // Adicionar nova turma
-        turmas.push(novaTurma);
-
-        // Salvar de volta
-        localStorage.setItem('turmas', JSON.stringify(turmas));
-
-        modalMessage.innerHTML = `
-          Turma <strong>${turma}</strong> foi cadastrada com sucesso!
-          <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
-            Professor(a): ${professor}<br>
-            Mensalidade: ${mensalidade} | Alunos: ${quantidade}
-          </div>
-        `;
-        
-        modal.style.display = 'flex';
-        form.reset();
-      });
-
-      okBtn.addEventListener('click', function() {
-        modal.style.display = 'none';
-        window.location.href = '/turmas-cadastradas';
-      });
-
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-          modal.style.display = 'none';
-        }
-      });
+        const profileToggle = document.getElementById('profile-toggle');
+        const dropdownMenu = document.getElementById('profile-dropdown-menu');
+        const profileArrow = profileToggle.querySelector('.profile-arrow');
+        // Lógica para o dropdown do perfil (exatamente igual às outras páginas)
+        profileToggle.addEventListener('click', function(event) {
+            event.stopPropagation();
+            dropdownMenu.classList.toggle('show');
+            profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }); 
+        window.addEventListener('click', function() {
+            if (dropdownMenu.classList.contains('show')) {
+                dropdownMenu.classList.remove('show');
+                profileArrow.style.transform = 'rotate(0deg)';
+            }
+        });
     });
-  </script>
+  </script> 
 </body>
 </html>
