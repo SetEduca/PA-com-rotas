@@ -13,7 +13,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #fcf8f2; min-height: 100vh; display: flex; }
 
-    /* --- CSS da Sidebar (Idêntico aos outros arquivos) --- */
+    /* --- CSS da Sidebar (Atualizado) --- */
     .sidebar { 
         width: var(--sidebar-width); 
         background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%); 
@@ -23,25 +23,38 @@
     }
     .logo { padding: 0px 40px; text-align: center; margin-bottom: 25px; margin-top: 30px; }
     .logo img { max-width: 150px; }
-    .menu { flex: 1; padding: 20px 18px; 
-    overflow-y: auto; } 
-    .menu-item { padding: 16px 20px; margin-bottom: 6px; border-radius: 8px; cursor: pointer; 
-    transition: all 0.3s ease; position: relative; display: flex; align-items: center; font-weight: 500; color: black; text-decoration: none; }
-    .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
+    .menu { flex: 1; padding: 20px 18px; overflow-y: auto; } 
+    .menu-item { 
+        padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer; 
+        transition: all 0.3s ease; position: relative; display: flex; align-items: center; 
+        font-weight: 500; color: black; text-decoration: none; overflow: visible;
+    }
+    .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
+    .menu-item span { z-index: 2; font-size: 15px; }
     .menu-item:hover { background-color: #6c757d21; }
-    .menu-item.active { background-color: rgba(128, 128, 128, 0.1); 
-    color: #333; font-weight: 600; } 
+    .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
+    .menu-item.active::before {
+        content: '';
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: currentColor;
+        z-index: 2;
+    }
     .menu-item::after { padding: 0 10px; content: ''; position: absolute; bottom: -3px; 
     left: 20px; height: 2px; width: 0px; transition: width 0.3s ease; border-radius: 1px; }
     .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
     .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-    .menu-item:nth-child(2)::after { background-color: #00A6FF; }
+    .menu-item:nth-child(2)::after { background-color: #306bc2; }
     .menu-item:nth-child(3)::after { background-color: #9747FF; }
     .menu-item:nth-child(4)::after { background-color: #F88C12; }
     .menu-item:nth-child(5)::after { background-color: #D22A2A; }
     .menu-item:nth-child(6)::after { background-color: #59C631; }
-    .sidebar-footer { padding: 20px 18px; 
-    border-top: 1px solid rgba(0, 0, 0, 0.1); } 
+    .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); } 
     .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; 
     transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; text-decoration: none; background: transparent; border: none; }
     .logout-button i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
