@@ -25,19 +25,36 @@
         .logo img { max-width: 150px; }
         .menu { flex: 1; padding: 20px 18px; overflow-y: auto; }
         .menu-item {
-            padding: 16px 20px; margin-bottom: 6px; border-radius: 8px; cursor: pointer;
+            padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer;
             transition: all 0.3s ease; position: relative; display: flex; align-items: center;
             font-weight: 500; color: black; text-decoration: none;
+            overflow: visible;
         }
-        .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
+        .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
+        .menu-item span { z-index: 2; font-size: 15px; }
         .menu-item:hover { background-color: #6c757d21; }
-        .menu-item.active { background-color: rgba(128, 128, 128, 0.1); color: #333; font-weight: 600; }
+        .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            z-index: 2;
+        }
         /* Efeitos ::after (linhas coloridas) */
         .menu-item::after { padding: 0 10px; content: ''; position: absolute; bottom: -3px; left: 20px; height: 2px; width: 0px; transition: width 0.3s ease; border-radius: 1px; }
         .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
-        .menu-item:nth-child(1)::after { background-color: #F4BF27; } .menu-item:nth-child(2)::after { background-color: #00A6FF; }
-        .menu-item:nth-child(3)::after { background-color: #9747FF; } .menu-item:nth-child(4)::after { background-color: #F88C12; }
-        .menu-item:nth-child(5)::after { background-color: #D22A2A; } .menu-item:nth-child(6)::after { background-color: #59C631; }
+        .menu-item:nth-child(1)::after { background-color: #F4BF27; } 
+        .menu-item:nth-child(2)::after { background-color: #306bc2; }
+        .menu-item:nth-child(3)::after { background-color: #9747FF; } 
+        .menu-item:nth-child(4)::after { background-color: #F88C12; }
+        .menu-item:nth-child(5)::after { background-color: #D22A2A; } 
+        .menu-item:nth-child(6)::after { background-color: #59C631; }
         /* Footer da Sidebar */
         .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); }
         .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; text-decoration: none; background: transparent; border: none; }
@@ -79,10 +96,10 @@
 
         form { display: flex; flex-direction: column; gap: 25px; }
         .field-group { display: flex; flex-direction: column; gap: 10px; }
-        label { font-weight: 600; font-size: 1rem; color: #333; /* margin-left: 10px; (removido para alinhar) */ }
+        label { font-weight: 600; font-size: 1rem; color: #333; }
         input, select { padding: 14px 18px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; width: 100%; background: white; }
         input:focus, select:focus { outline: none; border-color: #9154e0; box-shadow: 0 0 0 3px rgba(145, 84, 224, 0.2); }
-        .btn-primary { padding: 16px 30px; background: #9154e0; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; display: inline-flex; /* Mudado para inline-flex */ align-items: center; justify-content: center; gap: 8px; transition: background-color 0.3s, transform 0.1s; align-self: flex-start; /* Alinha o botão à esquerda */}
+        .btn-primary { padding: 16px 30px; background: #9154e0; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.3s, transform 0.1s; align-self: flex-start; }
         .btn-primary:hover { background-color: #7a46bd; }
         .btn-primary:active { transform: scale(0.98); }
         .btn-primary:disabled { background-color: #c7a9f2; cursor: not-allowed; }
@@ -90,11 +107,11 @@
         /* Busca de Aluno */
         .search-container { position: relative; }
         #searchResults {
-            border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; margin-top: -2px; /* Encosta no input */
+            border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; margin-top: -2px;
             max-height: 200px; overflow-y: auto; background-color: #fff; position: absolute; width: 100%; z-index: 999;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; /* Começa escondido */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none;
         }
-        #searchResults.visible { display: block; } /* Mostra quando tem resultados */
+        #searchResults.visible { display: block; }
         .search-result-item { padding: 12px 18px; cursor: pointer; font-size: 0.95rem; border-bottom: 1px solid #eee; }
         .search-result-item:last-child { border-bottom: none; }
         .search-result-item:hover { background-color: #f0e6ff; }
@@ -171,7 +188,8 @@
                          </div>
                     </div>
 
-                     <% if (typeof error !== 'undefined' && error) { %>
+                     <!-- Mensagens de erro/sucesso (descomente quando usar EJS) -->
+                     <!-- <% if (typeof error !== 'undefined' && error) { %>
                          <div class="error-message-box">
                              <i class="fas fa-exclamation-triangle"></i> <%= error %>
                          </div>
@@ -180,7 +198,7 @@
                           <div class="success-message-box">
                               <i class="fas fa-check-circle"></i> <%= success %>
                           </div>
-                     <% } %>
+                     <% } %> -->
 
                     <div class="tab-content active" id="matricula-content">
                         <form action="/matriculas" method="POST" id="matriculaForm">
@@ -189,26 +207,27 @@
                             <div class="field-group search-container">
                                 <label for="nomeAluno">Buscar Aluno por Nome:</label>
                                 <input type="text" id="nomeAluno" name="nomeAluno" placeholder="Digite pelo menos 3 letras do nome" autocomplete="off" required>
-                                <div id="searchResults"></div> </div>
+                                <div id="searchResults"></div> 
+                            </div>
 
                             <div id="studentInfo" class="student-info" style="display: none;">
                                 <h4><i class="fas fa-user-check"></i> Aluno Selecionado: <span id="studentName"></span></h4>
-                                <div class="student-details" id="studentDetails">
-                                    </div>
+                                <div class="student-details" id="studentDetails"></div>
                             </div>
 
                             <div class="field-group">
                                 <label for="turma_id">Turma:</label>
                                 <select id="turma_id" name="turma_id" required>
                                     <option value="">Selecione a turma</option>
-                                    <% if (turmas && turmas.length > 0) { %>
+                                    <!-- Turmas serão preenchidas pelo backend -->
+                                    <!-- <% if (turmas && turmas.length > 0) { %>
                                         <% turmas.forEach(turma => { %>
                                             <% const vagasDisponiveis = turma.limite_vagas - (turma.quantidade_alunos || 0); %>
                                             <option value="<%= turma.id %>"><%= turma.nome_turma %> (Vagas: <%= vagasDisponiveis %>)</option>
                                         <% }) %>
                                     <% } else { %>
                                         <option value="" disabled>Nenhuma turma com vagas disponíveis</option>
-                                    <% } %>
+                                    <% } %> -->
                                 </select>
                             </div>
                             
@@ -234,13 +253,10 @@
     </div>
 
     <script>
-        // Função de Navegação (mantida, mas links diretos são melhores)
-        // function navegarPara(pagina) { ... }
-
-        // Função de Logout (mantida)
+        // Função de Logout
         function logout() {
             if (confirm('Deseja realmente sair do sistema?')) {
-                window.location.href = '/login'; // Ou sua rota de logout
+                window.location.href = '/login';
             }
         }
 
@@ -248,10 +264,8 @@
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            // Adiciona a classe active à aba clicada
             const activeTabButton = document.querySelector(`.tab[onclick="switchTab('${tab}')"]`);
             if (activeTabButton) activeTabButton.classList.add('active');
-            // Adiciona a classe active ao conteúdo da aba
             const activeTabContent = document.getElementById(`${tab}-content`);
             if (activeTabContent) activeTabContent.classList.add('active');
         }
@@ -262,14 +276,14 @@
             // --- Lógica do Menu Dropdown do Perfil ---
             const profileToggle = document.getElementById('profile-toggle');
             const dropdownMenu = document.getElementById('profile-dropdown-menu');
-            const profileArrow = profileToggle?.querySelector('.profile-arrow'); // Adiciona verificação
+            const profileArrow = profileToggle?.querySelector('.profile-arrow');
 
             profileToggle?.addEventListener('click', function(event) {
                 event.stopPropagation();
                 const isShown = dropdownMenu.classList.toggle('show');
                 if (profileArrow) profileArrow.style.transform = isShown ? 'rotate(180deg)' : 'rotate(0deg)';
             });
-            // Fecha dropdown se clicar fora
+            
             window.addEventListener('click', function() {
                 if (dropdownMenu?.classList.contains('show')) {
                     dropdownMenu.classList.remove('show');
@@ -290,16 +304,13 @@
             // Preenche data atual por padrão
             if (dataMatriculaInput) dataMatriculaInput.value = new Date().toISOString().split('T')[0];
 
-            let searchTimeout; // Timer para debounce da busca
+            let searchTimeout;
 
             // Evento de digitação no campo de busca
             searchInput?.addEventListener('input', (e) => {
                 const searchTerm = e.target.value.trim();
+                clearTimeout(searchTimeout);
 
-                 // Limpa timeout anterior
-                 clearTimeout(searchTimeout);
-
-                // Limpa resultados e reseta estado se a busca for curta
                 if (searchTerm.length < 3) {
                     searchResults.innerHTML = '';
                     searchResults.classList.remove('visible');
@@ -309,17 +320,14 @@
                     return;
                 }
 
-                // Define um novo timeout (debounce) - espera 300ms após parar de digitar
                 searchTimeout = setTimeout(async () => {
                     try {
-                        // Faz a requisição para a API do backend
                         const response = await fetch(`/matriculas/api/buscar-aluno?nome=${encodeURIComponent(searchTerm)}`);
                         if (!response.ok) {
                              throw new Error(`Erro ${response.status}: ${await response.text()}`);
                         }
                         const alunos = await response.json();
 
-                        // Limpa resultados anteriores
                         searchResults.innerHTML = '';
 
                         if (alunos.length > 0) {
@@ -327,73 +335,64 @@
                                 const item = document.createElement('div');
                                 item.className = 'search-result-item';
 
-                                // --- CORREÇÃO: Pega o nome do responsável (OBJETO) ---
                                 let nomeResponsavel = aluno.responsavel ? aluno.responsavel.nome : 'Resp. não associado';
 
-                                // Mostra nome da criança E do responsável nos resultados
                                 item.innerHTML = `<strong>${aluno.nome}</strong> (Responsável: ${nomeResponsavel})`;
 
-                                // Guarda o ID do aluno
                                 item.dataset.alunoId = aluno.id;
-                                // Guarda TODOS os dados do aluno como string JSON
                                 item.dataset.alunoData = JSON.stringify(aluno);
 
                                 searchResults.appendChild(item);
                             });
-                            searchResults.classList.add('visible'); // Mostra a lista
+                            searchResults.classList.add('visible');
                         } else {
                             searchResults.innerHTML = '<div class="search-result-item" style="color: #666; cursor: default;">Nenhum aluno encontrado</div>';
-                            searchResults.classList.add('visible'); // Mostra mensagem
+                            searchResults.classList.add('visible');
                         }
                     } catch (error) {
                         console.error('Erro ao buscar alunos:', error);
                         searchResults.innerHTML = `<div class="search-result-item" style="color: red; cursor: default;">Erro na busca: ${error.message}</div>`;
-                        searchResults.classList.add('visible'); // Mostra erro
+                        searchResults.classList.add('visible');
                     }
-                }, 300); // Atraso de 300ms
+                }, 300);
             });
 
             // Evento de clique nos resultados da busca
             searchResults?.addEventListener('click', (e) => {
-                // Pega o elemento clicado que seja um item de resultado com 'alunoId'
                 const selectedItem = e.target.closest('.search-result-item[data-aluno-id]');
 
                 if (selectedItem) {
-                    // --- CORREÇÃO: Lê TODOS os dados do aluno do dataset ---
                     const alunoData = JSON.parse(selectedItem.dataset.alunoData);
 
-                    searchInput.value = alunoData.nome; // Preenche o campo de busca com o nome
-                    studentName.textContent = alunoData.nome; // Mostra o nome no cabeçalho
+                    searchInput.value = alunoData.nome;
+                    studentName.textContent = alunoData.nome;
 
-                    // --- CORREÇÃO: Monta a exibição dos detalhes (RESPONSÁVEL É OBJETO) ---
                     let detalhesHtml = `<div><strong>CPF Criança:</strong> ${alunoData.cpf || 'Não informado'}</div>`;
 
-                    if (alunoData.responsavel) { // Verifica se o objeto responsável existe
+                    if (alunoData.responsavel) {
                         detalhesHtml += `<div><strong>Responsável:</strong> ${alunoData.responsavel.nome || 'Nome não informado'}</div>`;
                         detalhesHtml += `<div><strong>CPF Responsável:</strong> ${alunoData.responsavel.cpf || 'Não informado'}</div>`;
                     } else {
                         detalhesHtml += `<div><strong>Responsável:</strong> Não associado</div>`;
                     }
-                    // --- Fim da montagem ---
 
-                    studentDetails.innerHTML = detalhesHtml; // Insere o HTML
-                    studentInfo.style.display = 'block'; // Mostra a seção
+                    studentDetails.innerHTML = detalhesHtml;
+                    studentInfo.style.display = 'block';
 
-                    hiddenAlunoId.value = alunoData.id; // Define o ID no input hidden
+                    hiddenAlunoId.value = alunoData.id;
 
-                    searchResults.innerHTML = ''; // Limpa os resultados da busca
-                    searchResults.classList.remove('visible'); // Esconde a lista
-                    btnMatricular.disabled = false; // Habilita o botão de matricular
+                    searchResults.innerHTML = '';
+                    searchResults.classList.remove('visible');
+                    btnMatricular.disabled = false;
                 }
             });
 
-             // Esconde resultados se clicar fora do campo de busca/resultados
+             // Esconde resultados se clicar fora
              document.addEventListener('click', (e) => {
                  if (!searchResults.contains(e.target) && e.target !== searchInput) {
                      searchResults.classList.remove('visible');
                  }
              });
-
 
         }); // Fim do DOMContentLoaded
     </script>
