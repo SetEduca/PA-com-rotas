@@ -3,6 +3,7 @@
  import supabase from './supabase.js';
  import turmasRouter from './routes/turmas.routes.js';
  import matriculasRouter from './routes/matricula.routes.js';
+ import professoresRoutes from './routes/professores.routes.js';
 
  const app = express();
  const PORT = 3020;
@@ -120,6 +121,8 @@ app.use('/turmas', turmasRouter);
 app.use('/matriculas', matriculasRouter);
 
 //PROFESSOR
+
+app.use('/professores', professoresRoutes);
 
 app.get("/cadastro-prof", (req, res) => {
   res.render("PROFESSOR/cadastrop");
