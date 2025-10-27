@@ -8,56 +8,69 @@
     <style>
         /* Estilos Gerais Padronizados */
         :root {
-            --sidebar-width: 280px; 
+            --sidebar-width: 280px;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #fcf8f2; min-height: 100vh; display: flex; }
 
-        /* CSS da Sidebar (Exatamente como no acessar.ejs) */
-        .sidebar { 
-            width: var(--sidebar-width); 
-            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1); 
-            min-height: 100vh; 
-            flex-shrink: 0; 
-            position: fixed; 
-            left: 0; 
-            top: 0; 
-            z-index: 1000;
+        /* CSS da Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            min-height: 100vh; flex-shrink: 0; position: fixed; left: 0; top: 0; z-index: 1000;
         }
         .logo { padding: 0px 40px; text-align: center; margin-bottom: 25px; margin-top: 30px; }
         .logo img { max-width: 150px; }
         .menu { flex: 1; padding: 20px 18px; overflow-y: auto; }
-        .menu-item { padding: 16px 20px; margin-bottom: 6px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; position: relative; display: flex; align-items: center; font-weight: 500; color: black; text-decoration: none; }
-        .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
+        .menu-item {
+            padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer;
+            transition: all 0.3s ease; position: relative; display: flex; align-items: center;
+            font-weight: 500; color: black; text-decoration: none;
+            overflow: visible;
+        }
+        .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
+        .menu-item span { z-index: 2; font-size: 15px; }
         .menu-item:hover { background-color: #6c757d21; }
-        .menu-item.active { background-color: rgba(128, 128, 128, 0.1); color: #333; font-weight: 600; }
+        .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            z-index: 2;
+        }
+        /* Efeitos ::after (linhas coloridas) */
         .menu-item::after { padding: 0 10px; content: ''; position: absolute; bottom: -3px; left: 20px; height: 2px; width: 0px; transition: width 0.3s ease; border-radius: 1px; }
         .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
-        .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-        .menu-item:nth-child(2)::after { background-color: #00A6FF; }
-        .menu-item:nth-child(3)::after { background-color: #9747FF; }
+        .menu-item:nth-child(1)::after { background-color: #F4BF27; } 
+        .menu-item:nth-child(2)::after { background-color: #306bc2; }
+        .menu-item:nth-child(3)::after { background-color: #9747FF; } 
         .menu-item:nth-child(4)::after { background-color: #F88C12; }
-        .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+        .menu-item:nth-child(5)::after { background-color: #D22A2A; } 
         .menu-item:nth-child(6)::after { background-color: #59C631; }
+        /* Footer da Sidebar */
         .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); }
         .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; text-decoration: none; background: transparent; border: none; }
         .logout-button i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
         .logout-button:hover { background-color: rgba(210, 42, 42, 0.1); color: #D22A2A; font-weight: 600; }
-        
+        .seteeduca { color: #333; text-align: center; margin-bottom: 10px; font-size: 0.9em; }
+
         /* CSS do Conteúdo Principal */
-        .main-content { 
-            flex: 1; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            margin-left: var(--sidebar-width); 
-            width: calc(100% - var(--sidebar-width)); 
+        .main-content {
+            flex: 1; min-height: 100vh; display: flex; flex-direction: column;
+            margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width));
         }
-        .header { background: #9154e0; height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; color: white; width: 100%; flex-shrink: 0; }
+        .header {
+            background: #9154e0; height: 80px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 30px; color: white; width: 100%; flex-shrink: 0;
+        }
         .header-title { display: flex; align-items: center; font-size: 24px; font-weight: 600; font-family: 'Kodchasan', sans-serif;}
         .header-title i { margin-right: 15px; font-size: 28px; }
         .profile { position: relative; cursor: pointer; z-index: 10; }
@@ -70,46 +83,75 @@
         .profile-dropdown a { display: flex; align-items: center; padding: 12px 18px; text-decoration: none; color: #444; font-size: 15px; }
         .profile-dropdown a:hover { background-color: #f5f5f5; }
         .profile-dropdown a i { width: 20px; margin-right: 15px; color: #666; text-align: center; }
+
+        /* Área de conteúdo e formulário */
         .content-area { padding: 30px; background: #fcf8f2; flex: 1; display: flex; justify-content: center; align-items: flex-start; width: 100%; }
         .container { width: 100%; max-width: 900px; }
         .form-section { width: 100%; background: white; border-radius: 12px; padding: 40px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border-top: 5px solid #9154e0; min-height: 600px; }
         .tabs { display: flex; margin-bottom: 30px; border-bottom: 2px solid #eee; }
-        .tab { padding: 15px 25px; cursor: pointer; font-weight: 600; color: #666; border-bottom: 3px solid transparent; }
-        .tab.active { color: #A96BFA; border-bottom-color: #9154e0; }
-        .tab-content.active { display: block; } .tab-content { display: none; }
+        .tab { padding: 15px 25px; cursor: pointer; font-weight: 600; color: #666; border-bottom: 3px solid transparent; transition: color 0.3s, border-bottom-color 0.3s; }
+        .tab.active { color: #9154e0; border-bottom-color: #9154e0; }
+        .tab:hover { color: #9154e0; }
+        .tab-content { display: none; } .tab-content.active { display: block; }
+
         form { display: flex; flex-direction: column; gap: 25px; }
         .field-group { display: flex; flex-direction: column; gap: 10px; }
-        label { font-weight: 600; font-size: 1rem; color: #333; margin-left: 10px; }
+        label { font-weight: 600; font-size: 1rem; color: #333; }
         input, select { padding: 14px 18px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; width: 100%; background: white; }
-        input:focus, select:focus { outline: none; border-color: #9154e0; box-shadow: 0 0 0 3px rgba(151, 71, 255, 0.2); }
-        .btn-primary { padding: 16px 30px; background: #9154e0; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .student-info { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; padding: 20px; margin-top: 15px; }
-        .student-info h4 { color: #333; margin-bottom: 15px; font-size: 1.2rem; }
-        .student-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; color: #666; font-size: 0.95rem; }
-        #searchResults { border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; max-height: 150px; overflow-y: auto; background-color: #fff; position: absolute; width: 100%; z-index: 999; }
-        .search-result-item { padding: 10px 15px; cursor: pointer; }
-        .search-result-item:hover { background-color: #f0f0f0; }
+        input:focus, select:focus { outline: none; border-color: #9154e0; box-shadow: 0 0 0 3px rgba(145, 84, 224, 0.2); }
+        .btn-primary { padding: 16px 30px; background: #9154e0; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.3s, transform 0.1s; align-self: flex-start; }
+        .btn-primary:hover { background-color: #7a46bd; }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:disabled { background-color: #c7a9f2; cursor: not-allowed; }
+
+        /* Busca de Aluno */
         .search-container { position: relative; }
+        #searchResults {
+            border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; margin-top: -2px;
+            max-height: 200px; overflow-y: auto; background-color: #fff; position: absolute; width: 100%; z-index: 999;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none;
+        }
+        #searchResults.visible { display: block; }
+        .search-result-item { padding: 12px 18px; cursor: pointer; font-size: 0.95rem; border-bottom: 1px solid #eee; }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:hover { background-color: #f0e6ff; }
+        .search-result-item strong { color: #5a1dae; }
+
+        /* Info Aluno Selecionado */
+        .student-info { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; padding: 25px; margin-top: 15px; }
+        .student-info h4 { color: #333; margin-bottom: 15px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;}
+        .student-info h4 i { color: #9154e0; }
+        .student-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; color: #555; font-size: 0.95rem; line-height: 1.6;}
+        .student-details strong { color: #333; margin-right: 5px; }
+        .student-details ul { list-style: none; padding-left: 0; margin-top: 5px; }
+        .student-details li { margin-bottom: 5px; }
+
+        /* Mensagens de erro/sucesso (EJS) */
+         .error-message-box, .success-message-box {
+            padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;
+            display: flex; align-items: center; gap: 10px;
+         }
+         .error-message-box { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+         .success-message-box { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+         .error-message-box i, .success-message-box i { font-size: 1.2em; }
+
     </style>
 </head>
 <body>
     <aside class="sidebar">
         <div>
-            <div class="logo">
-                <img src="/imagem/logo.png" alt="logo">
-            </div>
+            <div class="logo"> <img src="/imagem/logo.png" alt="logo"> </div>
             <div class="menu">
-                <a href="/home" class="menu-item"><i class="fas fa-home"></i><span>INÍCIO</span></a>
-                <a href="/acessar-aluno" class="menu-item"><i class="fas fa-address-card"></i><span>CADASTRO</span></a>
-                <a href="/matriculas" class="menu-item active"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
-                <a href="/professores" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></a>
-                <a href="/turmas" class="menu-item"><i class="fas fa-users"></i><span>TURMA</span></a>
-                <a href="/financeiro" class="menu-item"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></a>
+                 <a href="/home" class="menu-item"><i class="fas fa-home"></i><span>INÍCIO</span></a>
+                 <a href="/acessar-aluno" class="menu-item"><i class="fas fa-address-card"></i><span>CADASTRO</span></a>
+                 <a href="/matriculas" class="menu-item active"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
+                 <a href="/professores" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></a>
+                 <a href="/turmas" class="menu-item"><i class="fas fa-users"></i><span>TURMA</span></a>
+                 <a href="/financeiro" class="menu-item"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></a>
             </div>
         </div>
-
         <div>
-            <div class="seteeduca" style="color: #333; text-align: center; margin-bottom: 10px;">@Seteeduca</div>
+            <div class="seteeduca">@Seteeduca</div>
             <div class="sidebar-footer">
                 <button class="logout-button" onclick="logout()">
                     <i class="fa-solid fa-right-from-bracket"></i><span>Sair</span>
@@ -119,11 +161,8 @@
     </aside>
 
     <div class="main-content">
-        <div class="header">
-            <div class="header-title">
-                <i class="fas fa-user-graduate"></i>
-                <span>Matrícula</span>
-            </div>
+        <header class="header">
+            <div class="header-title"> <i class="fas fa-user-graduate"></i> <span>Matrícula</span> </div>
             <div class="profile" id="profile-toggle">
                 <div class="profile-header">
                     <i class="fas fa-user-circle profile-icon"></i>
@@ -135,19 +174,31 @@
                     <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
                 </div>
             </div>
-        </div>
+        </header>
 
-        <div class="content-area">
+        <main class="content-area">
             <div class="container">
-                <div class="form-section">
+                <section class="form-section">
                     <div class="tabs">
                          <div class="tab active" onclick="switchTab('matricula')">
-                            <i class="fas fa-plus-circle"></i> Nova Matrícula
-                        </div>
+                             <i class="fas fa-plus-circle"></i> Nova Matrícula
+                         </div>
                          <div class="tab" onclick="switchTab('rematricula')" title="Em breve">
                             <i class="fas fa-edit"></i> Rematrícula
-                        </div>
+                         </div>
                     </div>
+
+                     <!-- Mensagens de erro/sucesso (descomente quando usar EJS) -->
+                     <!-- <% if (typeof error !== 'undefined' && error) { %>
+                         <div class="error-message-box">
+                             <i class="fas fa-exclamation-triangle"></i> <%= error %>
+                         </div>
+                     <% } %>
+                     <% if (typeof success !== 'undefined' && success) { %>
+                          <div class="success-message-box">
+                              <i class="fas fa-check-circle"></i> <%= success %>
+                          </div>
+                     <% } %> -->
 
                     <div class="tab-content active" id="matricula-content">
                         <form action="/matriculas" method="POST" id="matriculaForm">
@@ -155,12 +206,12 @@
 
                             <div class="field-group search-container">
                                 <label for="nomeAluno">Buscar Aluno por Nome:</label>
-                                <input type="text" id="nomeAluno" name="nomeAluno" placeholder="Digite pelo menos 3 letras do nome do aluno" autocomplete="off" required>
-                                <div id="searchResults"></div>
+                                <input type="text" id="nomeAluno" name="nomeAluno" placeholder="Digite pelo menos 3 letras do nome" autocomplete="off" required>
+                                <div id="searchResults"></div> 
                             </div>
 
                             <div id="studentInfo" class="student-info" style="display: none;">
-                                <h4>Aluno Selecionado: <span id="studentName"></span></h4>
+                                <h4><i class="fas fa-user-check"></i> Aluno Selecionado: <span id="studentName"></span></h4>
                                 <div class="student-details" id="studentDetails"></div>
                             </div>
 
@@ -168,13 +219,15 @@
                                 <label for="turma_id">Turma:</label>
                                 <select id="turma_id" name="turma_id" required>
                                     <option value="">Selecione a turma</option>
-                                    <% if (turmas && turmas.length > 0) { %>
+                                    <!-- Turmas serão preenchidas pelo backend -->
+                                    <!-- <% if (turmas && turmas.length > 0) { %>
                                         <% turmas.forEach(turma => { %>
-                                            <option value="<%= turma.id %>"><%= turma.nome_turma %> (Vagas: <%= turma.limite_vagas - turma.quantidade_alunos %>)</option>
+                                            <% const vagasDisponiveis = turma.limite_vagas - (turma.quantidade_alunos || 0); %>
+                                            <option value="<%= turma.id %>"><%= turma.nome_turma %> (Vagas: <%= vagasDisponiveis %>)</option>
                                         <% }) %>
                                     <% } else { %>
                                         <option value="" disabled>Nenhuma turma com vagas disponíveis</option>
-                                    <% } %>
+                                    <% } %> -->
                                 </select>
                             </div>
                             
@@ -183,68 +236,62 @@
                                 <input type="date" id="data_matricula" name="data_matricula" required>
                             </div>
 
-                            <button type="submit" class="btn-primary" id="btnMatricular">
-                                <i class="fas fa-save"></i>
-                                 Realizar Matrícula
+                            <button type="submit" class="btn-primary" id="btnMatricular" disabled>
+                                <i class="fas fa-save"></i> Realizar Matrícula
                             </button>
                         </form>
                     </div>
 
                     <div class="tab-content" id="rematricula-content">
                         <p style="text-align: center; color: #666; margin-top: 50px;">
-                            Funcionalidade de Rematrícula em desenvolvimento.
+                            <i class="fas fa-wrench" style="margin-right: 8px;"></i>Funcionalidade de Rematrícula em desenvolvimento.
                         </p>
                     </div>
-                </div>
+                </section>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        function navegarPara(pagina) {
-            const rotas = {
-                'inicio': '/home',
-                'cadastro': '/acessar-aluno',
-                'matricula': '/matriculas',
-                'professor': '/professores',
-                'turmas': '/turmas',
-                'financeiro': '/financeiro'
-            };
-            if (rotas[pagina]) {
-                window.location.href = rotas[pagina];
-            }
-        }
+        // Função de Logout
         function logout() {
             if (confirm('Deseja realmente sair do sistema?')) {
                 window.location.href = '/login';
             }
         }
 
+        // Troca de Abas (Matrícula/Rematrícula)
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
-            document.getElementById(`${tab}-content`).classList.add('active');
+            const activeTabButton = document.querySelector(`.tab[onclick="switchTab('${tab}')"]`);
+            if (activeTabButton) activeTabButton.classList.add('active');
+            const activeTabContent = document.getElementById(`${tab}-content`);
+            if (activeTabContent) activeTabContent.classList.add('active');
         }
 
+        // --- Lógica Principal da Página (DOM Carregado) ---
         document.addEventListener('DOMContentLoaded', function() {
-            // Lógica do menu dropdown do perfil
+
+            // --- Lógica do Menu Dropdown do Perfil ---
             const profileToggle = document.getElementById('profile-toggle');
             const dropdownMenu = document.getElementById('profile-dropdown-menu');
-            const profileArrow = profileToggle.querySelector('.profile-arrow');
-            profileToggle.addEventListener('click', function(event) {
+            const profileArrow = profileToggle?.querySelector('.profile-arrow');
+
+            profileToggle?.addEventListener('click', function(event) {
                 event.stopPropagation();
-                dropdownMenu.classList.toggle('show');
-                profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+                const isShown = dropdownMenu.classList.toggle('show');
+                if (profileArrow) profileArrow.style.transform = isShown ? 'rotate(180deg)' : 'rotate(0deg)';
             });
+            
             window.addEventListener('click', function() {
-                if (dropdownMenu.classList.contains('show')) {
+                if (dropdownMenu?.classList.contains('show')) {
                     dropdownMenu.classList.remove('show');
-                    profileArrow.style.transform = 'rotate(0deg)';
+                    if (profileArrow) profileArrow.style.transform = 'rotate(0deg)';
                 }
             });
 
-            // Lógica da Matrícula
+            // --- Lógica da Matrícula ---
             const searchInput = document.getElementById('nomeAluno');
             const searchResults = document.getElementById('searchResults');
             const studentInfo = document.getElementById('studentInfo');
@@ -252,61 +299,102 @@
             const studentDetails = document.getElementById('studentDetails');
             const hiddenAlunoId = document.getElementById('aluno_id');
             const btnMatricular = document.getElementById('btnMatricular');
+            const dataMatriculaInput = document.getElementById('data_matricula');
 
-            document.getElementById('data_matricula').value = new Date().toISOString().split('T')[0];
-            btnMatricular.disabled = true;
+            // Preenche data atual por padrão
+            if (dataMatriculaInput) dataMatriculaInput.value = new Date().toISOString().split('T')[0];
 
-            searchInput.addEventListener('keyup', async (e) => {
-                const searchTerm = e.target.value;
-                searchResults.innerHTML = '';
-                studentInfo.style.display = 'none';
-                hiddenAlunoId.value = '';
-                btnMatricular.disabled = true;
+            let searchTimeout;
+
+            // Evento de digitação no campo de busca
+            searchInput?.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.trim();
+                clearTimeout(searchTimeout);
 
                 if (searchTerm.length < 3) {
+                    searchResults.innerHTML = '';
+                    searchResults.classList.remove('visible');
+                    studentInfo.style.display = 'none';
+                    hiddenAlunoId.value = '';
+                    btnMatricular.disabled = true;
                     return;
                 }
 
-                try {
-                    const response = await fetch(`/matriculas/api/buscar-aluno?nome=${searchTerm}`);
-                    const alunos = await response.json();
+                searchTimeout = setTimeout(async () => {
+                    try {
+                        const response = await fetch(`/matriculas/api/buscar-aluno?nome=${encodeURIComponent(searchTerm)}`);
+                        if (!response.ok) {
+                             throw new Error(`Erro ${response.status}: ${await response.text()}`);
+                        }
+                        const alunos = await response.json();
 
-                    if (alunos.length > 0) {
-                        alunos.forEach(aluno => {
-                            const item = document.createElement('div');
-                            item.className = 'search-result-item';
-                            item.textContent = `${aluno.nome} (CPF: ${aluno.cpf})`;
-                            item.dataset.alunoId = aluno.id;
-                            item.dataset.alunoNome = aluno.nome;
-                            item.dataset.alunoCpf = aluno.cpf;
-                            searchResults.appendChild(item);
-                        });
-                    } else {
-                        searchResults.innerHTML = '<div class="search-result-item" style="color: #666;">Nenhum aluno encontrado</div>';
+                        searchResults.innerHTML = '';
+
+                        if (alunos.length > 0) {
+                            alunos.forEach(aluno => {
+                                const item = document.createElement('div');
+                                item.className = 'search-result-item';
+
+                                let nomeResponsavel = aluno.responsavel ? aluno.responsavel.nome : 'Resp. não associado';
+
+                                item.innerHTML = `<strong>${aluno.nome}</strong> (Responsável: ${nomeResponsavel})`;
+
+                                item.dataset.alunoId = aluno.id;
+                                item.dataset.alunoData = JSON.stringify(aluno);
+
+                                searchResults.appendChild(item);
+                            });
+                            searchResults.classList.add('visible');
+                        } else {
+                            searchResults.innerHTML = '<div class="search-result-item" style="color: #666; cursor: default;">Nenhum aluno encontrado</div>';
+                            searchResults.classList.add('visible');
+                        }
+                    } catch (error) {
+                        console.error('Erro ao buscar alunos:', error);
+                        searchResults.innerHTML = `<div class="search-result-item" style="color: red; cursor: default;">Erro na busca: ${error.message}</div>`;
+                        searchResults.classList.add('visible');
                     }
-                } catch (error) {
-                    console.error('Erro ao buscar alunos:', error);
-                    searchResults.innerHTML = '<div class="search-result-item" style="color: red;">Erro na busca</div>';
-                }
+                }, 300);
             });
 
-            searchResults.addEventListener('click', (e) => {
-                if (e.target.classList.contains('search-result-item') && e.target.dataset.alunoId) {
-                    const selectedAluno = e.target;
-                    
-                    searchInput.value = selectedAluno.dataset.alunoNome;
+            // Evento de clique nos resultados da busca
+            searchResults?.addEventListener('click', (e) => {
+                const selectedItem = e.target.closest('.search-result-item[data-aluno-id]');
 
-                    studentName.textContent = selectedAluno.dataset.alunoNome;
-                    studentDetails.innerHTML = `<div><strong>CPF:</strong> ${selectedAluno.dataset.alunoCpf}</div>`;
+                if (selectedItem) {
+                    const alunoData = JSON.parse(selectedItem.dataset.alunoData);
+
+                    searchInput.value = alunoData.nome;
+                    studentName.textContent = alunoData.nome;
+
+                    let detalhesHtml = `<div><strong>CPF Criança:</strong> ${alunoData.cpf || 'Não informado'}</div>`;
+
+                    if (alunoData.responsavel) {
+                        detalhesHtml += `<div><strong>Responsável:</strong> ${alunoData.responsavel.nome || 'Nome não informado'}</div>`;
+                        detalhesHtml += `<div><strong>CPF Responsável:</strong> ${alunoData.responsavel.cpf || 'Não informado'}</div>`;
+                    } else {
+                        detalhesHtml += `<div><strong>Responsável:</strong> Não associado</div>`;
+                    }
+
+                    studentDetails.innerHTML = detalhesHtml;
                     studentInfo.style.display = 'block';
 
-                    hiddenAlunoId.value = selectedAluno.dataset.alunoId;
+                    hiddenAlunoId.value = alunoData.id;
 
                     searchResults.innerHTML = '';
+                    searchResults.classList.remove('visible');
                     btnMatricular.disabled = false;
                 }
             });
-        });
+
+             // Esconde resultados se clicar fora
+             document.addEventListener('click', (e) => {
+                 if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                     searchResults.classList.remove('visible');
+                 }
+             });
+
+        }); // Fim do DOMContentLoaded
     </script>
 </body>
 </html>

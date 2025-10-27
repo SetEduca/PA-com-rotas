@@ -1,3 +1,4 @@
+ import 'dotenv/config';
  import express from 'express';
  import supabase from './supabase.js';
  import turmasRouter from './routes/turmas.routes.js';
