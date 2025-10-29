@@ -9,7 +9,6 @@ import loginRouter from './routes/login.routes.js';
 import mensalidadeRouter from './routes/mensalidades.routes.js'
 import arquivadosRouter from './routes/arquivados.routes.js'
 
-
  const app = express();
  const PORT = 3020;
  const SALT_ROUNDS = 10;
