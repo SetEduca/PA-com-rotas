@@ -3,12 +3,9 @@
  import supabase from './supabase.js';
  import turmasRouter from './routes/turmas.routes.js';
  import matriculasRouter from './routes/matricula.routes.js';
-<<<<<<< HEAD
  import professoresRoutes from './routes/professores.routes.js';
-=======
-  import cadastroRouter from './routes/cadastro.routes.js';
+import cadastroRouter from './routes/cadastro.routes.js';
 import loginRouter from './routes/login.routes.js';
->>>>>>> f8c01267192922b82541b3d8e90db25e0eb8243a
 
  const app = express();
  const PORT = 3020;
