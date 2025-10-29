@@ -2,9 +2,14 @@
  import supabase from './supabase.js';
  import turmasRouter from './routes/turmas.routes.js';
  import matriculasRouter from './routes/matricula.routes.js';
+  import perfilRouter from './routes/perfil.routes.js';
+import mensalidadeRouter from './routes/mensalidades.routes.js';
+import arquivadosRouter from './routes/arquivados.routes.js';
+ import bcrypt from 'bcrypt';
 
  const app = express();
  const PORT = 3020;
+ const SALT_ROUNDS = 10;
 
 // --- CONFIGURAÇÕES GERAIS ---
  app.set("view engine", "ejs");
@@ -12,6 +17,8 @@
  app.use(express.static('public'));
  app.use(express.json());
  app.use(express.urlencoded({ extended: true }));
+ 
+ 
 
 //INICIO
 
@@ -38,13 +45,9 @@ app.get("/meuperfil", (req, res) => {
   res.render("PERFIL/meuperfil");
 });
 
-app.get("/mensalidade", (req, res) => {
-  res.render("PERFIL/mensalidade");
-});
+app.use('/mensalidade', mensalidadeRouter);
 
-app.get("/arquivados", (req, res) => {
-  res.render("PERFIL/arquivados");
-});
+app.use('/arquivados', arquivadosRouter);
 
 //HOME
 
