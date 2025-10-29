@@ -1,4 +1,5 @@
 import express from 'express';
+import supabase from './supabase.js';
 
 const app = express();
 const PORT = 3020;
@@ -8,24 +9,48 @@ app.set("views", "./views");
 
 app.use(express.static('public'));
 
-// Rotas corrigidas
+//INICIO
+
 app.get("/", (req, res) => {
   res.render("INICIO/inicial");
 });
+
+//LOGIN
 
 app.get("/login", (req, res) => {
   res.render("LOGIN/login");
 });
 
-app.get("/perfil", (req, res) => {
-  res.render("PERFIL/perfil");
+
+// CADASTROINICIAL
+
+app.get("/cadastro", (req, res) => {
+  res.render("CADASTRO/cadastro");
 });
+
+//PERFIL
+
+app.get("/meuperfil", (req, res) => {
+  res.render("PERFIL/meuperfil");
+});
+
+app.get("/mensalidade", (req, res) => {
+  res.render("PERFIL/mensalidade");
+});
+
+app.get("/arquivados", (req, res) => {
+  res.render("PERFIL/arquivados");
+});
+
+
+//HOME
 
 app.get("/home", (req, res) => {
   res.render("HOME/home");
 });
 
-// URLs corrigidas - sem espaços e acentos
+// SENHA
+
 app.get("/trocar-senha", (req, res) => {
   res.render("SENHA/senha");
 });
@@ -42,25 +67,21 @@ app.get("/senha-trocada", (req, res) => {
   res.render("SENHA/pronto");
 });
 
-app.get("/opcoes-aluno", (req, res) => {
-  res.render("ALUNO/inicio");
-});
+//CADASTRO
 
-app.get("/cadastro-aluno", (req, res) => {
-  res.render("ALUNO/cadastro2");
+app.get("/acessar-aluno", (req, res) => {
+  res.render("ALUNO/acessar-aluno");
 });
 
 app.get("/cadastro-responsavel", (req, res) => {
   res.render("ALUNO/cadastro1");
 });
 
-app.get("/criancas-cadastradas", (req, res) => {
-  res.render("ALUNO/cria");
+app.get("/cadastro-aluno", (req, res) => {
+  res.render("ALUNO/cadastro-aluno");
 });
 
-app.get("/opcoes-financeiro", (req, res) => {
-  res.render("FINANCEIRO/bot");
-});
+//FINANCEIRO
 
 app.get("/relatorio", (req, res) => {
   res.render("FINANCEIRO/relatorio");
@@ -86,9 +107,7 @@ app.get("/adimplentes-inadimplentes", (req, res) => {
   res.render("FINANCEIRO/adimplentes");
 });
 
-app.get("/opcoes-turma", (req, res) => {
-  res.render("TURMA/index");
-});
+//TURMAS
 
 app.get("/cadastro-turma", (req, res) => {
   res.render("TURMA/cadastro");
@@ -97,7 +116,57 @@ app.get("/cadastro-turma", (req, res) => {
 app.get("/turmas-cadastradas", (req, res) => {
   res.render("TURMA/acessar");
 });
+app.get("/editar-turmas", (req, res) => {
+  res.render("TURMA/editar");
+});
 
+//MATRICULA
+
+app.get("/matricula", (req, res) => {
+  res.render("MATRICULA/matricula");
+});
+
+//PROFESSOR
+
+app.get("/cadastro-prof", (req, res) => {
+  res.render("PROFESSOR/cadastrop");
+});
+
+app.get("/prof-cadastrados", (req, res) => {
+  res.render("PROFESSOR/acessop");
+});
+app.get("/editar-prof", (req, res) => {
+  res.render("PROFESSOR/editarp");
+});
+
+//TESTANDO O BANCO
+
+app.get('/testar-banco', async (req, res) => {
+  try{
+        const { error, count } = await supabase
+            .from('professor') 
+            .select('*', { count: 'exact', head: true });
+
+        if (error) {
+            throw error;
+        };
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Deu bom meninas',
+            details: `Tabela "professor" acessível e possui ${count} registros.`
+        });
+
+  }catch(error){
+    res.status(500).json({
+        status: 'error',
+        message: 'Deu ruim meninas',
+        error: error.message
+    });
+  }
+});
+
+//RODANDO O SERVIDOR
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });

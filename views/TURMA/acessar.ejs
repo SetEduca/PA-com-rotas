@@ -1,410 +1,1029 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;600;700&display=swap" rel="stylesheet">
-  <title>Seteeduca - Acessar Turmas</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Kodchasan', sans-serif;
-      background-color: #fff4df;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .logo-container {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 15px;
-      padding-right: 15px;
-      z-index: 1;
-    }
-    .logo {
-      width: 90px;
-      height: auto;
-      max-width: 100%;
-      position: relative;
-      top: -15px;
-    }
-    header {
-      background-color: #D22A2A;
-      border-radius: 0 0 40px 40px;
-      padding: 10px 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      height: 60px;
-      margin-top: -15px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-   
-   
-    .header-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.5rem;
-      color: black;
-      font-weight: normal;
-      font-family: 'Kodchasan', sans-serif;
-    }
-    .header-title b {
-      font-family: 'Allerta', sans-serif;
-    }
-    .cad-icon {
-      width: 35px;
-      height: 35px;
-    }
-   
-    .turmas-container {
-      width: 90%;
-      max-width: 800px;
-      margin: 30px auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      padding-bottom: 30px;
-    }
-    
-    .turma-card {
-      background-color: white;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .turma-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-    }
-    
-    .turma-header {
-      background-color: #D22A2A;
-      color: white;
-      padding: 18px 25px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    
-    .turma-header:hover {
-      background-color: #c12525;
-    }
-    
-    .turma-header h3 {
-      margin: 0;
-      font-size: 1.3rem;
-      font-weight: 600;
-      font-family: 'Allerta', sans-serif;
-    }
-    
-    .toggle-icon {
-      font-size: 1.5rem;
-      font-weight: bold;
-      transition: transform 0.3s;
-    }
-    
-    .turma-content {
-      padding: 20px 25px;
-      display: none;
-      background-color: #fff9f0;
-      border-top: 2px solid #f0e6d6;
-      animation: fadeIn 0.3s ease-out;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .turma-content p {
-      margin: 12px 0;
-      color: #333;
-      font-size: 1.05rem;
-      line-height: 1.5;
-    }
-    
-    .turma-content strong {
-      color: #D22A2A;
-      font-weight: 600;
-    }
-    
-    .delete-container {
-      text-align: right;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px dashed #ddd;
-    }
-    
-    .delete-icon {
-      display: inline-block;
-      cursor: pointer;
-      width: 26px;
-      height: 26px;
-      transition: transform 0.2s;
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-    }
-    
-    .delete-icon:hover {
-      transform: scale(1.2);
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    }
-    
-    .empty-message {
-      text-align: center;
-      padding: 40px 20px;
-      background-color: white;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      font-size: 1.1rem;
-      color: #666;
-    }
-    
-    .empty-message::before {
-      content: "😕";
-      font-size: 2rem;
-      display: block;
-      margin-bottom: 15px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sete Educa - Acessar TURMAS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #e8e8e8;
+; min-height: 100vh; display: flex; }
 
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+            flex-shrink: 0;
+        }
 
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0,0,0,0.5);
-      z-index: 1000;
-      justify-content: center;
+        .logo {
+            padding: 0px 40px;
+            text-align: center;
+            margin-bottom: 25px;
+            margin-top: 30px;
+        }
+
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .menu {
+            flex: 1;
+            padding: 20px 18px;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            padding: 30px 20px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            overflow: visible;
+            color: black;
+            text-decoration: none;
+        }
+
+        .menu-item i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .menu-item span {
+            z-index: 2;
+            font-size: 15px;
+        }
+
+        .menu-item:hover {
+            background-color: #6c757d21;
+        }
+
+        .menu-item::after {
+            padding: 0 10px;
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 20px;
+            height: 2px;
+            width: 0px;
+            transition: width 0.3s ease;
+            border-radius: 1px;
+        }
+
+        .menu-item:hover::after,
+        .menu-item.active::after {
+            width: calc(100% - 40px);
+        }
+
+    .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+    .menu-item:nth-child(2)::after { background-color: #00A6FF; }
+    .menu-item:nth-child(3)::after { background-color: #9747FF; }
+    .menu-item:nth-child(4)::after { background-color: #F88C12; }
+    .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+    .menu-item:nth-child(6)::after { background-color: #59C631; }
+
+        .menu-item.active {
+            background-color: rgba(128, 128, 128, 0.356);
+            color: #333;
+            font-weight: 600;
+        }
+
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #333;
+            z-index: 2;
+        }
+
+        .seteeduca {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-footer {
+            padding: 20px 18px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .logout-button {
+            padding: 16px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            color: #333;
+            width: 100%;
+            border: none;
+            background: transparent;
+        }
+
+        .logout-button i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(210, 42, 42, 0.1); 
+            color: #c01e26; 
+            font-weight: 600;
+        }
+
+        .main-content { 
+            flex: 1; 
+            min-height: 100vh; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header { 
+            background: #c01e26; 
+            height: 80px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 30px; 
+            color: white;
+            width: 100%;
+        }
+
+        .header-title { 
+             display: flex; 
       align-items: center;
-    }
-    
-    .modal-confirm {
-      background-color: #fff9f0;
-      border-radius: 20px;
-      padding: 30px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      text-align: center;
-      border-bottom: 5px solid #D22A2A;
-      animation: modalFadeIn 0.3s ease-out;
-    }
-    
-    @keyframes modalFadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .modal-confirm h3 {
-      color: #D22A2A;
-      margin-bottom: 20px;
-      font-family: 'Allerta', sans-serif;
-      font-size: 1.4rem;
-    }
-    
-    .modal-confirm p {
-      margin-bottom: 25px;
-      font-size: 1.1rem;
-      color: #333;
-      line-height: 1.5;
-    }
-    
-    .modal-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
-    
-    .modal-btn {
-      padding: 12px 25px;
-      border-radius: 20px;
-      font-family: 'Allerta', sans-serif;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: 2px solid #000;
-    }
-    
-    .modal-btn-confirm {
-      background-color: #D22A2A;
-      color: white;
-    }
-    
-    .modal-btn-cancel {
-      background-color: #fff;
-      color: #333;
-    }
-    
-    .modal-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    }
-    
-    .modal-btn-confirm:hover {
-      background-color: #b82222;
-    }
-    
-    .modal-btn-cancel:hover {
-      background-color: #f0f0f0;
-    }
-  </style>
+      position: relative; 
+      top: 0.7vh;
+      gap: 10px; 
+      font-size: 1.5rem; 
+      color: rgb(255, 255, 255); 
+      font-family: 'Kodchasan', sans-serif;
+        }
+
+        .header-title i { 
+            margin-right: 15px; 
+            font-size: 28px; 
+        }
+
+        .content-area { 
+            padding: 30px; 
+            background: #fcf8f2; 
+            flex: 1;
+            width: 100%;
+        }
+
+        .search-section { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin-bottom: 30px; 
+        }
+
+        .search-container { 
+            position: relative; 
+            width: 400px; 
+        }
+
+        .search-input { 
+            width: 100%; 
+            height: 50px; 
+            background: white; 
+            border: 2px solid #ddd; 
+            border-radius: 25px; 
+            padding: 0 20px 0 50px; 
+            font-size: 16px; 
+            color: #666; 
+            outline: none; 
+        }
+
+        .search-input:focus {
+            border-color: #c01e26;
+            box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.1);
+        }
+
+        .search-icon { 
+            position: absolute; 
+            left: 18px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            color: #999; 
+            font-size: 18px; 
+        }
+
+        .new-button { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 8px; 
+            cursor: pointer; 
+            transition: transform 0.2s ease;
+        }
+
+        .new-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .new-button-circle { 
+            width: 45px; 
+            height: 45px; 
+            background: #c01e26; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-size: 28px; 
+            font-weight: 200; 
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .new-button:hover .new-button-circle {
+            background: #c01e26;
+        }
+
+        .new-button-circle::before { 
+            content: '+'; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-size: 28px; 
+        }
+
+        .new-text { 
+            font-size: 14px; 
+            color: #666; 
+            font-weight: 500; 
+            text-align: center; 
+        }
+
+        .stats-info { 
+            text-align: right; 
+            color: #333; 
+            font-size: 18px; 
+            font-weight: 600; 
+        }
+
+        .table-container { 
+            background: white; 
+            border-radius: 12px; 
+            border-top: 5px solid #c01e26; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+            overflow: hidden; 
+        }
+
+        .table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+
+        .table-header { 
+            background: #f8f9fa; 
+            color: #666; 
+            font-weight: 600; 
+            font-size: 14px; 
+            text-transform: uppercase; 
+        }
+
+        .table th, .table td { 
+            padding: 20px; 
+            text-align: center; 
+            border-bottom: 1px solid #eee; 
+        }
+
+        .operations { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            gap: 8px; 
+            min-width: 200px;
+        }
+
+        .btn-action { 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center;
+            gap: 6px; 
+            padding: 10px 14px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 13px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            transition: all 0.3s ease; 
+            white-space: nowrap;
+            min-width: 0;
+            flex: 0 0 auto;
+        }
+
+        .btn-action i {
+            font-size: 14px;
+        }
+
+        .btn-view-students { 
+            background: #e8f5e8; 
+            color: #2e7d32;
+            border: 2px solid #c8e6c9;
+        }
+
+        .btn-view-students:hover { 
+            background: #c8e6c9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(46, 125, 50, 0.2);
+        }
+
+        .btn-edit { 
+            background: #e3f2fd; 
+            color: #1976d2;
+            border: 2px solid #bbdefb;
+        }
+
+        .btn-edit:hover { 
+            background: #bbdefb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(25, 118, 210, 0.2);
+        }
+
+        .btn-archive { 
+            background: #fce4ec; 
+            color: #c01e26;
+            border: 2px solid #f8bbd9;
+        }
+
+        .btn-archive:hover { 
+            background: #f8bbd9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(194, 24, 91, 0.2);
+        }
+        
+        .vagas-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .vagas-disponivel { 
+            background: linear-gradient(135deg, #d4edda, #c3e6cb); 
+            color: #155724; 
+            border: 1px solid #c3e6cb;
+        }
+        
+        .vagas-poucas { 
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7); 
+            color: #856404; 
+            border: 1px solid #ffeaa7;
+        }
+        
+        .vagas-esgotadas { 
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb); 
+            color: #721c24; 
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 0;
+            max-width: 900px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .modal-header {
+            background: #c01e26;
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 30px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .student-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .student-card:hover {
+            border-color: #c01e26;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(193, 39, 45, 0.15);
+        }
+
+        .student-info h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .student-details {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c01e26, #971d1d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { 
+                width: 70px; 
+            }
+            
+            .menu-item span, .logout-button span { 
+                display: none; 
+            }
+            
+            .menu-item i, .logout-button i { 
+                margin-right: 0; 
+            }
+            
+            .students-grid { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .operations { 
+                flex-direction: column;
+                gap: 6px;
+                min-width: auto;
+            }
+            
+            .btn-action { 
+                width: 100%; 
+                min-width: 120px;
+            }
+
+            .search-section {
+                flex-direction: column;
+                gap: 20px;
+                align-items: stretch;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .stats-info {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .operations {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            
+            .btn-action {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="logo-container">
-    <img class="logo" src="/imagem/financeiro/logocomp.png" alt="Logo" />
-  </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div>
+            <div class="logo">
+                <img src="imagem/logo.png" alt="logo">
+            </div>
+            <div class="menu">
+                <div class="menu-item" onclick="navegarPara('inicio')">
+                    <i class="fas fa-home"></i>
+                    <span>INÍCIO</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('cadastro')">
+                    <i class="fas fa-address-card"></i>
+                    <span>CADASTRO</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('matricula')">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>MATRÍCULA</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('professor')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <span>PROFESSOR</span>
+                </div>
+                <div class="menu-item active" > 
+                    <i class="fas fa-users"></i>
+                    <span>TURMA</span>
+                </div>
+                <div class="menu-item" onclick="navegarPara('financeiro')">
+                     <i class="fas fa-dollar-sign"></i>
+                    <span>FINANCEIRO</span>
+                </div>
+            </div>
+        </div>
+        <div class="seteeduca">
+                <p> @seteeduca </p>
+            </div>
 
-  <header>
-   
-    </a>
-    <div class="header-title">
-      <img src="/imagem/lupa.svg" alt="Ícone de cadastro" class="cad-icon">
-      <span>Acessar <b>TURMAS</b></span>
+        <div class="sidebar-footer">
+            <button class="logout-button" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>SAIR</span>
+            </button>
+        </div>
     </div>
-  </header>
 
-  <div class="turmas-container" id="turmasContainer">
- 
-  </div>
-
-
-  <div class="modal-overlay" id="confirmModal">
-    <div class="modal-confirm">
-      <h3>Confirmar Exclusão</h3>
-      <p id="modalMessage">Tem certeza que deseja excluir esta turma?</p>
-      <div class="modal-buttons">
-        <button class="modal-btn modal-btn-cancel" id="cancelDelete">Cancelar</button>
-        <button class="modal-btn modal-btn-confirm" id="confirmDelete">Excluir</button>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+          <div class="header-title">
+        <i class="fas fa-users"></i>
+        <span>Acessar <b>TURMAS</b></span>      
       </div>
+        </div>
+        <div class="content-area">
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="search-icon"><i class="fas fa-search"></i></div>
+                    <input type="text" class="search-input" placeholder="pesquisar">
+                </div>
+                <div class="new-button" onclick="criarNovaTurma()">
+                    <div class="new-button-circle"></div>
+                    <div class="new-text">Nova turma</div>
+                </div>
+                <div class="stats-info" id="totalTurmas">Total de Turmas: 0</div>
+            </div>
+
+            <div class="table-container">
+                <table class="table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Nome da Turma</th>
+                            <th>Professor(a)</th>
+                            <th>Mensalidade</th>
+                            <th>Vagas</th>
+                            <th>Alunos</th>
+                            <th>Ano letivo</th>
+                            <th>Operações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="turmasTableBody"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <script>
-
-    let currentTurmaIndex = null;
-    const confirmModal = document.getElementById('confirmModal');
-    const modalMessage = document.getElementById('modalMessage');
-    const cancelDeleteBtn = document.getElementById('cancelDelete');
-    const confirmDeleteBtn = document.getElementById('confirmDelete');
-
-    function toggleTurma(element) {
-      const content = element.nextElementSibling;
-      const icon = element.querySelector('.toggle-icon');
-      
-      if (content.style.display === 'block') {
-        content.style.animation = 'fadeOut 0.3s ease-out';
-        setTimeout(() => {
-          content.style.display = 'none';
-        }, 250);
-        icon.textContent = '+';
-        icon.style.transform = 'rotate(0deg)';
-      } else {
-        content.style.display = 'block';
-        icon.textContent = '-';
-        icon.style.transform = 'rotate(180deg)';
-      }
-    }
-
-    function carregarTurmas() {
-      const turmasContainer = document.getElementById('turmasContainer');
-      turmasContainer.innerHTML = '';
-      const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-
-      if (turmas.length === 0) {
-        turmasContainer.innerHTML = `
-          <div class="empty-message">
-            Nenhuma turma cadastrada ainda.<br>
-            Clique no botão "Voltar" para cadastrar uma nova turma.
-          </div>
-        `;
-      } else {
-        turmas.forEach((turma, index) => {
-          const card = document.createElement('div');
-          card.className = 'turma-card';
-
-          card.innerHTML = `
-            <div class="turma-header" onclick="toggleTurma(this)">
-              <h3>${turma.turma}</h3>
-              <span class="toggle-icon">+</span>
+    <!-- Modal para visualizar alunos -->
+    <div class="modal" id="studentsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span id="modalTurmaTitle">Alunos da Turma</span>
+                </div>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
-            <div class="turma-content">
-              <p><strong>Professor(a):</strong> ${turma.professor}</p>
-              <p><strong>Turno:</strong> ${turma.turno}</p>
-              <p><strong>Quantidade de Alunos:</strong> ${turma.quantidade}</p>
-              <p><strong>Faixa Etária:</strong> ${turma.faixa}</p>
-              <div class="delete-container">
-                <img src="/imagem/trash.svg" alt="Excluir turma" class="delete-icon" 
-                     onclick="abrirModalConfirmacao(${index})" title="Excluir turma">
-              </div>
+            <div class="modal-body">
+                <div id="studentsContainer"></div>
             </div>
-          `;
-          turmasContainer.appendChild(card);
+        </div>
+    </div>
+
+    <script>
+        // Dados globais
+        let turmas = [];
+        let matriculas = [];
+
+        // Dados de exemplo para teste - REMOVER EM PRODUÇÃO
+        const dadosExemplo = [
+            {
+                professor: "Maria Silva",
+                turma: "Berçário A",
+                mensalidade: "0-1/mat/R$ 150",
+                quantidade: "15"
+            },
+            {
+                professor: "João Santos",
+                turma: "Maternal I",
+                mensalidade: "2-3/int/R$ 300",
+                quantidade: "20"
+            }
+        ];
+
+        // Dados de alunos disponíveis
+        const alunosDisponiveis = [];
+
+        // Função para navegação entre páginas
+        function navegarPara(pagina) {
+            const rotas = {
+                'inicio': '/home',
+                'professor': '/cadastro-professor',
+                'financeiro': '/opcoes-financeiro',
+                'turmas': '/turmas-cadastradas',
+                'matricula': '/matricula',
+                'cadastro': '/opcoes-aluno'
+            };
+
+            if (rotas[pagina]) {
+                window.location.href = rotas[pagina];
+            } else {
+                console.warn(`Rota não encontrada para: ${pagina}`);
+            }
+        }
+
+        function logout() {
+            if (confirm('Deseja realmente sair do sistema?')) {
+                // Limpar dados da sessão se necessário
+                sessionStorage.clear();
+                // Redirecionar para página de login
+                window.location.href = '/login';
+            }
+        }
+
+        function criarNovaTurma() {
+            window.location.href = '/cadastro-turma';
+        }
+
+        // Função para carregar dados do storage
+        function carregarDoStorage() {
+            const turmasSalvas = sessionStorage.getItem('turmas') || localStorage.getItem('turmas');
+            if (turmasSalvas) {
+                try {
+                    return JSON.parse(turmasSalvas);
+                } catch (e) {
+                    console.error('Erro ao carregar turmas do storage:', e);
+                    return [];
+                }
+            }
+            // Se não há dados salvos, usar dados de exemplo
+            return dadosExemplo.slice();
+        }
+
+        // Função para salvar no storage
+        function salvarNoStorage(turmasArray) {
+            try {
+                sessionStorage.setItem('turmas', JSON.stringify(turmasArray));
+                console.log('Turmas salvas no storage:', turmasArray);
+            } catch (e) {
+                console.error('Erro ao salvar turmas:', e);
+            }
+        }
+
+        function contarAlunosNaTurma(nomeTurma) {
+            return matriculas.filter(matricula => matricula.turma === nomeTurma).length;
+        }
+
+        function calcularVagasDisponiveis(turma) {
+            const capacidadeMaxima = parseInt(turma.quantidade);
+            const alunosMatriculados = contarAlunosNaTurma(turma.turma);
+            return capacidadeMaxima - alunosMatriculados;
+        }
+
+        function getVagasStatus(vagasDisponiveis) {
+            if (vagasDisponiveis === 0) return { class: 'vagas-esgotadas', text: 'Esgotadas' };
+            if (vagasDisponiveis <= 2) return { class: 'vagas-poucas', text: `${vagasDisponiveis} restantes` };
+            return { class: 'vagas-disponivel', text: `${vagasDisponiveis} disponíveis` };
+        }
+
+        function carregarTurmas() {
+            turmas = carregarDoStorage();
+            const tbody = document.getElementById('turmasTableBody');
+            const totalTurmas = document.getElementById('totalTurmas');
+            tbody.innerHTML = '';
+
+            console.log('Carregando turmas:', turmas);
+
+            if (turmas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#666; padding:40px;">Nenhuma turma cadastrada ainda</td></tr>';
+            } else {
+                turmas.forEach((turma, index) => {
+                    const alunosMatriculados = contarAlunosNaTurma(turma.turma);
+                    const vagasDisponiveis = calcularVagasDisponiveis(turma);
+                    const vagasStatus = getVagasStatus(vagasDisponiveis);
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="font-weight: 600;">${turma.turma}</td>
+                            <td>${turma.professor}</td>
+                            <td>${turma.mensalidade}</td>
+                            <td>
+                                <span class="vagas-status ${vagasStatus.class}">
+                                    ${vagasStatus.text}
+                                </span>
+                            </td>
+                            <td><strong>${alunosMatriculados}/${turma.quantidade}</strong></td>
+                            <td>${new Date().getFullYear()}</td>
+                            <td>
+                                <div class="operations">
+                                    <button class="btn-action btn-view-students" onclick="visualizarAlunos('${turma.turma}', ${index})" title="Ver alunos matriculados">
+                                        <i class="fas fa-eye"></i> Ver
+                                    </button>
+                                    <button class="btn-action btn-edit" onclick="editarTurma(${index})" title="Editar turma">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="btn-action btn-archive" onclick="arquivarTurma(${index})" title="Arquivar turma">
+                                        <i class="fas fa-archive"></i> Arquivar
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>`;
+                });
+            }
+            totalTurmas.textContent = `Total de Turmas: ${turmas.length}`;
+        }
+
+        function visualizarAlunos(nomeTurma, turmaIndex) {
+            const modal = document.getElementById('studentsModal');
+            const modalTitle = document.getElementById('modalTurmaTitle');
+            const container = document.getElementById('studentsContainer');
+            
+            modalTitle.textContent = `Alunos da Turma: ${nomeTurma}`;
+            
+            // Buscar alunos matriculados nesta turma
+            const alunosMatriculados = matriculas
+                .filter(matricula => matricula.turma === nomeTurma)
+                .map(matricula => {
+                    const aluno = alunosDisponiveis.find(a => a.id === matricula.alunoId);
+                    return aluno ? { ...aluno, matricula } : null;
+                })
+                .filter(aluno => aluno !== null);
+            
+            if (alunosMatriculados.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Nenhum aluno matriculado</h3>
+                        <p>Esta turma ainda não possui alunos matriculados.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div style="margin-bottom: 20px; text-align: center;">
+                        <h4 style="color: #333;">Total de alunos matriculados: ${alunosMatriculados.length}</h4>
+                    </div>
+                    <div class="students-grid">
+                        ${alunosMatriculados.map(aluno => `
+                            <div class="student-card">
+                                <div class="student-avatar">
+                                    ${aluno.nome.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                                </div>
+                                <div class="student-info">
+                                    <h4>${aluno.nome}</h4>
+                                    <div class="student-details">
+                                        <strong>Data Nasc:</strong> ${aluno.dataNasc}<br>
+                                        <strong>Responsáveis:</strong> ${aluno.responsaveis.join(', ')}<br>
+                                        <strong>Matrícula:</strong> ${aluno.matricula.numeroMatricula}<br>
+                                        <strong>Data Matrícula:</strong> ${aluno.matricula.dataMatricula}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('studentsModal').style.display = 'none';
+        }
+
+        function editarTurma(index) {
+            console.log('Editando turma no índice:', index);
+            console.log('Dados da turma:', turmas[index]);
+            
+            if (index >= 0 && index < turmas.length) {
+                const turma = turmas[index];
+                const dadosParaEdicao = {
+                    index: index,
+                    dados: turma
+                };
+                
+                // Salvar nos dois storages para garantir
+                sessionStorage.setItem('turmaParaEditar', JSON.stringify(dadosParaEdicao));
+                localStorage.setItem('turmaParaEditar', JSON.stringify(dadosParaEdicao));
+                
+                console.log('Dados salvos para edição:', dadosParaEdicao);
+                
+                // Pequeno delay para garantir que os dados foram salvos
+                setTimeout(() => {
+                    window.location.href = '/editar-turmas';
+                }, 100);
+            } else {
+                console.error('Índice inválido para edição:', index);
+                alert('Erro: Turma não encontrada para edição.');
+            }
+        }
+
+        function arquivarTurma(index) {
+            const turma = turmas[index];
+            const alunosMatriculados = contarAlunosNaTurma(turma.turma);
+            
+            if (alunosMatriculados > 0) {
+                alert(`Não é possível arquivar esta turma pois há ${alunosMatriculados} aluno(s) matriculado(s). Transfira os alunos antes de arquivar.`);
+                return;
+            }
+            
+            if (confirm(`Tem certeza que deseja arquivar a turma "${turma.turma}"?`)) {
+                turmas.splice(index, 1);
+                salvarNoStorage(turmas);
+                carregarTurmas();
+                console.log('Turma arquivada. Turmas restantes:', turmas.length);
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Garantir que temos dados iniciais se necessário
+            const turmasAtuais = carregarDoStorage();
+            if (turmasAtuais.length === 0) {
+                console.log('Nenhuma turma encontrada, criando dados de exemplo');
+                salvarNoStorage(dadosExemplo);
+            }
+            
+            carregarTurmas();
+            
+            // Verificar se há nova turma cadastrada
+            const turmaCadastrada = localStorage.getItem('novaTurma') || sessionStorage.getItem('novaTurma');
+            if (turmaCadastrada) {
+                try {
+                    const turma = JSON.parse(turmaCadastrada);
+                    adicionarTurma(turma);
+                    localStorage.removeItem('novaTurma');
+                    sessionStorage.removeItem('novaTurma');
+                } catch (e) {
+                    console.error('Erro ao processar nova turma:', e);
+                }
+            }
+            
+            // Pesquisa em tempo real
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#turmasTableBody tr');
+                
+                rows.forEach(row => {
+                    if (row.children.length > 1) { // Ignora a linha de "nenhuma turma"
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    }
+                });
+            });
+            
+            // Fechar modal clicando fora
+            const modal = document.getElementById('studentsModal');
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // Fechar modal com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
         });
-      }
-    }
 
-    function abrirModalConfirmacao(index) {
-      const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-      const turmaNome = turmas[index].turma;
-      
-      currentTurmaIndex = index;
-      modalMessage.innerHTML = `Tem certeza que deseja excluir a turma <strong>"${turmaNome}"</strong>?`;
-      confirmModal.style.display = 'flex';
-    }
+        // Funções para adicionar dados (para integração futura)
+        function adicionarTurma(novaTurma) {
+            turmas.push(novaTurma);
+            salvarNoStorage(turmas);
+            carregarTurmas();
+            console.log('Nova turma adicionada:', novaTurma);
+        }
 
- 
-    function fecharModal() {
-      confirmModal.style.display = 'none';
-      currentTurmaIndex = null;
-    }
+        function adicionarMatricula(novaMatricula) {
+            matriculas.push(novaMatricula);
+            carregarTurmas(); // Recarregar para atualizar contadores
+            console.log('Nova matrícula adicionada:', novaMatricula);
+        }
 
-  
-    function executarExclusao() {
-      if (currentTurmaIndex !== null) {
-        const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-        const cards = document.querySelectorAll('.turma-card');
-        
-     
-        cards[currentTurmaIndex].style.transform = 'scale(0.9)';
-        cards[currentTurmaIndex].style.opacity = '0';
-        cards[currentTurmaIndex].style.transition = 'all 0.3s ease';
-        
-        setTimeout(() => {
-          turmas.splice(currentTurmaIndex, 1);
-          localStorage.setItem('turmas', JSON.stringify(turmas));
-          carregarTurmas();
-          fecharModal();
-        }, 300);
-      }
-    }
-
- 
-    cancelDeleteBtn.addEventListener('click', fecharModal);
-    confirmDeleteBtn.addEventListener('click', executarExclusao);
-    
-    
-    confirmModal.addEventListener('click', (e) => {
-      if (e.target === confirmModal) {
-        fecharModal();
-      }
-    });
-
-    document.addEventListener('DOMContentLoaded', carregarTurmas);
-  </script>
+        // Expor funções globalmente para uso em outros scripts
+        window.adicionarTurma = adicionarTurma;
+        window.adicionarMatricula = adicionarMatricula;
+        window.navegarPara = navegarPara;
+        window.logout = logout;
+        window.criarNovaTurma = criarNovaTurma;
+        window.visualizarAlunos = visualizarAlunos;
+        window.closeModal = closeModal;
+        window.editarTurma = editarTurma;
+        // Expor funções globalmente para uso em outros scripts
+        window.adicionarTurma = adicionarTurma;
+        window.adicionarMatricula = adicionarMatricula;
+        window.navegarPara = navegarPara;
+        window.logout = logout;
+        window.criarNovaTurma = criarNovaTurma;
+        window.visualizarAlunos = visualizarAlunos;
+        window.closeModal = closeModal;
+        window.editarTurma = editarTurma;
+        window.arquivarTurma = arquivarTurma;
+    </script>
 </body>
 </html>

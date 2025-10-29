@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --background-image: url(imagem/ChatGPT\ Image\ 22_09_2025\,\ 17_12_14.png);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #FCFCFC;
+            background-image: var(--background-image);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        .header {
+            background-color: #fade939f;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 35px;
+            font-weight: 550;
+            color: #2c3e50;
+        }
+
+        .header-left .user-icon {
+            width: 60px;
+            height: auto;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* INÍCIO ESTILOS DO NOVO CABEÇALHO E DROPDOWN (de inativos.html) */
+        /* Esconde os SVGs antigos se ainda existirem no HTML */
+        .home-icon, .profile-icon {
+            display: none; 
+        }
+
+        /* Estilo comum para os novos ícones de imagem */
+        .header-icon {
+            width: 50px; 
+            height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Contêiner do Perfil e Dropdown */
+        .profile {
+            position: relative;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .profile .header-icon {
+            margin: 0;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%; 
+            right: 0;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 200px;
+            display: none; 
+            padding: 10px 0;
+            margin-top: 10px; 
+        }
+        
+        .profile-dropdown a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .profile-dropdown a:hover {
+            background-color: #f1f1f1;
+            color: #f0ad4e;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            margin: 8px 0;
+            overflow: hidden;
+            background-color: #e9ecef;
+        }
+        /* FIM ESTILOS DO NOVO CABEÇALHO E DROPDOWN */
+
+        .container {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-section h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .avatar-container {
+            position: relative;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #fcd66e;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar img {
+            width: 70px;
+            height: auto;
+        }
+
+        .camera-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 35px;
+            height: 35px;
+            background-color: #fcd66e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-fields {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        /* Novo estilo para o grupo de senha */
+        .password-group {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+        }
+        .password-group .form-group {
+            flex-grow: 1;
+        }
+
+        .form-group label {
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s, background-color 0.3s;
+            background-color: #f0f0f0;
+        }
+        
+        /* Estilo para campos editáveis */
+        .form-group input:not([readonly]) {
+            background-color: white;
+            border-color: #fff4c2;
+        }
+
+        .form-group input:focus {
+            border-color: #fcd66e;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .save-btn, .edit-btn, .change-password-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .save-btn {
+            background: #fcd66e;
+            color: #2c3e50;
+        }
+        
+        .edit-btn, .change-password-btn {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .address-section {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 25px;
+            margin-top: 25px;
+        }
+
+        .address-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .address-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .address-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .address-group.full-width {
+            flex: 1 1 100%;
+        }
+
+        .address-group label {
+            color: #2c3e50;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .address-field {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .address-field:focus {
+            border-color: #fcd66e;
+            background-color: #f8fff9;
+            box-shadow: 0 0 0 3px rgba(168, 230, 207, 0.1);
+        }
+
+        .address-field:disabled {
+            background-color: #f5f5f5;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .address-field[readonly] {
+            background-color: #f9f9f9;
+            border-color: #ddd;
+        }
+
+        .address-select {
+            cursor: pointer;
+            padding-right: 35px;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            appearance: none;
+        }
+
+        .cep-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .cep-field {
+            padding-right: 45px;
+        }
+
+        .cep-search-btn {
+            position: absolute;
+            right: 10px;
+            background: #fff6a5;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #2c3e50;
+            transition: all 0.2s ease;
+        }
+
+        .cep-search-btn:hover {
+            background: #fcd66e;
+            transform: scale(1.1);
+        }
+
+        .cep-search-btn:active {
+            transform: scale(0.95);
+        }
+
+        .cep-error, .cep-loading {
+            display: none;
+            font-size: 12px;
+            margin-top: 5px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .cep-error {
+            color: #e74c3c;
+            background: #fdf2f2;
+            border: 1px solid #fadbd8;
+        }
+
+        
+
+        .cep-error.show, .cep-loading.show {
+            display: flex;
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .address-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            min-width: 120px;
+        }
+
+        .clear-address {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid #e9ecef;
+        }
+
+        .clear-address:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .save-address {
+            background: #fff6a5;
+            color: #2c3e50;
+            border: 2px solid #ffbb00;
+        }
+
+        .save-address:hover {
+            background: #fcd66e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(168, 230, 207, 0.3);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modal de alteração de senha */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .password-modal {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .close-modal:hover {
+            background-color: #f0f0f0;
+        }
+
+        .password-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .password-input-group {
+            position: relative;
+        }
+
+        .password-input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .password-input:focus {
+            border-color: #fcd66e;
+        }
+
+        /* INÍCIO DAS MUDANÇAS PARA SVG */
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0; /* Para garantir que o emoji sumiu caso volte */
+            color: #666;
+        }
+
+        .password-icon {
+            display: inline-block;
+            width: 18px; /* Tamanho do ícone */
+            height: 18px;
+        }
+
+        .password-icon svg {
+            width: 100%;
+            height: 100%;
+            color: #666; 
+            stroke: currentColor;
+            fill: none;
+        }
+        /* FIM DAS MUDANÇAS PARA SVG */
+
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-requirements {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .password-requirements h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .requirement.valid {
+            color: #27ae60;
+        }
+
+        .requirement.invalid {
+            color: #e74c3c;
+        }
+
+        .requirement-icon {
+            width: 12px;
+            height: 12px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .modal-cancel-btn, .modal-save-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .modal-cancel-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .modal-cancel-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .modal-save-btn {
+            background: #fcd66e;
+            color: #2c3e50;
+        }
+
+        .modal-save-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(252, 214, 110, 0.4);
+        }
+
+        .modal-save-btn:disabled {
+            background: #ddd;
+            color: #999;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal de alteração de foto */
+        .photo-modal {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+        }
+
+        .photo-upload-area {
+            border: 2px dashed #fcd66e;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 20px 0;
+            background: #fefcf0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .photo-upload-area:hover {
+            border-color: #f1c40f;
+            background: #fdf8e1;
+        }
+
+        .photo-upload-area.dragover {
+            border-color: #f39c12;
+            background: #fcf3cd;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #fcd66e;
+        }
+
+        .upload-text {
+            color: #2c3e50;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .upload-hint {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .photo-preview-container {
+            display: none;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .photo-preview-container.show {
+            display: block;
+        }
+
+        .photo-preview {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fcd66e;
+            margin: 0 auto 15px;
+            display: block;
+        }
+
+        .photo-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .photo-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .photo-info-label {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .photo-info-value {
+            color: #666;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .photo-action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .remove-photo-btn {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .remove-photo-btn:hover {
+            background: #c0392b;
+        }
+
+        .change-photo-btn {
+            background: #dbc234;
+            color: white;
+        }
+
+        .change-photo-btn:hover {
+            background: #fcd66e;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .current-photo-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .current-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e0e0e0;
+            margin: 0 auto 10px;
+            display: block;
+        }
+
+        .current-photo-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-info {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .address-row {
+                flex-direction: column;
+            }
+
+            .address-group {
+                min-width: unset;
+            }
+
+            .address-actions {
+                flex-direction: column;
+            }
+
+            .address-btn {
+                min-width: unset;
+            }
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .password-modal, .photo-modal {
+                margin: 20px;
+                width: calc(100% - 40px);
+            }
+
+            .photo-upload-area {
+                padding: 30px 15px;
+            }
+
+            .photo-preview {
+                width: 150px;
+                height: 150px;
+            }
+
+            .photo-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <img src="imagem/perfil.png" class="user-icon" alt="Ícone de Perfil">
+            <span>Meu perfil</span>
+        </div>
+        
+        <div class="header-right">
+            <img 
+                src="imagem/home3.png" 
+                class="header-icon" 
+                onclick="window.location.href='/home'" 
+                alt="Home Icon" 
+                title="Início"
+            
+            >
+            
+            <div class="profile">
+                <img 
+                    src="imagem/perfil2.png" 
+                    class="header-icon" 
+                    onclick="toggleDropdown(event)" 
+                    alt="Profile Icon" 
+                    title="Perfil"
+                >
+                
+                <div class="profile-dropdown" id="profile-dropdown-menu">
+                    <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
+                    <a href="/mensalidade" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+                    <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/login" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                </div>
+            </div>
+        </div>
+        </header>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-section">
+                <h2>Informações do perfil</h2>
+                
+                <div class="profile-info">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="imagem/perfil-de-usuario.png" alt="Avatar do usuário">
+                        </div>
+                        <div class="camera-icon">📷</div>
+                    </div>
+                    
+                    <div class="form-fields">
+                        <div class="form-group">
+                            <label for="creche">Nome da creche:</label>
+                            <input type="text" id="creche" name="creche" value="Creche do Zezinho" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input type="email" id="email" name="email" value="creche.zezinho@exemplo.com" readonly>
+                        </div>
+                        
+                        <div class="password-group">
+                            <div class="form-group">
+                                <label for="password">Senha:</label>
+                                <input type="password" id="password" name="password" value="********" readonly>
+                            </div>
+                            <div class="button-group">
+                                <button class="change-password-btn">Alterar Senha</button>
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <button class="edit-btn">Editar</button>
+                            <button class="save-btn">Salvar alterações</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="address-section">
+                <h2>Endereço</h2>
+                
+                <div class="address-form">
+                    <div class="address-row">
+                        <div class="address-group">
+                            <label for="cep">CEP:</label>
+                            <div class="cep-container">
+                                <input type="text" id="cep" name="cep" class="address-field cep-field" placeholder="00000-000" maxlength="9">
+                                <button type="button" class="cep-search-btn" id="searchCep" title="Buscar CEP">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="cep-error" id="cepError">CEP não encontrado</div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="address-row">
+                        <div class="address-group full-width">
+                            <label for="logradouro">Rua/Avenida:</label>
+                            <input type="text" id="logradouro" name="logradouro" class="address-field" placeholder="Ex: Rua das Flores, Avenida Brasil">
+                        </div>
+                    </div>
+
+                    <div class="address-row">
+                        <div class="address-group">
+                            <label for="numero">Número:</label>
+                            <input type="text" id="numero" name="numero" class="address-field" placeholder="123">
+                        </div>
+                        <div class="address-group">
+                            <label for="complemento">Complemento:</label>
+                            <input type="text" id="complemento" name="complemento" class="address-field" placeholder="Apto 45, Bloco B, Sala 102">
+                        </div>
+                    </div>
+
+                    <div class="address-row">
+                        <div class="address-group">
+                            <label for="bairro">Bairro:</label>
+                            <input type="text" id="bairro" name="bairro" class="address-field" placeholder="Centro, Copacabana">
+                        </div>
+                        <div class="address-group">
+                            <label for="localidade">Cidade:</label>
+                            <input type="text" id="localidade" name="localidade" class="address-field" placeholder="São Paulo, Rio de Janeiro">
+                        </div>
+                    </div>
+
+                    <div class="address-row">
+                        <div class="address-group">
+                            <label for="uf">Estado (UF):</label>
+                            <select id="uf" name="uf" class="address-field address-select">
+                                <option value="">Selecione o estado</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                        </div>
+                       
+                    </div>
+
+                    <div class="address-actions">
+                        <button type="button" class="address-btn clear-address" id="clearAddress">Limpar Endereço</button>
+                        <button type="button" class="address-btn save-address" id="saveAddress">Salvar Endereço</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="photoModal">
+        <div class="photo-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Alterar Foto de Perfil</h3>
+                <button class="close-modal" type="button" id="closePhotoModal">&times;</button>
+            </div>
+            
+            <div class="current-photo-display">
+                <div class="current-photo-label">Foto atual:</div>
+                <img src="imagem/perfil-de-usuario.png" alt="Foto atual" class="current-photo" id="currentPhotoDisplay">
+            </div>
+
+            <div class="photo-upload-area" id="photoUploadArea">
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">Clique aqui ou arraste uma nova foto</div>
+                <div class="upload-hint">Formatos aceitos: JPG, PNG, GIF (máx. 5MB)</div>
+            </div>
+
+            <input type="file" id="photoInput" class="file-input" accept="image/jpeg,image/jpg,image/png,image/gif">
+
+            <div class="photo-preview-container" id="photoPreviewContainer">
+                <img id="photoPreview" class="photo-preview" alt="Preview da nova foto">
+                <div class="photo-info" id="photoInfo">
+                    <div class="photo-info-item">
+                        <span class="photo-info-label">Nome:</span>
+                        <span class="photo-info-value" id="fileName"></span>
+                    </div>
+                    <div class="photo-info-item">
+                        <span class="photo-info-label">Tamanho:</span>
+                        <span class="photo-info-value" id="fileSize"></span>
+                    </div>
+                    <div class="photo-info-item">
+                        <span class="photo-info-label">Dimensões:</span>
+                        <span class="photo-info-value" id="fileDimensions"></span>
+                    </div>
+                </div>
+                <div class="photo-actions">
+                    <button type="button" class="photo-action-btn remove-photo-btn" id="removePhoto">Remover</button>
+                    <button type="button" class="photo-action-btn change-photo-btn" id="changePhoto">Escolher Outra</button>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="button" class="modal-cancel-btn" id="cancelPhotoChange">Cancelar</button>
+                <button type="button" class="modal-save-btn" id="savePhotoChange" disabled>Salvar Foto</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="passwordModal">
+        <div class="password-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Alterar Senha</h3>
+                <button class="close-modal" type="button">&times;</button>
+            </div>
+            
+            <form class="password-form" id="passwordForm">
+                <div class="password-input-group">
+                    <label for="currentPassword">Senha Atual:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="currentPassword" class="password-input" required>
+                        <button type="button" class="toggle-password" data-target="currentPassword">
+                            <span class="password-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="error-message" id="currentPasswordError">Senha atual incorreta</div>
+                </div>
+
+                <div class="password-input-group">
+                    <label for="newPassword">Nova Senha:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="newPassword" class="password-input" required>
+                        <button type="button" class="toggle-password" data-target="newPassword">
+                            <span class="password-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="password-requirements">
+                        <h4>Requisitos da senha:</h4>
+                        <div class="requirement" data-requirement="length">
+                            <span class="requirement-icon">✗</span>
+                            <span>Pelo menos 8 caracteres</span>
+                        </div>
+                        <div class="requirement" data-requirement="uppercase">
+                            <span class="requirement-icon">✗</span>
+                            <span>Uma letra maiúscula</span>
+                        </div>
+                        <div class="requirement" data-requirement="lowercase">
+                            <span class="requirement-icon">✗</span>
+                            <span>Uma letra minúscula</span>
+                        </div>
+                        <div class="requirement" data-requirement="number">
+                            <span class="requirement-icon">✗</span>
+                            <span>Um número</span>
+                        </div>
+                        <div class="requirement" data-requirement="special">
+                            <span class="requirement-icon">✗</span>
+                            <span>Um caractere especial (!@#$%^&*)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="password-input-group">
+                    <label for="confirmPassword">Confirmar Nova Senha:</label>
+                    <div class="password-input-container">
+                        <input type="password" id="confirmPassword" class="password-input" required>
+                        <button type="button" class="toggle-password" data-target="confirmPassword">
+                            <span class="password-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError">As senhas não coincidem</div>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="modal-cancel-btn">Cancelar</button>
+                    <button type="submit" class="modal-save-btn" disabled>Alterar Senha</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis globais
+        const editBtn = document.querySelector('.edit-btn');
+        const saveBtn = document.querySelector('.save-btn');
+        const changePasswordBtn = document.querySelector('.change-password-btn');
+        const profileInputs = document.querySelectorAll('#creche, #email');
+        const passwordModal = document.getElementById('passwordModal');
+        const photoModal = document.getElementById('photoModal');
+        const passwordForm = document.getElementById('passwordForm');
+        const closePhotoModal = document.getElementById('closePhotoModal');
+        const cancelBtn = passwordModal.querySelector('.modal-cancel-btn'); // Especifica o cancel button do modal de senha
+        const cancelPhotoBtn = document.getElementById('cancelPhotoChange');
+        const savePasswordBtn = document.querySelector('.modal-save-btn');
+        const savePhotoBtn = document.getElementById('savePhotoChange');
+        const cameraIcon = document.querySelector('.camera-icon');
+        const avatarImg = document.querySelector('.avatar img');
+        
+        // Senha atual simulada (em um sistema real, isso viria do backend)
+        const currentPasswordHash = 'minhasenhaatual123';
+        let selectedFile = null;
+
+        // ==========================================================
+        // NOVAS FUNÇÕES DE NAVEGAÇÃO E DROPDOWN (de inativos.html)
+        // ==========================================================
+        
+        function toggleDropdown(event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById('profile-dropdown-menu');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function navegarPara(pagina) {
+            const rotas = {
+                'inicio': '/home',
+                'professor': '/cadastro-professor',
+                'financeiro': '/opcoes-financeiro',
+                'turma': '/turmas-cadastradas',
+                'matricula': '/matricula',
+                'cadastro': '/opcoes-aluno',
+                
+                'meu-perfil': '/perfil',
+                'mensalidade': '/mensalidade',
+                'arquivados': '/arquivados',
+                'ajuda': '/ajuda'
+            };
+
+            if (rotas[pagina]) {
+                const dropdown = document.getElementById('profile-dropdown-menu');
+                if (dropdown) dropdown.style.display = 'none';
+                
+                window.location.href = rotas[pagina];
+            } else {
+                console.warn(`Rota não encontrada para: ${pagina}`);
+            }
+        }
+
+        function logout() {
+            if (confirm('Deseja realmente sair do sistema?')) {
+                window.location.href = '/login';
+            }
+        }
+        
+        // Expondo as funções
+        window.toggleDropdown = toggleDropdown;
+        window.navegarPara = navegarPara;
+        window.logout = logout;
+
+
+        // Funcionalidade para o botão de editar
+        editBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            profileInputs.forEach(input => {
+                input.removeAttribute('readonly');
+            });
+
+            document.getElementById('creche').focus();
+        });
+
+        // Funcionalidade para o botão de salvar
+        saveBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            profileInputs.forEach(input => {
+                input.setAttribute('readonly', true);
+            });
+            alert('Alterações salvas com sucesso!');
+        });
+        
+        // Funcionalidade para o botão de alterar senha
+        changePasswordBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            passwordModal.classList.add('show');
+            document.getElementById('currentPassword').focus();
+        });
+
+        // Fechar modal de senha
+        function closePasswordModal() {
+            passwordModal.classList.remove('show');
+            passwordForm.reset();
+            resetPasswordValidation();
+        }
+
+        // CORREÇÃO: Pegar o botão de fechar específico do modal de senha
+        const closePasswordModalBtn = passwordModal.querySelector('.close-modal');
+
+        closePasswordModalBtn.addEventListener('click', closePasswordModal); // O 'x' do modal de senha
+        cancelBtn.addEventListener('click', closePasswordModal); // O botão 'Cancelar' do modal de senha
+
+        // Fechar modal clicando fora
+        passwordModal.addEventListener('click', function(e) {
+            if (e.target === passwordModal) {
+                closePasswordModal();
+            }
+        });
+
+        // Toggle de visibilidade da senha (AGORA COM SVG)
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+                const iconSpan = this.querySelector('.password-icon');
+
+                // Ícones SVG
+                const eyeOpenSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+                const eyeOffSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.07 3.49"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
+                
+                if (input.type === 'password') {
+                    // Mudar para ver a senha (Mostra o ícone de olho CORTADO, indicando que o próximo clique irá esconder)
+                    input.type = 'text';
+                    iconSpan.innerHTML = eyeOffSvg; 
+                } else {
+                    // Mudar para esconder a senha (Mostra o ícone de olho ABERTO, indicando que o próximo clique irá mostrar)
+                    input.type = 'password';
+                    iconSpan.innerHTML = eyeOpenSvg; 
+                }
+            });
+        });
+
+        // Validação da senha atual
+        document.getElementById('currentPassword').addEventListener('input', function() {
+            const errorDiv = document.getElementById('currentPasswordError');
+            errorDiv.style.display = 'none';
+            validateForm();
+        });
+
+        // Validação da nova senha
+        document.getElementById('newPassword').addEventListener('input', function() {
+            validateNewPassword();
+            validatePasswordMatch();
+            validateForm();
+        });
+
+        // Validação da confirmação de senha
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            validatePasswordMatch();
+            validateForm();
+        });
+
+        function validateNewPassword() {
+            const password = document.getElementById('newPassword').value;
+            const requirements = {
+                length: password.length >= 8,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+            };
+
+            Object.keys(requirements).forEach(req => {
+                const element = document.querySelector(`[data-requirement="${req}"]`);
+                const icon = element.querySelector('.requirement-icon');
+                
+                if (requirements[req]) {
+                    element.classList.add('valid');
+                    element.classList.remove('invalid');
+                    icon.textContent = '✓';
+                } else {
+                    element.classList.add('invalid');
+                    element.classList.remove('valid');
+                    icon.textContent = '✗';
+                }
+            });
+
+            return Object.values(requirements).every(req => req);
+        }
+
+        function validatePasswordMatch() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorDiv = document.getElementById('confirmPasswordError');
+
+            if (confirmPassword && newPassword !== confirmPassword) {
+                errorDiv.style.display = 'block';
+                return false;
+            } else {
+                errorDiv.style.display = 'none';
+                return true;
+            }
+        }
+
+        function validateForm() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            const isCurrentPasswordValid = currentPassword.length > 0;
+            const isNewPasswordValid = validateNewPassword();
+            const isPasswordMatch = validatePasswordMatch();
+            const isFormValid = isCurrentPasswordValid && isNewPasswordValid && isPasswordMatch && confirmPassword.length > 0;
+
+            savePasswordBtn.disabled = !isFormValid;
+        }
+
+        // Modificação no resetPasswordValidation para usar SVG
+        function resetPasswordValidation() {
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.style.display = 'none';
+            });
+
+            // Reset password requirements
+            document.querySelectorAll('.requirement').forEach(req => {
+                req.classList.remove('valid', 'invalid');
+                req.querySelector('.requirement-icon').textContent = '✗';
+            });
+
+            // Reset password visibility e ícone para o estado inicial (Olho Aberto)
+            document.querySelectorAll('.password-input').forEach(input => {
+                input.type = 'password';
+            });
+            document.querySelectorAll('.toggle-password').forEach(btn => {
+                const eyeOpenSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+                btn.querySelector('.password-icon').innerHTML = eyeOpenSvg;
+            });
+
+            savePasswordBtn.disabled = true;
+        }
+
+        // Submissão do formulário de senha
+        passwordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+
+            // Verificar senha atual (em um sistema real, isso seria feito no backend)
+            if (currentPassword !== currentPasswordHash) {
+                document.getElementById('currentPasswordError').style.display = 'block';
+                return;
+            }
+
+            // Verificar se a nova senha é diferente da atual
+            if (newPassword === currentPassword) {
+                alert('A nova senha deve ser diferente da senha atual.');
+                return;
+            }
+
+            // Simular alteração de senha (em um sistema real, isso seria uma requisição para o backend)
+            setTimeout(() => {
+                alert('Senha alterada com sucesso!');
+                closePasswordModal();
+            }, 500);
+        });
+
+        // Funcionalidade para o ícone da câmera
+        cameraIcon.addEventListener('click', function() {
+            photoModal.classList.add('show');
+        });
+
+        // Fechar modal de foto
+        function closePhotoModalFunction() {
+            photoModal.classList.remove('show');
+            resetPhotoUpload();
+        }
+
+        closePhotoModal.addEventListener('click', closePhotoModalFunction);
+        cancelPhotoBtn.addEventListener('click', closePhotoModalFunction);
+
+        // Fechar modal clicando fora
+        photoModal.addEventListener('click', function(e) {
+            if (e.target === photoModal) {
+                closePhotoModalFunction();
+            }
+        });
+
+        // Upload de foto - área de clique
+        document.getElementById('photoUploadArea').addEventListener('click', function() {
+            document.getElementById('photoInput').click();
+        });
+
+        // Upload de foto - drag and drop
+        const photoUploadArea = document.getElementById('photoUploadArea');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            photoUploadArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            photoUploadArea.addEventListener(eventName, () => {
+                photoUploadArea.classList.add('dragover');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            photoUploadArea.addEventListener(eventName, () => {
+                photoUploadArea.classList.remove('dragover');
+            });
+        });
+
+        photoUploadArea.addEventListener('drop', function(e) {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handlePhotoFile(files[0]);
+            }
+        });
+
+        // Input de arquivo
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                handlePhotoFile(e.target.files[0]);
+            }
+        });
+
+        // Processar arquivo de foto
+        function handlePhotoFile(file) {
+            // Validar tipo de arquivo
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            if (!validTypes.includes(file.type)) {
+                alert('Por favor, selecione uma imagem válida (JPG, PNG, GIF).');
+                return;
+            }
+
+            // Validar tamanho (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('A imagem deve ter no máximo 5MB.');
+                return;
+            }
+
+            selectedFile = file;
+            
+            // Preview da imagem
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('photoPreview');
+                preview.src = e.target.result;
+                
+                // Mostrar informações do arquivo
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = formatFileSize(file.size);
+                
+                // Obter dimensões da imagem
+                const img = new Image();
+                img.onload = function() {
+                    document.getElementById('fileDimensions').textContent = `${this.width} x ${this.height}px`;
+                };
+                img.src = e.target.result;
+                
+                // Mostrar preview e esconder upload area
+                document.getElementById('photoPreviewContainer').classList.add('show');
+                photoUploadArea.style.display = 'none';
+                savePhotoBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Formatar tamanho do arquivo
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Remover foto selecionada
+        document.getElementById('removePhoto').addEventListener('click', function() {
+            resetPhotoUpload();
+        });
+
+        // Escolher outra foto
+        document.getElementById('changePhoto').addEventListener('click', function() {
+            document.getElementById('photoInput').click();
+        });
+
+        // Reset do upload de foto
+        function resetPhotoUpload() {
+            selectedFile = null;
+            document.getElementById('photoInput').value = '';
+            document.getElementById('photoPreviewContainer').classList.remove('show');
+            photoUploadArea.style.display = 'block';
+            savePhotoBtn.disabled = true;
+        }
+
+        // Salvar nova foto
+        savePhotoBtn.addEventListener('click', function() {
+            if (selectedFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Atualizar foto no perfil
+                    avatarImg.src = e.target.result;
+                    document.getElementById('currentPhotoDisplay').src = e.target.result;
+                    
+                    // Simular upload (em um sistema real, enviaria para o servidor)
+                    setTimeout(() => {
+                        alert('Foto de perfil alterada com sucesso!');
+                        closePhotoModalFunction();
+                    }, 500);
+                };
+                reader.readAsDataURL(selectedFile);
+            }
+        });
+
+        // ==========================================================
+        // API DE CONSULTA DE CEP (ViaCEP) E LÓGICA DE ENDEREÇO
+        // ==========================================================
+
+        // Referências aos elementos do DOM para Endereço
+        const cepField = document.getElementById('cep');
+        const searchCepBtn = document.getElementById('searchCep');
+        const cepError = document.getElementById('cepError');
+        const cepLoading = document.getElementById('cepLoading');
+
+        const addressFields = {
+            logradouro: document.getElementById('logradouro'),
+            bairro: document.getElementById('bairro'),
+            localidade: document.getElementById('localidade'),
+            uf: document.getElementById('uf'),
+            numero: document.getElementById('numero'), 
+            complemento: document.getElementById('complemento'), 
+        };
+
+        /**
+         * Implementação do debounce para limitar a frequência de chamadas de função
+         */
+        function debounce(func, delay) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            };
+        }
+
+        /**
+         * Limpa todos os campos de endereço
+         */
+        function clearAddressFields() {
+             Object.keys(addressFields).forEach(key => {
+                addressFields[key].value = key === 'uf' ? '' : ''; 
+            });
+        }
+        
+        /**
+         * Busca dados de endereço completos a partir de um CEP usando o serviço ViaCEP.
+         */
+        async function searchAddress(cep) {
+            const cleanedCep = cep.replace(/\D/g, '');
+            if (!cleanedCep || cleanedCep.length !== 8) {
+                return { error: true, message: 'CEP inválido. Deve conter 8 dígitos.' };
+            }
+
+            const url = `https://viacep.com.br/ws/${cleanedCep}/json/`;
+
+            try {
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: Status ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.erro) {
+                    return { error: true, message: 'CEP não encontrado. Verifique o número digitado.' };
+                }
+
+                return {
+                    error: false,
+                    data: {
+                        cep: data.cep,
+                        logradouro: data.logradouro,
+                        complemento: data.complemento,
+                        bairro: data.bairro,
+                        localidade: data.localidade,
+                        uf: data.uf,
+                        ibge: data.ibge
+                    }
+                };
+
+            } catch (e) {
+                console.error('Erro na consulta ViaCEP:', e.message);
+                return { error: true, message: 'Erro ao consultar o serviço de CEP. Tente novamente.' };
+            }
+        }
+
+        // Funções de manipulação da interface de Endereço
+
+        function fillAddressFields(data) {
+            // Campos que devem ser preenchidos automaticamente (se disponíveis)
+            addressFields.logradouro.value = data.logradouro || '';
+            addressFields.bairro.value = data.bairro || '';
+            addressFields.localidade.value = data.localidade || '';
+            addressFields.uf.value = data.uf || '';
+            
+            // Animação visual
+            Object.keys(addressFields).forEach(key => {
+                const field = addressFields[key];
+                // Não animar 'numero' e 'complemento'
+                if (field.value && key !== 'numero' && key !== 'complemento') {
+                    field.style.background = '#f0fff4';
+                    setTimeout(() => {
+                        field.style.background = '';
+                    }, 1000);
+                }
+            });
+        }
+
+        function showAddressError(message) {
+            hideAddressMessages();
+            cepError.textContent = message;
+            cepError.classList.add('show');
+        }
+
+        function showAddressLoading() {
+            hideAddressMessages();
+            // cepLoading.classList.add('show'); 
+        }
+
+        function hideAddressMessages() {
+            cepError.classList.remove('show');
+            // cepLoading.classList.remove('show');
+        }
+
+        // Lógica principal de busca e preenchimento
+        async function handleCepSearch(cep) {
+            const cleanedCep = cep.replace(/\D/g, '');
+
+            if (cleanedCep.length !== 8) {
+                hideAddressMessages(); 
+                clearAddressFields();
+                return;
+            }
+
+            showAddressLoading();
+            
+            const result = await searchAddress(cleanedCep); 
+
+            // Oculta o loading imediatamente após a requisição, independentemente do sucesso/erro
+            hideAddressMessages(); 
+
+            if (result.error) {
+                clearAddressFields(); // Limpa campos em caso de erro
+                showAddressError(result.message);
+            } else {
+                fillAddressFields(result.data);
+                
+                // Focar no campo número se logradouro foi preenchido
+                if (result.data.logradouro) {
+                    setTimeout(() => {
+                        document.getElementById('numero').focus();
+                    }, 100);
+                }
+            }
+        }
+
+        // Cria a versão "debounced" (atrasada) da busca para a digitação
+        const debouncedHandleCepSearch = debounce(handleCepSearch, 500);
+
+
+        // Event Listeners
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Máscara para CEP
+            cepField.addEventListener('input', function() {
+                let value = this.value.replace(/\D/g, '');
+                if (value.length > 5) {
+                    value = value.replace(/^(\d{5})(\d{1,3}).*/, '$1-$2');
+                }
+                this.value = value;
+                
+                hideAddressMessages(); 
+
+                // Auto-buscar quando CEP estiver completo (9 caracteres com o hífen)
+                if (value.length === 9) {
+                    // Usa a função debounced para evitar chamadas rápidas
+                    debouncedHandleCepSearch(value);
+                }
+            });
+
+            // Buscar ao clicar no botão (sem debounce, para execução imediata)
+            searchCepBtn.addEventListener('click', function() {
+                const cep = cepField.value.replace(/\D/g, '');
+                handleCepSearch(cep);
+            });
+
+            // Buscar ao pressionar Enter no campo CEP (sem debounce)
+            cepField.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const cep = this.value.replace(/\D/g, '');
+                    handleCepSearch(cep);
+                }
+            });
+            
+            // Listener para fechar o dropdown quando clicar fora dele (de inativos.html)
+            document.addEventListener('click', function(event) {
+                const dropdown = document.getElementById('profile-dropdown-menu');
+                const profileIcon = document.querySelector('.profile .header-icon');
+                
+                // Verifica se o clique não foi no dropdown e nem no ícone de perfil
+                if (dropdown && dropdown.style.display === 'block' && event.target !== profileIcon && !dropdown.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
+
+
+        // Limpar endereço
+        document.getElementById('clearAddress').addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja limpar todos os campos do endereço?')) {
+                cepField.value = '';
+                clearAddressFields();
+                hideAddressMessages();
+                cepField.focus();
+            }
+        });
+
+        // Salvar endereço (mantido como simulação)
+        document.getElementById('saveAddress').addEventListener('click', function() {
+            const addressData = {
+                cep: cepField.value,
+                logradouro: addressFields.logradouro.value,
+                numero: addressFields.numero.value,
+                complemento: addressFields.complemento.value,
+                bairro: addressFields.bairro.value,
+                localidade: addressFields.localidade.value,
+                uf: addressFields.uf.value,
+            };
+
+            // Validação básica
+            if (!addressData.cep || !addressData.logradouro || !addressData.numero) {
+                alert('Por favor, preencha pelo menos CEP, Logradouro e Número.');
+                return;
+            }
+
+            // Simular salvamento
+            console.log('Dados do endereço:', addressData);
+            alert('Endereço salvo com sucesso!');
+        });
+
+        // Validação visual em tempo real para campos obrigatórios (mantido)
+        [cepField, addressFields.logradouro, document.getElementById('numero')].forEach(field => {
+            field.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    this.style.borderColor = '#e0e0e0';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
