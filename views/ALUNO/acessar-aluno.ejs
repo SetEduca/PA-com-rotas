@@ -185,6 +185,93 @@ margin-right: 15px;
 font-size: 28px;
 }
 
+/* === CSS ADICIONADO PARA O MENU DE PERFIL === */
+.profile {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-icon {
+    font-size: 28px;
+    color: white;
+}
+
+.profile-arrow {
+    font-size: 16px;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.profile-dropdown {
+    display: none; /* Começa escondido */
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 1000;
+    padding: 8px 0;
+    margin-top: 10px;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.profile-dropdown.show {
+    display: block; /* Mostra o dropdown */
+}
+
+.profile-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.profile-dropdown a:hover {
+    background-color: #f4f4f4;
+}
+
+.profile-dropdown a i {
+    width: 20px;
+    text-align: center;
+    color: #555;
+}
+
+.profile.active .profile-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 8px 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* === FIM DO CSS ADICIONADO === */
+
+
 .content-area {
 padding: 30px;
 background: #fcf8f2;
@@ -632,6 +719,24 @@ padding: 8px 10px;
 <i class="fas fa-child"></i>
 <span>Crianças <b>CADASTRADAS</b></span>
 </div>
+
+<!-- === HTML ADICIONADO PARA O MENU DE PERFIL === -->
+<div class="profile" id="profile-toggle">
+    <div class="profile-header">
+        <i class="fas fa-user-circle profile-icon"></i>
+        <i class="fas fa-chevron-down profile-arrow"></i>
+    </div>
+    <div class="profile-dropdown" id="profile-dropdown-menu">
+        <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
+        <a href="/mensalidade" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+        <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
+        <div class="dropdown-divider"></div>
+        <!-- Adicionei um link de logout que chama a função 'logout()' já existente -->
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+    </div>
+</div>
+<!-- === FIM DO HTML ADICIONADO === -->
+
 </div>
 <div class="content-area">
 <div class="search-section">
@@ -658,7 +763,8 @@ padding: 8px 10px;
 <th>Operações</th>
 </tr>
 </thead>
-<tbody id="criancasTableBody"></tbody>
+<tbody id="criancasTableBody">
+</tbody>
 </table>
 </div>
 </div>
@@ -680,45 +786,27 @@ padding: 8px 10px;
 </div>
 
 <script>
+// Variável global para armazenar os dados carregados
 let criancas = [];
-
-const dadosExemplo = [
-{
-id: 1,
-nome: "Maria Silva Santos",
-dataNasc: "15/03/2020",
-dataMatricula: "01/02/2024",
-responsavelPrincipal: "Ana Silva Santos",
-responsavelSecundario: "João Santos",
-telefone: "(71) 98765-4321",
-endereco: "Rua das Flores, 123 - Salvador/BA",
-status: "ativo",
-observacoes: "Criança com necessidades alimentares especiais"
-},
-{
-id: 2,
-nome: "Pedro Henrique Costa",
-dataNasc: "22/07/2019",
-dataMatricula: "15/01/2024",
-responsavelPrincipal: "Carla Costa",
-responsavelSecundario: "",
-telefone: "(71) 99876-5432",
-endereco: "Av. Principal, 456 - Salvador/BA",
-status: "ativo",
-observacoes: ""
-}
-];
 
 function calcularIdade(dataNasc) {
 const hoje = new Date();
-const nascimento = new Date(dataNasc.split('/').reverse().join('-'));
+// Garante que a data seja interpretada corretamente
+const dataFormatada = dataNasc.includes('T') ? dataNasc.split('T')[0] : dataNasc;
+const partesData = dataFormatada.split(dataFormatada.includes('/') ? '/' : '-');
+
+// Formato esperado: DD/MM/YYYY ou YYYY-MM-DD
+const nascimento = dataFormatada.includes('/')
+? new Date(partesData[2], partesData[1] - 1, partesData[0]) // DD/MM/YYYY
+: new Date(partesData[0], partesData[1] - 1, partesData[2]); // YYYY-MM-DD
+
 let idade = hoje.getFullYear() - nascimento.getFullYear();
 const mes = hoje.getMonth() - nascimento.getMonth();
-
 if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
 idade--;
 }
 
+if (idade < 0) return 'Data inválida';
 if (idade === 0) {
 const meses = hoje.getMonth() - nascimento.getMonth() + (12 * (hoje.getFullYear() - nascimento.getFullYear()));
 return `${meses} meses`;
@@ -734,7 +822,10 @@ const rotas = {
 'financeiro': '/financeiro',
 'turma': '/turmas-cadastradas',
 'matricula': '/matricula',
-'cadastro': '/acessar-aluno'
+'cadastro': '/acessar-aluno', // Esta rota leva para a lista, não para o cadastro
+'meu-perfil': '/meuperfil', // Rota adicionada
+'mensalidade': '/mensalidade', // Rota adicionada
+'arquivados': '/arquivados' // Rota adicionada
 };
 
 if (rotas[pagina]) {
@@ -751,37 +842,34 @@ window.location.href = '/login';
 }
 
 function criarNovoCadastro() {
-window.location.href = '/cadastro-aluno';
-}
-
-function carregarDoMemoria() {
-if (criancas.length === 0) {
-return dadosExemplo.slice();
-}
-return criancas;
+window.location.href = '/cadastro-aluno'; // Rota para a página de cadastro
 }
 
 function getStatusInfo(status) {
+if (!status) return { class: 'status-pendente', text: 'Indefindo' };
 switch (status.toLowerCase()) {
 case 'ativo':
 return { class: 'status-ativo', text: 'Ativo' };
 case 'inativo':
 return { class: 'status-inativo', text: 'Inativo' };
 default:
-return { class: 'status-pendente', text: 'Indefinido' };
+return { class: 'status-pendente', text: status };
 }
 }
 
-function carregarCriancas() {
-criancas = carregarDoMemoria();
+// Esta função desenha a tabela com base nos dados recebidos
+function renderTable(criancasData) {
 const tbody = document.getElementById('criancasTableBody');
 const totalCriancas = document.getElementById('totalCriancas');
 tbody.innerHTML = '';
 
-if (criancas.length === 0) {
-tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#666; padding:40px;">Nenhuma criança cadastrada ainda</td></tr>';
-} else {
-criancas.forEach((crianca, index) => {
+if (!criancasData || criancasData.length === 0) {
+tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#666; padding:40px;">Nenhuma criança encontrada</td></tr>';
+totalCriancas.textContent = `Total de Crianças: 0`;
+return;
+}
+
+criancasData.forEach((crianca) => {
 const statusInfo = getStatusInfo(crianca.status);
 const idade = calcularIdade(crianca.dataNasc);
 const iniciais = crianca.nome.split(' ').map(n => n[0]).join('').substring(0, 2);
@@ -789,7 +877,7 @@ const iniciais = crianca.nome.split(' ').map(n => n[0]).join('').substring(0, 2)
 tbody.innerHTML += `
 <tr>
 <td class="avatar-cell">
-<div class="student-avatar">${iniciais}</div>
+<div class="student-avatar">${iniciais.toUpperCase()}</div>
 </td>
 <td style="font-weight: 600; text-align: left;">${crianca.nome}</td>
 <td><strong>${idade}</strong></td>
@@ -801,38 +889,61 @@ ${statusInfo.text}
 </td>
 <td>
 <div class="operations">
-<button class="btn-action btn-view" onclick="visualizarCrianca(${index})" title="Ver detalhes">
+<button class="btn-action btn-view" onclick="visualizarCrianca(${crianca.id})" title="Ver detalhes">
 <i class="fas fa-eye"></i> Ver
 </button>
-<button class="btn-action btn-edit" onclick="editarCrianca(${index})" title="Editar cadastro">
+<button class="btn-action btn-edit" onclick="editarCrianca(${crianca.id})" title="Editar cadastro">
 <i class="fas fa-edit"></i> Editar
-</button>
-<button class="btn-action btn-delete" onclick="excluirCrianca(${index})" title="Arquivar cadastro">
-<i class="fas fa-archive"></i> Arquivar
 </button>
 </div>
 </td>
 </tr>`;
 });
-}
-totalCriancas.textContent = `Total de Crianças: ${criancas.length}`;
+totalCriancas.textContent = `Total de Crianças: ${criancasData.length}`;
 }
 
-function visualizarCrianca(index) {
-const crianca = criancas[index];
+// MODIFICADO: carregarCriancas
+// Agora busca os dados da API
+async function carregarCriancas() {
+try {
+// CORREÇÃO: Caminho absoluto (com /) para chamar /acessar-aluno/api/listar
+const response = await fetch('/acessar-aluno/api/listar');
+if (!response.ok) {
+throw new Error('Erro ao buscar dados do servidor');
+}
+criancas = await response.json(); // Armazena os dados globalmente
+renderTable(criancas);
+} catch (error) {
+console.error('Falha ao carregar crianças:', error);
+const tbody = document.getElementById('criancasTableBody');
+tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red; padding:40px;">Erro ao carregar dados do servidor. Tente novamente.</td></tr>`;
+document.getElementById('totalCriancas').textContent = 'Total de Crianças: 0';
+}
+}
+
+// MODIFICADO: visualizarCrianca
+// Agora busca os detalhes da API
+async function visualizarCrianca(id) { // Recebe ID, não index
+try {
+// CORREÇÃO: Caminho absoluto (com /) para chamar /acessar-aluno/api/detalhes/:id
+const response = await fetch(`/acessar-aluno/api/detalhes/${id}`);
+if (!response.ok) {
+throw new Error('Criança não encontrada');
+}
+const crianca = await response.json();
 const modal = document.getElementById('childDetailsModal');
 const modalTitle = document.getElementById('modalChildTitle');
 const container = document.getElementById('childDetailsContainer');
-
 modalTitle.textContent = `Detalhes: ${crianca.nome}`;
 
 const idade = calcularIdade(crianca.dataNasc);
 const statusInfo = getStatusInfo(crianca.status);
-
+const dataMatriculaFormatada = crianca.dataMatricula ? new Date(crianca.dataMatricula).toLocaleDateString('pt-BR') : 'N/A';
+const dataNascFormatada = crianca.dataNasc ? new Date(crianca.dataNasc).toLocaleDateString('pt-BR') : 'N/A';
 container.innerHTML = `
 <div style="text-align: center; margin-bottom: 30px;">
 <div class="student-avatar" style="width: 80px; height: 80px; font-size: 28px; margin: 0 auto 15px;">
-${crianca.nome.split(' ').map(n => n[0]).join('').substring(0, 2)}
+${crianca.nome.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
 </div>
 <h2 style="color: #333; margin-bottom: 10px;">${crianca.nome}</h2>
 <span class="status-badge ${statusInfo.class}">${statusInfo.text}</span>
@@ -842,25 +953,25 @@ ${crianca.nome.split(' ').map(n => n[0]).join('').substring(0, 2)}
 <div class="info-card">
 <h4><i class="fas fa-child"></i> Informações Pessoais</h4>
 <div class="info-details">
-<strong>Data de Nascimento:</strong> ${crianca.dataNasc}<br>
+<strong>Data de Nascimento:</strong> ${dataNascFormatada}<br>
 <strong>Idade:</strong> ${idade}<br>
-<strong>Data de Matrícula:</strong> ${crianca.dataMatricula}
+<strong>Data de Matrícula:</strong> ${dataMatriculaFormatada}
 </div>
 </div>
 
 <div class="info-card">
 <h4><i class="fas fa-users"></i> Responsáveis</h4>
 <div class="info-details">
-<strong>Principal:</strong> ${crianca.responsavelPrincipal}<br>
+<strong>Principal:</strong> ${crianca.responsavelPrincipal || 'N/A'}<br>
 ${crianca.responsavelSecundario ? `<strong>Secundário:</strong> ${crianca.responsavelSecundario}<br>` : ''}
-<strong>Telefone:</strong> ${crianca.telefone}
+<strong>Telefone:</strong> ${crianca.telefone || 'N/A'}
 </div>
 </div>
 
 <div class="info-card">
 <h4><i class="fas fa-map-marker-alt"></i> Endereço</h4>
 <div class="info-details">
-${crianca.endereco}
+${crianca.endereco || 'Nenhum endereço cadastrado.'}
 </div>
 </div>
 
@@ -876,39 +987,45 @@ ${crianca.observacoes}
 `;
 
 modal.style.display = 'flex';
+} catch (error) {
+console.error('Erro ao visualizar criança:', error);
+alert('Não foi possível carregar os detalhes da criança.');
+}
 }
 
 function closeModal() {
 document.getElementById('childDetailsModal').style.display = 'none';
 }
 
-function editarCrianca(index) {
-if (index >= 0 && index < criancas.length) {
-const criancaId = criancas[index].id;
-window.location.href = `/editar-aluno?id=${criancaId}`;
-}
+// MODIFICADO: editarCrianca
+function editarCrianca(id) { // Recebe ID, não index
+window.location.href = `/editar-aluno?id=${id}`; // (Esta rota deve ser criada no futuro)
 }
 
-function excluirCrianca(index) {
-const crianca = criancas[index];
-
-if (confirm(`Tem certeza que deseja arquivar o cadastro de "${crianca.nome}"?`)) {
-criancas.splice(index, 1);
-carregarCriancas();
-alert('Cadastro arquivado com sucesso!');
+// MODIFICADO: excluirCrianca (em standby)
+/*
+async function excluirCrianca(id, nome) {
+if (confirm(`Tem certeza que deseja arquivar o cadastro de "${nome}"?`)) {
+try {
+    // CORREÇÃO: Caminho absoluto (com /)
+    const response = await fetch(`/acessar-aluno/api/arquivar/${id}`, { 
+        method: 'DELETE'
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Falha ao arquivar');
+    }
+    alert('Cadastro arquivado com sucesso!');
+    carregarCriancas();
+} catch (error) {
+    console.error("Erro ao arquivar:", error);
+    alert(`Ocorreu um erro ao tentar arquivar: ${error.message}`);
 }
 }
-
-function adicionarCrianca(novaCrianca) {
-if (!novaCrianca.id) {
-novaCrianca.id = Date.now();
 }
+*/
 
-criancas.push(novaCrianca);
-carregarCriancas();
-alert('Criança cadastrada com sucesso!');
-}
-
+// Esta função ainda funcionará com os dados carregados na variável 'criancas'
 function filtrarPorStatus(status) {
 const rows = document.querySelectorAll('#criancasTableBody tr');
 let visibleCount = 0;
@@ -916,13 +1033,12 @@ let visibleCount = 0;
 rows.forEach(row => {
 if (row.children.length > 1) {
 const statusCell = row.children[4];
-const statusText = statusCell.textContent.toLowerCase();
-const isVisible = status === 'todos' || statusText.includes(status.toLowerCase());
+const statusText = statusCell.querySelector('.status-badge').textContent.trim().toLowerCase();
+const isVisible = status === 'todos' || statusText === status.toLowerCase();
 row.style.display = isVisible ? '' : 'none';
 if (isVisible) visibleCount++;
 }
 });
-
 const totalCriancas = document.getElementById('totalCriancas');
 if (status === 'todos') {
 totalCriancas.textContent = `Total de Crianças: ${criancas.length}`;
@@ -932,65 +1048,104 @@ totalCriancas.textContent = `${status.charAt(0).toUpperCase() + status.slice(1)}
 }
 
 function exportarDados() {
+if (criancas.length === 0) {
+alert('Não há dados para exportar.');
+return;
+}
 const dataStr = JSON.stringify(criancas, null, 2);
 const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-
 const exportFileDefaultName = `criancas_cadastradas_${new Date().toISOString().split('T')[0]}.json`;
-
 const linkElement = document.createElement('a');
 linkElement.setAttribute('href', dataUri);
 linkElement.setAttribute('download', exportFileDefaultName);
 linkElement.click();
 }
 
+// MODIFICADO: DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
-carregarCriancas();
+carregarCriancas(); // Carrega os dados da API ao iniciar
 
 const searchInput = document.querySelector('.search-input');
+let searchTimeout; 
+
 searchInput.addEventListener('input', function() {
+clearTimeout(searchTimeout);
 const searchTerm = this.value.toLowerCase();
-const rows = document.querySelectorAll('#criancasTableBody tr');
-
-let visibleCount = 0;
-rows.forEach(row => {
-if (row.children.length > 1) {
-const text = row.textContent.toLowerCase();
-const isVisible = text.includes(searchTerm);
-row.style.display = isVisible ? '' : 'none';
-if (isVisible) visibleCount++;
-}
-});
-
 const totalCriancas = document.getElementById('totalCriancas');
-if (searchTerm) {
-totalCriancas.textContent = `Encontradas: ${visibleCount} de ${criancas.length}`;
-} else {
-totalCriancas.textContent = `Total de Crianças: ${criancas.length}`;
-}
-});
 
+searchTimeout = setTimeout(async () => {
+try {
+if (searchTerm.length === 0) {
+carregarCriancas(); 
+return;
+}
+if (searchTerm.length < 2) {
+renderTable([]); 
+totalCriancas.textContent = 'Digite ao menos 2 letras...';
+return; 
+}
+
+// CORREÇÃO: Caminho absoluto (com /) para chamar /acessar-aluno/api/buscar
+const response = await fetch(`/acessar-aluno/api/buscar?termo=${encodeURIComponent(searchTerm)}`);
+if (!response.ok) {
+throw new Error('Erro ao buscar');
+}
+const criancasFiltradas = await response.json();
+renderTable(criancasFiltradas); 
+
+totalCriancas.textContent = `Encontradas: ${criancasFiltradas.length}`;
+
+} catch (error) {
+console.error('Erro na busca:', error);
+const tbody = document.getElementById('criancasTableBody');
+tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red; padding:40px;">Erro ao realizar busca.</td></tr>`;
+}
+}, 300);
+});
+// Lógica do Modal (original)
 const modal = document.getElementById('childDetailsModal');
 modal.addEventListener('click', function(e) {
 if (e.target === this) {
 closeModal();
 }
 });
-
 document.addEventListener('keydown', function(e) {
 if (e.key === 'Escape') {
 closeModal();
 }
 });
+
+// === JAVASCRIPT ADICIONADO PARA O MENU DE PERFIL ===
+const profileToggle = document.getElementById('profile-toggle');
+const profileDropdown = document.getElementById('profile-dropdown-menu');
+
+if (profileToggle && profileDropdown) {
+    profileToggle.addEventListener('click', function(e) {
+        e.stopPropagation(); // Impede que o clique feche o menu imediatamente
+        profileDropdown.classList.toggle('show');
+        profileToggle.classList.toggle('active');
+    });
+
+    // Fecha o dropdown se clicar em qualquer outro lugar
+    document.addEventListener('click', function(e) {
+        if (!profileToggle.contains(e.target) && profileDropdown.classList.contains('show')) {
+            profileDropdown.classList.remove('show');
+            profileToggle.classList.remove('active');
+        }
+    });
+}
+// === FIM DO JAVASCRIPT ADICIONADO ===
+
 });
 
-window.adicionarCrianca = adicionarCrianca;
+// MODIFICADO: Exposição global das funções
 window.navegarPara = navegarPara;
 window.logout = logout;
 window.criarNovoCadastro = criarNovoCadastro;
 window.visualizarCrianca = visualizarCrianca;
 window.closeModal = closeModal;
 window.editarCrianca = editarCrianca;
-window.excluirCrianca = excluirCrianca;
+// window.excluirCrianca = excluirCrianca; // Em standby
 window.filtrarPorStatus = filtrarPorStatus;
 window.exportarDados = exportarDados;
 </script>
