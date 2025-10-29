@@ -1,21 +1,26 @@
+ import 'dotenv/config';
  import express from 'express';
  import supabase from './supabase.js';
  import turmasRouter from './routes/turmas.routes.js';
  import matriculasRouter from './routes/matricula.routes.js';
-  import perfilRouter from './routes/perfil.routes.js';
+import perfilRouter from './routes/perfil.routes.js';    
 import mensalidadeRouter from './routes/mensalidades.routes.js';
 import arquivadosRouter from './routes/arquivados.routes.js';
- import bcrypt from 'bcrypt';
+  import bcrypt from 'bcrypt';
+ import professoresRoutes from './routes/professores.routes.js';
+ import cadastroRouter from './routes/cadastro.routes.js';
+import loginRouter from './routes/login.routes.js';
+
 
  const app = express();
  const PORT = 3020;
  const SALT_ROUNDS = 10;
 
 // --- CONFIGURAÇÕES GERAIS ---
+app.use(express.json());
  app.set("view engine", "ejs");
  app.set("views", "./views");
  app.use(express.static('public'));
- app.use(express.json());
  app.use(express.urlencoded({ extended: true }));
  
  
@@ -28,16 +33,11 @@ app.get("/", (req, res) => {
 
 //LOGIN
 
-app.get("/login", (req, res) => {
-  res.render("LOGIN/login");
-});
+app.use('/login', loginRouter);
 
 
 // CADASTROINICIAL
-
-app.get("/cadastro", (req, res) => {
-  res.render("CADASTRO/cadastro");
-});
+app.use('/cadastro', cadastroRouter);
 
 //PERFIL
 
@@ -122,6 +122,8 @@ app.use('/turmas', turmasRouter);
 app.use('/matriculas', matriculasRouter);
 
 //PROFESSOR
+
+app.use('/professores', professoresRoutes);
 
 app.get("/cadastro-prof", (req, res) => {
   res.render("PROFESSOR/cadastrop");
