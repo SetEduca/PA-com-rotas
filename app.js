@@ -1,11 +1,14 @@
- import 'dotenv/config';
- import express from 'express';
- import supabase from './supabase.js';
- import turmasRouter from './routes/turmas.routes.js';
- import matriculasRouter from './routes/matricula.routes.js';
- import professoresRoutes from './routes/professores.routes.js';
-  import cadastroRouter from './routes/cadastro.routes.js';
+import 'dotenv/config';
+import express from 'express';
+import supabase from './supabase.js';
+import turmasRouter from './routes/turmas.routes.js';
+import matriculasRouter from './routes/matricula.routes.js';
+import professoresRoutes from './routes/professores.routes.js';
+import cadastroRouter from './routes/cadastro.routes.js';
 import loginRouter from './routes/login.routes.js';
+import mensalidadeRouter from './routes/mensalidades.routes.js'
+import arquivadosRouter from './routes/arquivados.routes.js'
+
 
  const app = express();
  const PORT = 3020;
