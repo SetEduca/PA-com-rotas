@@ -39,19 +39,35 @@
         .menu { flex: 1; /* Permite que o menu ocupe todo o espaço vertical disponível */ padding: 20px 18px; overflow-y: auto; /* Adiciona uma barra de rolagem se o menu for muito grande */ }
         /* Estilos para cada item do menu */
         .menu-item { 
-            padding: 16px 20px; margin-bottom: 6px; border-radius: 8px; cursor: pointer; 
+            padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer; 
             transition: all 0.3s ease; /* Animação suave para todas as propriedades */ 
             position: relative; /* Necessário para o pseudo-elemento ::after */ 
             display: flex; align-items: center; /* Alinha o ícone e o texto verticalmente */ 
             font-weight: 500; color: black; text-decoration: none; /* Remove o sublinhado do link */ 
+            overflow: visible;
         }
-        .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
+        .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
+        .menu-item span { z-index: 2; font-size: 15px; }
         /* Efeito ao passar o mouse sobre o item do menu */
         .menu-item:hover { background-color: #6c757d21; }
         /* Estilo para o item de menu que está ativo (página atual) */
-        .menu-item.active { background-color: rgba(128, 128, 128, 0.1); color: #333; font-weight: 600; }
+        .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
+        /* Adiciona indicador visual no item ativo */
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            z-index: 2;
+        }
         /* Cria uma pequena linha decorativa abaixo do item do menu */
         .menu-item::after { 
+            padding: 0 10px;
             content: ''; position: absolute; bottom: -3px; 
             left: 20px; height: 2px; width: 0px; /* Começa com largura 0 */ 
             transition: width 0.3s ease; /* Anima a largura */ 
@@ -61,7 +77,7 @@
         .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
         /* Cores diferentes da linha para cada item do menu */
         .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-        .menu-item:nth-child(2)::after { background-color: #00A6FF; }
+        .menu-item:nth-child(2)::after { background-color: #306bc2; }
         .menu-item:nth-child(3)::after { background-color: #9747FF; }
         .menu-item:nth-child(4)::after { background-color: #F88C12; }
         .menu-item:nth-child(5)::after { background-color: #D22A2A; }

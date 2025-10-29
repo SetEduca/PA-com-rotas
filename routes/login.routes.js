@@ -1,233 +1,136 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const session = require('express-session');
-const nodemailer = require('nodemailer');
-const path = require('path');
+// routes/login.routes.js
 
-const app = express();
-const PORT = 3020;
+// Importa as bibliotecas necessárias
+import express from 'express';
+import bcrypt from 'bcrypt';
+import supabase from '../supabase.js';
 
-// Array temporário para armazenar usuários (em um projeto real, use um banco de dados)
-let users = [];
+// Cria o roteador Express
+const router = express.Router();
 
-// Array para armazenar códigos de recuperação temporários
-let recoveryCodes = [];
-
-// --- Configuração do Nodemailer ---
-// IMPORTANTE: Configure com suas credenciais reais
-const transporter = nodemailer.createTransport({
-    service: 'gmail', // ou outro serviço (outlook, yahoo, etc)
-    auth: {
-        user: 'seu-email@gmail.com', // Substitua pelo seu e-mail
-        pass: 'sua-senha-app' // Substitua pela senha de aplicativo do Gmail
+// --- ROTA GET /login ---
+router.get("/", (req, res) => {
+    try {
+        const successMessage = req.query.cadastro === 'sucesso'
+            ? 'Cadastro realizado com sucesso! Faça o login.'
+            : null;
+        res.render("LOGIN/login", { error: null, success: successMessage });
+    } catch (renderError) {
+        console.error("Erro ao renderizar página de login:", renderError);
+        res.status(500).send("Erro ao carregar a página de login.");
     }
 });
 
-// Função para gerar código de 6 dígitos
-function generateCode() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-}
+// --- ROTA POST /login ---
+router.post("/", async (req, res) => {
+    const { email, password } = req.body;
 
-// Função para enviar e-mail com código
-async function sendRecoveryEmail(email, code) {
-    const mailOptions = {
-        from: '"Seu App" <seu-email@gmail.com>', // Nome do remetente
-        to: email,
-        subject: 'Código de Recuperação de Senha',
-        html: `
-            <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 10px;">
-                <h2 style="color: #fcdc6a; text-align: center;">Recuperação de Senha</h2>
-                <p>Você solicitou a recuperação de senha para sua conta.</p>
-                <p>Seu código de verificação é:</p>
-                <div style="background-color: #FFF9E8; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px; margin: 20px 0; border-radius: 10px;">
-                    ${code}
-                </div>
-                <p style="color: #dc3545; font-weight: bold;">Este código expira em 10 minutos.</p>
-                <p>Se você não solicitou esta recuperação, por favor, ignore este e-mail.</p>
-            </div>
-        `
-    };
+    if (!email || !password) {
+        return res.status(400).render("LOGIN/login", {
+            error: 'E-mail e senha são obrigatórios.', success: null
+        });
+    }
 
     try {
-        await transporter.sendMail(mailOptions);
-        console.log('E-mail de recuperação enviado com sucesso para:', email);
-        return true;
-    } catch (error) {
-        console.error('Erro ao enviar e-mail:', error);
-        return false;
-    }
-}
+        // 1. Buscar o usuário na tabela 'cadastro_creche'
+        console.log(`Tentando login para: ${email}`);
+        const { data: usuario, error: fetchError } = await supabase
+            .from('cadastro_creche') // Tabela correta
+            .select('id, senha, nome') // Colunas corretas
+            .eq('email', email)        // Coluna correta
+            .maybeSingle();
 
-// Configuração do EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Middlewares
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Configuração de sessão
-app.use(session({
-    secret: 'seu-secret-key-super-seguro-e-longo',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: false, // Em produção, use true com HTTPS
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000
-    }
-}));
-
-// Middleware para verificar autenticação
-const requireAuth = (req, res, next) => {
-    if (req.session.userId) {
-        next();
-    } else {
-        res.redirect('/login');
-    }
-};
-
-// --- ROTAS PRINCIPAIS ---
-
-// Rota para a página de login (GET)
-app.get('/login', (req, res) => {
-    if (req.session.userId) {
-        return res.redirect('/home');
-    }
-    res.render('login');
-});
-
-// Rota raiz redireciona para login
-app.get('/', (req, res) => {
-    res.redirect('/login');
-});
-
-// Rota para processar o login (POST)
-app.post('/login', async (req, res) => {
-    // ... (sua lógica de login aqui, não precisa mudar)
-});
-
-// Rota para a página cadastro.html
-app.get('/cadastro', (req, res) => {
-    if (req.session.userId) {
-        return res.redirect('/home');
-    }
-    res.render('cadastro');
-});
-
-// Rota para processar cadastro (POST)
-app.post('/cadastro', async (req, res) => {
-    // ... (sua lógica de cadastro aqui, não precisa mudar)
-});
-
-
-// ========== ROTAS DE RECUPERAÇÃO DE SENHA (API) ==========
-
-// API: Solicitar código de recuperação
-app.post('/api/forgot-password', async (req, res) => {
-    try {
-        const { email } = req.body;
-        if (!email) {
-            return res.status(400).json({ success: false, message: 'E-mail é obrigatório.' });
+        if (fetchError) {
+            console.error("Erro ao buscar usuário no login:", fetchError);
+            if (fetchError.code === 'PGRST205') {
+                 throw new Error("Erro de configuração: A tabela de usuários ('cadastro_creche') não foi encontrada.");
+             }
+            throw new Error("Erro ao consultar o banco de dados.");
         }
 
-        const user = users.find(u => u.email === email.toLowerCase());
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'E-mail não encontrado em nosso sistema.' });
+        // 2. Verificar usuário e senha
+        let senhaCorreta = false;
+        if (usuario) {
+             console.log(`Usuário encontrado (ID: ${usuario.id}). Verificando senha...`);
+            senhaCorreta = usuario.senha ? await bcrypt.compare(password, usuario.senha) : false;
+             console.log(`Senha correta? ${senhaCorreta}`);
+        } else {
+             console.log(`Usuário com email ${email} não encontrado.`);
         }
 
-        const code = generateCode();
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutos
-
-        recoveryCodes = recoveryCodes.filter(rc => rc.email !== email.toLowerCase());
-        recoveryCodes.push({ email: email.toLowerCase(), code, expiresAt, verified: false });
-
-        const emailSent = await sendRecoveryEmail(email, code);
-        if (!emailSent) {
-            return res.status(500).json({ success: false, message: 'Erro ao enviar e-mail. Verifique as configurações do servidor.' });
+        if (!usuario || !senhaCorreta) {
+            console.warn(`Tentativa de login falhou (e-mail ou senha inválidos) para: ${email}`);
+            return res.status(401).render("LOGIN/login", {
+                error: 'E-mail ou senha inválidos.', success: null
+            });
         }
 
-        res.json({ success: true, message: 'Código enviado para seu e-mail!' });
-    } catch (error) {
-        console.error('Erro ao solicitar recuperação:', error);
-        res.status(500).json({ success: false, message: 'Erro interno ao processar a solicitação.' });
+        // 3. Login Válido!
+        console.log(`Login bem-sucedido para: ${email} (ID: ${usuario.id}, Nome: ${usuario.nome})`);
+
+        // --- LÓGICA DE SESSÃO --- // <-- ATIVADO (REQUER CONFIGURAÇÃO EXTERNA)
+        // Certifique-se de ter configurado 'express-session' (ou similar) no seu app.js
+        if (req.session) { // Verifica se o middleware de sessão adicionou req.session
+             req.session.userId = usuario.id;      // Armazena o ID do usuário na sessão
+             req.session.userName = usuario.nome;   // Armazena o nome do usuário na sessão
+             req.session.isAuthenticated = true; // Marca a sessão como autenticada
+             console.log("Sessão criada/atualizada:", req.session);
+
+             // Salva a sessão explicitamente (bom para garantir antes do redirect)
+             req.session.save(err => {
+                 if (err) {
+                     console.error("Erro ao salvar a sessão:", err);
+                     // Decide se o erro ao salvar a sessão deve impedir o login
+                     // throw new Error("Não foi possível iniciar a sessão."); // Ou apenas loga
+                 }
+             });
+        } else {
+             console.error("!!! ERRO: Middleware de sessão (ex: express-session) não parece estar configurado corretamente! O objeto req.session não existe. O usuário não permanecerá logado.");
+             // Considerar lançar um erro ou retornar uma mensagem diferente
+             // throw new Error("Erro interno: Sistema de sessão não configurado.");
+        }
+        // --- FIM LÓGICA DE SESSÃO ---
+
+        // --- INSERIR EM cliente_login --- // <-- ATIVADO (NÃO RECOMENDADO)
+        // Verifique se a tabela 'cliente_login' existe e tem as colunas 'email', 'senha'
+        // e opcionalmente 'cliente_id' (para relacionar com 'cadastro_creche.id') e 'data_login'.
+        try {
+            console.log("Tentando inserir em cliente_login...");
+            const { error: loginLogError } = await supabase
+                .from('cliente_login') // Nome da tabela
+                .insert({
+                    email: email,       // Coluna 'email'
+                    senha: usuario.senha, // Coluna 'senha' (armazena o HASH)
+                    // Adicione outras colunas conforme a estrutura da sua tabela:
+                    // cliente_id: usuario.id,     // Relaciona com o ID da tabela cadastro_creche
+                    // data_login: new Date()      // Registra o momento do login
+                });
+
+            if (loginLogError) {
+                console.error("Erro ao tentar salvar na tabela cliente_login:", loginLogError);
+                // Decide se esse erro impede o login ou só loga
+                // throw new Error("Erro ao registrar informações de login."); // Ou só loga o erro
+            } else {
+                console.log("Informações salvas com sucesso em cliente_login.");
+            }
+        } catch(clienteLoginError) {
+             // Captura erro caso a tabela cliente_login não exista
+             console.error("Erro grave ao tentar acessar/inserir em cliente_login:", clienteLoginError);
+             // throw new Error("Erro ao registrar login: Tabela 'cliente_login' inacessível ou inválida."); // Ou apenas loga
+        }
+        // --- FIM INSERIR EM cliente_login ---
+
+        // Redireciona para a página principal após login
+        res.redirect('/home');
+
+    } catch (error) { // Captura erros gerais
+        console.error("Erro crítico no POST /login:", error);
+        res.status(500).render("LOGIN/login", {
+            error: error.message || 'Ocorreu um erro interno no servidor. Tente novamente.',
+            success: null
+        });
     }
 });
 
-// API: Verificar código
-app.post('/api/verify-code', async (req, res) => {
-    try {
-        const { email, code } = req.body;
-        if (!email || !code) {
-            return res.status(400).json({ success: false, message: 'E-mail e código são obrigatórios.' });
-        }
-
-        const recoveryCode = recoveryCodes.find(rc => rc.email === email.toLowerCase() && rc.code === code);
-        if (!recoveryCode) {
-            return res.status(400).json({ success: false, message: 'Código inválido.' });
-        }
-
-        if (new Date() > recoveryCode.expiresAt) {
-            return res.status(400).json({ success: false, message: 'Código expirado. Solicite um novo código.' });
-        }
-
-        recoveryCode.verified = true;
-        res.json({ success: true, message: 'Código verificado com sucesso!' });
-    } catch (error) {
-        console.error('Erro ao verificar código:', error);
-        res.status(500).json({ success: false, message: 'Erro interno ao verificar o código.' });
-    }
-});
-
-// API: Redefinir senha
-app.post('/api/reset-password', async (req, res) => {
-    try {
-        const { email, code, newPassword } = req.body;
-        if (!email || !code || !newPassword) {
-            return res.status(400).json({ success: false, message: 'Todos os campos são obrigatórios.' });
-        }
-        if (newPassword.length < 6) {
-            return res.status(400).json({ success: false, message: 'A senha deve ter pelo menos 6 caracteres.' });
-        }
-
-        const recoveryCode = recoveryCodes.find(rc => rc.email === email.toLowerCase() && rc.code === code && rc.verified === true);
-        if (!recoveryCode) {
-            return res.status(400).json({ success: false, message: 'Código inválido ou não verificado. Tente novamente.' });
-        }
-        if (new Date() > recoveryCode.expiresAt) {
-            return res.status(400).json({ success: false, message: 'Sessão de recuperação expirada. Por favor, reinicie o processo.' });
-        }
-
-        const userIndex = users.findIndex(u => u.email === email.toLowerCase());
-        if (userIndex === -1) {
-            return res.status(404).json({ success: false, message: 'Usuário não encontrado.' });
-        }
-
-        const saltRounds = 12;
-        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
-        users[userIndex].password = hashedPassword;
-
-        recoveryCodes = recoveryCodes.filter(rc => rc.email !== email.toLowerCase());
-
-        console.log(`Senha redefinida com sucesso para o usuário: ${email}`);
-        res.json({ success: true, message: 'Senha redefinida com sucesso!' });
-    } catch (error) {
-        console.error('Erro ao redefinir senha:', error);
-        res.status(500).json({ success: false, message: 'Erro interno ao redefinir a senha.' });
-    }
-});
-
-// Rota para a página home (protegida)
-app.get('/home', requireAuth, (req, res) => {
-    res.render('home', {
-        userName: req.session.userName
-    });
-});
-
-// Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
-    console.log('Sistema funcionando SEM banco de dados (dados em memória)');
-    console.log('\n⚠️  IMPORTANTE: Configure o e-mail no código antes de usar a recuperação de senha!');
-});
+// Exporta o roteador
+export default router;

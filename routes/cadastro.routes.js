@@ -1,511 +1,231 @@
-// Funções que podem ser chamadas diretamente pelo HTML (onclick) ou que não dependem da página carregar
-function cancelarCadastro() {
-    if (confirm("Deseja cancelar o cadastro e limpar todos os dados?")) {
-        document.getElementById('cadastro-form').reset();
-        // Limpar também o preview da foto
-        document.getElementById('photoPreview').style.display = 'none';
-        document.getElementById('cameraIcon').style.display = 'block';
-        document.getElementById('removePhoto').style.display = 'none';
-        document.getElementById('successMessage').style.display = 'none';
-        // Limpar mensagens de erro
-        document.getElementById('error-message').style.display = 'none';
-        document.getElementById('success-cadastro').style.display = 'none';
-        document.getElementById('password-error-message').textContent = '';
-    }
-}
+// routes/cadastro.routes.js
 
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
+// Importa as bibliotecas necessárias
+import express from 'express';
+import bcrypt from 'bcrypt';
+import multer from 'multer'; // <-- ATIVADO
+import supabase from '../supabase.js';
 
-// Todo o código que manipula a página deve esperar ela carregar primeiro.
-document.addEventListener('DOMContentLoaded', () => {
+// Cria o roteador Express
+const router = express.Router();
+const saltRounds = 10;
 
-    // ========== CONSTANTES DOS ELEMENTOS ==========
-    const photoCircle = document.getElementById('photoCircle');
-    const fileInput = document.getElementById('fileInput');
-    const photoPreview = document.getElementById('photoPreview');
-    const cameraIcon = document.getElementById('cameraIcon');
-    const removePhoto = document.getElementById('removePhoto');
-    const successMessage = document.getElementById('successMessage');
-    const form = document.getElementById('cadastro-form');
-    const senhaInput = document.getElementById('senha');
-    const confirmarSenhaInput = document.getElementById('confirmar_senha');
-    const errorMessageDiv = document.getElementById('password-error-message');
-    const cadastrarBtn = document.getElementById('cadastrar-btn');
-    const successCadastro = document.getElementById('success-cadastro');
-    const errorMessage = document.getElementById('error-message');
-    const errorText = document.getElementById('error-text');
-    const ruaInput = document.getElementById('rua');
-    const bairroInput = document.getElementById('bairro');
-    const cidadeInput = document.getElementById('cidade');
-    const emailInput = document.getElementById('email');
-    const cnpjInput = document.getElementById('cnpj');
-    const successOverlay = document.getElementById('success-overlay');
-    const passwordRequirements = document.getElementById('password-requirements');
-
-    // ========== FUNCIONALIDADE DE UPLOAD DE FOTO ==========
-    if (photoCircle) {
-        photoCircle.addEventListener('click', function(e) {
-            if (e.target === removePhoto) return;
-            fileInput.click();
-        });
-
-        photoCircle.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            photoCircle.classList.add('drag-over');
-        });
-
-        photoCircle.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            photoCircle.classList.remove('drag-over');
-        });
-
-        photoCircle.addEventListener('drop', function(e) {
-            e.preventDefault();
-            photoCircle.classList.remove('drag-over');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                const file = files[0];
-                if (file.type.startsWith('image/')) {
-                    fileInput.files = files;
-                    fileInput.dispatchEvent(new Event('change'));
-                } else {
-                    alert('Por favor, solte apenas arquivos de imagem!');
-                }
-            }
-        });
-    }
-
-    if(fileInput) {
-        fileInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                if (!file.type.startsWith('image/')) {
-                    alert('Por favor, selecione apenas arquivos de imagem!');
-                    fileInput.value = '';
-                    return;
-                }
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('O arquivo deve ter no máximo 5MB!');
-                    fileInput.value = '';
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    photoPreview.src = e.target.result;
-                    photoPreview.style.display = 'block';
-                    cameraIcon.style.display = 'none';
-                    removePhoto.style.display = 'flex';
-                    successMessage.style.display = 'block';
-                    setTimeout(() => {
-                        successMessage.style.display = 'none';
-                    }, 3000);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    }
-
-    if(removePhoto) {
-        removePhoto.addEventListener('click', function(event) {
-            event.stopPropagation();
-            photoPreview.style.display = 'none';
-            cameraIcon.style.display = 'block';
-            removePhoto.style.display = 'none';
-            fileInput.value = '';
-            successMessage.style.display = 'none';
-        });
-    }
-
-
-    // ========== MÁSCARAS PARA OS CAMPOS ==========
-    if (cnpjInput) {
-        cnpjInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            } else {
-                value = value.replace(/^(\d{2})(\d)/, '$1.$2');
-                value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-                value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
-                value = value.replace(/(\d{4})(\d)/, '$1-$2');
-            }
-            e.target.value = value;
-        });
-    }
-
-    if (document.getElementById('telefone')) {
-        document.getElementById('telefone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 10) {
-                value = value.replace(/^(\d{2})(\d)/, '($1) $2');
-                value = value.replace(/(\d{4})(\d)/, '$1-$2');
-            } else {
-                value = value.replace(/^(\d{2})(\d)/, '($1) $2');
-                value = value.replace(/(\d{5})(\d)/, '$1-$2');
-            }
-            e.target.value = value;
-        });
-    }
-    
-    if (document.getElementById('cep')) {
-        document.getElementById('cep').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            value = value.replace(/^(\d{5})(\d)/, '$1-$2');
-            e.target.value = value;
-        });
-    }
-
-    // ========== VALIDAÇÃO DE SENHA EM TEMPO REAL ==========
-    if (senhaInput && passwordRequirements) {
-        senhaInput.addEventListener('focus', function() {
-            passwordRequirements.style.display = 'block';
-        });
-
-        senhaInput.addEventListener('blur', function() {
-            if (this.value === '') {
-                passwordRequirements.style.display = 'none';
-            }
-        });
-
-        function validatePassword(password) {
-            const requirements = {
-                length: password.length >= 6,
-                lowercase: /[a-z]/.test(password),
-                uppercase: /[A-Z]/.test(password),
-                number: /\d/.test(password)
-            };
-
-            // Atualizar visual dos requisitos
-            document.getElementById('req-length').className = requirements.length ? 'valid' : 'invalid';
-            document.getElementById('req-lowercase').className = requirements.lowercase ? 'valid' : 'invalid';
-            document.getElementById('req-uppercase').className = requirements.uppercase ? 'valid' : 'invalid';
-            document.getElementById('req-number').className = requirements.number ? 'valid' : 'invalid';
-
-            return requirements.length && requirements.lowercase && requirements.uppercase && requirements.number;
+// --- Configuração do Upload (Multer) --- // <-- ATIVADO
+const storage = multer.memoryStorage(); // Armazena em memória
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Limite de 5MB
+    fileFilter: (req, file, cb) => { // Aceita apenas imagens
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Formato inválido. Apenas imagens.'), false); // Rejeita outros tipos
         }
-
-        senhaInput.addEventListener('input', function() {
-            const password = this.value;
-            validatePassword(password);
-            
-            // Limpar erro de confirmação se existir
-            if (errorMessageDiv.textContent) {
-                errorMessageDiv.textContent = '';
-                confirmarSenhaInput.classList.remove('error');
-            }
-        });
     }
-
-    // ========== BUSCA AUTOMÁTICA DE CNPJ ==========
-    if(cnpjInput) {
-        cnpjInput.addEventListener('blur', async function() {
-            const cnpjValue = this.value.replace(/\D/g, '');
-            const nomeCrecheInput = document.getElementById('nome_creche');
-
-            if (cnpjValue.length === 14) {
-                const originalValue = nomeCrecheInput.value;
-                nomeCrecheInput.value = 'Buscando...';
-                nomeCrecheInput.disabled = true;
-
-                try {
-                    const response = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpjValue}`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        nomeCrecheInput.value = data.razao_social || '';
-                    } else {
-                        alert('CNPJ não encontrado ou inválido.');
-                        nomeCrecheInput.value = originalValue;  
-                    }
-                } catch (error) {
-                    console.error('Erro ao buscar CNPJ:', error);
-                    alert('Erro ao conectar com a API de CNPJ. Verifique sua conexão.');
-                    nomeCrecheInput.value = originalValue;
-                } finally {
-                    nomeCrecheInput.disabled = false;
-                }
-            }
-        });
-    }
-
-    // ========== BUSCA AUTOMÁTICA DE CEP ==========
-    const configurarCamposEndereco = (estado, texto = '') => {
-        ruaInput.disabled = estado;
-        bairroInput.disabled = estado;
-        cidadeInput.disabled = estado;
-        ruaInput.value = texto;
-        bairroInput.value = texto;
-        cidadeInput.value = texto;
-    };
-
-    const buscarCep = async (cep) => {
-        configurarCamposEndereco(true, 'Buscando...');
-        try {
-            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            if (!response.ok) {
-                throw new Error('Erro de rede ao buscar o CEP.');
-            }
-            const data = await response.json();
-            if (data.erro) {
-                configurarCamposEndereco(false);
-                alert('CEP não encontrado. Por favor, verifique o número digitado.');
-            } else {
-                ruaInput.value = data.logradouro || '';
-                bairroInput.value = data.bairro || '';
-                cidadeInput.value = data.localidade || '';
-                configurarCamposEndereco(false);
-            }
-        } catch (error) {
-            console.error('Falha ao buscar CEP:', error);
-            configurarCamposEndereco(false);
-            alert('Não foi possível buscar o CEP. Verifique sua conexão com a internet.');
-        }
-    };
-
-    if (document.getElementById('cep')) {
-        document.getElementById('cep').addEventListener('blur', function() {
-            const cep = this.value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                buscarCep(cep);
-            } else if (cep.length > 0) {
-                configurarCamposEndereco(false);
-            }
-        });
-    }
-
-    // ========== VALIDAÇÃO DE CONFIRMAÇÃO DE SENHA ==========
-    if (confirmarSenhaInput) {
-        confirmarSenhaInput.addEventListener('input', function() {
-            const senha = senhaInput.value;
-            const confirmarSenha = confirmarSenhaInput.value;
-            if (confirmarSenha && senha !== confirmarSenha) {
-                errorMessageDiv.textContent = 'As senhas não coincidem';
-                confirmarSenhaInput.classList.add('error');
-            } else {
-                errorMessageDiv.textContent = '';
-                confirmarSenhaInput.classList.remove('error');
-            }
-        });
-    }
-
-    // ========== VALIDAÇÃO E SUBMIT DO FORMULÁRIO ==========
-    if (form) {
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            
-            // Limpar mensagens anteriores
-            errorMessageDiv.textContent = '';
-            errorMessage.style.display = 'none';
-            successCadastro.style.display = 'none';
-            
-            const senha = senhaInput.value;
-            const confirmarSenha = confirmarSenhaInput.value;
-            
-            // Validar senhas
-            if (senha !== confirmarSenha) {
-                errorMessageDiv.textContent = 'As senhas não coincidem. Tente novamente.';
-                confirmarSenhaInput.classList.add('error');
-                confirmarSenhaInput.focus();
-                setTimeout(() => {
-                    errorMessageDiv.textContent = '';
-                    confirmarSenhaInput.classList.remove('error');
-                }, 3000);
-                return;
-            }
-
-            // Validar senha com os requisitos (se a função existir)
-            if (typeof validatePassword === 'function' && !validatePassword(senha)) {
-                errorText.textContent = 'A senha não atende aos requisitos de segurança.';
-                errorMessage.style.display = 'block';
-                senhaInput.focus();
-                senhaInput.classList.add('error');
-                if (passwordRequirements) passwordRequirements.style.display = 'block';
-                setTimeout(() => senhaInput.classList.remove('error'), 3000);
-                return;
-            }
-
-            // Validar senha básica (mínimo 6 caracteres)
-            if (senha.length < 6) {
-                errorText.textContent = 'A senha deve ter no mínimo 6 caracteres.';
-                errorMessage.style.display = 'block';
-                senhaInput.focus();
-                senhaInput.classList.add('error');
-                setTimeout(() => senhaInput.classList.remove('error'), 3000);
-                return;
-            }
-
-            // Validar se os termos foram aceitos
-            const termsCheckbox = document.getElementById('terms');
-            if (termsCheckbox && !termsCheckbox.checked) {
-                errorText.textContent = 'Você deve aceitar os Termos de Serviço para continuar.';
-                errorMessage.style.display = 'block';
-                termsCheckbox.focus();
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                return;
-            }
-
-            // Validar campos obrigatórios
-            const camposObrigatorios = [
-                { id: 'nome_creche', nome: 'Nome da Creche' },
-                { id: 'cnpj', nome: 'CNPJ/CPF' },
-                { id: 'telefone', nome: 'Telefone' },
-                { id: 'cep', nome: 'CEP' },
-                { id: 'rua', nome: 'Rua' },
-                { id: 'bairro', nome: 'Bairro' },
-                { id: 'cidade', nome: 'Cidade' },
-                { id: 'email', nome: 'E-mail' }
-            ];
-
-            for (let campo of camposObrigatorios) {
-                const input = document.getElementById(campo.id);
-                if (!input.value.trim()) {
-                    errorText.textContent = `O campo "${campo.nome}" é obrigatório.`;
-                    errorMessage.style.display = 'block';
-                    input.focus();
-                    input.classList.add('error');
-                    setTimeout(() => input.classList.remove('error'), 3000);
-                    return;
-                }
-            }
-
-            // Validar formato do e-mail
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(document.getElementById('email').value)) {
-                errorText.textContent = 'Por favor, digite um e-mail válido.';
-                errorMessage.style.display = 'block';
-                document.getElementById('email').focus();
-                document.getElementById('email').classList.add('error');
-                setTimeout(() => document.getElementById('email').classList.remove('error'), 3000);
-                return;
-            }
-
-            // Validar CNPJ/CPF
-            const cnpjValue = document.getElementById('cnpj').value.replace(/\D/g, '');
-            if (cnpjValue.length !== 11 && cnpjValue.length !== 14) {
-                errorText.textContent = 'CNPJ/CPF deve ter 11 ou 14 dígitos.';
-                errorMessage.style.display = 'block';
-                document.getElementById('cnpj').focus();
-                document.getElementById('cnpj').classList.add('error');
-                setTimeout(() => document.getElementById('cnpj').classList.remove('error'), 3000);
-                return;
-            }
-
-            // Validar CEP
-            const cepValue = document.getElementById('cep').value.replace(/\D/g, '');
-            if (cepValue.length !== 8) {
-                errorText.textContent = 'CEP deve ter 8 dígitos.';
-                errorMessage.style.display = 'block';
-                document.getElementById('cep').focus();
-                document.getElementById('cep').classList.add('error');
-                setTimeout(() => document.getElementById('cep').classList.remove('error'), 3000);
-                return;
-            }
-
-            cadastrarBtn.disabled = true;
-            cadastrarBtn.textContent = 'Cadastrando...';
-            cadastrarBtn.style.opacity = '0.7';
-            
-            try {
-                const formData = new FormData(form);
-                
-                // Log para debug
-                console.log('Enviando dados para o servidor...');
-                
-                const response = await fetch('/cadastro', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (response.ok) {
-                    console.log('Cadastro realizado com sucesso!');
-                    if (successOverlay) {
-                        successOverlay.style.display = 'flex';
-                    } else {
-                        successCadastro.style.display = 'block';
-                        setTimeout(() => {
-                            window.location.href = '/login';
-                        }, 2000);
-                    }
-                    errorMessage.style.display = 'none';
-                    form.style.opacity = '0.7';
-                    form.style.pointerEvents = 'none';
-                } else {
-                    const contentType = response.headers.get('content-type');
-                    let mensagemErro = 'Erro no cadastro. Tente novamente.';
-                    
-                    if (contentType && contentType.includes('application/json')) {
-                        const errorData = await response.json();
-                        mensagemErro = errorData.message || mensagemErro;
-                    } else {
-                        const errorHtml = await response.text();
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(errorHtml, 'text/html');
-                        const errorElement = doc.querySelector('.error-message');
-                        if (errorElement) {
-                            mensagemErro = errorElement.textContent.replace(/[⚠✖]/g, '').trim();
-                        }
-                    }
-                    
-                    console.log('Erro no cadastro:', mensagemErro);
-                    errorText.textContent = mensagemErro;
-                    errorMessage.style.display = 'block';
-                    successCadastro.style.display = 'none';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            } catch (networkError) {
-                console.error('Erro de rede:', networkError);
-                errorText.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
-                errorMessage.style.display = 'block';
-                successCadastro.style.display = 'none';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            
-            cadastrarBtn.disabled = false;
-            cadastrarBtn.textContent = 'Cadastrar';
-            cadastrarBtn.style.opacity = '1';
-        });
-    }
-
-    // ========== VALIDAÇÕES ADICIONAIS ==========
-    if (emailInput) {
-        emailInput.addEventListener('blur', function() {
-            const email = this.value.trim();
-            if (email && !isValidEmail(email)) {
-                this.classList.add('error');
-                setTimeout(() => this.classList.remove('error'), 3000);
-            }
-        });
-    }
-    
-    if (cnpjInput) {
-        cnpjInput.addEventListener('blur', function() {
-            const cnpj = this.value.replace(/\D/g, '');
-            if (cnpj && cnpj.length !== 11 && cnpj.length !== 14) {
-                this.classList.add('error');
-                setTimeout(() => this.classList.remove('error'), 3000);
-            }
-        });
-    }
-    
-    document.addEventListener('input', function(e) {
-        if (e.target.classList.contains('error')) {
-            e.target.classList.remove('error');
-        }
-    });
-
-    // ========== CONSOLE LOG PARA DEBUG ==========
-    console.log('JavaScript do cadastro carregado com sucesso!');
-    console.log('Funcionalidades ativas:');
-    console.log('   - Upload de foto com drag & drop');
-    console.log('   - Máscaras para CNPJ/CPF, telefone e CEP');
-    console.log('   - Busca automática de CNPJ');
-    console.log('   - Busca automática de endereço por CEP');
-    console.log('   - Validação de senhas em tempo real');
-    console.log('   - Submit direto para o servidor via fetch');
-    console.log('   - Validações de campos obrigatórios');
-
 });
+// --- FIM Configuração Multer ---
+
+// --- ROTA GET /cadastro ---
+router.get("/", (req, res) => {
+    try {
+        res.render("CADASTRO/cadastro", { error: null, success: null });
+    } catch (renderError) {
+        console.error("Erro ao renderizar GET /cadastro:", renderError);
+        res.status(500).send("Erro ao carregar a página.");
+    }
+});
+
+// --- ROTA POST /cadastro ---
+// AGORA USA O MIDDLEWARE DO MULTER: upload.single('foto_creche') // <-- ATIVADO
+router.post("/", upload.single('foto_creche'), async (req, res) => {
+    // Log para depuração
+    console.log("---------- POST /cadastro (com Multer e Endereço/Tel) ----------");
+    console.log("Recebido req.body:", req.body); // Campos de texto
+    console.log("Recebido req.file:", req.file ? req.file.originalname : 'Nenhum arquivo'); // Arquivo
+
+    // Verifica se req.body existe
+    if (!req.body) {
+        console.error("ERRO GRAVE: req.body está undefined após Multer!");
+        // Retorna JSON pois o fetch espera JSON
+        return res.status(500).json({ success: false, message: 'Erro interno ao processar formulário.' });
+    }
+
+    // Pega todos os campos esperados do formulário
+    const {
+        nome_creche,
+        cnpj,
+        email,
+        senha,
+        confirmar_senha,
+        terms,
+        telefone, // <-- ATIVADO
+        cep,      // <-- ATIVADO
+        rua,      // <-- ATIVADO
+        bairro,   // <-- ATIVADO
+        cidade    // <-- ATIVADO
+    } = req.body;
+    const fotoFile = req.file; // <-- ATIVADO: Pega o arquivo do Multer
+
+    // --- Validações Essenciais ---
+    // Adiciona validação para campos de endereço/telefone se forem obrigatórios
+    if (!nome_creche || !cnpj || !email || !senha || !confirmar_senha || !terms ||
+        !telefone || !cep || !rua || !bairro || !cidade /* || !fotoFile */ ) { // Adicione !fotoFile se a foto for obrigatória
+        console.warn('Tentativa de cadastro com campos faltando.');
+        let campoFaltando = !nome_creche?'Nome':!cnpj?'CNPJ':!email?'Email':!senha?'Senha':!confirmar_senha?'Conf Senha':!terms?'Termos':!telefone?'Telefone':!cep?'CEP':!rua?'Rua':!bairro?'Bairro':!cidade?'Cidade':/* !fotoFile?'Foto': */'Campo';
+        // Retorna JSON pois o fetch espera JSON
+        return res.status(400).json({ success: false, message: `O campo "${campoFaltando}" é obrigatório.` });
+    }
+    if (senha !== confirmar_senha) {
+        // Retorna JSON pois o fetch espera JSON
+        return res.status(400).json({ success: false, message: 'As senhas não coincidem.' });
+    }
+    // TODO: Validar força da senha
+
+    try {
+        // 1. Verificar e-mail (igual antes)
+        const { data: existingUser, error: checkError } = await supabase
+            .from('cadastro_creche').select('email').eq('email', email).maybeSingle();
+        if (checkError) throw checkError;
+        if (existingUser) {
+            // Retorna JSON pois o fetch espera JSON
+            return res.status(409).json({ success: false, message: 'Este e-mail já está cadastrado.' });
+        }
+
+        // 2. Hash da Senha (igual antes)
+        const hashedSenha = await bcrypt.hash(senha, saltRounds);
+
+        // 3. Inserir na 'cadastro_creche' (igual antes)
+        const { data: newUser, error: userError } = await supabase
+            .from('cadastro_creche')
+            .insert({ nome: nome_creche, cnpj: cnpj.replace(/\D/g, ''), email: email, senha: hashedSenha })
+            .select('id').single();
+        if (userError) throw userError;
+        if (!newUser || !newUser.id) throw new Error('Falha ao obter ID do usuário.');
+        const userId = newUser.id;
+        console.log(`Usuário inserido (ID: ${userId})`);
+
+        // --- Inserções Endereço e Telefone --- // <-- ATIVADO
+        console.log("Tentando inserir endereço e telefone...");
+        // Garante que temos os dados necessários antes de tentar inserir
+        if (telefone && cep && rua && bairro && cidade) {
+            const [enderecoResult, telResult] = await Promise.all([
+                supabase.from('endereco_creche').insert({ // VERIFIQUE NOME DA TABELA
+                    rua: rua,
+                    bairro: bairro,
+                    cidade: cidade,
+                    cep: cep.replace(/\D/g, ''), // VERIFIQUE NOME DA COLUNA (cepa ou cep)
+                    cadastro_id: userId   // VERIFIQUE NOME DA COLUNA FK
+                    // Adicione numero, complemento, estado se tiver no form/tabela
+                }),
+                supabase.from('tel_creche').insert({ // VERIFIQUE NOME DA TABELA
+                    ddd: telefone.replace(/\D/g, '').substring(0, 2),
+                    numero: telefone.replace(/\D/g, '').substring(2), // VERIFIQUE NOME DA COLUNA (número ou numero)
+                    cadastro_id: userId                    // VERIFIQUE NOME DA COLUNA FK
+                })
+            ]);
+            // Verifica erros nas inserções paralelas
+            if (enderecoResult.error) {
+                 console.error("Erro ao inserir endereço:", enderecoResult.error);
+                 throw new Error(`Falha ao salvar endereço: ${enderecoResult.error.message}`);
+            }
+            if (telResult.error) {
+                 console.error("Erro ao inserir telefone:", telResult.error);
+                 throw new Error(`Falha ao salvar telefone: ${telResult.error.message}`);
+            }
+            console.log("Endereço e telefone inseridos com sucesso.");
+        } else {
+             // Lança um erro se os campos eram esperados mas não vieram (ajuste conforme sua lógica de obrigatoriedade)
+             // throw new Error("Dados de endereço/telefone ausentes ou inválidos.");
+             console.warn("Dados de endereço/telefone incompletos, não foram salvos."); // Ou apenas avisa
+        }
+        // --- FIM Inserções Endereço/Telefone ---
+
+// --- Upload da Foto --- // <-- ATIVADO
+        let fotoUrlPublica = null;
+        if (fotoFile) {
+            console.log(`Tentando upload da foto: ${fotoFile.originalname}`);
+            try {
+                const BUCKET_NAME = 'fotos-creche'; // Bucket público no Supabase Storage
+                const fileExtension = fotoFile.originalname.split('.').pop();
+                const filePath = `public/${userId}-${Date.now()}.${fileExtension}`;
+
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from(BUCKET_NAME)
+                    .upload(filePath, fotoFile.buffer, {
+                        contentType: fotoFile.mimetype,
+                        upsert: false
+                    });
+
+                if (uploadError) {
+                    console.error("Erro no upload para Supabase Storage:", uploadError);
+                    throw new Error(`Falha no upload da foto: ${uploadError.message}`);
+                }
+
+                const { data: urlData } = supabase.storage.from(BUCKET_NAME).getPublicUrl(filePath);
+                fotoUrlPublica = urlData.publicUrl;
+                console.log("Foto enviada com sucesso:", fotoUrlPublica);
+
+                // --- ATIVADO: Salvar URL na tabela 'cadastro_creche' ---
+                // CERTIFIQUE-SE que a coluna 'url_foto' (ou o nome que você usou)
+                // existe na tabela 'cadastro_creche' e é do tipo TEXT ou VARCHAR.
+                console.log(`Tentando salvar URL da foto no banco para userId: ${userId}`);
+                const { error: updateFotoError } = await supabase
+                    .from('cadastro_creche')
+                    .update({ url_foto: fotoUrlPublica }) // <-- VERIFIQUE O NOME DA COLUNA AQUI
+                    .eq('id', userId); // Garante que atualiza apenas o usuário correto
+
+                if (updateFotoError) {
+                    // Loga um aviso, mas não impede o cadastro principal
+                    console.warn(`Aviso: Foto enviada para o Storage (${fotoUrlPublica}), mas ocorreu um erro ao salvar a URL na tabela 'cadastro_creche':`, updateFotoError.message);
+                    // Possíveis causas: Coluna 'url_foto' não existe, erro de permissão no RLS da tabela.
+                } else {
+                     console.log("URL da foto salva com sucesso na tabela cadastro_creche.");
+                }
+                // --- FIM: Salvar URL ---
+
+            } catch (storageError) {
+                console.warn("Aviso: Erro durante o processo de upload da foto:", storageError.message);
+                // Não impede cadastro principal, mas avisa
+            }
+        } else {
+             console.log("Nenhuma foto enviada.");
+             // Adicione aqui se a foto for obrigatória: throw new Error("A foto é obrigatória.");
+        }
+        // --- FIM Upload da Foto ---
+
+        // ... (resto do código: Cadastro Concluído, catch, etc.)
+
+        // 7. Cadastro Concluído! Retorna sucesso para o fetch.
+        console.log(`Cadastro concluído para ${email}. Foto URL: ${fotoUrlPublica || 'Nenhuma'}`);
+        res.status(201).json({ success: true, message: 'Cadastro realizado com sucesso!' });
+
+    } catch (error) { // Bloco de captura de erros gerais
+        console.error("Erro detalhado no POST /cadastro:", error);
+        let userMessage = error.message || 'Ocorreu um erro inesperado durante o cadastro.'; // Usa a msg do erro se disponível
+        // Tenta ser mais específico para erros conhecidos
+        if (error.code === '23505' && error.message.includes('email')) userMessage = 'E-mail já cadastrado.';
+        if (error.code === '23505' && error.message.includes('cnpj')) userMessage = 'CNPJ/CPF já cadastrado.';
+        // Retorna erro como JSON para o fetch
+        res.status(500).json({ success: false, message: userMessage });
+    }
+});
+
+// --- Middleware de tratamento de erro do Multer --- // <-- ATIVADO
+router.use((err, req, res, next) => {
+    // Captura erros do Multer (ex: tamanho, tipo de arquivo inválido)
+    if (err instanceof multer.MulterError || (err && err.message.includes('Formato inválido'))) {
+        console.warn("Erro de Upload (Multer Middleware):", err.message);
+        // Retorna o erro como JSON para o fetch do frontend
+        res.status(400).json({ success: false, message: `Erro no upload: ${err.message}` });
+    } else if (err) {
+        // Captura outros erros inesperados que podem ocorrer antes da rota principal
+        console.error("Erro inesperado antes da rota de cadastro:", err);
+        res.status(500).json({ success: false, message: 'Erro interno no servidor.' });
+    } else {
+        // Se não houve erro, continua para a próxima etapa (a rota POST principal)
+        next();
+    }
+});
+// --- FIM Middleware Multer ---
+
+export default router;
