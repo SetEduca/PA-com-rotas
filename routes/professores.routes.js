@@ -6,15 +6,15 @@ const router = express.Router();
 // --- ROTA PARA LISTAR TODOS OS PROFESSORES ATIVOS ---
 router.get("/", async (req, res) => {
     const { data, error } = await supabase
-        .from('PROFESSOR') // <-- Nome da tabela corrigido
+        .from('professor') // <-- Nome da tabela corrigido
         .select(` 
             id, 
             nome, 
             cpf, 
             email, 
             classificacao,
-            TEL_PROFESSOR ( ddd, numero ), 
-            END_PROFESSOR ( end_descricao )
+            tel_professor ( ddd, numero ), 
+            end_professor ( end_descricao )
         `) // <-- Nomes das tabelas e colunas corrigidos
         .eq('ativo', true) // <-- Assume que a coluna 'ativo' existe
         .order('nome');
@@ -27,13 +27,13 @@ router.get("/", async (req, res) => {
     // O 'data' agora conterá objetos como:
     // { id: 1, ..., TEL_PROFESSOR: [{ddd: '11', numero: '9...'}], END_PROFESSOR: [{end_descricao: 'Rua X'}] }
     // Sua view 'acessar.ejs' precisará ser ajustada para isso.
-    res.render("PROFESSOR/acessar", { professores: data });
+    res.render("PROFESSOR/acessop", { professores: data });
 });
 
 // --- ROTA PARA EXIBIR O FORMULÁRIO DE CADASTRO ---
 router.get("/cadastro", async (req, res) => {
     try {
-        res.render("PROFESSOR/cadastro");
+        res.render("PROFESSOR/cadastrop");
     } catch (err) {
         console.error(err);
         res.status(500).send(err.message);
@@ -56,7 +56,7 @@ router.post("/cadastro", async (req, res) => {
     try {
         // 2. Insere na tabela 'PROFESSOR'
         const { data: newProfessor, error: professorError } = await supabase
-            .from('PROFESSOR')
+            .from('professor')
             .insert([{
                 nome: professor, 
                 cpf, 
@@ -74,12 +74,12 @@ router.post("/cadastro", async (req, res) => {
 
         // 3. Usa o ID para inserir nas tabelas 'TEL_PROFESSOR' e 'END_PROFESSOR'
         const [telefoneResult, enderecoResult] = await Promise.all([
-            supabase.from('TEL_PROFESSOR').insert({
+            supabase.from('tel_professor').insert({
                 professor_id: newProfessorId,
                 ddd: ddd,
                 numero: numero
             }),
-            supabase.from('END_PROFESSOR').insert({
+            supabase.from('end_professor').insert({
                 professor_id: newProfessorId,
                 end_descricao: Endereço
             })
@@ -91,7 +91,7 @@ router.post("/cadastro", async (req, res) => {
             console.error("Erro Supabase (Endereço):", enderecoResult.error);
 
             // Reverte o cadastro
-            await supabase.from('PROFESSOR').delete().eq('id', newProfessorId); 
+            await supabase.from('professor').delete().eq('id', newProfessorId); 
             
             const erroMsg = telefoneResult.error?.message || enderecoResult.error?.message;
             throw new Error(`Erro do Supabase ao salvar contato: ${erroMsg}. Cadastro revertido.`);
