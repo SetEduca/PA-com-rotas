@@ -9,6 +9,8 @@ import loginRouter from './routes/login.routes.js';
 import mensalidadeRouter from './routes/mensalidades.routes.js'
 import arquivadosRouter from './routes/arquivados.routes.js'
 
+
+
  const app = express();
  const PORT = 3020;
  const SALT_ROUNDS = 10;
@@ -36,6 +38,7 @@ app.use('/login', loginRouter);
 // CADASTROINICIAL
 app.use('/cadastro', cadastroRouter);
 
+
 //PERFIL
 
 app.get("/meuperfil", (req, res) => {
@@ -53,21 +56,7 @@ app.get("/home", (req, res) => {
 
 // SENHA
 
-app.get("/trocar-senha", (req, res) => {
-  res.render("SENHA/senha");
-});
 
-app.get("/codigo-confirmacao", (req, res) => {
-  res.render("SENHA/codigo");
-});
-
-app.get("/nova-senha", (req, res) => {
-  res.render("SENHA/trocar");
-});
-
-app.get("/senha-trocada", (req, res) => {
-  res.render("SENHA/pronto");
-});
 
 //CADASTRO
 
