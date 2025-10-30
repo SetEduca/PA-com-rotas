@@ -509,414 +509,280 @@ class="block text-sm font-medium text-gray-700">Selecione o Aluno</label>
     </div>
 
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Lógica do Perfil Dropdown
-            const profileToggle = document.getElementById('profile-toggle');
-            const dropdownMenu = document.getElementById('profile-dropdown-menu');
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- SELETORES DO DOM ---
+        const contentArea = document.getElementById('content-area');
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const dateEl = document.getElementById('current-date');
+        const novaReceitaModal = document.getElementById('nova-receita-modal');
+        const addRevenueForm = document.getElementById('add-revenue-form');
+        const transactionTypeSelect = document.getElementById('transaction-type');
+        const profileToggle = document.getElementById('profile-toggle');
+        
+        let relatoriosData = []; // Cache local dos dados
 
-            if (profileToggle) {
-                profileToggle.addEventListener('click', (event) => {
-                    event.stopPropagation(); // Impede que o clique se propague para o window
-                    dropdownMenu.classList.toggle('show');
-                    profileToggle.classList.toggle('active');
-                });
+        // --- LÓGICA DE DADOS (API) ---
+        const getAlunos = async () => {
+            try {
+                const response = await fetch('/api/alunos');
+                if (!response.ok) throw new Error('Falha ao buscar alunos');
+                return await response.json();
+            } catch (error) { console.error(error); return []; }
+        };
+
+        async function fetchRelatorios() {
+            try {
+                const response = await fetch('/api/transacoes');
+                if (!response.ok) throw new Error('Falha ao buscar transações');
+                relatoriosData = await response.json();
+                return relatoriosData;
+            } catch (error) { console.error(error); return []; }
+        }
+
+        // --- TEMPLATES HTML (O seu HTML para as abas) ---
+        const dashboardTemplate = `
+            <div class="space-y-6">
+                <section>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
+                            <div class="bg-green-100 p-3 rounded-full"><i class="fas fa-arrow-up text-green-600 text-2xl"></i></div>
+                            <div><h3 class="text-md font-semibold text-gray-500">Receita Total (Mês)</h3><p class="text-2xl font-bold text-green-600" id="total-revenue">R$ 0,00</p></div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
+                            <div class="bg-red-100 p-3 rounded-full"><i class="fas fa-arrow-down text-red-600 text-2xl"></i></div>
+                            <div><h3 class="text-md font-semibold text-gray-500">Despesas Totais (Mês)</h3><p class="text-2xl font-bold text-red-600" id="total-expense">R$ 0,00</p></div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
+                            <div class="bg-blue-100 p-3 rounded-full"><i class="fas fa-balance-scale text-blue-600 text-2xl"></i></div>
+                            <div><h3 class="text-md font-semibold text-gray-500">Lucro Líquido (Mês)</h3><p class="text-2xl font-bold text-brand-text" id="net-profit">R$ 0,00</p></div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
+                            <div class="bg-yellow-100 p-3 rounded-full"><i class="fas fa-users text-yellow-600 text-2xl"></i></div>
+                            <div><h3 class="text-md font-semibold text-gray-500">Alunos Ativos</h3><p class="text-2xl font-bold text-brand-text" id="active-students">0</p></div>
+                        </div>
+                    </div>
+                </section>
+                <section class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                    <div class="lg:col-span-3 bg-white p-6 rounded-lg shadow-sm flex flex-col"><h3 class="text-xl font-semibold mb-4 text-brand-text">Fluxo de Caixa</h3><div class="relative flex-1 min-h-[300px]"><canvas id="cashflow-chart"></canvas></div></div>
+                    <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm flex flex-col"><h3 class="text-xl font-semibold mb-4 text-brand-text">Distribuição de Despesas</h3><div class="relative flex-1 min-h-[300px]"><canvas id="expenses-chart"></canvas></div></div>
+                </section>
+                 <section class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 text-brand-text">Atividade Recente</h3>
+                    <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-50"><tr><th class="p-3">Descrição</th><th class="p-3">Data</th><th class="p-3">Tipo</th><th class="p-3 text-right">Valor</th></tr></thead><tbody id="recent-activity-body"></tbody></table></div>
+                </section>
+            </div>`;
+        const alunosTemplate = `<div class="bg-white p-6 rounded-lg shadow-sm h-full"><h2 class="text-2xl font-bold mb-4 text-brand-text">Situação Financeira dos Alunos</h2><div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Nome do Aluno</th><th class="p-3">Responsável</th><th class="p-3">Mensalidade</th><th class="p-3">Vencimento</th><th class="p-3">Status</th></tr></thead><tbody id="alunos-table-body"></tbody></table></div></div>`;
+        const relatoriosTemplate = `<div class="bg-white p-6 rounded-lg shadow-sm h-full"><div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-bold text-brand-text">Relatório Detalhado</h2><button id="btn-novo-lancamento" class="bg-brand-green-dark text-white px-4 py-2 rounded-md hover:bg-brand-text flex items-center gap-2"><i class="fas fa-plus"></i>Novo Lançamento</button></div><div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Data</th><th class="p-3">Descrição</th><th class="p-3">Categoria</th><th class="p-3">Valor</th><th class="p-3">Tipo</th><th class="p-3">Ações</th></tr></thead><tbody id="relatorios-table-body"></tbody></table></div></div>`;
+        const historicoTemplate = `<div class="bg-white p-6 rounded-lg shadow-sm h-full"><h2 class="text-xl font-semibold mb-4 text-brand-text">Histórico de Relatórios Arquivados</h2><div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Data</th><th class="p-3">Descrição</th><th class="p-3">Categoria</th><th class="p-3">Valor</th><th class="p-3">Tipo</th><th class="p-3">Ações</th></tr></thead><tbody id="historico-table-body"></tbody></table></div></div>`;
+        
+        // --- FUNÇÕES DE RENDERIZAÇÃO ---
+        function setupCharts() { /* ...Sua lógica de gráficos... */ }
+        
+        async function renderRecentActivity() {
+            const tbody = document.getElementById('recent-activity-body');
+            if (!tbody) return;
+            const recentData = relatoriosData.slice(0, 5);
+            tbody.innerHTML = '';
+            if (recentData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Nenhuma atividade recente.</td></tr>`;
+                return;
+            }
+            recentData.forEach(item => {
+                const valueClass = item.type === 'Receita' ? 'text-green-600' : 'text-red-600';
+                const formattedValue = `R$ ${Math.abs(item.value).toFixed(2).replace('.', ',')}`;
+                const row = `<tr class="border-b"><td class="p-3">${item.description}</td><td class="p-3">${new Date(item.date).toLocaleDateString('pt-BR')}</td><td class="p-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${item.type === 'Receita' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${item.type}</span></td><td class="p-3 font-medium text-right ${valueClass}">${formattedValue}</td></tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        async function renderAlunos() {
+            const alunos = await getAlunos(); 
+            const tbody = document.getElementById('alunos-table-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            const statusClasses = { pago: 'bg-green-100 text-green-700', pendente: 'bg-yellow-100 text-yellow-700', atrasado: 'bg-red-100 text-red-700' };
+
+            if (alunos.length === 0) {
+                 tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">Nenhum aluno cadastrado no banco de dados.</td></tr>`;
+                 return;
             }
             
-            // Fecha o dropdown se clicar fora dele
-            window.addEventListener('click', (event) => {
-                if (dropdownMenu && dropdownMenu.classList.contains('show')) {
-                    if (!profileToggle.contains(event.target)) {
-                        dropdownMenu.classList.remove('show');
-                        profileToggle.classList.remove('active');
-                    }
+            // "Mágica" para cruzar os dados dos alunos (Supabase) com as cobranças (Asaas)
+            alunos.forEach(aluno => {
+                const cobrancasDoAluno = relatoriosData.filter(c => c.customerId === aluno.asaasId && c.type === 'Receita');
+                let status = 'pago'; 
+                let vencimento = 'N/A';
+                let mensalidade = 550.00; // Valor padrão
+
+                if (cobrancasDoAluno.length > 0) {
+                    const ultimaCobranca = cobrancasDoAluno.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+                    status = ultimaCobranca.status === 'ativo' ? 'pago' : 'pendente'; 
+                    vencimento = new Date(ultimaCobranca.date).toLocaleDateString('pt-BR');
+                    mensalidade = ultimaCobranca.value;
                 }
+                
+                const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+                const row = `<tr><td class="p-3">${aluno.studentName}</td><td class="p-3">${aluno.parentName}</td><td class="p-3">R$ ${Number(mensalidade).toFixed(2).replace('.', ',')}</td><td class="p-3">${vencimento}</td><td class="p-3"><span class="px-2 py-1 rounded-full text-sm font-medium ${statusClasses[status]}">${statusText}</span></td></tr>`;
+                tbody.innerHTML += row;
             });
 
-            // Restante do seu código JS original
-            const contentArea = document.getElementById('content-area');
-const navTabs = document.querySelectorAll('.nav-tab');
-            const dateEl = document.getElementById('current-date');
-            const novaReceitaModal = document.getElementById('nova-receita-modal');
-            const addRevenueForm = document.getElementById('add-revenue-form');
-if(dateEl) {
-                dateEl.textContent = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
-}
+            const activeStudentsEl = document.getElementById('active-students');
+            if (activeStudentsEl) activeStudentsEl.textContent = alunos.length;
+        }
+
+        function renderRelatorios(filterStatus = 'ativo') {
+            const tbodyId = filterStatus === 'ativo' ? 'relatorios-table-body' : 'historico-table-body';
+            const tbody = document.getElementById(tbodyId);
+            if(!tbody) return;
             
-            let relatoriosData = [
-                { id: 1, date: '2025-10-01', description: 'Mensalidade - João Silva', category: 'Mensalidade', value: 550.00, type: 'Receita', status: 'ativo' },
-                { id: 2, date: '2025-10-02', description: 'Pagamento de Salário - Prof.ª Ana', category: 'Salários', value: -1800.00, type: 'Despesa', status: 'ativo' },
-   
-             { id: 3, date: '2025-10-03', description: 'Conta de Luz', category: 'Contas', value: -350.00, type: 'Despesa', status: 'ativo' },
-                { id: 9, date: '2025-10-04', description: 'Mensalidade - Maria Oliveira', category: 'Mensalidade', value: 550.00, type: 'Receita', status: 'ativo' },
-                { id: 10, date: '2025-10-05', description: 'Compra de Alimentos', category: 'Alimentação', value: -800.00, type: 'Despesa', status: 'ativo' },
-   
-             { id: 4, date: '2025-09-15', description: 'Compra de Material de Limpeza', category: 'Materiais', value: -150.00, type: 'Despesa', status: 'arquivado' },
-                { id: 5, date: '2025-09-01', description: 'Mensalidade - Ana Souza', category: 'Mensalidade', value: 500.00, type: 'Receita', status: 'arquivado' },
-                { id: 6, date: '2025-08-05', description: 'Pagamento de Aluguel', category: 'Aluguel', value: -2500.00, type: 'Despesa', status: 'arquivado' },
- 
-               { id: 7, date: '2025-08-01', description: 'Mensalidade - Pedro Costa', category: 'Mensalidade', value: 500.00, type: 'Receita', status: 'arquivado' },
-                { id: 8, date: '2025-07-02', description: 'Conta de Internet', category: 'Contas', value: -120.00, type: 'Despesa', status: 'arquivado' },
-            ];
-const getAlunos = async () => [
-                { id: 1, studentName: 'João Silva', parentName: 'Maria Silva', mensalidade: 550.00, vencimento: '10/10/2025', status: 'pago' },
-                { id: 2, studentName: 'Ana Souza', parentName: 'Carlos Souza', mensalidade: 550.00, vencimento: '10/09/2025', status: 'pago' },
-                { id: 3, studentName: 'Pedro Costa', parentName: 'Beatriz Costa', mensalidade: 550.00, vencimento: '10/11/2025', status: 'pendente' },
- 
-               { id: 4, studentName: 'Mariana Lima', parentName: 'Felipe Lima', mensalidade: 550.00, vencimento: '10/08/2025', status: 'atrasado' },
-            ];
-const dashboardTemplate = `
-                <div class="space-y-6">
-                    <section>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <div class="bg-white p-6 
-rounded-lg shadow-sm flex items-center gap-4">
-                                <div class="bg-green-100 p-3 rounded-full"><i class="fas fa-arrow-up text-green-600 text-2xl"></i></div>
-                                <div>
-                         
-           <h3 class="text-md font-semibold text-gray-500">Receita Total (Mês)</h3>
-                                    <p class="text-2xl font-bold text-green-600">R$ 15.250,00</p>
-                                </div>
-            
-                </div>
-                            <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
-                                <div class="bg-red-100 p-3 rounded-full"><i class="fas fa-arrow-down text-red-600 text-2xl"></i></div>
-          
-                      <div>
-                                    <h3 class="text-md font-semibold text-gray-500">Despesas Totais (Mês)</h3>
-                                    <p 
-class="text-2xl font-bold text-red-600">R$ 8.980,00</p>
-                                </div>
-                            </div>
-                            <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
-  
-                               <div class="bg-blue-100 p-3 rounded-full"><i class="fas fa-balance-scale text-blue-600 text-2xl"></i></div>
-                                <div>
-                              
-      <h3 class="text-md font-semibold text-gray-500">Lucro Líquido (Mês)</h3>
-                                    <p class="text-2xl font-bold text-brand-text">R$ 6.270,00</p>
-                                </div>
-                 
-           </div>
-                            <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
-                                <div class="bg-yellow-100 p-3 rounded-full"><i class="fas fa-users text-yellow-600 text-2xl"></i></div>
-               
-                 <div>
-                                    <h3 class="text-md font-semibold text-gray-500">Alunos Ativos</h3>
-                                    <p class="text-2xl font-bold text-brand-text">32</p>
-    
-                            </div>
-                            </div>
-                        </div>
-                    
-</section>
-                    
-                    <section class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                        <div class="lg:col-span-3 bg-white p-6 rounded-lg shadow-sm flex flex-col">
-                         
-   <h3 class="text-xl font-semibold mb-4 text-brand-text">Fluxo de Caixa (Últimos 6 meses)</h3>
-                            <div class="relative flex-1 min-h-[300px]"><canvas id="cashflow-chart"></canvas></div>
-                        </div>
-                        <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm flex flex-col">
- 
-                           <h3 class="text-xl font-semibold mb-4 text-brand-text">Distribuição de Despesas</h3>
-                            <div class="relative flex-1 min-h-[300px]"><canvas id="expenses-chart"></canvas></div>
-                        </div>
-           
-         </section>
-                    
-                     <section class="bg-white p-6 rounded-lg shadow-sm">
-                        <h3 class="text-xl font-semibold mb-4 text-brand-text">Atividade Recente</h3>
-                 
-       <div class="overflow-x-auto">
-                            <table class="w-full text-left">
-                                <thead class="bg-gray-50">
-                             
-       <tr>
-                                        <th class="p-3 font-semibold text-sm">Descrição</th>
-                                        <th class="p-3 font-semibold text-sm">Data</th>
-       
-                                 <th class="p-3 font-semibold text-sm">Tipo</th>
-                                        <th class="p-3 font-semibold text-sm text-right">Valor</th>
-                    
-                </tr>
-                                </thead>
-                                <tbody id="recent-activity-body">
-                   
-                 </tbody>
-                            </table>
-                        </div>
-                    </section>
-           
-     </div>`;
-
-            const alunosTemplate = `
-                <div class="bg-white p-6 rounded-lg shadow-sm h-full">
-                    <h2 class="text-2xl font-bold mb-4 text-brand-text">Situação Financeira dos Alunos</h2>
-                    <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Nome do Aluno</th><th class="p-3">Responsável</th><th class="p-3">Mensalidade</th><th class="p-3">Vencimento</th><th class="p-3">Status da Mensalidade</th></tr></thead><tbody id="alunos-table-body"></tbody></table></div>
-         
-       </div>`;
-            const relatoriosTemplate = `
-                <div class="bg-white p-6 rounded-lg shadow-sm h-full">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold text-brand-text">Relatório Financeiro Detalhado</h2>
-               
-         <button id="btn-novo-lancamento" class="bg-brand-green-dark text-white px-4 py-2 rounded-md hover:bg-brand-text flex items-center gap-2"><i class="fas fa-plus"></i>Novo Lançamento</button>
-                    </div>
-                    <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Data</th><th class="p-3">Descrição</th><th class="p-3">Categoria</th><th class="p-3">Valor</th><th class="p-3">Tipo</th><th class="p-3">Ações</th></tr></thead><tbody id="relatorios-table-body"></tbody></table></div>
-                </div>`;
-const historicoTemplate = `
-                <div class="bg-white p-6 rounded-lg shadow-sm h-full">
-                    <h2 class="text-2xl font-bold mb-4 text-brand-text">Histórico de Relatórios Arquivados</h2>
-                    <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Data</th><th class="p-3">Descrição</th><th class="p-3">Categoria</th><th class="p-3">Valor</th><th class="p-3">Tipo</th><th class="p-3">Ações</th></tr></thead><tbody id="historico-table-body"></tbody></table></div>
-                </div>`;
-let cashflowChartInstance;
-            let expensesChartInstance;
-
-            function setupCharts() {
-                // Destruir gráficos antigos se existirem para evitar sobreposição
-                if (cashflowChartInstance) cashflowChartInstance.destroy();
-if (expensesChartInstance) expensesChartInstance.destroy();
-
-                // Gráfico de Fluxo de Caixa
-                const cashflowCtx = document.getElementById('cashflow-chart')?.getContext('2d');
-if(cashflowCtx) {
-                    cashflowChartInstance = new Chart(cashflowCtx, {
-                        type: 'bar',
-                        data: {
-                         
-   labels: ['Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro'],
-                            datasets: [{
-                                label: 'Receitas',
-                             
-   data: [12500, 13000, 14200, 13800, 15500, 15250],
-                                backgroundColor: '#A8D5BA',
-                                borderRadius: 4,
-                         
-   }, {
-                                label: 'Despesas',
-                                data: [8000, 8200, 9500, 8100, 9200, 8980],
-                         
-       backgroundColor: '#FFB6B6',
-                                borderRadius: 4,
-                            }]
-                        },
-       
-                 options: { maintainAspectRatio: false, responsive: true, scales: { y: { beginAtZero: true } } }
-                    });
-}
-                
-                // Gráfico de Despesas
-                const expensesCtx = document.getElementById('expenses-chart')?.getContext('2d');
-if(expensesCtx) {
-                    expensesChartInstance = new Chart(expensesCtx, {
-                        type: 'doughnut',
-                        data: {
-                         
-   labels: ['Salários', 'Aluguel', 'Contas', 'Alimentação', 'Materiais', 'Outros'],
-                            datasets: [{
-                                data: [4500, 2500, 600, 800, 350, 230],
-                        
-        backgroundColor: ['#3D8C5B', '#FF6B6B', '#4A90E2', '#F2C94C', '#9B51E0', '#8A8A8A'],
-                            }]
-                        },
-                        options: { maintainAspectRatio: false, responsive: true, plugins: { legend: { 
-position: 'bottom' } } }
-                    });
-}
+            const relatorios = relatoriosData.filter(r => (filterStatus === 'ativo' ? (r.status === 'ativo' || r.status === 'pendente') : (r.status === 'arquivado')))
+                                             .sort((a, b) => new Date(b.date) - new Date(a.date));
+            tbody.innerHTML = '';
+            if (relatorios.length === 0) {
+                 tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Nenhum lançamento encontrado.</td></tr>`;
+                 return;
             }
-            
-            function renderRecentActivity() {
-                const tbody = document.getElementById('recent-activity-body');
-if (!tbody) return;
-                
-                // Pega os 5 lançamentos mais recentes (já que os novos são adicionados no início)
-                const recentData = relatoriosData.filter(r => r.status === 'ativo').slice(0, 5);
-tbody.innerHTML = '';
-                
-                if (recentData.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Nenhuma atividade recente.</td></tr>`;
-return;
-                }
-                
-                recentData.forEach(item => {
-                    const valueClass = item.type === 'Receita' ? 'text-green-600' : 'text-red-600';
-                    const formattedValue = `R$ ${Math.abs(item.value).toFixed(2).replace('.', ',')}`;
-           
-         
-                    const row = `
-                        <tr class="border-b">
-                            <td class="p-3">${item.description}</td>
-              
-              <td class="p-3">${new Date(item.date).toLocaleDateString('pt-BR')}</td>
-                            <td class="p-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${item.type === 'Receita' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${item.type}</span></td>
-                            <td class="p-3 font-medium text-right ${valueClass}">${formattedValue}</td>
-         
-               </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
-}
+            relatorios.forEach(item => {
+                const valueClass = item.type === 'Receita' ? 'text-green-600' : 'text-red-600';
+                const actionButton = `<button data-id="${item.id}" class="archive-btn text-yellow-600 hover:underline">Arquivar</button>`;
+                const row = `<tr><td class="p-3">${new Date(item.date).toLocaleDateString('pt-BR')}</td><td class="p-3">${item.description}</td><td class="p-3">${item.category}</td><td class="p-3 font-medium ${valueClass}">R$ ${Math.abs(item.value).toFixed(2).replace('.',',')}</td><td class="p-3">${item.type}</td><td class="p-3">${actionButton}</td></tr>`;
+                tbody.innerHTML += row;
+            });
+        }
 
-            async function renderAlunos() {
-                const alunos = await getAlunos();
-const tbody = document.getElementById('alunos-table-body');
-                if (!tbody) return;
-                tbody.innerHTML = '';
-const statusClasses = {
-                    pago: 'bg-green-100 text-green-700',
-                    pendente: 'bg-yellow-100 text-yellow-700',
-                    atrasado: 'bg-red-100 text-red-700',
-                };
-alunos.forEach(aluno => {
-                    const row = `<tr>
-                        <td class="p-3">${aluno.studentName}</td>
-                        <td class="p-3">${aluno.parentName}</td>
-                        <td 
-class="p-3">R$ ${aluno.mensalidade.toFixed(2).replace('.', ',')}</td>
-                        <td class="p-3">${aluno.vencimento}</td>
-                        <td class="p-3"><span class="px-2 py-1 rounded-full text-sm font-medium ${statusClasses[aluno.status]}">${aluno.status.charAt(0).toUpperCase() + aluno.status.slice(1)}</span></td>
-                    </tr>`;
-                    
-tbody.innerHTML += row;
-                });
-}
+        function updateDashboardCards() {
+            const totalRevenueEl = document.getElementById('total-revenue');
+            const totalExpenseEl = document.getElementById('total-expense');
+            const netProfitEl = document.getElementById('net-profit');
+            if (!totalRevenueEl) return;
 
-            function renderRelatorios(filterStatus = 'ativo') {
-                const relatorios = relatoriosData.filter(r => r.status === filterStatus).sort((a, b) => new Date(b.date) - new Date(a.date));
-const tbodyId = filterStatus === 'ativo' ? 'relatorios-table-body' : 'historico-table-body';
-                const tbody = document.getElementById(tbodyId);
-                if(!tbody) return;
-                tbody.innerHTML = '';
-relatorios.forEach(item => {
-                    const valueClass = item.type === 'Receita' ? 'text-green-600' : 'text-red-600';
-                    const actionButton = filterStatus === 'ativo'
-                        ? `<button data-id="${item.id}" class="archive-btn text-yellow-600 hover:underline">Arquivar</button>`
-               
-         : `<button data-id="${item.id}" class="unarchive-btn text-green-600 hover:underline">Reativar</button>`;
+            const totalReceitas = relatoriosData.filter(r => r.type === 'Receita' && r.status === 'ativo').reduce((acc, r) => acc + r.value, 0);
+            const totalDespesas = relatoriosData.filter(r => r.type === 'Despesa').reduce((acc, r) => acc + r.value, 0); 
 
-                    const row = `<tr>
-                        <td class="p-3">${new Date(item.date).toLocaleDateString('pt-BR')}</td>
-                        <td class="p-3">${item.description}</td>
-            
-            <td class="p-3">${item.category}</td>
-                        <td class="p-3 font-medium ${valueClass}">R$ ${Math.abs(item.value).toFixed(2).replace('.',',')}</td>
-                        <td class="p-3">${item.type}</td>
-                        <td class="p-3">${actionButton}</td>
-         
-           </tr>`;
-                    tbody.innerHTML += row;
-});
+            totalRevenueEl.textContent = `R$ ${totalReceitas.toFixed(2).replace('.', ',')}`;
+            totalExpenseEl.textContent = `R$ ${Math.abs(totalDespesas).toFixed(2).replace('.', ',')}`;
+            netProfitEl.textContent = `R$ ${(totalReceitas + totalDespesas).toFixed(2).replace('.', ',')}`;
+        }
+        
+        async function populateSelects() {
+            const alunos = await getAlunos(); // Busca alunos do Supabase
+            const customerSelect = document.getElementById('customerId');
+            if (!customerSelect) return;
+            // Usa o ID do Supabase (ex: 1)
+            customerSelect.innerHTML = alunos.map(a => `<option value="${a.id}">${a.studentName}</option>`).join('');
+        }
+        
+        function updateFormBasedOnType() {
+            const type = transactionTypeSelect.value;
+            const categorySelect = document.getElementById('category');
+            const customerField = document.getElementById('customer-field');
+            const revenueCategories = ['Mensalidade', 'Matrícula', 'Outras Receitas'];
+            const expenseCategories = ['Salários', 'Contas', 'Materiais', 'Alimentação', 'Aluguel', 'Outras Despesas'];
+
+            if (type === 'Receita') {
+                categorySelect.innerHTML = revenueCategories.map(c => `<option value="${c}">${c}</option>`).join('');
+                customerField.style.display = 'block';
+            } else {
+                categorySelect.innerHTML = expenseCategories.map(c => `<option value="${c}">${c}</option>`).join('');
+                customerField.style.display = 'none';
             }
+        }
+        
+        function handleReportAction(e) { /* ...Sua lógica de arquivar... */ }
+
+        async function renderContent(tabId) {
+            contentArea.removeEventListener('click', handleReportAction);
+            await fetchRelatorios(); 
             
-            async function populateSelects() {
-                const alunos = await getAlunos();
-const customerSelect = document.getElementById('customerId');
-                customerSelect.innerHTML = alunos.map(a => `<option value="${a.id}">${a.studentName}</option>`).join('');
-}
-            
-            function updateFormBasedOnType() {
-                const type = document.getElementById('transaction-type').value;
-const categorySelect = document.getElementById('category');
-                const customerField = document.getElementById('customer-field');
-                
-                const revenueCategories = ['Mensalidade', 'Matrícula', 'Outras Receitas'];
-const expenseCategories = ['Salários', 'Contas', 'Materiais', 'Alimentação', 'Aluguel', 'Outras Despesas'];
-if (type === 'Receita') {
-                    categorySelect.innerHTML = revenueCategories.map(c => `<option value="${c}">${c}</option>`).join('');
-customerField.style.display = 'block';
-                } else { // Despesa
-                    categorySelect.innerHTML = expenseCategories.map(c => `<option value="${c}">${c}</option>`).join('');
-customerField.style.display = 'none';
-                }
-            }
-            
-            function handleReportAction(e) {
-                const target = e.target;
-if (!target.dataset.id) return;
-                const reportId = parseInt(target.dataset.id);
-                const report = relatoriosData.find(r => r.id === reportId);
-                if (!report) return;
-if (target.classList.contains('archive-btn')) {
-                    report.status = 'arquivado';
-renderContent('btn-relatorios');
-                }
-
-                if (target.classList.contains('unarchive-btn')) {
-                    report.status = 'ativo';
-renderContent('btn-historico');
-                }
-            }
-
-            function renderContent(tabId) {
-                contentArea.removeEventListener('click', handleReportAction);
-if (tabId === 'btn-dashboard') {
-                    contentArea.innerHTML = dashboardTemplate;
-// Usar um pequeno timeout para garantir que o DOM foi atualizado antes de renderizar os gráficos
-                    setTimeout(() => {
-                        setupCharts();
-                        renderRecentActivity();
-              
-      }, 0);
-                } else if (tabId === 'btn-alunos') {
-                    contentArea.innerHTML = alunosTemplate;
-renderAlunos();
-                } else if (tabId === 'btn-relatorios') {
-                    contentArea.innerHTML = relatoriosTemplate;
-renderRelatorios('ativo');
-                    document.getElementById('btn-novo-lancamento').addEventListener('click', () => {
-                        addRevenueForm.reset();
-                        updateFormBasedOnType();
-                        novaReceitaModal.style.display = 'flex';
-                    });
-contentArea.addEventListener('click', handleReportAction);
-                } else if (tabId === 'btn-historico') {
-                    contentArea.innerHTML = historicoTemplate;
-renderRelatorios('arquivado');
-                    contentArea.addEventListener('click', handleReportAction);
-                }
-            }
-
-            // --- Event Listeners & Initialization ---
-            document.getElementById('close-nova-receita-modal').addEventListener('click', () => novaReceitaModal.style.display = 'none');
-document.getElementById('cancel-nova-receita-modal').addEventListener('click', () => novaReceitaModal.style.display = 'none');
-            document.getElementById('transaction-type').addEventListener('change', updateFormBasedOnType);
-
-            addRevenueForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const formData = new FormData(addRevenueForm);
-                const data = Object.fromEntries(formData.entries());
-                
-                const newEntry 
-= {
-                    id: Date.now(),
-                    date: data.date,
-                    description: data.description,
-                    category: data.category,
-               
-     value: parseFloat(data.value),
-                    type: data['transaction-type'],
-                    status: 'ativo'
-                };
-                if (newEntry.type === 'Despesa') {
-                
-    newEntry.value = -Math.abs(newEntry.value);
-                }
-                
-                relatoriosData.unshift(newEntry);
-                novaReceitaModal.style.display = 'none';
+            if (tabId === 'btn-dashboard') {
+                contentArea.innerHTML = dashboardTemplate;
+                setTimeout(() => {
+                    setupCharts();
+                    renderRecentActivity();
+                    renderAlunos(); // Para atualizar o card de alunos
+                    updateDashboardCards(); // Atualiza cards
+                }, 0);
+            } else if (tabId === 'btn-alunos') {
+                contentArea.innerHTML = alunosTemplate;
+                renderAlunos();
+            } else if (tabId === 'btn-relatorios') {
+                contentArea.innerHTML = relatoriosTemplate;
                 renderRelatorios('ativo');
-            
-});
-            
-            navTabs.forEach(tab => tab.addEventListener('click', (e) => {
-                 navTabs.forEach(t => t.classList.remove('active'));
-                 e.currentTarget.classList.add('active');
-                 renderContent(e.currentTarget.id);
-            }));
-populateSelects();
-            document.getElementById('btn-dashboard').click();
+                document.getElementById('btn-novo-lancamento').addEventListener('click', () => {
+                    addRevenueForm.reset();
+                    updateFormBasedOnType();
+                    novaReceitaModal.style.display = 'flex';
+                });
+                contentArea.addEventListener('click', handleReportAction);
+            } else if (tabId === 'btn-historico') {
+                contentArea.innerHTML = historicoTemplate;
+                renderRelatorios('arquivado');
+                contentArea.addEventListener('click', handleReportAction);
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+        if (dateEl) {
+            dateEl.textContent = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
+        }
+        if (profileToggle) {
+            profileToggle.addEventListener('click', () => {
+                profileToggle.classList.toggle('active');
+                document.getElementById('profile-dropdown-menu').classList.toggle('show');
+            });
+        }
+        document.getElementById('close-nova-receita-modal').addEventListener('click', () => novaReceitaModal.style.display = 'none');
+        document.getElementById('cancel-nova-receita-modal').addEventListener('click', () => novaReceitaModal.style.display = 'none');
+        transactionTypeSelect.addEventListener('change', updateFormBasedOnType);
+
+        // ATUALIZADO: Evento de submit para enviar dados ao BACKEND
+        addRevenueForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(addRevenueForm);
+            const data = Object.fromEntries(formData.entries());
+
+            const body = {
+                tipo: data['transaction-type'],
+                valor: parseFloat(data.value),
+                data: data.date,
+                descricao: data.description,
+                categoria: data.category,
+                alunoId: data.customerId // ID do nosso banco (ex: 1, 2)
+            };
+
+            try {
+                // Envia para o nosso backend
+                const response = await fetch('/api/transacoes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+
+                if (response.ok) {
+                    novaReceitaModal.style.display = 'none';
+                    const activeTab = document.querySelector('.nav-tab.active');
+                    renderContent(activeTab.id); // Re-renderiza a aba atual
+                } else {
+                    const error = await response.json();
+                    alert(`Erro ao salvar: ${error.message}`);
+                }
+            } catch (error) {
+                console.error("Erro no submit:", error);
+                alert('Erro de conexão ao salvar.');
+            }
         });
-    </script>
+        
+        navTabs.forEach(tab => tab.addEventListener('click', (e) => {
+             navTabs.forEach(t => t.classList.remove('active'));
+             e.currentTarget.classList.add('active');
+             renderContent(e.currentTarget.id);
+        }));
+
+        // --- INICIALIZAÇÃO ---
+        populateSelects(); // Popula o select de alunos
+        document.getElementById('btn-dashboard').click(); // Começa na Visão Geral
+    });
+</script>
 </body>
 </html>

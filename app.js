@@ -8,12 +8,14 @@ import cadastroRouter from './routes/cadastro.routes.js';
 import loginRouter from './routes/login.routes.js';
 import mensalidadeRouter from './routes/mensalidades.routes.js'
 import arquivadosRouter from './routes/arquivados.routes.js'
+import apiRoutes from './routes/api.js';
 
 
 
  const app = express();
  const PORT = 3020;
  const SALT_ROUNDS = 10;
+
 
 // --- CONFIGURAÇÕES GERAIS ---
 app.use(express.json());
@@ -74,28 +76,10 @@ app.get("/cadastro-aluno", (req, res) => {
 
 //FINANCEIRO
 
-app.get("/relatorio", (req, res) => {
-  res.render("FINANCEIRO/relatorio");
-});
+app.use('/api', apiRoutes);
 
-app.get("/relatorio-diario", (req, res) => {
-  res.render("FINANCEIRO/rel_diario");
-});
-
-app.get("/relatorio-mensal", (req, res) => {
-  res.render("FINANCEIRO/rel_mensal");
-});
-
-app.get("/fluxo-de-caixa", (req, res) => {
-  res.render("FINANCEIRO/fluxo_de_caixa");
-});
-
-app.get("/relatorio-financeiro", (req, res) => {
-  res.render("FINANCEIRO/financial_report_page");
-});
-
-app.get("/adimplentes-inadimplentes", (req, res) => {
-  res.render("FINANCEIRO/adimplentes");
+app.get('/financeiro', (req, res) => {
+    res.render('FINANCEIRO/financeiro');
 });
 
 //TURMAS
@@ -122,9 +106,8 @@ app.get("/editar-prof", (req, res) => {
 });
 
 // FINANCEIRO
-app.get("/financeiro", (req, res) => {
-  res.render("FINANCEIRO/financeiro");
-});
+
+
 
 //TESTANDO O BANCO
 
