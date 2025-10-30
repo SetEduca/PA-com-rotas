@@ -11,6 +11,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;600&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Allerta&display=swap');
 
+
         /* --- Configuração Geral --- */
         body, html {
             margin: 0;
@@ -21,11 +22,13 @@
             background-color: #FFFFFF;
         }
 
+
         .main-container {
             display: flex;
             width: 100%;
             height: 100vh;
         }
+
 
         /* --- Painel Esquerdo (Imagem) --- */
         .left-panel {
@@ -34,11 +37,13 @@
             height: 100%; /* Garante altura total */
         }
 
+
         .left-panel img {
             width: 100%;
             height: 100%;
             object-fit: cover; /* Cobre o espaço sem distorcer */
         }
+
 
         /* --- Painel Direito (Formulário de Login) --- */
         .right-panel {
@@ -52,10 +57,12 @@
             overflow-y: auto; /* Permite scroll se necessário */
         }
 
+
         .login-container {
             max-width: 520px;
             width: 100%;
         }
+
 
         .login-container h1 {
             font-family: 'Konkhmer Sleokchher', cursive;
@@ -65,6 +72,7 @@
             color: #000000;
         }
 
+
         .login-container h2 {
             font-family: 'Kodchasan', sans-serif;
             font-size: 1.25rem;
@@ -72,12 +80,13 @@
             color: #555555;
             margin-bottom: 40px;
         }
-        
+       
         /* --- Estilos do Formulário --- */
         .form-group {
             margin-bottom: 28px;
             position: relative;
         }
+
 
         .form-group label {
             font-family: 'Kodchasan', sans-serif;
@@ -87,6 +96,7 @@
             margin-bottom: 8px;
             display: block;
         }
+
 
         .form-group input {
             width: 100%;
@@ -107,6 +117,8 @@
         }
 
 
+
+
         .form-group input::placeholder {
             color: #A0A0A0;
         }
@@ -115,6 +127,8 @@
              border-color: #fcdc6a; /* Cor de foco */
              box-shadow: 0 0 0 3px rgba(252, 220, 106, 0.4);
          }
+
+
 
 
         .password-wrapper {
@@ -128,6 +142,8 @@
         }
 
 
+
+
         .toggle-password { /* Ícone do olho */
             position: absolute;
             right: 20px;
@@ -137,6 +153,7 @@
             color: #838181;
             font-size: 1.1rem; /* Tamanho do ícone */
         }
+
 
         .form-links {
             display: flex;
@@ -149,19 +166,23 @@
             gap: 10px; /* Espaço entre os links se quebrar linha */
         }
 
+
         .form-links a {
             color: #00A6FF; /* Azul para links */
             text-decoration: none;
             font-weight: bold;
         }
 
+
         .form-links a:hover {
             text-decoration: underline;
         }
 
+
         .form-links p a { /* Link dentro do "Não é cadastrado?" */
             color: #FFC72C; /* Amarelo */
         }
+
 
         #submit-btn {
             display: block; /* Ocupa linha inteira */
@@ -191,6 +212,8 @@
          }
 
 
+
+
         /* Mensagens de Erro/Sucesso (Vindas do Backend via EJS) */
         .error-message, .success-message {
             font-family: 'Allerta', sans-serif;
@@ -205,6 +228,7 @@
             gap: 10px; /* Espaço entre ícone e texto */
         }
 
+
         .error-message {
             color: #721c24; /* Texto vermelho escuro */
             background-color: #f8d7da; /* Fundo rosa claro */
@@ -212,12 +236,15 @@
         }
          .error-message i { color: #dc3545; } /* Ícone vermelho */
 
+
         .success-message {
             color: #155724; /* Texto verde escuro */
             background-color: #d4edda; /* Fundo verde claro */
             border: 1px solid #c3e6cb; /* Borda verde */
         }
         .success-message i { color: #28a745; } /* Ícone verde */
+
+
 
 
         /* --- MODAL DE RECUPERAÇÃO DE SENHA --- */
@@ -233,9 +260,11 @@
             backdrop-filter: blur(4px); /* Efeito de desfoque */
         }
 
+
         .modal-overlay.active {
             display: flex; /* Mostra o modal */
         }
+
 
         .modal-content {
             background-color: #FFFFFF;
@@ -255,6 +284,8 @@
          }
 
 
+
+
         .modal-close {
             position: absolute;
             top: 15px; /* Mais perto do topo */
@@ -268,9 +299,11 @@
             padding: 5px; /* Área de clique maior */
         }
 
+
         .modal-close:hover {
             color: #333; /* Cor mais escura no hover */
         }
+
 
         .modal-content h3 {
             font-family: 'Konkhmer Sleokchher', cursive;
@@ -281,6 +314,7 @@
             text-align: center; /* Centraliza título */
         }
 
+
         .modal-content p {
             font-family: 'Kodchasan', sans-serif;
             font-size: 1rem;
@@ -289,8 +323,10 @@
             text-align: center; /* Centraliza parágrafo */
         }
 
+
         .recovery-step { display: none; }
         .recovery-step.active { display: block; }
+
 
         /* Botão dentro do modal */
         .modal-content .submit-btn {
@@ -316,6 +352,8 @@
         .modal-content .submit-btn:active { transform: scale(0.98); }
 
 
+
+
         .modal-content .submit-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -323,17 +361,20 @@
             border-color: #ced4da;
         }
 
+
         .modal-links {
             text-align: center;
             margin-top: 20px;
             font-size: 0.9rem;
         }
 
+
         .modal-links a {
             color: #00A6FF;
             text-decoration: none;
             font-weight: bold;
         }
+
 
         .modal-links a:hover {
             text-decoration: underline;
@@ -343,6 +384,8 @@
              margin-bottom: 20px; /* Espaço abaixo da mensagem */
              min-height: 40px; /* Altura mínima para evitar pulos */
         }
+
+
 
 
         /* --- Responsividade --- */
@@ -359,6 +402,7 @@
                  min-height: 100vh; /* Garante que ocupe a tela */
             }
         }
+
 
         @media (max-width: 576px) {
             .login-container h1 {
@@ -393,23 +437,12 @@
             <img src="/imagem/BV.svg" alt="Banner de boas-vindas com ilustrações infantis">
         </div>
 
+
         <div class="right-panel">
             <div class="login-container">
                 <h1>Login</h1>
                 <h2>Sentimos falta de você!</h2>
 
-
-
- <form id="meuform" method="POST" action="/login">
-    
-    <!-- Seus campos de usuário e senha ficam aqui -->
-    <label for="username" class="label">Usuário ou e-mail</label><br>
-    <input type="text" id="username" name="username" placeholder="Digite seu usuário ou e-mail" required><br><br><br><br>
-
-    <label for="password" class="labe">Senha</label><br>
-    <input type="password" id="password" name="password" placeholder="Digite sua senha" required><br><br>
-
-                <form id="loginForm">
 
                 <% if (typeof error !== 'undefined' && error) { %>
                     <div class="error-message">
@@ -429,11 +462,11 @@
                     </script>
                 <% } %>
                 <form id="loginForm" method="POST" action="/login">
-
                     <div class="form-group">
                         <label for="email">E-mail</label>
                         <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
                     </div>
+
 
                     <div class="form-group">
                         <label for="password">Senha</label>
@@ -442,7 +475,7 @@
                             <i class="fas fa-eye toggle-password" data-target="password"></i>
                         </div>
                     </div>
-                    
+                   
                     <div class="form-links">
                         <p>Não é cadastrado? <a href="/cadastro">Cadastro</a></p>
                         <a href="#" id="forgot-password-link">Esqueceu a senha?</a>
@@ -455,20 +488,13 @@
         </div>
     </div>
 
+
     <div class="modal-overlay" id="recoveryModal">
         <div class="modal-content">
             <button class="modal-close" id="closeModal">&times;</button>
-            
-            <div id="modalMessage"></div> 
+           
+            <div id="modalMessage"></div>
 
-
-        <button htype="submit" id="sub">Entrar</button>
-    </form>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-</body>
 
             <div id="step1" class="recovery-step active">
                 <h3>Recuperar Senha</h3>
@@ -481,6 +507,7 @@
                     <button type="submit" class="submit-btn">Enviar Código</button>
                 </form>
             </div>
+
 
             <div id="step2" class="recovery-step">
                 <h3>Código Enviado</h3>
@@ -496,6 +523,7 @@
                     </div>
                 </form>
             </div>
+
 
             <div id="step3" class="recovery-step">
                 <h3>Nova Senha</h3>
@@ -521,7 +549,7 @@
             </div>
         </div>
     </div>
-    
+   
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Toggle password visibility (para todos os campos de senha)
@@ -539,6 +567,7 @@
                 });
             });
 
+
             // --- Lógica do Modal "Esqueceu a Senha?" ---
             const modal = document.getElementById('recoveryModal');
             const forgotPasswordLink = document.getElementById('forgot-password-link');
@@ -546,12 +575,14 @@
             let currentEmail = ''; // Armazena o email entre os passos
             // Removido: let currentCode = ''; // Não precisamos mais guardar o código no JS
 
+
             // Função para ABRIR o modal
             forgotPasswordLink?.addEventListener('click', (e) => {
                 e.preventDefault();
                 modal.classList.add('active');
                 resetModal(); // Garante que começa no passo 1
             });
+
 
             // Função para FECHAR o modal (botão X e clique fora)
             const closeModal = () => {
@@ -564,6 +595,7 @@
                 }
             });
 
+
             // Funções auxiliares do modal
             const showStep = (step) => {
                 document.querySelectorAll('.recovery-step').forEach(s => s.classList.remove('active'));
@@ -571,6 +603,7 @@
                  if (stepElement) stepElement.classList.add('active');
                 clearMessages(); // Limpa mensagens ao trocar de passo
             };
+
 
             const showMessage = (message, type = 'error', target = 'modalMessage') => {
                  const messageDiv = document.getElementById(target);
@@ -580,12 +613,14 @@
                  messageDiv.innerHTML = `<div class="${type}-message"><i class="fas ${iconClass}"></i> ${message}</div>`;
              };
 
+
             const clearMessages = () => {
                 const modalMsg = document.getElementById('modalMessage');
                 const modalPwdErr = document.getElementById('modal-password-error');
                  if(modalMsg) modalMsg.innerHTML = '';
                  if(modalPwdErr) modalPwdErr.innerHTML = '';
             };
+
 
             const resetModal = () => {
                 showStep(1);
@@ -599,10 +634,12 @@
                  enableButton(document.getElementById('passwordForm'));
             };
 
+
             const disableButton = (form) => {
                 const button = form?.querySelector('button[type="submit"]');
                 if (button) button.disabled = true;
             };
+
 
             const enableButton = (form) => {
                 const button = form?.querySelector('button[type="submit"]');
@@ -610,7 +647,10 @@
             };
 
 
+
+
              // --- Event Listeners dos Formulários do Modal ---
+
 
              // Passo 1: Enviar E-mail
              document.getElementById('emailForm')?.addEventListener('submit', async (e) => {
@@ -622,11 +662,13 @@
                  const email = emailInput?.value;
                  currentEmail = email; // Guarda o email
 
+
                  if (!email) {
                      showMessage('Por favor, digite seu e-mail.');
                      enableButton(form);
                      return;
                  }
+
 
                  try {
                      showMessage('Enviando código...', 'success'); // Feedback visual
@@ -640,13 +682,16 @@
                      // const data = await response.json();
                      // if (!response.ok) throw new Error(data.message || 'Falha ao enviar código.');
 
+
                      // Simulação de sucesso (REMOVA ISSO e use a chamada real acima)
                       await new Promise(resolve => setTimeout(resolve, 1500)); // Simula espera
                      console.log("Simulando envio de código para:", email);
                      // ---------------------------------------------------------------------
 
+
                      showMessage('Código enviado! Verifique seu e-mail.', 'success');
                      setTimeout(() => showStep(2), 1500); // Avança para o passo 2
+
 
                  } catch (error) {
                      console.error("Erro ao enviar código:", error);
@@ -655,6 +700,8 @@
                      enableButton(form); // Reabilita o botão
                  }
              });
+
+
 
 
              // Passo 2: Verificar Código
@@ -666,11 +713,13 @@
                  const codeInput = document.getElementById('verificationCode');
                  const code = codeInput?.value;
 
+
                  if (!code || code.length !== 6) {
                      showMessage('Digite o código de 6 dígitos.');
                      enableButton(form);
                      return;
                  }
+
 
                  try {
                      showMessage('Verificando código...', 'success');
@@ -684,13 +733,16 @@
                      // const data = await response.json();
                      // if (!response.ok) throw new Error(data.message || 'Código inválido ou expirado.');
 
+
                      // Simulação de sucesso (REMOVA ISSO)
                       await new Promise(resolve => setTimeout(resolve, 1500));
                      console.log("Simulando verificação de código:", code, "para email:", currentEmail);
                      // -------------------------------------------------------------------------
 
+
                      showMessage('Código verificado!', 'success');
                      setTimeout(() => showStep(3), 1500); // Avança para o passo 3
+
 
                  } catch (error) {
                      console.error("Erro ao verificar código:", error);
@@ -699,6 +751,8 @@
                      enableButton(form);
                  }
              });
+
+
 
 
              // Passo 3: Redefinir Senha
@@ -711,6 +765,7 @@
                  const confirmPasswordInput = document.getElementById('confirmPassword');
                  const newPassword = newPasswordInput?.value;
                  const confirmPassword = confirmPasswordInput?.value;
+
 
                  // Validações
                  if (!newPassword || !confirmPassword) {
@@ -730,6 +785,8 @@
                  }
 
 
+
+
                  try {
                      showMessage('Redefinindo senha...', 'success');
                      // -------> CHAME SUA API DE BACKEND AQUI PARA REDEFINIR A SENHA <-------
@@ -743,13 +800,16 @@
                      // const data = await response.json();
                      // if (!response.ok) throw new Error(data.message || 'Não foi possível redefinir a senha.');
 
+
                       // Simulação de sucesso (REMOVA ISSO)
                       await new Promise(resolve => setTimeout(resolve, 1500));
                      console.log("Simulando redefinição de senha para:", currentEmail);
                      // -------------------------------------------------------------------------
 
+
                      showMessage('Senha redefinida com sucesso! Você já pode fazer login.', 'success');
                      setTimeout(closeModal, 3000); // Fecha o modal após 3 segundos
+
 
                  } catch (error) {
                      console.error("Erro ao redefinir senha:", error);
@@ -759,6 +819,7 @@
                  }
                  // 'finally' não é usado aqui intencionalmente em caso de erro, para forçar recomeçar
              });
+
 
             // Link "Reenviar Código"
             document.getElementById('resendCode')?.addEventListener('click', (e) => {
@@ -772,8 +833,9 @@
              });
 
 
+
+
         }); // Fim do DOMContentLoaded
     </script>
 </body>
 </html>
-
