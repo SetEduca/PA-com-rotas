@@ -96,7 +96,7 @@
 
 
     .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-    .menu-item:nth-child(2)::after { background-color: #00A6FF; }
+    .menu-item:nth-child(2)::after { background-color: #306bc2; }
     .menu-item:nth-child(3)::after { background-color: #9747FF; }
     .menu-item:nth-child(4)::after { background-color: #F88C12; }
     .menu-item:nth-child(5)::after { background-color: #D22A2A; }
@@ -462,7 +462,7 @@
         </div>
     <div>
       <div class="seteeduca">
-        <p>@seteeduca</p>
+        <p></p>
       </div>
       <div class="sidebar-footer">
         <div class="logout-button">
@@ -493,7 +493,7 @@
     <!-- Content Area -->
     <div class="content-area">
       <div class="caixa">
-        <form action="/cadastrar" method="POST" id="formCadastro">
+       <form action="/professores/cadastro" method="POST" id="formCadastro">
           <div class="campo">
             <label for="professor">Nome:</label>
             <input type="text" id="professor" name="professor" placeholder="Nome completo do professor" required>
@@ -552,10 +552,10 @@
             const rotas = {
                 'inicio': '/home',                    // Rota para home
                 'professor': '/cadastro-professor',     // Adicione esta rota no seu servidor se necessário
-                'financeiro': '/opcoes-financeiro',   // Rota existente para financeiro
+                'financeiro': '/financeiro',   // Rota existente para financeiro
                 'turmas': '/turmas-cadastradas',      // Rota existente para turmas
                 'matricula': '/matricula',            // Página atual
-                'cadastro': '/opcoes-aluno'           // Rota existente para cadastro de aluno
+                'cadastro': '/acessar-aluno'           // Rota existente para cadastro de aluno
             };
 
             // Navegar para a página correspondente
@@ -582,67 +582,6 @@
           i.classList.remove('active');
         });
         this.classList.add('active');
-      });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('formCadastro');
-      const modal = document.getElementById('confirmModal');
-      const okBtn = modal.querySelector('.ok');
-      const modalMessage = document.getElementById('modalMessage');
-
-      form.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const professor = document.getElementById('professor').value.trim();
-        const turma = document.getElementById('turma').value.trim();
-        const mensalidade = document.getElementById('mensalidade').value;
-        const quantidade = document.getElementById('quantidade_alunos').value;
-
-        if (!professor || !turma || mensalidade === "" || !quantidade) {
-          alert("Por favor, preencha todos os campos obrigatórios!");
-          return;
-        }
-
-        const novaTurma = {
-          professor: professor,
-          turma: turma,
-          mensalidade: mensalidade,
-          quantidade: quantidade,
-          dataCadastro: new Date().toLocaleDateString()
-        };
-
-        // Carregar turmas já salvas
-        let turmas = JSON.parse(localStorage.getItem('turmas')) || JSON.parse(sessionStorage.getItem('turmas')) || [];
-
-        // Adicionar nova turma
-        turmas.push(novaTurma);
-
-        // Salvar de volta
-        localStorage.setItem('turmas', JSON.stringify(turmas));
-        sessionStorage.setItem('turmas', JSON.stringify(turmas));
-
-        modalMessage.innerHTML = `
-          Turma <strong>${turma}</strong> foi cadastrada com sucesso!
-          <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">
-            Professor(a): ${professor}<br>
-            Mensalidade: ${mensalidade} | Alunos: ${quantidade}
-          </div>
-        `;
-        
-        modal.style.display = 'flex';
-        form.reset();
-      });
-
-   okBtn.addEventListener('click', function() {
-    modal.style.display = 'none';
-    window.location.href = '/turmas-cadastradas'; // ou a rota correta para suas turmas
-});
-
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-          modal.style.display = 'none';
-        }
       });
     });
   </script>

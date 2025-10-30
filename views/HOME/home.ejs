@@ -114,7 +114,7 @@
 
         /* Cores das barrinhas inferiores dos itens do menu */
         .menu-item:nth-child(1)::after { background-color: #F4BF27; } 
-        .menu-item:nth-child(2)::after { background-color: #00A6FF; } 
+        .menu-item:nth-child(2)::after { background-color: #306bc2; } 
         .menu-item:nth-child(3)::after { background-color: #9747FF; } 
         .menu-item:nth-child(4)::after { background-color: #F88C12; } 
         .menu-item:nth-child(5)::after { background-color: #D22A2A; } 
@@ -664,19 +664,20 @@
             margin: 0 0 8px 0;
             line-height: 1.4;
             color: #333;
+
         }
 
         .contact-button {
-            background-color: #e91e63; /* Cor do botão similar à imagem */
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            display: inline-block; /* Permite padding e width */
-            margin-top: 15px;
-            transition: background-color 0.3s ease;
-        }
+        background-color: #e91e63;
+        color: #333; /* Alterei para branco para melhor contraste */
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+        padding: 15px 30px; /* Ajustado para um visual mais equilibrado */
+        height: 50px;
+    }
 
         .contact-button:hover {
             background-color: #d81b60;
@@ -747,7 +748,7 @@
     <div class="sidebar">
         <div>
             <div class="logo">
-                <img src="imagem/logo.png" alt="logo">
+                <img src="logo.png" alt="logo">
             </div>
             <div class="menu">
                 <a href="/home" class="menu-item active" onclick="navegarPara('inicio')">
@@ -771,7 +772,7 @@
                     <i class="fas fa-users"></i>
                     <span>TURMA</span>
                 </a>
-                <a href="#" class="menu-item" onclick="navegarPara('financeiro')">
+                <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
                     <i class="fas fa-dollar-sign"></i>
                     <span>FINANCEIRO</span>
                 </a>
@@ -894,14 +895,6 @@
                     <li><a href="#">Parceiros - SENAI CIMATEC/ SESI</a></li>
                 </ul>
             </div>
-
-            <div class="footer-social-contact">
-                <div class="footer-social-icons">
-                    <a href="#" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                </div>
 
                 <div class="contact-info">
                     <p>Telefone: (71) 98765-4321</p>

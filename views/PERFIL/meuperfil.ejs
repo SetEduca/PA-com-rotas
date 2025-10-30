@@ -14,7 +14,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
@@ -55,13 +55,9 @@
             gap: 15px;
         }
 
-        /* INÍCIO ESTILOS DO NOVO CABEÇALHO E DROPDOWN (de inativos.html) */
-        /* Esconde os SVGs antigos se ainda existirem no HTML */
-        .home-icon, .profile-icon {
-            display: none; 
-        }
+        /* INÍCIO ESTILOS DO NOVO CABEÇALHO E DROPDOWN */
 
-        /* Estilo comum para os novos ícones de imagem */
+        /* Estilo comum para ícones de imagem (Home) */
         .header-icon {
             width: 50px; 
             height: 50px;
@@ -72,18 +68,51 @@
         .header-icon:hover {
             transform: scale(1.1);
         }
-        
-        /* Contêiner do Perfil e Dropdown */
+
+        /* Contêiner do Perfil e Dropdown (MODIFICADO) */
         .profile {
             position: relative;
             cursor: pointer;
-            z-index: 10;
+            z-index: 150;
+            padding: 8px 10px; /* Adiciona padding para aumentar a área de clique */
+            border-radius: 10px;
+            transition: background-color 0.2s ease;
+        
         }
         
-        .profile .header-icon {
-            margin: 0;
+        .profile:hover {
+            background-color: #4e4e4e18; /* Fundo suave ao passar o mouse */
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Espaçamento entre o ícone do usuário e a seta */
         }
 
+        /* Estilo para o ícone de usuário Font Awesome */
+        .profile-header .profile-icon {
+            font-size: 43px; 
+            color: #000000;
+        }
+        
+        /* Esconde a classe .profile-icon antiga */
+        .home-icon, .profile-icon:not(.profile-header .profile-icon) { 
+             display: none; 
+        }
+
+        .profile-arrow {
+            font-size: 14px; 
+            color: #2c3e50;
+            transition: transform 0.3s ease;
+        }
+
+        /* Rotação da seta quando o dropdown estiver aberto */
+        .profile.active .profile-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* REGRAS DO DROPDOWN (mantidas) */
         .profile-dropdown {
             position: absolute;
             top: 100%; 
@@ -130,7 +159,7 @@
 
         .profile-card {
             background: white;
-            border-radius: 15px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado */
             padding: 30px;
             box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
         }
@@ -216,7 +245,7 @@
         .form-group input {
             padding: 10px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 25px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 25px) */
             font-size: 14px;
             outline: none;
             transition: border-color 0.3s, background-color 0.3s;
@@ -242,7 +271,7 @@
         .save-btn, .edit-btn, .change-password-btn {
             padding: 10px 20px;
             border: none;
-            border-radius: 20px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado */
             cursor: pointer;
             font-weight: 500;
             font-size: 14px;
@@ -255,6 +284,12 @@
         }
         
         .edit-btn, .change-password-btn {
+            background: #e0e0e0;
+            color: #666;
+        }
+        
+        /* NOVO ESTILO: Botão de editar endereço */
+        .edit-address-btn {
             background: #e0e0e0;
             color: #666;
         }
@@ -304,7 +339,7 @@
         .address-field {
             padding: 12px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 25px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 25px) */
             font-size: 14px;
             outline: none;
             transition: all 0.3s ease;
@@ -363,8 +398,16 @@
             color: #2c3e50;
             transition: all 0.2s ease;
         }
+        
+        /* NOVO ESTILO: Desabilitar botão de busca CEP em modo de leitura */
+        .cep-search-btn:disabled {
+            background: #e0e0e0;
+            cursor: not-allowed;
+            color: #999;
+            transform: none;
+        }
 
-        .cep-search-btn:hover {
+        .cep-search-btn:hover:not(:disabled) {
             background: #fcd66e;
             transform: scale(1.1);
         }
@@ -378,7 +421,7 @@
             font-size: 12px;
             margin-top: 5px;
             padding: 8px 12px;
-            border-radius: 15px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 15px) */
             animation: slideDown 0.3s ease-out;
         }
 
@@ -406,7 +449,7 @@
         .address-btn {
             padding: 12px 24px;
             border: none;
-            border-radius: 25px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado */
             cursor: pointer;
             font-weight: 500;
             font-size: 14px;
@@ -419,6 +462,19 @@
             color: #666;
             border: 2px solid #e9ecef;
         }
+        
+        /* NOVO ESTILO: Botão de editar endereço */
+        .edit-address-btn {
+            background: #e0e0e0;
+            color: #666;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .edit-address-btn:hover {
+            background: #d4d4d4;
+            color: #495057;
+        }
+
 
         .clear-address:hover {
             background: #e9ecef;
@@ -430,11 +486,12 @@
             color: #2c3e50;
             border: 2px solid #ffbb00;
         }
-
+        
+        /* NOVO ESTILO: Corrigir cor do hover do botão de salvar endereço */
         .save-address:hover {
             background: #fcd66e;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(168, 230, 207, 0.3);
+            box-shadow: 0 4px 12px rgba(252, 214, 110, 0.3); /* Alterado de cor verde para cor amarela/laranja */
         }
 
         @keyframes slideDown {
@@ -475,7 +532,7 @@
         .password-modal {
             background: white;
             padding: 30px;
-            border-radius: 20px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 20px) */
             width: 90%;
             max-width: 450px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -543,7 +600,7 @@
             width: 100%;
             padding: 12px 45px 12px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 25px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 25px) */
             font-size: 14px;
             outline: none;
             transition: border-color 0.3s;
@@ -636,7 +693,7 @@
             flex: 1;
             padding: 12px 20px;
             border: none;
-            border-radius: 25px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado */
             cursor: pointer;
             font-weight: 500;
             font-size: 14px;
@@ -690,7 +747,7 @@
         .photo-modal {
             background: white;
             padding: 30px;
-            border-radius: 20px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 20px) */
             width: 90%;
             max-width: 500px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -700,7 +757,7 @@
 
         .photo-upload-area {
             border: 2px dashed #fcd66e;
-            border-radius: 15px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 15px) */
             padding: 40px 20px;
             text-align: center;
             margin: 20px 0;
@@ -791,7 +848,7 @@
         .photo-action-btn {
             padding: 8px 16px;
             border: none;
-            border-radius: 20px;
+            border-radius: 10px; /* ALTERADO: Mais quadrado */
             cursor: pointer;
             font-size: 12px;
             font-weight: 500;
@@ -902,31 +959,27 @@
             <img 
                 src="imagem/home3.png" 
                 class="header-icon" 
-                onclick="window.location.href='/home'" 
+                onclick="navegarPara('inicio')" 
                 alt="Home Icon" 
                 title="Início"
-            
             >
             
-            <div class="profile">
-                <img 
-                    src="imagem/perfil2.png" 
-                    class="header-icon" 
-                    onclick="toggleDropdown(event)" 
-                    alt="Profile Icon" 
-                    title="Perfil"
-                >
-                
+            <div class="profile" id="profile-toggle" onclick="toggleDropdown(event)">
+                <div class="profile-header">
+                    <i class="fas fa-user-circle profile-icon"></i>
+                    <i class="fas fa-chevron-down profile-arrow"></i>
+                </div>
                 <div class="profile-dropdown" id="profile-dropdown-menu">
                     <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
                     <a href="/mensalidade" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
                     <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
                     <div class="dropdown-divider"></div>
-                    <a href="/login" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                    <a href="/login" onclick="login()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                  
                 </div>
             </div>
         </div>
-        </header>
+    </header>
 
     <div class="container">
         <div class="profile-card">
@@ -1057,8 +1110,13 @@
                     </div>
 
                     <div class="address-actions">
+                        <button type="button" class="address-btn edit-address-btn" id="editAddress">Editar Endereço</button>
+                        
                         <button type="button" class="address-btn clear-address" id="clearAddress">Limpar Endereço</button>
-                        <button type="button" class="address-btn save-address" id="saveAddress">Salvar Endereço</button>
+                        
+                        <button type="button" class="address-btn save-address" id="saveAddress" style="display: none;">Salvar Alterações</button>
+                        
+                        <button type="button" class="address-btn clear-address" id="cancelAddress" style="display: none;">Cancelar</button>
                     </div>
                 </div>
             </div>
@@ -1201,7 +1259,6 @@
         const photoModal = document.getElementById('photoModal');
         const passwordForm = document.getElementById('passwordForm');
         const closePhotoModal = document.getElementById('closePhotoModal');
-        const cancelBtn = passwordModal.querySelector('.modal-cancel-btn'); // Especifica o cancel button do modal de senha
         const cancelPhotoBtn = document.getElementById('cancelPhotoChange');
         const savePasswordBtn = document.querySelector('.modal-save-btn');
         const savePhotoBtn = document.getElementById('savePhotoChange');
@@ -1213,13 +1270,22 @@
         let selectedFile = null;
 
         // ==========================================================
-        // NOVAS FUNÇÕES DE NAVEGAÇÃO E DROPDOWN (de inativos.html)
+        // NOVAS FUNÇÕES DE NAVEGAÇÃO E DROPDOWN
         // ==========================================================
         
         function toggleDropdown(event) {
             if (event) event.stopPropagation();
             const dropdown = document.getElementById('profile-dropdown-menu');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            const profileContainer = document.querySelector('.profile');
+            
+            // Toggle visibility
+            const isVisible = dropdown.style.display === 'block';
+            dropdown.style.display = isVisible ? 'none' : 'block';
+            
+            // Toggle active class para rotação da seta
+            if (profileContainer) {
+                profileContainer.classList.toggle('active', !isVisible);
+            }
         }
 
         function navegarPara(pagina) {
@@ -1247,7 +1313,7 @@
             }
         }
 
-        function logout() {
+        function login() {
             if (confirm('Deseja realmente sair do sistema?')) {
                 window.location.href = '/login';
             }
@@ -1256,7 +1322,7 @@
         // Expondo as funções
         window.toggleDropdown = toggleDropdown;
         window.navegarPara = navegarPara;
-        window.logout = logout;
+        window.login = login;
 
 
         // Funcionalidade para o botão de editar
@@ -1296,6 +1362,8 @@
 
         // CORREÇÃO: Pegar o botão de fechar específico do modal de senha
         const closePasswordModalBtn = passwordModal.querySelector('.close-modal');
+        const cancelBtn = passwordModal.querySelector('.modal-cancel-btn'); // Especifica o cancel button do modal de senha
+
 
         closePasswordModalBtn.addEventListener('click', closePasswordModal); // O 'x' do modal de senha
         cancelBtn.addEventListener('click', closePasswordModal); // O botão 'Cancelar' do modal de senha
@@ -1618,7 +1686,6 @@
         const cepField = document.getElementById('cep');
         const searchCepBtn = document.getElementById('searchCep');
         const cepError = document.getElementById('cepError');
-        const cepLoading = document.getElementById('cepLoading');
 
         const addressFields = {
             logradouro: document.getElementById('logradouro'),
@@ -1628,6 +1695,47 @@
             numero: document.getElementById('numero'), 
             complemento: document.getElementById('complemento'), 
         };
+        
+        // NOVO: Referências e array de campos para a funcionalidade de edição de endereço
+        const editAddressBtn = document.getElementById('editAddress');
+        const saveAddressBtn = document.getElementById('saveAddress');
+        const clearAddressBtn = document.getElementById('clearAddress');
+        const cancelAddressBtn = document.getElementById('cancelAddress');
+
+        const allAddressFields = [
+            cepField, 
+            addressFields.logradouro, 
+            addressFields.numero, 
+            addressFields.complemento, 
+            addressFields.bairro, 
+            addressFields.localidade, 
+            addressFields.uf
+        ];
+        
+        /**
+         * Define o estado de somente leitura para os campos de endereço
+         * @param {boolean} isReadOnly 
+         */
+        function setAddressFieldsReadOnly(isReadOnly) {
+            allAddressFields.forEach(field => {
+                if (field.tagName === 'SELECT') {
+                    field.disabled = isReadOnly;
+                } else {
+                    field.readOnly = isReadOnly;
+                }
+                
+                // Adiciona ou remove o atributo 'readonly' para que o CSS de leitura seja aplicado
+                if (isReadOnly) {
+                    field.setAttribute('readonly', 'readonly');
+                } else {
+                    field.removeAttribute('readonly');
+                }
+            });
+
+            // Desabilita/habilita o botão de busca de CEP
+            searchCepBtn.disabled = isReadOnly;
+        }
+
 
         /**
          * Implementação do debounce para limitar a frequência de chamadas de função
@@ -1648,6 +1756,7 @@
              Object.keys(addressFields).forEach(key => {
                 addressFields[key].value = key === 'uf' ? '' : ''; 
             });
+            cepField.value = '';
         }
         
         /**
@@ -1657,6 +1766,11 @@
             const cleanedCep = cep.replace(/\D/g, '');
             if (!cleanedCep || cleanedCep.length !== 8) {
                 return { error: true, message: 'CEP inválido. Deve conter 8 dígitos.' };
+            }
+            
+            // Impedir busca se estiver em modo de leitura
+            if (searchCepBtn.disabled) {
+                return { error: true, message: 'Clique em Editar Endereço para realizar uma busca.'};
             }
 
             const url = `https://viacep.com.br/ws/${cleanedCep}/json/`;
@@ -1737,7 +1851,6 @@
 
             if (cleanedCep.length !== 8) {
                 hideAddressMessages(); 
-                clearAddressFields();
                 return;
             }
 
@@ -1749,7 +1862,7 @@
             hideAddressMessages(); 
 
             if (result.error) {
-                clearAddressFields(); // Limpa campos em caso de erro
+                // Não limpa todos os campos, apenas mostra o erro
                 showAddressError(result.message);
             } else {
                 fillAddressFields(result.data);
@@ -1770,6 +1883,9 @@
         // Event Listeners
 
         document.addEventListener('DOMContentLoaded', function() {
+            // NOVO: Configura o estado inicial dos campos de endereço como somente leitura
+            setAddressFieldsReadOnly(true);
+            
             // Máscara para CEP
             cepField.addEventListener('input', function() {
                 let value = this.value.replace(/\D/g, '');
@@ -1781,7 +1897,7 @@
                 hideAddressMessages(); 
 
                 // Auto-buscar quando CEP estiver completo (9 caracteres com o hífen)
-                if (value.length === 9) {
+                if (value.length === 9 && !this.readOnly) {
                     // Usa a função debounced para evitar chamadas rápidas
                     debouncedHandleCepSearch(value);
                 }
@@ -1802,56 +1918,104 @@
                 }
             });
             
-            // Listener para fechar o dropdown quando clicar fora dele (de inativos.html)
+            // Listener para fechar o dropdown quando clicar fora dele (AJUSTADO)
             document.addEventListener('click', function(event) {
                 const dropdown = document.getElementById('profile-dropdown-menu');
-                const profileIcon = document.querySelector('.profile .header-icon');
+                const profileContainer = document.querySelector('.profile'); // Seleciona o container do perfil
                 
-                // Verifica se o clique não foi no dropdown e nem no ícone de perfil
-                if (dropdown && dropdown.style.display === 'block' && event.target !== profileIcon && !dropdown.contains(event.target)) {
+                // Verifica se o clique não foi no container do perfil e nem no dropdown
+                if (dropdown && dropdown.style.display === 'block' && profileContainer && !profileContainer.contains(event.target)) {
                     dropdown.style.display = 'none';
+                    profileContainer.classList.remove('active'); // Remove a classe active ao fechar
+                }
+            });
+            
+            // Lógica para o botão de Editar Endereço
+            editAddressBtn.addEventListener('click', function() {
+                setAddressFieldsReadOnly(false);
+                
+                // Toggle button visibility
+                editAddressBtn.style.display = 'none';
+                clearAddressBtn.style.display = 'none'; // Esconde 'Limpar Endereço' durante a edição
+                cancelAddressBtn.style.display = 'block'; 
+                saveAddressBtn.style.display = 'block';
+            
+                cepField.focus();
+                
+                // Armazena valores originais em um atributo de dados para restaurar se cancelar
+                allAddressFields.forEach(field => {
+                    field.setAttribute('data-original-value', field.value);
+                });
+            });
+            
+            // Lógica para o botão de Cancelar Endereço
+            cancelAddressBtn.addEventListener('click', function() {
+                if (confirm('Deseja realmente cancelar as alterações no endereço?')) {
+                    // Restaura valores originais
+                    allAddressFields.forEach(field => {
+                        field.value = field.getAttribute('data-original-value') || '';
+                        field.removeAttribute('data-original-value');
+                    });
+                    
+                    setAddressFieldsReadOnly(true);
+                    
+                    // Retorna a visibilidade dos botões para o modo de visualização
+                    editAddressBtn.style.display = 'block';
+                    clearAddressBtn.style.display = 'block';
+                    cancelAddressBtn.style.display = 'none';
+                    saveAddressBtn.style.display = 'none';
+                    
+                    hideAddressMessages(); // Esconde quaisquer erros de CEP
+                }
+            });
+
+            // Lógica do Salvar Endereço (modificada para voltar ao modo de leitura após salvar)
+            document.getElementById('saveAddress').addEventListener('click', function() {
+                const addressData = {
+                    cep: cepField.value,
+                    logradouro: addressFields.logradouro.value,
+                    numero: addressFields.numero.value,
+                    complemento: addressFields.complemento.value,
+                    bairro: addressFields.bairro.value,
+                    localidade: addressFields.localidade.value,
+                    uf: addressFields.uf.value,
+                };
+
+                // Validação básica
+                if (!addressData.cep || !addressData.logradouro || !addressData.numero) {
+                    alert('Por favor, preencha pelo menos CEP, Logradouro e Número.');
+                    return;
+                }
+
+                // Simular salvamento
+                console.log('Dados do endereço:', addressData);
+                alert('Endereço salvo com sucesso!');
+                
+                // Mudar de volta para o modo de leitura
+                setAddressFieldsReadOnly(true);
+                editAddressBtn.style.display = 'block';
+                clearAddressBtn.style.display = 'block';
+                cancelAddressBtn.style.display = 'none';
+                saveAddressBtn.style.display = 'none';
+            });
+            
+            // Lógica do Limpar Endereço (mantida, agora só deve ser acessível no modo de leitura)
+            document.getElementById('clearAddress').addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja limpar todos os campos do endereço?')) {
+                    clearAddressFields();
+                    hideAddressMessages();
+                    cepField.focus();
+                    
+                    // O valor original é agora o estado limpo se estiver no modo de edição (embora este botão esteja escondido no modo de edição)
                 }
             });
         });
 
 
-        // Limpar endereço
-        document.getElementById('clearAddress').addEventListener('click', function() {
-            if (confirm('Tem certeza que deseja limpar todos os campos do endereço?')) {
-                cepField.value = '';
-                clearAddressFields();
-                hideAddressMessages();
-                cepField.focus();
-            }
-        });
-
-        // Salvar endereço (mantido como simulação)
-        document.getElementById('saveAddress').addEventListener('click', function() {
-            const addressData = {
-                cep: cepField.value,
-                logradouro: addressFields.logradouro.value,
-                numero: addressFields.numero.value,
-                complemento: addressFields.complemento.value,
-                bairro: addressFields.bairro.value,
-                localidade: addressFields.localidade.value,
-                uf: addressFields.uf.value,
-            };
-
-            // Validação básica
-            if (!addressData.cep || !addressData.logradouro || !addressData.numero) {
-                alert('Por favor, preencha pelo menos CEP, Logradouro e Número.');
-                return;
-            }
-
-            // Simular salvamento
-            console.log('Dados do endereço:', addressData);
-            alert('Endereço salvo com sucesso!');
-        });
-
         // Validação visual em tempo real para campos obrigatórios (mantido)
         [cepField, addressFields.logradouro, document.getElementById('numero')].forEach(field => {
             field.addEventListener('blur', function() {
-                if (!this.value.trim()) {
+                if (!this.value.trim() && !this.readOnly) {
                     this.style.borderColor = '#e74c3c';
                 } else {
                     this.style.borderColor = '#e0e0e0';
