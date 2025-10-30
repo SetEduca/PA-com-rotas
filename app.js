@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import session from 'express-session'; // <<< 1. IMPORTE O PACOTE DE SESSÃO
 import supabase from './supabase.js';
 import turmasRouter from './routes/turmas.routes.js';
 import matriculasRouter from './routes/matricula.routes.js';
@@ -10,30 +11,40 @@ import mensalidadeRouter from './routes/mensalidades.routes.js'
 import arquivadosRouter from './routes/arquivados.routes.js'
 import apiRoutes from './routes/api.js';
 
-
-
- const app = express();
- const PORT = 3020;
- const SALT_ROUNDS = 10;
+const app = express();
+const PORT = 3020;
+// A constante SALT_ROUNDS não é usada aqui, mas pode ser usada no seu 'login.routes.js'
+// const SALT_ROUNDS = 10; 
 
 
 // --- CONFIGURAÇÕES GERAIS ---
 app.use(express.json());
- app.set("view engine", "ejs");
- app.set("views", "./views");
- app.use(express.static('public'));
- app.use(express.urlencoded({ extended: true }));
- 
- 
+app.set("view engine", "ejs");
+app.set("views", "./views");
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+
+// <<< 2. CONFIGURE A SESSÃO AQUI (ANTES DAS ROTAS) ---
+// Isso cria o objeto `req.session` para todas as rotas abaixo
+app.use(session({
+    secret: 'coloque-uma-chave-secreta-forte-aqui-depois', // IMPORTANTE: Mude isso para uma string segura
+    resave: false,
+    saveUninitialized: true,
+    cookie: { 
+        secure: false, // Em produção (com HTTPS), mude para 'true'
+        maxAge: 24 * 60 * 60 * 1000 // Ex: sessão dura 1 dia (em milissegundos)
+    } 
+}));
+// ---------------------------------------------------
+
 
 //INICIO
-
 app.get("/", (req, res) => {
   res.render("INICIO/inicial");
 });
 
 //LOGIN
-
+// Esta rota agora terá acesso ao req.session
 app.use('/login', loginRouter);
 
 
@@ -42,16 +53,20 @@ app.use('/cadastro', cadastroRouter);
 
 
 //PERFIL
-
+// Esta rota também terá acesso ao req.session
 app.get("/meuperfil", (req, res) => {
-  res.render("PERFIL/meuperfil");});
+  // Você pode adicionar uma verificação aqui:
+  // if (!req.session.usuario) {
+  //   return res.redirect('/login');
+  // }
+  res.render("PERFIL/meuperfil");
+});
 
 app.use('/mensalidade', mensalidadeRouter);
 
 app.use('/arquivados', arquivadosRouter);
 
 //HOME
-
 app.get("/home", (req, res) => {
   res.render("HOME/home");
 });
