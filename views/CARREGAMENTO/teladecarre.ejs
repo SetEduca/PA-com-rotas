@@ -9,7 +9,7 @@
         /* Configurações básicas */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
+margin: 0;
             padding: 0;
             background-color: #ffffff; /* Um cinza claro para combinar com o fundo da logo */
         }
@@ -17,65 +17,70 @@
         /* A tela de carregamento (tela inteira) */
         #loading-screen {
             position: fixed;
-            top: 0;
+top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background-color: #ffffff; 
             display: flex;
-            flex-direction: column; /* Organiza os itens em coluna (logo, barra, texto) */
+            flex-direction: column;
+/* Organiza os itens em coluna (logo, barra, texto) */
             align-items: center;
-            justify-content: center;
+justify-content: center;
             z-index: 9999;
             /* Transição para sumir suavemente */
-            transition: opacity 0.8s ease; 
-        }
+            transition: opacity 0.8s ease;
+}
 
         /* Estilo da sua logo */
         .loading-logo {
-            width: 240px; /* Ajuste o tamanho conforme precisar */
+            width: 240px;
+/* Ajuste o tamanho conforme precisar */
             height: auto;
-            margin-bottom: 30px; /* Espaço entre a logo e a barra */
+margin-bottom: 30px; /* Espaço entre a logo e a barra */
         }
 
         /* O contêiner cinza da barra (a parte de trás) */
         .loading-bar-container {
-            width: 280px; /* Largura da barra */
+            width: 280px;
+/* Largura da barra */
             height: 10px;
-            background-color: #ffffff; /* Fundo branco para a barra */
+            background-color: #ffffff;
+/* Fundo branco para a barra */
             border-radius: 5px;
-            overflow: hidden; /* Garante que a barra interna não saia das bordas */
+overflow: hidden; /* Garante que a barra interna não saia das bordas */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+}
 
         /* A barra colorida que cresce */
         #loading-bar {
             height: 100%;
-            width: 0%; /* Começa com 0% de largura */
+width: 0%; /* Começa com 0% de largura */
             border-radius: 5px;
-            
-            /* Um gradiente bonito inspirado nas cores da sua logo */
+/* Um gradiente bonito inspirado nas cores da sua logo */
             background: linear-gradient(90deg, #ffa997 0%, #ffce89 50%, #8fb7f8 100%);
-            background-size: 200% 100%; /* Tamanho do gradiente para animar */
+background-size: 200% 100%; /* Tamanho do gradiente para animar */
 
             /* Animação suave da largura */
             transition: width 0.2s linear;
-            
-            /* Animação do gradiente */
+/* Animação do gradiente */
             animation: gradient-animation 3s ease infinite;
-        }
+}
 
         /* Animação do gradiente da barra */
         @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% { background-position: 0% 50%;
+}
+            50% { background-position: 100% 50%;
+}
+            100% { background-position: 0% 50%;
+}
         }
 
         /* Texto da porcentagem */
         #loading-percentage {
             margin-top: 20px;
-            font-size: 1.1em;
+font-size: 1.1em;
             color: #555;
             font-weight: 500;
         }
@@ -83,7 +88,7 @@
         /* O conteúdo principal que será mostrado depois */
         #main-content {
             text-align: center;
-            padding-top: 50px;
+padding-top: 50px;
         }
     </style>
 </head>
@@ -101,8 +106,8 @@
 
     <div id="main-content" style="display: none;">
         <h1>Página Carregada!</h1>
-        <p>Bem-vindo ao seu site.</p>
-        </div>
+      <p>Bem-vindo ao seu site.</p>
+    </div>
 
     <script>
         // Espera todo o conteúdo da página carregar para executar o script
@@ -111,44 +116,50 @@
             // Seleciona os elementos que vamos usar
             const loadingBar = document.getElementById('loading-bar');
             const loadingPercentage = document.getElementById('loading-percentage');
-            const loadingScreen = document.getElementById('loading-screen');
+          const loadingScreen = document.getElementById('loading-screen');
             const mainContent = document.getElementById('main-content');
             
             let progress = 0;
-            const intervalTime = 40; // Velocidade do carregamento (em milissegundos)
+const intervalTime = 40; // Velocidade do carregamento (em milissegundos)
 
             // Cria um intervalo que roda a cada 'intervalTime'
             const interval = setInterval(() => {
                 progress += 1; // Aumenta o progresso
                 
-                // Atualiza a largura da barra no CSS
+                
+// Atualiza a largura da barra no CSS
                 loadingBar.style.width = progress + '%';
                 
                 // Atualiza o texto da porcentagem
                 loadingPercentage.textContent = progress + '%';
 
-                // Quando o progresso chegar a 100...
+                
+// Quando o progresso chegar a 100...
                 if (progress >= 100) {
                     clearInterval(interval); // Para o intervalo
                     
                     // Espera um pouquinho (300ms) antes de sumir
-                    setTimeout(() => {
+                 setTimeout(() => {
                         loadingScreen.style.opacity = '0'; // Faz a tela de carregamento ficar transparente
                         
-                        // Espera a animação de opacidade terminar (800ms)
+                       
+ // Espera a animação de opacidade terminar (800ms)
                         setTimeout(() => {
-                            loadingScreen.style.display = 'none'; // Esconde a tela de vez
-                            mainContent.style.display = 'block'; // Mostra o conteúdo principal
-                        }, 800); 
+                            
+                            // ===================================
+                            // *** MUDANÇA APLICADA AQUI ***
+                            // Redireciona para /home
+                            // ===================================
+                            window.location.href = '/home';
 
-                    }, 300);
+                        }, 800); // Tempo igual à transição de opacidade [cite: 28]
+}, 300);
                 }
             }, intervalTime);
-
-            // NOTA: Em um site real, você não usaria um 'setInterval'. 
-            // Você atualizaria a variável 'progress' com base no 
+// NOTA: Em um site real, você não usaria um 'setInterval'.
+// Você atualizaria a variável 'progress' com base no 
             // carregamento real de imagens, vídeos, ou dados de API.
-            // Isso é apenas uma simulação para fins de design.
+// Isso é apenas uma simulação para fins de design.
         });
     </script>
 </body>
