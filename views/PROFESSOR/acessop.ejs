@@ -309,13 +309,15 @@
       transition: all 0.3s ease;
       white-space: nowrap;
     }
+ .btn-edit { 
+    background: #e3f2fd;
+    color: #1976d2;
+    border: 2px solid #bbdefb;
+       }
 
-    .btn-edit { background: #e3f2fd; color: #1976d2; border: 2px solid #bbdefb; }
-    .btn-edit:hover { background: #bbdefb; transform: translateY(-2px); }
+        .btn-edit:hover { background: #bbdefb; }
 
-    .btn-delete { background: #fce4ec; color: #ef7215; border: 2px solid #f8bbd9; }
-    .btn-delete:hover { background: #f8bbd9; transform: translateY(-2px); }
-
+   
     .empty-state {
       text-align: center;
       padding: 40px;
@@ -327,6 +329,190 @@
       color: #ddd;
       margin-bottom: 15px;
     }
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    /* Mantendo a cor laranja do professor */
+    border-top: 5px solid #ef7215; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-header {
+    background: #f8f9fa;
+    color: #666;
+    font-weight: 600;
+    /* Fonte um pouco menor para o cabeçalho, como em turmas */
+    font-size: 14px; 
+    text-transform: uppercase;
+}
+
+.table th, .table td {
+    /* Diminuímos o padding para caber mais colunas */
+    padding: 16px 10px; 
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    /* Fonte menor no corpo da tabela para tudo caber */
+    font-size: 15px; 
+    white-space: nowrap; /* Impede que o texto quebre em duas linhas */
+}
+
+/* --- Estilos dos Botões de Ação (como em acessar.ejs) --- */
+
+/* Container para os botões */
+.operations {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Estilo base do botão de ação */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+/* Botão Editar (azul) [cite: 274] */
+.btn-edit {
+    background: #e3f2fd;
+    color: #1976d2;
+    border: 2px solid #bbdefb;
+}
+.btn-edit:hover {
+    background: #bbdefb;
+    transform: translateY(-2px);
+}
+
+/* Botão Arquivar (vermelho/rosa) [cite: 276] */
+.btn-archive {
+    background: #fce4ec;
+    color: #c01e26; /* Cor vermelha do tema de turmas */
+    border: 2px solid #f8bbd9;
+}
+.btn-archive:hover {
+    background: #f8bbd9;
+    transform: translateY(-2px);
+}
+/* Botão Ver (verde, copiado do seu arquivo de turmas) */
+.btn-view {
+    background: #e8f5e8; /* [cite: 201] */
+    color: #2e7d32; /* [cite: 201] */
+    border: 2px solid #c8e6c9; /* [cite: 201] */
+}
+.btn-view:hover {
+    background: #c8e6c9; /* [cite: 202] */
+}
+
+/* --- ESTILOS DO MODAL DE DETALHES --- */
+.modal-overlay {
+    display: none; /* Começa escondido */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+.modal-overlay.show {
+    display: flex; /* Mostra o modal */
+}
+.modal-caixa {
+    background: #fff;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    border-top: 5px solid #ef7215;
+    /* Animação de entrada */
+    transform: scale(0.95);
+    opacity: 0;
+    transition: all 0.2s ease-out;
+}
+.modal-overlay.show .modal-caixa {
+    transform: scale(1);
+    opacity: 1;
+}
+.modal-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.25rem;
+    color: #333;
+}
+.modal-header i {
+    margin-right: 12px;
+    color: #ef7215;
+}
+.modal-fechar {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    font-weight: 300;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+}
+.modal-fechar:hover {
+    color: #333;
+}
+.modal-conteudo {
+    padding: 25px 30px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+/* Estilos dos detalhes (copiados do verp.ejs) */
+.detalhe-grupo {
+    margin-bottom: 20px;
+}
+.detalhe-grupo:last-child {
+    margin-bottom: 0;
+}
+.detalhe-grupo h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ef7215;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+}
+.detalhe-item {
+    display: flex;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+}
+.detalhe-item label {
+    font-weight: 600;
+    color: #333;
+    width: 130px;
+    flex-shrink: 0;
+}
+.detalhe-item span {
+    color: #555;
+}
+
   </style>
 </head>
 <body>
@@ -373,51 +559,123 @@
         <table class="table">
           <thead class="table-header">
             <tr>
-              <th>Nome</th>
-              <th>CPF</th>
-              <th>Telefone</th>
-              <th>Email</th>
-              <th>Endereço</th>
-              <th>Classificação</th>
-              <th>Ações</th>
+              
+      <th>Nome</th>
+      <th>Telefone</th>
+      <th>Email</th>
+      <th>Ações</th>
+   
             </tr>
           </thead>
           <tbody id="professoresTableBody">
             <% if (typeof professores !== 'undefined' && professores.length > 0) { %>
-              <% professores.forEach(professor => { %>
-                <tr>
-                  <td><%= professor.nome %></td>
-                  <td><%= professor.cpf %></td>
-                  <td><%= professor.telefone %></td>
-                  <td><%= professor.email %></td>
-                  <td><%= professor.endereco %></td>
-                  <td><%= professor.classificacao %></td>
-                  <td>
-                    <a href="/editar-prof/<%= professor.id %>" class="btn-action btn-edit"><i class="fas fa-edit"></i> Editar</a>
-                    <form action="/excluir-prof/<%= professor.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este professor?');">
-                      <button type="submit" class="btn-action btn-delete"><i class="fas fa-trash"></i> Excluir</button>
-                    </form>
-                  </td>
-                </tr>
-              <% }) %>
-            <% } else { %>
-              <tr>
-                <td colspan="7" class="empty-state">
-                  <i class="fas fa-chalkboard-teacher"></i><br>Nenhum professor cadastrado.
-                </td>
-              </tr>
-            <% } %>
-          </tbody>
+    <% professores.forEach(professor => { %>
+       <tr>
+        <td><%= professor.nome %></td>
+
+        <td>
+          <% if (professor.tel_professor && professor.tel_professor.length > 0) { %>
+            (<%= professor.tel_professor[0].ddd %>) <%= professor.tel_professor[0].numero %>
+          <% } else { %>
+            N/C
+          <% } %>
+        </td>
+
+        <td><%= professor.email %></td> 
+
+        <td>
+          <div class="operations">
+
+           <button class="btn-action btn-view" data-id="<%= professor.id %>" title="Ver Detalhes">
+             <i class="fas fa-eye"></i> Ver
+          </button>
+
+            <a href="/professores/editar/<%= professor.id %>" class="btn-action btn-edit" title="Editar Professor">
+              <i class="fas fa-edit"></i> Editar
+            </a>
+
+            <form action="/professores/arquivar/<%= professor.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja arquivar este professor?');">
+              <button type="submit" class="btn-action btn-archive" title="Arquivar Professor">
+                <i class="fas fa-archive"></i> Arquivar
+              </button>
+            </form>
+
+          </div>
+        </td>
+      </tr>
+    <% }) %>
+  <% } else { %>
+    <tr>
+      <td colspan="4" class="empty-state">
+        <i class="fas fa-chalkboard-teacher"></i><br>Nenhum professor cadastrado.
+      </td>
+    </tr>
+  <% } %>
+</tbody>
         </table>
       </div>
     </div>
   </div>
 
+   <div class="modal-overlay" id="detalhesModal">
+  <div class="modal-caixa">
+    
+    <div class="modal-header">
+      <i class="fas fa-id-card"></i>
+      <span>Detalhes do <b>PROFESSOR</b></span>
+      <button class="modal-fechar" id="modal-fechar" title="Fechar">&times;</button>
+    </div>
+
+    <div class="modal-conteudo">
+        <div class="detalhe-grupo">
+            <h3>Informações Pessoais</h3>
+            <div class="detalhe-item">
+                <label>Nome:</label>
+                <span id="modal-nome"></span>
+            </div>
+            <div class="detalhe-item">
+                <label>CPF:</label>
+                <span id="modal-cpf"></span>
+            </div>
+            <div class="detalhe-item">
+                <label>Status:</label>
+                <span id="modal-status"></span>
+            </div>
+        </div>
+
+        <div class="detalhe-grupo">
+            <h3>Informações de Contato</h3>
+            <div class="detalhe-item">
+                <label>Email:</label>
+                <span id="modal-email"></span>
+            </div>
+            <div class="detalhe-item">
+                <label>Telefone:</label>
+                <span id="modal-telefone"></span>
+            </div>
+            <div class="detalhe-item">
+                <label>Endereço:</label>
+                <span id="modal-endereco"></span>
+            </div>
+        </div>
+
+        <div class="detalhe-grupo">
+            <h3>Informações de Trabalho</h3>
+            <div class="detalhe-item">
+                <label>Classificação:</label>
+                <span id="modal-classificacao"></span>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
   <script>
     function navegarPara(pagina) {
       const rotas = {
         'inicio': '/home',
-        'professor': '/cadastro-professor',
+        'professor': '/professores',
         'financeiro': '/financeiro',
         'turmas': '/turmas-cadastradas',
         'matricula': '/matricula',
@@ -433,6 +691,103 @@
     function cadastrarprof() {
       window.location.href = '/cadastro-prof';
     }
+
+     document.addEventListener('DOMContentLoaded', () => {
+
+        // --- LÓGICA DA BARRA DE PESQUISA ---
+        const searchInput = document.querySelector('.search-input');
+        const tableBody = document.getElementById('professoresTableBody');
+        const allRows = tableBody.querySelectorAll('tr'); // Pega todas as linhas
+        
+        // Verifica se os elementos existem antes de adicionar o listener
+        if (searchInput && tableBody) {
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                
+                allRows.forEach(row => {
+                    // Garante que é uma linha de dados (não a "Nenhum professor")
+                    if (row.children.length > 1) { 
+                        const rowText = row.textContent.toLowerCase();
+                        
+                        if (rowText.includes(searchTerm)) {
+                            row.style.display = ''; // Mostra
+                        } else {
+                            row.style.display = 'none'; // Esconde
+                        }
+                    }
+                });
+            });
+        }
+
+        // --- LÓGICA DO CONTADOR DE PROFESSORES ---
+        const totalProfessoresEl = document.getElementById('totalProfessores');
+        if (totalProfessoresEl) {
+            // Usa o valor passado pelo EJS para definir o total
+            totalProfessoresEl.textContent = 'Total de Professores: <%= professores.length %>';
+        }
+
+
+        // --- LÓGICA DO MODAL DE DETALHES (código que você já tinha) ---
+        const modalOverlay = document.getElementById('detalhesModal');
+        const modalFecharBtn = document.getElementById('modal-fechar');
+        const todosBotoesVer = document.querySelectorAll('.btn-view');
+
+        // Função para preencher o modal
+        function preencherModal(professor) {
+            document.getElementById('modal-nome').textContent = professor.nome;
+            document.getElementById('modal-cpf').textContent = professor.cpf;
+            document.getElementById('modal-status').textContent = professor.ativo ? 'Ativo' : 'Arquivado';
+            document.getElementById('modal-email').textContent = professor.email;
+            document.getElementById('modal-classificacao').textContent = professor.classificacao;
+
+            // Telefone
+            if (professor.tel_professor && professor.tel_professor.length > 0) {
+                const tel = professor.tel_professor[0];
+                document.getElementById('modal-telefone').textContent = `(${tel.ddd}) ${tel.numero}`;
+            } else {
+                document.getElementById('modal-telefone').textContent = 'Não cadastrado';
+            }
+            // Endereço
+            if (professor.end_professor && professor.end_professor.length > 0) {
+                document.getElementById('modal-endereco').textContent = professor.end_professor[0].end_descricao;
+            } else {
+                document.getElementById('modal-endereco').textContent = 'Não cadastrado';
+            }
+        }
+
+        // Adiciona evento de clique para CADA botão "Ver"
+        todosBotoesVer.forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const id = e.currentTarget.dataset.id; 
+                try {
+                    const response = await fetch(`/professores/ver/${id}`);
+                    if (!response.ok) {
+                        throw new Error('Falha ao buscar dados do professor.');
+                    }
+                    const professor = await response.json();
+                    preencherModal(professor);
+                    modalOverlay.classList.add('show');
+                } catch (err) {
+                    console.error(err);
+                    alert('Não foi possível carregar os detalhes. Tente novamente.');
+                }
+            });
+        });
+
+        // Função para fechar o modal
+        function fecharModal() {
+            modalOverlay.classList.remove('show');
+        }
+
+        // Adiciona eventos para fechar o modal
+        modalFecharBtn.addEventListener('click', fecharModal); 
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                fecharModal();
+            }
+        });
+        
+    }); // Fim do DOMContentLoaded
   </script>
 </body>
 </html>

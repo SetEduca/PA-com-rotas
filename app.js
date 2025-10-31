@@ -121,17 +121,6 @@ app.use('/matriculas', matriculasRouter);
 
 app.use('/professores', professoresRoutes);
 
-app.get("/cadastro-prof", (req, res) => {
-  res.render("PROFESSOR/cadastrop");
-});
-
-app.get("/prof-cadastrados", (req, res) => {
-  res.render("PROFESSOR/acessop");
-});
-app.get("/editar-prof", (req, res) => {
-  res.render("PROFESSOR/editarp");
-});
-
 // FINANCEIRO
 app.get("/financeiro", (req, res) => {
   res.render("FINANCEIRO/financeiro");
