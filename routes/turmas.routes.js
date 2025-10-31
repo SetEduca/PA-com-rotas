@@ -101,6 +101,52 @@ router.post("/cadastro", async (req, res) => {
     res.redirect("/turmas");
 });
 
+// ... (imports e rotas GET / e GET /cadastro) ...
+
+// --- ROTA PARA VER OS DETALHES DE UMA TURMA E SEUS ALUNOS ---
+// Esta rota exibe os detalhes de uma turma específica e os alunos matriculados nela.
+router.get("/ver/:id", async (req, res) => {
+    const { id: turmaId } = req.params; // Pega o ID da turma da URL
+
+    try {
+        // Busca a turma pelo ID
+        const { data: turma, error } = await supabase
+            .from('turma')
+            .select(`
+                id,
+                nome_turma,
+                ano_letivo,
+                professor ( nome ), 
+                matricula ( 
+                    crianca_id,
+                    ativo,
+                    cadastro_crianca ( id, nome ) 
+                )
+            `)
+            .eq('id', turmaId) // Filtra pela turma com o ID da URL
+            .single(); // Espera apenas um resultado
+
+        if (error) throw error;
+        if (!turma) return res.status(404).send("Turma não encontrada.");
+
+        // Filtra a lista para incluir apenas matrículas ativas
+        const alunosAtivos = turma.matricula
+            .filter(m => m.ativo === true)
+            .map(m => m.cadastro_crianca); // Pega só os dados da criança
+
+        // Renderiza a nova página "ver.ejs"
+        res.render("TURMA/ver", {
+            turma: turma,
+            alunos: alunosAtivos
+        });
+
+    } catch (err) {
+        console.error("Erro ao buscar detalhes da turma:", err.message);
+        res.status(500).send(err.message);
+    }
+});
+
+
 // --- ROTA PARA EXIBIR O FORMULÁRIO DE EDIÇÃO DE UMA TURMA EXISTENTE ---
 // Define uma rota que responde a requisições GET em "/turmas/editar/:id".
 // O ":id" é um parâmetro dinâmico, ou seja, ele vai mudar dependendo da turma que queremos editar.
@@ -188,4 +234,5 @@ router.post('/arquivar/:id', async (req, res) => {
 // Exporta o roteador com todas as suas rotas definidas.
 // Isso permite que o arquivo principal do nosso servidor (geralmente index.js ou app.js)
 // importe e use este conjunto de rotas.
+
 export default router;

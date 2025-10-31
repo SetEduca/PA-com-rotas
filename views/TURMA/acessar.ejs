@@ -1,371 +1,812 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sete Educa - Acessar TURMAS</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* Define variáveis CSS para reutilização, como a largura da barra lateral */
-        :root {
-            --sidebar-width: 280px; 
-        }
-        /* Seletor universal (*) que remove todas as margens e preenchimentos padrão e define uma fonte padrão para toda a página */
-        * { margin: 0; padding: 0; box-sizing: border-box; 
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; } 
-        /* Estilos para o corpo (body) da página */
-        body { 
-            background-color: #fcf8f2; /* Cor de fundo suave */ 
-            min-height: 100vh; /* Altura mínima de 100% da tela */ 
-            display: flex; /* Usa o modelo Flexbox para alinhar os elementos filhos (sidebar e conteúdo principal) lado a lado */ 
-        }
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sete Educa - Acessar TURMAS</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        /* --- CSS da Barra Lateral (Sidebar) --- */
-        .sidebar { 
-            width: var(--sidebar-width); /* Largura definida pela variável CSS */ 
-            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%); /* Fundo com um gradiente suave */ 
-            display: flex; /* Habilita o Flexbox para os itens internos */ 
-            flex-direction: column; /* Organiza os itens em coluna (logo/menu em cima, footer embaixo) */ 
-            justify-content: space-between; /* Distribui o espaço entre os itens */ 
-            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1); /* Sombra sutil para dar profundidade */ 
-            min-height: 100vh; /* Altura mínima de 100% da tela */ 
-            flex-shrink: 0; /* Impede que a sidebar encolha se o conteúdo for muito grande */ 
-            position: fixed; /* Fixa a sidebar na tela, para que não role com a página */ 
-            left: 0; top: 0; z-index: 1000; /* Posicionamento e ordem de sobreposição */ 
-        }
-        .logo { padding: 0px 40px; text-align: center; margin-bottom: 25px; margin-top: 30px; }
-        .logo img { max-width: 150px; }
-        .menu { flex: 1; /* Permite que o menu ocupe todo o espaço vertical disponível */ padding: 20px 18px; overflow-y: auto; /* Adiciona uma barra de rolagem se o menu for muito grande */ }
-        /* Estilos para cada item do menu */
-        .menu-item { 
-            padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer; 
-            transition: all 0.3s ease; /* Animação suave para todas as propriedades */ 
-            position: relative; /* Necessário para o pseudo-elemento ::after */ 
-            display: flex; align-items: center; /* Alinha o ícone e o texto verticalmente */ 
-            font-weight: 500; color: black; text-decoration: none; /* Remove o sublinhado do link */ 
-            overflow: visible;
-        }
-        .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
-        .menu-item span { z-index: 2; font-size: 15px; }
-        /* Efeito ao passar o mouse sobre o item do menu */
-        .menu-item:hover { background-color: #6c757d21; }
-        /* Estilo para o item de menu que está ativo (página atual) */
-        .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
-        /* Adiciona indicador visual no item ativo */
-        .menu-item.active::before {
-            content: '';
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: currentColor;
-            z-index: 2;
-        }
-        /* Cria uma pequena linha decorativa abaixo do item do menu */
-        .menu-item::after { 
-            padding: 0 10px;
-            content: ''; position: absolute; bottom: -3px; 
-            left: 20px; height: 2px; width: 0px; /* Começa com largura 0 */ 
-            transition: width 0.3s ease; /* Anima a largura */ 
-            border-radius: 1px; 
-        }
-        /* Expande a linha quando o mouse passa por cima ou se o item está ativo */
-        .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
-        /* Cores diferentes da linha para cada item do menu */
-        .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-        .menu-item:nth-child(2)::after { background-color: #306bc2; }
-        .menu-item:nth-child(3)::after { background-color: #9747FF; }
-        .menu-item:nth-child(4)::after { background-color: #F88C12; }
-        .menu-item:nth-child(5)::after { background-color: #D22A2A; }
-        .menu-item:nth-child(6)::after { background-color: #59C631; }
-        /* Estilos do rodapé da sidebar */
-        .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); }
-        /* Estilo do botão de Sair */
-        .logout-button { 
-            padding: 16px 20px; border-radius: 8px; cursor: pointer; 
-            transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; text-decoration: none; background: transparent; border: none; 
-        }
-        .logout-button i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
-        .logout-button:hover { background-color: rgba(210, 42, 42, 0.1); color: #D22A2A; font-weight: 600; }
-        
-        /* --- CSS do Conteúdo Principal --- */
-        .main-content { 
-            flex: 1; /* Faz o conteúdo principal ocupar todo o espaço restante */ 
-            min-height: 100vh; display: flex; flex-direction: column; /* Organiza o cabeçalho e a área de conteúdo em coluna */ 
-            margin-left: var(--sidebar-width); /* Cria um espaço à esquerda para não ficar embaixo da sidebar */ 
-        }
-        .header { 
-            background: #c01e26; /* Cor de fundo do cabeçalho */ 
-            height: 80px; display: flex; align-items: center; justify-content: space-between; /* Alinha o título à esquerda e o perfil à direita */ 
-            padding: 0 30px; color: white; width: 100%; 
-        }
-        .header-title { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; color: white; 
-        font-family: 'Kodchasan', sans-serif; } 
-        .header-title i { margin-right: 15px; font-size: 28px; }
-        /* Estilos do menu de perfil (dropdown) */
-        .profile { position: relative; cursor: pointer; z-index: 10; }
-        .profile-header { display: flex; align-items: center; padding: 5px; border-radius: 50px; 
-        transition: background-color 0.2s ease; } 
-        .profile-header:hover { background-color: rgba(255, 255, 255, 0.1); }
-        .profile-icon { font-size: 38px; color: white; }
-        .profile-arrow { font-size: 14px; margin-left: 8px; color: white; transition: transform 0.3s ease; }
-        /* O menu dropdown começa escondido */
-        .profile-dropdown { 
-            display: none; position: absolute; top: 110%; right: 0; background-color: white; 
-            border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); width: 200px; z-index: 1001; overflow: hidden; padding: 8px 0; 
-            border: 1px solid #eee; 
-        }
-        /* A classe 'show' (adicionada via JS) torna o menu visível */
-        .profile-dropdown.show { display: block; }
-        .profile-dropdown a { display: flex; align-items: center; padding: 12px 18px; text-decoration: none; 
-        color: #444; font-size: 15px; transition: background-color 0.2s ease; } 
-        .profile-dropdown a:hover { background-color: #f5f5f5; }
-        .profile-dropdown a i { width: 20px; margin-right: 15px; color: #666; text-align: center; }
-        
-        /* --- Estilos específicos da Área de Conteúdo desta página --- */
-        .content-area { padding: 30px; background: #fcf8f2; flex: 1; width: 100%; }
-        .search-section { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
-        /* Barra de pesquisa */
-        .search-container { position: relative; width: 400px; }
-        .search-input { width: 100%; height: 50px; background: white; border: 2px solid #ddd; 
-        border-radius: 25px; padding: 0 20px 0 50px; font-size: 16px; color: #666; outline: none; }
-        .search-input:focus { border-color: #c01e26; 
-        box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.1); } 
-        /* Ícone de lupa dentro da barra de pesquisa */
-        .search-icon { position: absolute; 
-        left: 18px; top: 50%; transform: translateY(-50%); color: #999; font-size: 18px; }
-        /* Botão para adicionar nova turma */
-        .new-button { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; 
-        transition: transform 0.2s ease; } 
-        .new-button:hover { transform: translateY(-2px); /* Efeito de "levantar" ao passar o mouse */ }
-        .new-button-circle { width: 45px; height: 45px; background: #c01e26; border-radius: 50%; display: flex; 
-        align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 200; position: relative; transition: background-color 0.3s ease; }
-        .new-button:hover .new-button-circle { background: #a01820; }
-        .new-button-circle::before { content: '+'; position: absolute; top: 50%; left: 50%; /* Centraliza o sinal de '+' */ 
-        transform: translate(-50%, -50%); font-size: 28px; } 
-        .new-text { font-size: 14px; color: #666; 
-        font-weight: 500; text-align: center; } 
-        /* Contador do total de turmas */
-        .stats-info { text-align: right; color: #333; font-size: 18px; 
-        font-weight: 600; } 
-        /* Container da tabela */
-        .table-container { 
-            background: white; border-radius: 12px; border-top: 5px solid #c01e26; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); overflow: hidden; /* Garante que os cantos arredondados funcionem */ 
-        }
-        .table { width: 100%; border-collapse: collapse; /* Remove o espaçamento entre as células */ }
-        .table-header { background: #f8f9fa; color: #666; font-weight: 600; font-size: 14px; text-transform: uppercase; }
-        .table th, .table td { padding: 20px; text-align: center; 
-        border-bottom: 1px solid #eee; } 
-        /* Container para os botões de ação na tabela */
-        .operations { display: flex; justify-content: center; align-items: center; 
-        gap: 8px; min-width: 200px; } 
-        /* Estilo base para os botões de ação (Ver, Editar, Arquivar) */
-        .btn-action { 
-            display: inline-flex; align-items: center; justify-content: center; 
-            gap: 6px; padding: 10px 14px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; text-decoration: none; 
-            transition: all 0.3s ease; 
-        }
-        /* Estilos específicos para cada botão de ação */
-        .btn-view-students { background: #e8f5e8; color: #2e7d32; 
-        border: 2px solid #c8e6c9; } 
-        .btn-view-students:hover { background: #c8e6c9; }
-        .btn-edit { background: #e3f2fd; color: #1976d2; border: 2px solid #bbdefb; }
-        .btn-edit:hover { background: #bbdefb; }
-        .btn-archive { background: #fce4ec; color: #c01e26; border: 2px solid #f8bbd9; }
-        .btn-archive:hover { background: #f8bbd9; }
-        /* Estilos para o status das vagas */
-        .vagas-status { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 12px; 
-        font-weight: 700; } 
-        .vagas-disponivel { background: linear-gradient(135deg, #d4edda, #c3e6cb); color: #155724; }
-        .vagas-poucas { background: linear-gradient(135deg, #fff3cd, #ffeaa7); color: #856404; }
-        .vagas-esgotadas { background: linear-gradient(135deg, #f8d7da, #f5c6cb); color: #721c24; }
-    </style>
-</head>
-<body>
-    
-    <aside class="sidebar">
-        <div>
-            <div class="logo">
-                <img src="/imagem/logo.png" alt="logo">
-            </div>
-            <div class="menu">
-                <a href="/home" class="menu-item"><i class="fas fa-home"></i><span>INÍCIO</span></a>
-                <a href="/acessar-aluno" class="menu-item"><i class="fas fa-address-card"></i><span>CADASTRO</span></a> 
-                <a href="/matriculas" class="menu-item"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
-                <a href="/professores" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></a>
-                <a href="/turmas" class="menu-item active"><i class="fas fa-users"></i><span>TURMA</span></a>
-                <a href="/financeiro" class="menu-item"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></a>
-            </div> 
-        </div>
-        <div>
-            <div class="seteeduca" style="color: #333; text-align: center; margin-bottom: 10px;">@Seteeduca</div> 
-            <div class="sidebar-footer">
-                <button class="logout-button" onclick="logout()">
-                    <i class="fa-solid fa-right-from-bracket"></i><span>Sair</span>
-                </button>
-            </div>
-        </div>
-    </aside>
-
-    <div class="main-content"> 
-        <div class="header">
-            <div class="header-title">
-                <i class="fas fa-users"></i>
-                <span>Acessar <b>TURMAS</b></span>      
-            </div>
-            <div class="profile" id="profile-toggle">
-                <div class="profile-header"> 
-                    <i class="fas fa-user-circle profile-icon"></i>
-                    <i class="fas fa-chevron-down profile-arrow"></i>
-                </div>
-                <div class="profile-dropdown" id="profile-dropdown-menu">
-                    <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a> 
-                    <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
-                    <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
-                </div>
-            </div>
-        </div>
-    
-        <div class="content-area"> 
-            <div class="search-section">
-                <div class="search-container">
-                    <div class="search-icon"><i class="fas fa-search"></i></div>
-                    <input type="text" class="search-input" placeholder="Pesquisar por nome da turma ou professor...">
-                </div> 
-                <a href="/turmas/cadastro" class="new-button" style="text-decoration: none;">
-                    <div class="new-button-circle"></div>
-                    <div class="new-text">Nova turma</div>
-                </a>
-                <div class="stats-info" id="totalTurmas">Total de Turmas: <%= turmas.length %></div> 
-            </div>
-            <div class="table-container">
-                <table class="table">
-                    <thead class="table-header">
-                        <tr>
-                            <th>Nome da Turma</th> 
-                            <th>Professor(a)</th>
-                            <th>Vagas</th>
-                            <th>Alunos</th> 
-                            <th>Ano letivo</th>
-                            <th>Operações</th>
-                        </tr>
-                    </thead> 
-                    <tbody id="turmasTableBody">
-                        <% if (turmas && turmas.length > 0) { %>
-                            <% turmas.forEach(turma => { %>
-                                <tr> 
-                                    <td style="font-weight: 600;"><%= turma.nome_turma %></td>
-                                    <td><%= turma.professor ? turma.professor.nome : 'Não definido' %></td> 
-                                    <td>
-                                        <% const vagasRestantes = turma.limite_vagas - turma.quantidade_alunos; %> 
-                                        <% if (vagasRestantes <= 0) { %>
-                                            <span class="vagas-status vagas-esgotadas">Esgotadas</span>
-                                        <% } else if (vagasRestantes <= 2) { %> 
-                                            <span class="vagas-status vagas-poucas"><%= vagasRestantes %> restantes</span>
-                                        <% } else { %> 
-                                            <span class="vagas-status vagas-disponivel">Disponíveis</span>
-                                        <% } %> 
-                                    </td>
-                                    <td><strong><%= turma.quantidade_alunos %> / <%= turma.limite_vagas %></strong></td>
-                                    <td><%= turma.ano_letivo %></td> 
-                                    <td>
-                                        <div class="operations"> 
-                                            <button class="btn-action btn-view-students" disabled title="Em breve">
-                                                <i class="fas fa-eye"></i> Ver 
-                                            </button>
-                                            <a href="/turmas/editar/<%= turma.id %>" class="btn-action btn-edit" title="Editar turma"> 
-                                                <i class="fas fa-edit"></i> Editar
-                                            </a> 
-                                            <form action="/turmas/arquivar/<%= turma.id %>" method="POST" onsubmit="return confirm('Tem certeza que deseja arquivar a turma <%= turma.nome_turma %>?');" 
-                                            style="display: inline;"> 
-                                                <button type="submit" class="btn-action btn-archive" title="Arquivar turma">
-                                                    <i class="fas fa-archive"></i> Arquivar 
-                                                </button>
-                                            </form> 
-                                        </div>
-                                    </td>
-                                </tr> 
-                            <% }) %>
-                        <% } else { %>
-                            <tr>
-                                <td colspan="6" style="text-align:center; color:#666; padding:40px;"> 
-                                    Nenhuma turma cadastrada ainda. 
-                                </td>
-                            </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div> 
-        </div>
-    </div>
-
-    <script>
-        // Função para sair do sistema
-        function logout() {
-            // Pede confirmação ao usuário antes de redirecionar
-            if (confirm('Deseja realmente sair do sistema?')) {
-                window.location.href = '/login'; 
-            }
-        }
-        // Função para navegar para outras páginas (usada em versões anteriores, mas mantida)
-        function navegarPara(pagina) {
-            const rotas = {
-                'inicio': '/home',
-                'cadastro': '/acessar-aluno',
-                'matricula': '/matriculas',
-                'professor': '/professores', 
-                'turmas': '/turmas',
-                'financeiro': '/financeiro'
-            };
-            if (rotas[pagina]) { 
-                window.location.href = rotas[pagina]; 
-            }
-        }
-
-        // Executa o código JavaScript depois que todo o HTML da página foi carregado
-        document.addEventListener('DOMContentLoaded', function() {
-            const profileToggle = document.getElementById('profile-toggle');
-            const dropdownMenu = document.getElementById('profile-dropdown-menu');
-            const profileArrow = profileToggle.querySelector('.profile-arrow');
-
-            // Adiciona um evento de clique ao ícone do perfil para mostrar/esconder o dropdown
-            profileToggle.addEventListener('click', function(event) {
-                event.stopPropagation(); // Impede que o clique se propague para o 'window'
-                dropdownMenu.classList.toggle('show'); // Adiciona ou remove a classe 'show'
-                // Gira a seta para baixo ou para cima
-                profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-            });
-
-            // Adiciona um evento de clique na janela inteira para fechar o dropdown se ele estiver aberto
-            window.addEventListener('click', function() {
-                if (dropdownMenu.classList.contains('show')) {
-                    dropdownMenu.classList.remove('show');
-                    profileArrow.style.transform = 'rotate(0deg)'; 
+        <style>
+                /* Define variáveis CSS para reutilização, como a largura da barra lateral */
+                :root {
+                        --sidebar-width: 280px;
                 }
-            });
 
-            // --- Lógica da Barra de Pesquisa ---
-            const searchInput = document.querySelector('.search-input');
-            // Adiciona um evento que é disparado toda vez que o usuário digita algo
-            searchInput.addEventListener('input', function() { 
-                const searchTerm = this.value.toLowerCase(); // Pega o texto e converte para minúsculas
-                const rows = document.querySelectorAll('#turmasTableBody tr'); // Pega todas as linhas da tabela
-                
-                rows.forEach(row => {
-                    // Verifica se a linha não é a mensagem "Nenhuma turma cadastrada"
-                    if (row.children.length > 1) { 
-                        const rowText = row.textContent.toLowerCase(); // Pega todo o texto da linha
-                        // Se o texto da linha incluir o termo pesquisado, mostra a linha. Senão, esconde.
-                        row.style.display = rowText.includes(searchTerm) ? '' : 'none'; 
-                    }
+                /* Seletor universal (*) que remove todas as margens e preenchimentos padrão e define uma fonte padrão para toda a página */
+                * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                }
+
+                /* Estilos para o corpo (body) da página */
+                body {
+                        background-color: #fcf8f2;
+                        /* Cor de fundo suave */
+                        min-height: 100vh;
+                        /* Altura mínima de 100% da tela */
+                        display: flex;
+                        /* Usa o modelo Flexbox para alinhar os elementos filhos (sidebar e conteúdo principal) lado a lado */
+                }
+
+                /* --- CSS da Barra Lateral (Sidebar) --- */
+                .sidebar {
+                        width: var(--sidebar-width);
+                        /* Largura definida pela variável CSS */
+                        background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+                        /* Fundo com um gradiente suave */
+                        display: flex;
+                        /* Habilita o Flexbox para os itens internos */
+                        flex-direction: column;
+                        /* Organiza os itens em coluna (logo/menu em cima, footer embaixo) */
+                        justify-content: space-between;
+                        /* Distribui o espaço entre os itens */
+                        box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+                        /* Sombra sutil para dar profundidade */
+                        min-height: 100vh;
+                        /* Altura mínima de 100% da tela */
+                        flex-shrink: 0;
+                        /* Impede que a sidebar encolha se o conteúdo for muito grande */
+                        position: fixed;
+                        /* Fixa a sidebar na tela, para que não role com a página */
+                        left: 0;
+                        top: 0;
+                        z-index: 1000;
+                        /* Posicionamento e ordem de sobreposição */
+                }
+
+                .logo {
+                        padding: 0px 40px;
+                        text-align: center;
+                        margin-bottom: 25px;
+                        margin-top: 30px;
+                }
+
+                .logo img {
+                        max-width: 150px;
+                }
+
+                .menu {
+                        flex: 1;
+                        /* Permite que o menu ocupe todo o espaço vertical disponível */
+                        padding: 20px 18px;
+                        overflow-y: auto;
+                        /* Adiciona uma barra de rolagem se o menu for muito grande */
+                }
+
+                /* Estilos para cada item do menu */
+                .menu-item {
+                        padding: 30px 20px;
+                        margin-bottom: 6px;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        /* Animação suave para todas as propriedades */
+                        position: relative;
+                        /* Necessário para o pseudo-elemento ::after */
+                        display: flex;
+                        align-items: center;
+                        /* Alinha o ícone e o texto verticalmente */
+                        font-weight: 500;
+                        color: black;
+                        text-decoration: none;
+                        /* Remove o sublinhado do link */
+                        overflow: visible;
+                }
+
+                .menu-item i {
+                        margin-right: 15px;
+                        font-size: 18px;
+                        width: 24px;
+                        text-align: center;
+                        z-index: 2;
+                }
+
+                .menu-item span {
+                        z-index: 2;
+                        font-size: 15px;
+                }
+
+                /* Efeito ao passar o mouse sobre o item do menu */
+                .menu-item:hover {
+                        background-color: #6c757d21;
+                }
+
+                /* Estilo para o item de menu que está ativo (página atual) */
+                .menu-item.active {
+                        background-color: rgba(128, 128, 128, 0.356);
+                        color: #333;
+                        font-weight: 600;
+                }
+
+                /* Adiciona indicador visual no item ativo */
+                .menu-item.active::before {
+                        content: '';
+                        position: absolute;
+                        right: 15px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 50%;
+                        background-color: currentColor;
+                        z-index: 2;
+                }
+
+                /* Cria uma pequena linha decorativa abaixo do item do menu */
+                .menu-item::after {
+                        padding: 0 10px;
+                        content: '';
+                        position: absolute;
+                        bottom: -3px;
+                        left: 20px;
+                        height: 2px;
+                        width: 0px;
+                        /* Começa com largura 0 */
+                        transition: width 0.3s ease;
+                        /* Anima a largura */
+                        border-radius: 1px;
+                }
+
+                /* Expande a linha quando o mouse passa por cima ou se o item está ativo */
+                .menu-item:hover::after,
+                .menu-item.active::after {
+                        width: calc(100% - 40px);
+                }
+
+                /* Cores diferentes da linha para cada item do menu */
+                .menu-item:nth-child(1)::after {
+                        background-color: #F4BF27;
+                }
+
+                .menu-item:nth-child(2)::after {
+                        background-color: #306bc2;
+                }
+
+                .menu-item:nth-child(3)::after {
+                        background-color: #9747FF;
+                }
+
+                .menu-item:nth-child(4)::after {
+                        background-color: #F88C12;
+                }
+
+                .menu-item:nth-child(5)::after {
+                        background-color: #D22A2A;
+                }
+
+                .menu-item:nth-child(6)::after {
+                        background-color: #59C631;
+                }
+
+                /* Estilos do rodapé da sidebar */
+                .sidebar-footer {
+                        padding: 20px 18px;
+                        border-top: 1px solid rgba(0, 0, 0, 0.1);
+                }
+
+                /* Estilo do botão de Sair */
+                .logout-button {
+                        padding: 16px 20px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        display: flex;
+                        align-items: center;
+                        font-weight: 500;
+                        color: #333;
+                        width: 100%;
+                        text-decoration: none;
+                        background: transparent;
+                        border: none;
+                }
+
+                .logout-button i {
+                        margin-right: 15px;
+                        font-size: 18px;
+                        width: 24px;
+                        text-align: center;
+                }
+
+                .logout-button:hover {
+                        background-color: rgba(210, 42, 42, 0.1);
+                        color: #D22A2A;
+                        font-weight: 600;
+                }
+
+                /* --- CSS do Conteúdo Principal --- */
+                .main-content {
+                        flex: 1;
+                        /* Faz o conteúdo principal ocupar todo o espaço restante */
+                        min-height: 100vh;
+                        display: flex;
+                        flex-direction: column;
+                        /* Organiza o cabeçalho e a área de conteúdo em coluna */
+                        margin-left: var(--sidebar-width);
+                        /* Cria um espaço à esquerda para não ficar embaixo da sidebar */
+                }
+
+                .header {
+                        background: #c01e26;
+                        /* Cor de fundo do cabeçalho */
+                        height: 80px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        /* Alinha o título à esquerda e o perfil à direita */
+                        padding: 0 30px;
+                        color: white;
+                        width: 100%;
+                }
+
+                .header-title {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        font-size: 1.5rem;
+                        color: white;
+                        font-family: 'Kodchasan', sans-serif;
+                }
+
+                .header-title i {
+                        margin-right: 15px;
+                        font-size: 28px;
+                }
+
+                /* Estilos do menu de perfil (dropdown) */
+                .profile {
+                        position: relative;
+                        cursor: pointer;
+                        z-index: 10;
+                }
+
+                .profile-header {
+                        display: flex;
+                        align-items: center;
+                        padding: 5px;
+                        border-radius: 50px;
+                        transition: background-color 0.2s ease;
+                }
+
+                .profile-header:hover {
+                        background-color: rgba(255, 255, 255, 0.1);
+                }
+
+                .profile-icon {
+                        font-size: 38px;
+                        color: white;
+                }
+
+                .profile-arrow {
+                        font-size: 14px;
+                        margin-left: 8px;
+                        color: white;
+                        transition: transform 0.3s ease;
+                }
+
+                /* O menu dropdown começa escondido */
+                .profile-dropdown {
+                        display: none;
+                        position: absolute;
+                        top: 110%;
+                        right: 0;
+                        background-color: white;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                        width: 200px;
+                        z-index: 1001;
+                        overflow: hidden;
+                        padding: 8px 0;
+                        border: 1px solid #eee;
+                }
+
+                /* A classe 'show' (adicionada via JS) torna o menu visível */
+                .profile-dropdown.show {
+                        display: block;
+                }
+
+                .profile-dropdown a {
+                        display: flex;
+                        align-items: center;
+                        padding: 12px 18px;
+                        text-decoration: none;
+                        color: #444;
+                        font-size: 15px;
+                        transition: background-color 0.2s ease;
+                }
+
+                .profile-dropdown a:hover {
+                        background-color: #f5f5f5;
+                }
+
+                .profile-dropdown a i {
+                        width: 20px;
+                        margin-right: 15px;
+                        color: #666;
+                        text-align: center;
+                }
+
+                /* --- Estilos específicos da Área de Conteúdo desta página --- */
+                .content-area {
+                        padding: 30px;
+                        background: #fcf8f2;
+                        flex: 1;
+                        width: 100%;
+                }
+
+                .search-section {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: 30px;
+                }
+
+                /* Barra de pesquisa */
+                .search-container {
+                        position: relative;
+                        width: 400px;
+                }
+
+                .search-input {
+                        width: 100%;
+                        height: 50px;
+                        background: white;
+                        border: 2px solid #ddd;
+                        border-radius: 25px;
+                        padding: 0 20px 0 50px;
+                        font-size: 16px;
+                        color: #666;
+                        outline: none;
+                }
+
+                .search-input:focus {
+                        border-color: #c01e26;
+                        box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.1);
+                }
+
+                /* Ícone de lupa dentro da barra de pesquisa */
+                .search-icon {
+                        position: absolute;
+                        left: 18px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        color: #999;
+                        font-size: 18px;
+                }
+
+                /* Botão para adicionar nova turma */
+                .new-button {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 8px;
+                        cursor: pointer;
+                        transition: transform 0.2s ease;
+                }
+
+                .new-button:hover {
+                        transform: translateY(-2px);
+                        /* Efeito de "levantar" ao passar o mouse */
+                }
+
+                .new-button-circle {
+                        width: 45px;
+                        height: 45px;
+                        background: #c01e26;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-size: 28px;
+                        font-weight: 200;
+                        position: relative;
+                        transition: background-color 0.3s ease;
+                }
+
+                .new-button:hover .new-button-circle {
+                        background: #a01820;
+                }
+
+                .new-button-circle::before {
+                        content: '+';
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        /* Centraliza o sinal de '+' */
+                        transform: translate(-50%, -50%);
+                        font-size: 28px;
+                }
+
+                .new-text {
+                        font-size: 14px;
+                        color: #666;
+                        font-weight: 500;
+                        text-align: center;
+                }
+
+                /* Contador do total de turmas */
+                .stats-info {
+                        text-align: right;
+                        color: #333;
+                        font-size: 18px;
+                        font-weight: 600;
+                }
+
+                /* Container da tabela */
+                .table-container {
+                        background: white;
+                        border-radius: 12px;
+                        border-top: 5px solid #c01e26;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                        overflow: hidden;
+                        /* Garante que os cantos arredondados funcionem */
+                }
+
+                .table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        /* Remove o espaçamento entre as células */
+                }
+
+                .table-header {
+                        background: #f8f9fa;
+                        color: #666;
+                        font-weight: 600;
+                        font-size: 14px;
+                        text-transform: uppercase;
+                }
+
+                .table th,
+                .table td {
+                        padding: 20px;
+                        text-align: center;
+                        border-bottom: 1px solid #eee;
+                }
+
+                /* Container para os botões de ação na tabela */
+                .operations {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        gap: 8px;
+                        min-width: 200px;
+                }
+
+                /* Estilo base para os botões de ação (Ver, Editar, Arquivar) */
+                .btn-action {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 6px;
+                        padding: 10px 14px;
+                        border: none;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-size: 13px;
+                        font-weight: 600;
+                        text-decoration: none;
+                        transition: all 0.3s ease;
+                }
+
+                /* Estilos específicos para cada botão de ação */
+                .btn-view-students {
+                        background: #e8f5e8;
+                        color: #2e7d32;
+                        border: 2px solid #c8e6c9;
+                }
+
+                .btn-view-students:hover {
+                        background: #c8e6c9;
+                }
+
+                .btn-edit {
+                        background: #e3f2fd;
+                        color: #1976d2;
+                        border: 2px solid #bbdefb;
+                }
+
+                .btn-edit:hover {
+                        background: #bbdefb;
+                }
+
+                .btn-archive {
+                        background: #fce4ec;
+                        color: #c01e26;
+                        border: 2px solid #f8bbd9;
+                }
+
+                .btn-archive:hover {
+                        background: #f8bbd9;
+                }
+
+                /* Estilos para o status das vagas */
+                .vagas-status {
+                        display: inline-block;
+                        padding: 6px 12px;
+                        border-radius: 20px;
+                        font-size: 12px;
+                        font-weight: 700;
+                }
+
+                .vagas-disponivel {
+                        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+                        color: #155724;
+                }
+
+                .vagas-poucas {
+                        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+                        color: #856404;
+                }
+
+                .vagas-esgotadas {
+                        background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+                        color: #721c24;
+                }
+        </style>
+</head>
+
+<body>
+
+        <aside class="sidebar">
+                <div>
+                        <div class="logo">
+                                <img src="/imagem/logo.png" alt="logo">
+                        </div>
+                        <div class="menu">
+                                <a href="/home" class="menu-item"><i class="fas fa-home"></i><span>INÍCIO</span></a>
+
+                                <a href="/acessar-aluno" class="menu-item"><i
+                                                class="fas fa-address-card"></i><span>CADASTRO</span></a>
+                                <a href="/matriculas" class="menu-item"><i
+                                                class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
+                                <a href="/professores" class="menu-item"><i
+                                                class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></a>
+                                <a href="/turmas" class="menu-item active"><i
+                                                class="fas fa-users"></i><span>TURMA</span></a>
+                                <a href="/financeiro" class="menu-item"><i
+                                                class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></a>
+
+                        </div>
+                </div>
+                <div>
+                        <div class="seteeduca" style="color: #333;
+text-align: center; margin-bottom: 10px;">@Seteeduca</div>
+                        <div class="sidebar-footer">
+                                <button class="logout-button" onclick="logout()">
+                                        <i class="fa-solid fa-right-from-bracket"></i><span>Sair</span>
+                                </button>
+                        </div>
+                </div>
+        </aside>
+
+
+        <div class="main-content">
+                <div class="header">
+                        <div class="header-title">
+                                <i class="fas fa-users"></i>
+                                <span>Acessar <b>TURMAS</b></span>
+                        </div>
+                        <div class="profile" id="profile-toggle">
+
+                                <div class="profile-header">
+                                        <i class="fas fa-user-circle profile-icon"></i>
+                                        <i class="fas fa-chevron-down profile-arrow"></i>
+                                </div>
+                                <div class="profile-dropdown" id="profile-dropdown-menu">
+
+                                        <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a>
+                                        <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i>
+                                                Mensalidade</a>
+                                        <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
+                                </div>
+                        </div>
+
+                </div>
+
+                <div class="content-area">
+                        <div class="search-section">
+                                <div class="search-container">
+                                        <div class="search-icon"><i class="fas fa-search"></i></div>
+                                        <input type="text" class="search-input"
+                                                placeholder="Pesquisar por nome da turma ou professor...">
+
+                                </div>
+                                <a href="/turmas/cadastro" class="new-button" style="text-decoration: none;">
+                                        <div class="new-button-circle"></div>
+                                        <div class="new-text">Nova turma</div>
+                                </a>
+
+                                <div class="stats-info" id="totalTurmas">Total de Turmas: <%= turmas.length %>
+                                </div>
+                        </div>
+                        <div class="table-container">
+                                <table class="table">
+                                        <thead class="table-header">
+
+                                                <tr>
+                                                        <th>Nome da Turma</th>
+                                                        <th>Professor(a)</th>
+                                                        <th>Vagas</th>
+
+                                                        <th>Alunos</th>
+                                                        <th>Ano letivo</th>
+                                                        <th>Operações</th>
+
+                                                </tr>
+                                        </thead>
+                                        <tbody id="turmasTableBody">
+                                                <% if (turmas && turmas.length> 0) { %>
+
+                                                        <% turmas.forEach(turma=> { %>
+                                                                <tr>
+                                                                        <td style="font-weight: 600;">
+                                                                                <%= turma.nome_turma %>
+                                                                        </td>
+
+                                                                        <td>
+                                                                                <%= turma.professor ?
+                                                                                        turma.professor.nome
+                                                                                        : 'Não definido' %>
+                                                                        </td>
+
+                                                                        <td>
+                                                                                <% const vagasRestantes=turma.limite_vagas
+                                                                                        - turma.quantidade_alunos; %>
+                                                                                        <% if (vagasRestantes <=0) { %>
+                                                                                                <span
+                                                                                                        class="vagas-status vagas-esgotadas">Esgotadas</span>
+
+                                                                                                <% } else if
+                                                                                                        (vagasRestantes
+                                                                                                        <=2) { %>
+                                                                                                        <span
+                                                                                                                class="vagas-status vagas-poucas">
+                                                                                                                <%= vagasRestantes
+                                                                                                                        %>
+                                                                                                                        restantes
+                                                                                                        </span>
+
+                                                                                                        <% } else { %>
+                                                                                                                <span
+                                                                                                                        class="vagas-status vagas-disponivel">Disponíveis</span>
+
+                                                                                                                <% } %>
+                                                                        </td>
+                                                                        <td><strong>
+                                                                                        <%= turma.quantidade_alunos %>
+                                                                                                / <%= turma.limite_vagas
+                                                                                                        %>
+                                                                                </strong></td>
+                                                                        <td>
+                                                                                <%= turma.ano_letivo %>
+                                                                        </td>
+                                                                        <td>
+
+                                                                                <div class="operations">
+
+                                                                                        <a href="/turmas/ver/<%= turma.id %>"
+                                                                                                class="btn-action btn-view-students"
+                                                                                                title="Ver alunos da turma">
+                                                                                                <i
+                                                                                                        class="fas fa-eye"></i>
+                                                                                                Ver
+                                                                                        </a>
+
+                                                                                        <a href="/turmas/editar/<%= turma.id %>"
+                                                                                                class="btn-action btn-edit"
+                                                                                                title="Editar turma">
+                                                                                                <i
+                                                                                                        class="fas fa-edit"></i>
+                                                                                                Editar
+
+                                                                                        </a>
+                                                                                        <form action="/turmas/arquivar/<%= turma.id %>"
+                                                                                                method="POST"
+                                                                                                onsubmit="return confirm('Tem certeza que deseja arquivar a turma <%= turma.nome_turma %>?');"
+                                                                                                style="display: inline;">
+                                                                                                <button type="submit"
+                                                                                                        class="btn-action btn-archive"
+                                                                                                        title="Arquivar turma">
+
+                                                                                                        <i
+                                                                                                                class="fas fa-archive"></i>
+                                                                                                        Arquivar
+                                                                                                </button>
+
+                                                                                        </form>
+                                                                                </div>
+                                                                        </td>
+
+                                                                </tr>
+                                                                <% }) %>
+                                                                        <% } else { %>
+                                                                                <tr>
+
+                                                                                        <td colspan="6"
+                                                                                                style="text-align:center; color:#666; padding:40px;">
+                                                                                                Nenhuma turma cadastrada
+                                                                                                ainda.
+                                                                                        </td>
+                                                                                </tr>
+                                                                                <% } %>
+                                        </tbody>
+                                </table>
+
+                        </div>
+                </div>
+        </div>
+
+        <script>
+                // Função para sair do sistema
+                function logout() {
+                        // Pede confirmação ao usuário antes de redirecionar
+                        if (confirm('Deseja realmente sair do sistema?')) {
+                                window.location.href = '/login';
+                        }
+                }
+                // Função para navegar para outras páginas (usada em versões anteriores, mas mantida)
+                function navegarPara(pagina) {
+                        const rotas = {
+                                'inicio': '/home',
+                                'cadastro': '/acessar-aluno',
+
+                                'matricula': '/matriculas',
+                                'professor': '/professores',
+                                'turmas': '/turmas',
+                                'financeiro': '/financeiro'
+                        };
+                        if (rotas[pagina]) {
+                                window.location.href = rotas[pagina];
+                        }
+                }
+
+                // Executa o código JavaScript depois que todo o HTML da página foi carregado
+                document.addEventListener('DOMContentLoaded', function () {
+                        const profileToggle = document.getElementById('profile-toggle');
+                        const dropdownMenu = document.getElementById('profile-dropdown-menu');
+                        const profileArrow = profileToggle.querySelector('.profile-arrow');
+
+            // Adiciona um evento de clique ao ícone do perfil para mostrar / esconder o dropdown
+                        profileToggle.addEventListener('click', function (event) {
+                                event.stopPropagation(); // Impede que o clique se propague para o 'window'
+                                dropdownMenu.classList.toggle('show'); // Adiciona ou remove a classe 'show'
+                                // Gira a seta para baixo ou para cima
+
+                                profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+                        });
+
+                        // Adiciona um evento de clique na janela inteira para fechar o dropdown se ele estiver aberto
+                        window.addEventListener('click', function () {
+                                if (dropdownMenu.classList.contains('show')) {
+
+                                        dropdownMenu.classList.remove('show');
+                                        profileArrow.style.transform = 'rotate(0deg)';
+                                }
+                        });
+                        // --- Lógica da Barra de Pesquisa ---
+                        const searchInput = document.querySelector('.search-input');
+                        // Adiciona um evento que é disparado toda vez que o usuário digita algo
+                        searchInput.addEventListener('input', function () {
+                                const searchTerm = this.value.toLowerCase(); // Pega o texto e converte para minúsculas
+                                const rows = document.querySelectorAll('#turmasTableBody tr'); // Pega todas as linhas da tabela
+
+
+                                rows.forEach(row => {
+                                        // Verifica se a linha não é a mensagem "Nenhuma turma cadastrada"
+                                        if (row.children.length > 1) {
+                                                const rowText = row.textContent.toLowerCase();
+                                                // Pega todo o texto da linha
+                                                // Se o texto da linha incluir o termo pesquisado, mostra a linha. Senão, esconde.
+                                                row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+                                        }
+
+                                });
+                        });
                 });
-            }); 
-        });
-    </script>
+        </script>
 </body>
+
 </html>

@@ -9,34 +9,45 @@
         /* Estilos Gerais Padronizados */
         :root {
             --sidebar-width: 280px;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #fcf8f2; min-height: 100vh; display: flex; }
+}
+        * { margin: 0; padding: 0; box-sizing: border-box;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #fcf8f2;
+min-height: 100vh; display: flex; }
 
         /* CSS da Sidebar */
         .sidebar {
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
             display: flex; flex-direction: column; justify-content: space-between;
             box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            min-height: 100vh; flex-shrink: 0; position: fixed; left: 0; top: 0; z-index: 1000;
-        }
-        .logo { padding: 0px 40px; text-align: center; margin-bottom: 25px; margin-top: 30px; }
-        .logo img { max-width: 150px; }
-        .menu { flex: 1; padding: 20px 18px; overflow-y: auto; }
+min-height: 100vh; flex-shrink: 0; position: fixed; left: 0; top: 0; z-index: 1000;
+}
+        .logo { padding: 0px 40px; text-align: center; margin-bottom: 25px; margin-top: 30px;
+}
+        .logo img { max-width: 150px;
+}
+        .menu { flex: 1; padding: 20px 18px; overflow-y: auto;
+}
         .menu-item {
-            padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer;
+            padding: 30px 20px;
+margin-bottom: 6px; border-radius: 6px; cursor: pointer;
             transition: all 0.3s ease; position: relative; display: flex; align-items: center;
-            font-weight: 500; color: black; text-decoration: none;
+            font-weight: 500; color: black;
+text-decoration: none;
             overflow: visible;
         }
-        .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
-        .menu-item span { z-index: 2; font-size: 15px; }
-        .menu-item:hover { background-color: #6c757d21; }
-        .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
+        .menu-item i { margin-right: 15px; font-size: 18px;
+width: 24px; text-align: center; z-index: 2; }
+        .menu-item span { z-index: 2;
+font-size: 15px; }
+        .menu-item:hover { background-color: #6c757d21;
+}
+        .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600;
+}
         .menu-item.active::before {
             content: '';
-            position: absolute;
+position: absolute;
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
@@ -45,95 +56,191 @@
             border-radius: 50%;
             background-color: currentColor;
             z-index: 2;
-        }
+}
         /* Efeitos ::after (linhas coloridas) */
-        .menu-item::after { padding: 0 10px; content: ''; position: absolute; bottom: -3px; left: 20px; height: 2px; width: 0px; transition: width 0.3s ease; border-radius: 1px; }
-        .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
-        .menu-item:nth-child(1)::after { background-color: #F4BF27; } 
-        .menu-item:nth-child(2)::after { background-color: #306bc2; }
-        .menu-item:nth-child(3)::after { background-color: #9747FF; } 
-        .menu-item:nth-child(4)::after { background-color: #F88C12; }
-        .menu-item:nth-child(5)::after { background-color: #D22A2A; } 
-        .menu-item:nth-child(6)::after { background-color: #59C631; }
+        .menu-item::after { padding: 0 10px;
+content: ''; position: absolute; bottom: -3px; left: 20px; height: 2px; width: 0px; transition: width 0.3s ease; border-radius: 1px;
+}
+        .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px);
+}
+        .menu-item:nth-child(1)::after { background-color: #F4BF27;
+} 
+        .menu-item:nth-child(2)::after { background-color: #306bc2;
+}
+        .menu-item:nth-child(3)::after { background-color: #9747FF;
+} 
+        .menu-item:nth-child(4)::after { background-color: #F88C12;
+}
+        .menu-item:nth-child(5)::after { background-color: #D22A2A;
+} 
+        .menu-item:nth-child(6)::after { background-color: #59C631;
+}
         /* Footer da Sidebar */
-        .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); }
-        .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; text-decoration: none; background: transparent; border: none; }
-        .logout-button i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; }
-        .logout-button:hover { background-color: rgba(210, 42, 42, 0.1); color: #D22A2A; font-weight: 600; }
-        .seteeduca { color: #333; text-align: center; margin-bottom: 10px; font-size: 0.9em; }
+        .sidebar-footer { padding: 20px 18px;
+border-top: 1px solid rgba(0, 0, 0, 0.1); }
+        .logout-button { padding: 16px 20px;
+border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; text-decoration: none;
+background: transparent; border: none; }
+        .logout-button i { margin-right: 15px; font-size: 18px;
+width: 24px; text-align: center; }
+        .logout-button:hover { background-color: rgba(210, 42, 42, 0.1);
+color: #D22A2A; font-weight: 600; }
+        .seteeduca { color: #333; text-align: center; margin-bottom: 10px;
+font-size: 0.9em; }
 
         /* CSS do Conteúdo Principal */
         .main-content {
-            flex: 1; min-height: 100vh; display: flex; flex-direction: column;
+            flex: 1;
+min-height: 100vh; display: flex; flex-direction: column;
             margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width));
-        }
+}
         .header {
-            background: #9154e0; height: 80px; display: flex; align-items: center; justify-content: space-between;
+            background: #9154e0;
+height: 80px; display: flex; align-items: center; justify-content: space-between;
             padding: 0 30px; color: white; width: 100%; flex-shrink: 0;
-        }
-        .header-title { display: flex; align-items: center; font-size: 24px; font-weight: 600; font-family: 'Kodchasan', sans-serif;}
-        .header-title i { margin-right: 15px; font-size: 28px; }
-        .profile { position: relative; cursor: pointer; z-index: 10; }
-        .profile-header { display: flex; align-items: center; padding: 5px; border-radius: 50px; transition: background-color 0.2s ease; }
-        .profile-header:hover { background-color: rgba(255, 255, 255, 0.1); }
-        .profile-icon { font-size: 38px; color: white; }
-        .profile-arrow { font-size: 14px; margin-left: 8px; color: white; transition: transform 0.3s ease; }
-        .profile-dropdown { display: none; position: absolute; top: 110%; right: 0; background-color: white; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); width: 200px; z-index: 1001; overflow: hidden; padding: 8px 0; border: 1px solid #eee; }
-        .profile-dropdown.show { display: block; }
-        .profile-dropdown a { display: flex; align-items: center; padding: 12px 18px; text-decoration: none; color: #444; font-size: 15px; }
-        .profile-dropdown a:hover { background-color: #f5f5f5; }
-        .profile-dropdown a i { width: 20px; margin-right: 15px; color: #666; text-align: center; }
+}
+        .header-title { display: flex; align-items: center; font-size: 24px; font-weight: 600;
+font-family: 'Kodchasan', sans-serif;}
+        .header-title i { margin-right: 15px; font-size: 28px;
+}
+        .profile { position: relative; cursor: pointer; z-index: 10;
+}
+        .profile-header { display: flex; align-items: center; padding: 5px; border-radius: 50px;
+transition: background-color 0.2s ease; }
+        .profile-header:hover { background-color: rgba(255, 255, 255, 0.1);
+}
+        .profile-icon { font-size: 38px; color: white;
+}
+        .profile-arrow { font-size: 14px; margin-left: 8px; color: white; transition: transform 0.3s ease;
+}
+        .profile-dropdown { display: none; position: absolute; top: 110%; right: 0; background-color: white;
+border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); width: 200px; z-index: 1001; overflow: hidden; padding: 8px 0;
+border: 1px solid #eee; }
+        .profile-dropdown.show { display: block;
+}
+        .profile-dropdown a { display: flex; align-items: center; padding: 12px 18px; text-decoration: none;
+color: #444; font-size: 15px; }
+        .profile-dropdown a:hover { background-color: #f5f5f5;
+}
+        .profile-dropdown a i { width: 20px; margin-right: 15px; color: #666; text-align: center;
+}
 
         /* Área de conteúdo e formulário */
-        .content-area { padding: 30px; background: #fcf8f2; flex: 1; display: flex; justify-content: center; align-items: flex-start; width: 100%; }
-        .container { width: 100%; max-width: 900px; }
-        .form-section { width: 100%; background: white; border-radius: 12px; padding: 40px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border-top: 5px solid #9154e0; min-height: 600px; }
-        .tabs { display: flex; margin-bottom: 30px; border-bottom: 2px solid #eee; }
-        .tab { padding: 15px 25px; cursor: pointer; font-weight: 600; color: #666; border-bottom: 3px solid transparent; transition: color 0.3s, border-bottom-color 0.3s; }
-        .tab.active { color: #9154e0; border-bottom-color: #9154e0; }
-        .tab:hover { color: #9154e0; }
-        .tab-content { display: none; } .tab-content.active { display: block; }
+        .content-area { padding: 30px;
+background: #fcf8f2; flex: 1; display: flex; justify-content: center; align-items: flex-start; width: 100%;
+}
+        .container { width: 100%; max-width: 900px;
+}
+        .form-section { width: 100%; background: white; border-radius: 12px; padding: 40px;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border-top: 5px solid #9154e0; min-height: 600px;
+}
+        .tabs { display: flex; margin-bottom: 30px; border-bottom: 2px solid #eee;
+}
+        .tab { padding: 15px 25px; cursor: pointer; font-weight: 600; color: #666;
+border-bottom: 3px solid transparent; transition: color 0.3s, border-bottom-color 0.3s; }
+        .tab.active { color: #9154e0;
+border-bottom-color: #9154e0; }
+        .tab:hover { color: #9154e0;
+}
+        .tab-content { display: none; } .tab-content.active { display: block;
+}
 
-        form { display: flex; flex-direction: column; gap: 25px; }
-        .field-group { display: flex; flex-direction: column; gap: 10px; }
-        label { font-weight: 600; font-size: 1rem; color: #333; }
-        input, select { padding: 14px 18px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; width: 100%; background: white; }
-        input:focus, select:focus { outline: none; border-color: #9154e0; box-shadow: 0 0 0 3px rgba(145, 84, 224, 0.2); }
-        .btn-primary { padding: 16px 30px; background: #9154e0; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background-color 0.3s, transform 0.1s; align-self: flex-start; }
-        .btn-primary:hover { background-color: #7a46bd; }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-primary:disabled { background-color: #c7a9f2; cursor: not-allowed; }
+        form { display: flex; flex-direction: column; gap: 25px;
+}
+        .field-group { display: flex; flex-direction: column; gap: 10px;
+}
+        label { font-weight: 600; font-size: 1rem; color: #333;
+}
+        input, select { padding: 14px 18px; border: 2px solid #ddd; border-radius: 8px;
+font-size: 1rem; width: 100%; background: white; }
+        input:focus, select:focus { outline: none;
+border-color: #9154e0; box-shadow: 0 0 0 3px rgba(145, 84, 224, 0.2);
+}
+        .btn-primary { padding: 16px 30px; background: #9154e0; color: white; border: none;
+border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 20px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+transition: background-color 0.3s, transform 0.1s; align-self: flex-start; }
+        .btn-primary:hover { background-color: #7a46bd;
+}
+        .btn-primary:active { transform: scale(0.98);
+}
+        .btn-primary:disabled { background-color: #c7a9f2; cursor: not-allowed;
+}
 
         /* Busca de Aluno */
-        .search-container { position: relative; }
-        #searchResults {
-            border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px; margin-top: -2px;
-            max-height: 200px; overflow-y: auto; background-color: #fff; position: absolute; width: 100%; z-index: 999;
+        .search-container { position: relative;
+}
+        .search-results-list { /* Classe unificada para ambas as buscas */
+            border: 1px solid #ddd;
+border-top: none; border-radius: 0 0 8px 8px; margin-top: -2px;
+            max-height: 200px; overflow-y: auto; background-color: #fff; position: absolute; width: 100%;
+z-index: 999;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none;
         }
-        #searchResults.visible { display: block; }
-        .search-result-item { padding: 12px 18px; cursor: pointer; font-size: 0.95rem; border-bottom: 1px solid #eee; }
-        .search-result-item:last-child { border-bottom: none; }
-        .search-result-item:hover { background-color: #f0e6ff; }
-        .search-result-item strong { color: #5a1dae; }
+        .search-results-list.visible { display: block;
+}
+        .search-result-item { padding: 12px 18px; cursor: pointer; font-size: 0.95rem;
+border-bottom: 1px solid #eee; }
+        .search-result-item:last-child { border-bottom: none;
+}
+        .search-result-item:hover { background-color: #f0e6ff;
+}
+        .search-result-item strong { color: #5a1dae;
+}
+        .search-result-item .turma-atual {
+            font-size: 0.9em;
+            color: #666;
+        }
 
         /* Info Aluno Selecionado */
-        .student-info { background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; padding: 25px; margin-top: 15px; }
-        .student-info h4 { color: #333; margin-bottom: 15px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;}
-        .student-info h4 i { color: #9154e0; }
-        .student-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; color: #555; font-size: 0.95rem; line-height: 1.6;}
-        .student-details strong { color: #333; margin-right: 5px; }
-        .student-details ul { list-style: none; padding-left: 0; margin-top: 5px; }
-        .student-details li { margin-bottom: 5px; }
+        .student-info { background: #f8f9fa;
+border: 2px solid #e9ecef; border-radius: 12px; padding: 25px; margin-top: 15px;
+}
+        .student-info h4 { color: #333; margin-bottom: 15px; font-size: 1.2rem; display: flex;
+align-items: center; gap: 8px;}
+        .student-info h4 i { color: #9154e0;
+}
+        .student-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; color: #555;
+font-size: 0.95rem; line-height: 1.6;}
+        .student-details strong { color: #333; margin-right: 5px;
+}
+        .student-details ul { list-style: none; padding-left: 0; margin-top: 5px;
+}
+        .student-details li { margin-bottom: 5px;
+}
 
         /* Mensagens de erro/sucesso (EJS) */
          .error-message-box, .success-message-box {
-            padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 500;
+            padding: 15px;
+border-radius: 8px; margin-bottom: 20px; font-weight: 500;
             display: flex; align-items: center; gap: 10px;
-         }
-         .error-message-box { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-         .success-message-box { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-         .error-message-box i, .success-message-box i { font-size: 1.2em; }
+}
+         .error-message-box { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;
+}
+         .success-message-box { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;
+}
+         .error-message-box i, .success-message-box i { font-size: 1.2em;
+}
+         
+        /* Link para o Histórico */
+        .btn-historico {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            color: #555;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 25px; /* Adiciona espaço abaixo do link */
+            float: right; /* Alinha à direita */
+        }
+        .btn-historico:hover {
+            background: #e9ecef;
+            border-color: #ccc;
+        }
 
     </style>
 </head>
@@ -144,20 +251,23 @@
             <div class="menu">
                  <a href="/home" class="menu-item"><i class="fas fa-home"></i><span>INÍCIO</span></a>
                  <a href="/acessar-aluno" class="menu-item"><i class="fas fa-address-card"></i><span>CADASTRO</span></a>
-                 <a href="/matriculas" class="menu-item active"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
+           
+      <a href="/matriculas" class="menu-item active"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
                  <a href="/professores" class="menu-item"><i class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></a>
                  <a href="/turmas" class="menu-item"><i class="fas fa-users"></i><span>TURMA</span></a>
                  <a href="/financeiro" class="menu-item"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></a>
             </div>
         </div>
-        <div>
+      
+  <div>
             <div class="seteeduca">@Seteeduca</div>
             <div class="sidebar-footer">
                 <button class="logout-button" onclick="logout()">
                     <i class="fa-solid fa-right-from-bracket"></i><span>Sair</span>
                 </button>
             </div>
-        </div>
+    
+    </div>
     </aside>
 
     <div class="main-content">
@@ -166,11 +276,13 @@
             <div class="profile" id="profile-toggle">
                 <div class="profile-header">
                     <i class="fas fa-user-circle profile-icon"></i>
-                    <i class="fas fa-chevron-down profile-arrow"></i>
+      
+              <i class="fas fa-chevron-down profile-arrow"></i>
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown-menu">
                     <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a>
-                    <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+                    <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> 
+Mensalidade</a>
                     <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
                 </div>
             </div>
@@ -179,76 +291,137 @@
         <main class="content-area">
             <div class="container">
                 <section class="form-section">
+ 
                     <div class="tabs">
                          <div class="tab active" onclick="switchTab('matricula')">
                              <i class="fas fa-plus-circle"></i> Nova Matrícula
-                         </div>
-                         <div class="tab" onclick="switchTab('rematricula')" title="Em breve">
+                   
+      </div>
+                         <div class="tab" onclick="switchTab('rematricula')">
                             <i class="fas fa-edit"></i> Rematrícula
                          </div>
-                    </div>
-
-                     <!-- Mensagens de erro/sucesso (descomente quando usar EJS) -->
-                     <!-- <% if (typeof error !== 'undefined' && error) { %>
-                         <div class="error-message-box">
+         
+           </div>
+                     
+                     <div style="text-align: right;">
+                        <a href="/matriculas/historico" class="btn-historico">
+                            <i class="fas fa-history"></i> Ver Histórico de Matrículas
+                        </a>
+                     </div>
+                     <div style="clear: both;"></div> <% if (typeof error !== 'undefined' && error) { %>
+                         <div class="error-message-box" id="matricula_error_box">
                              <i class="fas fa-exclamation-triangle"></i> <%= error %>
                          </div>
                      <% } %>
+                     
                      <% if (typeof success !== 'undefined' && success) { %>
-                          <div class="success-message-box">
+                          <div class="success-message-box" id="success_box">
                               <i class="fas fa-check-circle"></i> <%= success %>
                           </div>
-                     <% } %> -->
+                     <% } %>
+
+                     <% if (typeof rematricula_error !== 'undefined' && rematricula_error) { %>
+                         <div class="error-message-box" id="rematricula_error_box">
+                             <i class="fas fa-exclamation-triangle"></i> <%= rematricula_error %>
+                         </div>
+                     <% } %>
+
 
                     <div class="tab-content active" id="matricula-content">
                         <form action="/matriculas" method="POST" id="matriculaForm">
-                            <input type="hidden" id="aluno_id" name="aluno_id" required>
+                            <input 
+type="hidden" id="aluno_id" name="aluno_id" required>
 
                             <div class="field-group search-container">
-                                <label for="nomeAluno">Buscar Aluno por Nome:</label>
-                                <input type="text" id="nomeAluno" name="nomeAluno" placeholder="Digite pelo menos 3 letras do nome" autocomplete="off" required>
-                                <div id="searchResults"></div> 
+                                <label for="nomeAluno">Buscar Aluno (Ainda não matriculado):</label>
+                               
+ <input type="text" id="nomeAluno" name="nomeAluno" placeholder="Digite pelo menos 3 letras do nome" autocomplete="off" required>
+                                <div id="searchResults" class="search-results-list"></div> 
                             </div>
 
-                            <div id="studentInfo" class="student-info" style="display: none;">
+                         
+   <div id="studentInfo" class="student-info" style="display: none;">
                                 <h4><i class="fas fa-user-check"></i> Aluno Selecionado: <span id="studentName"></span></h4>
                                 <div class="student-details" id="studentDetails"></div>
-                            </div>
+                     
+       </div>
 
                             <div class="field-group">
                                 <label for="turma_id">Turma:</label>
-                                <select id="turma_id" name="turma_id" required>
+                               
+ <select id="turma_id" name="turma_id" required>
                                     <option value="">Selecione a turma</option>
-                                    <!-- Turmas serão preenchidas pelo backend -->
-                                    <!-- <% if (turmas && turmas.length > 0) { %>
+                                    <% if (turmas && turmas.length > 0) { %>
                                         <% turmas.forEach(turma => { %>
                                             <% const vagasDisponiveis = turma.limite_vagas - (turma.quantidade_alunos || 0); %>
                                             <option value="<%= turma.id %>"><%= turma.nome_turma %> (Vagas: <%= vagasDisponiveis %>)</option>
                                         <% }) %>
                                     <% } else { %>
                                         <option value="" disabled>Nenhuma turma com vagas disponíveis</option>
-                                    <% } %> -->
+                                    <% } %>
                                 </select>
                             </div>
-                            
+                   
+         
                             <div class="field-group">
                                 <label for="data_matricula">Data da Matrícula:</label>
-                                <input type="date" id="data_matricula" name="data_matricula" required>
+                           
+     <input type="date" id="data_matricula" name="data_matricula" required>
                             </div>
 
                             <button type="submit" class="btn-primary" id="btnMatricular" disabled>
-                                <i class="fas fa-save"></i> Realizar Matrícula
+                               
+ <i class="fas fa-save"></i> Realizar Matrícula
                             </button>
                         </form>
                     </div>
 
                     <div class="tab-content" id="rematricula-content">
-                        <p style="text-align: center; color: #666; margin-top: 50px;">
-                            <i class="fas fa-wrench" style="margin-right: 8px;"></i>Funcionalidade de Rematrícula em desenvolvimento.
-                        </p>
+                        <form action="/matriculas/rematricular" method="POST" id="rematriculaForm">
+                            <input type="hidden" id="rematricula_matricula_id" name="matricula_id" required>
+                            <input type="hidden" id="rematricula_crianca_id" name="crianca_id" required>
+                            <input type="hidden" id="rematricula_turma_antiga_id" name="turma_antiga_id" required>
+
+
+                            <div class="field-group search-container">
+                                <label for="nomeAlunoMatriculado">Buscar Aluno (Já matriculado):</label>
+                                <input type="text" id="nomeAlunoMatriculado" name="nomeAlunoMatriculado" placeholder="Digite pelo menos 3 letras do nome" autocomplete="off" required>
+                                <div id="searchResultsMatriculado" class="search-results-list"></div>
+                            </div>
+
+                            <div id="studentInfoMatriculado" class="student-info" style="display: none;">
+                                <h4><i class="fas fa-user-check"></i> Aluno Selecionado: <span id="studentNameMatriculado"></span></h4>
+                                <div class="student-details" id="studentDetailsMatriculado"></div>
+                            </div>
+                            
+                            <div class="field-group">
+                                <label for="data_rematricula">Data da Rematrícula (Define o novo Ano Letivo):</label>
+                                <input type="date" id="data_rematricula" name="data_rematricula" required>
+                            </div>
+
+                            <div class="field-group">
+                                <label for="nova_turma_id">Mover para a Turma:</label>
+                                <select id="nova_turma_id" name="nova_turma_id" required>
+                                    <option value="">Selecione a nova turma</option>
+                                    <% if (turmas && turmas.length > 0) { %>
+                                        <% turmas.forEach(turma => { %>
+                                            <% const vagasDisponiveis = turma.limite_vagas - (turma.quantidade_alunos || 0); %>
+                                            <option value="<%= turma.id %>"><%= turma.nome_turma %> (Vagas: <%= vagasDisponiveis %>)</option>
+                                        <% }) %>
+                                    <% } else { %>
+                                        <option value="" disabled>Nenhuma turma com vagas disponíveis</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary" id="btnRematricular" disabled>
+                                 <i class="fas fa-exchange-alt"></i> Confirmar Rematrícula
+                            </button>
+                        </form>
                     </div>
                 </section>
-            </div>
+ 
+           </div>
         </main>
     </div>
 
@@ -258,7 +431,8 @@
             if (confirm('Deseja realmente sair do sistema?')) {
                 window.location.href = '/login';
             }
-        }
+    
+    }
 
         // Troca de Abas (Matrícula/Rematrícula)
         function switchTab(tab) {
@@ -267,7 +441,15 @@
             const activeTabButton = document.querySelector(`.tab[onclick="switchTab('${tab}')"]`);
             if (activeTabButton) activeTabButton.classList.add('active');
             const activeTabContent = document.getElementById(`${tab}-content`);
-            if (activeTabContent) activeTabContent.classList.add('active');
+if (activeTabContent) activeTabContent.classList.add('active');
+
+            // Limpa mensagens de erro/sucesso ao trocar de aba
+            const errorBox1 = document.getElementById('matricula_error_box');
+            const errorBox2 = document.getElementById('rematricula_error_box');
+            const successBox = document.getElementById('success_box');
+            if (errorBox1) errorBox1.style.display = 'none';
+            if (errorBox2) errorBox2.style.display = 'none';
+            if (successBox) successBox.style.display = 'none';
         }
 
         // --- Lógica Principal da Página (DOM Carregado) ---
@@ -278,123 +460,243 @@
             const dropdownMenu = document.getElementById('profile-dropdown-menu');
             const profileArrow = profileToggle?.querySelector('.profile-arrow');
 
-            profileToggle?.addEventListener('click', function(event) {
+      
+      profileToggle?.addEventListener('click', function(event) {
                 event.stopPropagation();
                 const isShown = dropdownMenu.classList.toggle('show');
                 if (profileArrow) profileArrow.style.transform = isShown ? 'rotate(180deg)' : 'rotate(0deg)';
             });
             
-            window.addEventListener('click', function() {
+         
+   window.addEventListener('click', function() {
                 if (dropdownMenu?.classList.contains('show')) {
                     dropdownMenu.classList.remove('show');
                     if (profileArrow) profileArrow.style.transform = 'rotate(0deg)';
-                }
+}
             });
 
-            // --- Lógica da Matrícula ---
+            // --- Lógica para mostrar aba correta se houver erro ou sucesso ---
+            <% if (typeof rematricula_error !== 'undefined' && rematricula_error) { %>
+                // Se o erro veio da rematrícula, troca para essa aba
+                switchTab('rematricula');
+            <% } else if (typeof success !== 'undefined' && success) { %>
+                // Se veio msg de sucesso, mostra, mas fica na aba 1
+            <% } else if (typeof error !== 'undefined' && error) { %>
+                // Se veio erro da matricula 1, fica na aba 1
+            <% } %>
+
+
+            // ===========================================
+            // --- Lógica da ABA 1 (Nova Matrícula) ---
+            // ===========================================
             const searchInput = document.getElementById('nomeAluno');
-            const searchResults = document.getElementById('searchResults');
+const searchResults = document.getElementById('searchResults');
             const studentInfo = document.getElementById('studentInfo');
             const studentName = document.getElementById('studentName');
             const studentDetails = document.getElementById('studentDetails');
             const hiddenAlunoId = document.getElementById('aluno_id');
-            const btnMatricular = document.getElementById('btnMatricular');
+const btnMatricular = document.getElementById('btnMatricular');
             const dataMatriculaInput = document.getElementById('data_matricula');
 
             // Preenche data atual por padrão
             if (dataMatriculaInput) dataMatriculaInput.value = new Date().toISOString().split('T')[0];
+let searchTimeout;
 
-            let searchTimeout;
-
-            // Evento de digitação no campo de busca
+            // Evento de digitação no campo de busca (ABA 1)
             searchInput?.addEventListener('input', (e) => {
                 const searchTerm = e.target.value.trim();
                 clearTimeout(searchTimeout);
 
                 if (searchTerm.length < 3) {
-                    searchResults.innerHTML = '';
+                    searchResults.innerHTML 
+= '';
                     searchResults.classList.remove('visible');
                     studentInfo.style.display = 'none';
                     hiddenAlunoId.value = '';
                     btnMatricular.disabled = true;
-                    return;
+             
+       return;
                 }
 
                 searchTimeout = setTimeout(async () => {
                     try {
+                        // Chama a API de alunos (todos os ativos do cadastro)
                         const response = await fetch(`/matriculas/api/buscar-aluno?nome=${encodeURIComponent(searchTerm)}`);
-                        if (!response.ok) {
+       
+                 if (!response.ok) {
                              throw new Error(`Erro ${response.status}: ${await response.text()}`);
                         }
-                        const alunos = await response.json();
+                       
+ const alunos = await response.json();
 
                         searchResults.innerHTML = '';
 
                         if (alunos.length > 0) {
                             alunos.forEach(aluno => {
                                 const item = document.createElement('div');
-                                item.className = 'search-result-item';
+                      
+          item.className = 'search-result-item';
 
-                                let nomeResponsavel = aluno.responsavel ? aluno.responsavel.nome : 'Resp. não associado';
+                                // Verifica se 'aluno.responsavel' existe e tem 'nome'
+                                let nomeResponsavel = (aluno.responsavel && aluno.responsavel.nome) ? aluno.responsavel.nome : 'Resp. não associado';
 
                                 item.innerHTML = `<strong>${aluno.nome}</strong> (Responsável: ${nomeResponsavel})`;
 
-                                item.dataset.alunoId = aluno.id;
+           
+                     item.dataset.alunoId = aluno.id;
                                 item.dataset.alunoData = JSON.stringify(aluno);
 
                                 searchResults.appendChild(item);
-                            });
+           
+                 });
                             searchResults.classList.add('visible');
-                        } else {
+} else {
                             searchResults.innerHTML = '<div class="search-result-item" style="color: #666; cursor: default;">Nenhum aluno encontrado</div>';
-                            searchResults.classList.add('visible');
+searchResults.classList.add('visible');
                         }
                     } catch (error) {
                         console.error('Erro ao buscar alunos:', error);
-                        searchResults.innerHTML = `<div class="search-result-item" style="color: red; cursor: default;">Erro na busca: ${error.message}</div>`;
+searchResults.innerHTML = `<div class="search-result-item" style="color: red; cursor: default;">Erro na busca: ${error.message}</div>`;
                         searchResults.classList.add('visible');
-                    }
+}
                 }, 300);
             });
 
-            // Evento de clique nos resultados da busca
+            // Evento de clique nos resultados da busca (ABA 1)
             searchResults?.addEventListener('click', (e) => {
                 const selectedItem = e.target.closest('.search-result-item[data-aluno-id]');
 
                 if (selectedItem) {
                     const alunoData = JSON.parse(selectedItem.dataset.alunoData);
 
-                    searchInput.value = alunoData.nome;
+                  
+  searchInput.value = alunoData.nome;
                     studentName.textContent = alunoData.nome;
 
                     let detalhesHtml = `<div><strong>CPF Criança:</strong> ${alunoData.cpf || 'Não informado'}</div>`;
 
                     if (alunoData.responsavel) {
-                        detalhesHtml += `<div><strong>Responsável:</strong> ${alunoData.responsavel.nome || 'Nome não informado'}</div>`;
+                        
+detalhesHtml += `<div><strong>Responsável:</strong> ${alunoData.responsavel.nome || 'Nome não informado'}</div>`;
                         detalhesHtml += `<div><strong>CPF Responsável:</strong> ${alunoData.responsavel.cpf || 'Não informado'}</div>`;
                     } else {
                         detalhesHtml += `<div><strong>Responsável:</strong> Não associado</div>`;
-                    }
+}
 
                     studentDetails.innerHTML = detalhesHtml;
-                    studentInfo.style.display = 'block';
+studentInfo.style.display = 'block';
 
                     hiddenAlunoId.value = alunoData.id;
 
                     searchResults.innerHTML = '';
                     searchResults.classList.remove('visible');
                     btnMatricular.disabled = false;
+}
+            });
+
+
+            // ===========================================
+            // --- Lógica da ABA 2 (Rematrícula) ---
+            // ===========================================
+            const searchInputMat = document.getElementById('nomeAlunoMatriculado');
+            const searchResultsMat = document.getElementById('searchResultsMatriculado');
+            const studentInfoMat = document.getElementById('studentInfoMatriculado');
+            const studentNameMat = document.getElementById('studentNameMatriculado');
+            const studentDetailsMat = document.getElementById('studentDetailsMatriculado');
+            const hiddenMatriculaId = document.getElementById('rematricula_matricula_id');
+            const hiddenCriancaId = document.getElementById('rematricula_crianca_id');
+            const hiddenTurmaAntigaId = document.getElementById('rematricula_turma_antiga_id');
+            const btnRematricular = document.getElementById('btnRematricular');
+            const dataRematriculaInput = document.getElementById('data_rematricula');
+            let searchTimeoutMat;
+
+            // Preenche data atual por padrão
+            if (dataRematriculaInput) dataRematriculaInput.value = new Date().toISOString().split('T')[0];
+
+            // Evento de digitação no campo de busca (ABA 2)
+            searchInputMat?.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.trim();
+                clearTimeout(searchTimeoutMat);
+
+                if (searchTerm.length < 3) {
+                    searchResultsMat.innerHTML = '';
+                    searchResultsMat.classList.remove('visible');
+                    studentInfoMat.style.display = 'none';
+                    hiddenMatriculaId.value = '';
+                    hiddenCriancaId.value = '';
+                    hiddenTurmaAntigaId.value = '';
+                    btnRematricular.disabled = true;
+                    return;
+                }
+
+                searchTimeoutMat = setTimeout(async () => {
+                    try {
+                        // Chama a API de alunos JÁ matriculados
+                        const response = await fetch(`/matriculas/api/buscar-matriculados?nome=${encodeURIComponent(searchTerm)}`);
+                        if (!response.ok) {
+                             throw new Error(`Erro ${response.status}: ${await response.text()}`);
+                        }
+                        const alunos = await response.json();
+                        searchResultsMat.innerHTML = '';
+
+                        if (alunos.length > 0) {
+                            alunos.forEach(aluno => {
+                                const item = document.createElement('div');
+                                item.className = 'search-result-item';
+                                item.innerHTML = `<strong>${aluno.nome_crianca}</strong> <span class="turma-atual">(Turma Atual: ${aluno.turma_atual_nome})</span>`;
+                                item.dataset.alunoData = JSON.stringify(aluno); // Guarda todos os dados
+                                searchResultsMat.appendChild(item);
+                            });
+                            searchResultsMat.classList.add('visible');
+                        } else {
+                            searchResultsMat.innerHTML = '<div class="search-result-item" style="color: #666; cursor: default;">Nenhum aluno matriculado encontrado</div>';
+                            searchResultsMat.classList.add('visible');
+                        }
+                    } catch (error) {
+                        console.error('Erro ao buscar alunos matriculados:', error);
+                        searchResultsMat.innerHTML = `<div class="search-result-item" style="color: red; cursor: default;">Erro na busca: ${error.message}</div>`;
+                        searchResultsMat.classList.add('visible');
+                    }
+                }, 300);
+            });
+
+            // Evento de clique nos resultados da busca (ABA 2)
+            searchResultsMat?.addEventListener('click', (e) => {
+                const selectedItem = e.target.closest('.search-result-item[data-aluno-data]');
+
+                if (selectedItem) {
+                    const alunoData = JSON.parse(selectedItem.dataset.alunoData);
+
+                    searchInputMat.value = alunoData.nome_crianca;
+                    studentNameMat.textContent = alunoData.nome_crianca;
+
+                    let detalhesHtml = `<div><strong>CPF:</strong> ${alunoData.cpf_crianca || 'Não informado'}</div>`;
+                    detalhesHtml += `<div style="margin-top: 10px;"><strong>Turma Atual:</strong> ${alunoData.turma_atual_nome}</div>`;
+                    
+                    studentDetailsMat.innerHTML = detalhesHtml;
+                    studentInfoMat.style.display = 'block';
+
+                    // Preenche TODOS os IDs ocultos necessários para o backend
+                    hiddenMatriculaId.value = alunoData.matricula_id;
+                    hiddenCriancaId.value = alunoData.crianca_id;
+                    hiddenTurmaAntigaId.value = alunoData.turma_atual_id;
+
+                    searchResultsMat.innerHTML = '';
+                    searchResultsMat.classList.remove('visible');
+                    btnRematricular.disabled = false; // Habilita o botão
                 }
             });
 
-             // Esconde resultados se clicar fora
+            // Esconde resultados se clicar fora (para AMBAS as listas)
              document.addEventListener('click', (e) => {
                  if (!searchResults.contains(e.target) && e.target !== searchInput) {
                      searchResults.classList.remove('visible');
                  }
+                 if (!searchResultsMat.contains(e.target) && e.target !== searchInputMat) {
+                     searchResultsMat.classList.remove('visible');
+                 }
              });
-
-        }); // Fim do DOMContentLoaded
+}); // Fim do DOMContentLoaded
     </script>
 </body>
 </html>
