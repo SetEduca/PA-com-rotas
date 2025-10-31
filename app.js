@@ -73,15 +73,26 @@ app.get("/senha-trocada", (req, res) => {
 
 //CADASTRO
 
-app.use("/cadastro-aluno", alunoAcessarRouter);
+// ========================================================================
+//                           *** CORREÇÃO DE ROTA (1/2) ***
+// 1. Esta rota GET específica para /cadastro-aluno (o formulário)
+//    deve vir ANTES do app.use() que captura o prefixo.
+// ========================================================================
+app.get("/cadastro-aluno", (req, res) => {
+  res.render("ALUNO/cadastro-aluno");
+});
 
 app.get("/cadastro-responsavel", (req, res) => {
   res.render("ALUNO/cadastro1");
 });
 
-app.get("/cadastro-aluno", (req, res) => {
-  res.render("ALUNO/cadastro-aluno");
-});
+// ========================================================================
+//                           *** CORREÇÃO DE ROTA (2/2) ***
+// 2. O prefixo deste router deve ser '/acessar-aluno' para bater
+//    com as chamadas de API (fetch) do seu arquivo 'acessar-aluno.ejs' 
+// ========================================================================
+app.use("/acessar-aluno", alunoAcessarRouter);
+
 
 //FINANCEIRO
 

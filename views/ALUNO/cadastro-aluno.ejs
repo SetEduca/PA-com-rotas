@@ -167,7 +167,7 @@
         }
 
         .logout-button:hover {
-            background-color: rgba(210, 42, 42, 0.1); 
+            background-color: rgba(210, 42, 42, 0.1);
             color: #D22A2A; 
             font-weight: 600;
         }
@@ -215,7 +215,7 @@
         }
 
         .header {
-            background: #306bc2; 
+            background: #306bc2;
             height: 80px; 
             display: flex; 
             align-items: center; 
@@ -226,7 +226,7 @@
         }
 
         .header-title {
-            display: flex; 
+            display: flex;
             align-items: center;
             position: relative; 
             top: 0.7vh;
@@ -283,7 +283,7 @@
         }
 
         .panel-header {
-            background: white; 
+            background: white;
             border-radius: 12px; 
             border-top: 5px solid #306bc2; 
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
@@ -510,6 +510,13 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             animation: modalSlideIn 0.3s ease;
         }
+        
+        /* Classe para modal de ERRO */
+        .modal-content.error::before {
+            content: "✕";
+            background: #D22A2A;
+            margin-top: -16px;
+        }
 
         .modal-content::before {
             content: "✓";
@@ -553,6 +560,14 @@
 
         .modal-btn:hover {
             background: #2557a0;
+        }
+        
+        /* Botão de erro */
+        .modal-btn.error-btn {
+            background: #D22A2A;
+        }
+        .modal-btn.error-btn:hover {
+            background: #a02121;
         }
 
         @keyframes modalSlideIn {
@@ -725,27 +740,31 @@
         </div>
         
         <div class="menu">
-            <div class="menu-item" onclick="navegarPara('inicio')">
+       
+     <div class="menu-item" onclick="navegarPara('inicio')">
                 <i class="fas fa-home"></i>
                 <span>INÍCIO</span>
             </div>
             <div class="menu-item active" onclick="navegarPara('cadastro')">
                 <i class="fas fa-address-card"></i>
-                <span>CADASTRO</span>
+              
+  <span>CADASTRO</span>
             </div>
             <div class="menu-item" onclick="navegarPara('matricula')">
                 <i class="fas fa-user-graduate"></i>
                 <span>MATRÍCULA</span>
             </div>
             <div class="menu-item" onclick="navegarPara('professor')">
-                <i class="fas fa-chalkboard-teacher"></i>
+            
+    <i class="fas fa-chalkboard-teacher"></i>
                 <span>PROFESSOR</span>
             </div>
             <div class="menu-item" onclick="navegarPara('turmas')"> 
                 <i class="fas fa-users"></i>
                 <span>TURMA</span>
             </div>
-            <div class="menu-item" onclick="navegarPara('financeiro')">
+     
+       <div class="menu-item" onclick="navegarPara('financeiro')">
                 <i class="fas fa-dollar-sign"></i>
                 <span>FINANCEIRO</span>
             </div>
@@ -755,7 +774,8 @@
             <p></p>
         </div>
 
-        <div class="sidebar-footer">
+        
+<div class="sidebar-footer">
             <div class="logout-button">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>Sair</span>
@@ -765,14 +785,16 @@
 
     <div class="main-content">
         <div class="header">
-            <div class="header-title">
+            <div 
+class="header-title">
                 <i class="fas fa-address-card"></i>
                 <span>Painel <b>CADASTRAMENTO</b></span>
             </div>
             <div class="user-profile">
                 <div class="profile-pic">
                     <i class="fas fa-user"></i>
-                </div>
+ 
+               </div>
                 <div class="profile-arrow">
                     <i class="fas fa-chevron-down"></i>
                 </div>
@@ -780,127 +802,184 @@
         </div>
 
         <div class="content-area">
-            <div class="registration-panel">
+ 
+           <div class="registration-panel">
                 <div class="panel-header"></div>
 
                 <div class="panel-content">
-                    <form id="registrationForm">
+                    
+                    <form id="registrationForm" method="POST" action="/acessar-aluno/cadastrar">
                         <div class="photo-upload-section">
-                            <div class="photo-preview" id="photoPreview">
+        
+                    <div class="photo-preview" id="photoPreview">
                                 <i class="fas fa-camera"></i>
                             </div>
-                            <button type="button" class="upload-btn" onclick="uploadPhoto()">
+                
+            <button type="button" class="upload-btn" onclick="uploadPhoto()">
                                 Adicionar Foto
                             </button>
-                        </div>
+                        
+</div>
 
                         <div class="form-section">
                             <h3 class="section-title">
                                 <i class="fas fa-user"></i>
-                                Informações Pessoais
+            
+                    Informações Pessoais
                             </h3>
-                            <div class="form-grid">
-                                <div class="form-field full-width">
+                            <div class="form-grid two-columns">
+                      
+          <div class="form-field full-width">
                                     <label class="form-label">Nome Completo</label>
                                     <input type="text" class="form-input" name="nome" placeholder="Nome completo da criança" required>
-                                </div>
+      
+                          </div>
                                 <div class="form-field">
                                     <label class="form-label">Data de Nascimento</label>
-                                    <input type="date" class="form-input" name="dataNascimento" required>
+  
+                                  <input type="date" class="form-input" name="dataNascimento" required>
                                 </div>
-                                <div class="form-field">
+                              
+  <div class="form-field">
                                     <label class="form-label">CPF</label>
                                     <input type="text" class="form-input" name="cpf" placeholder="000.000.000-00">
-                                </div>
+                    
+            </div>
                                 <div class="form-field">
                                     <label class="form-label">Sexo</label>
-                                    <div class="radio-group">
+                  
+                  <div class="radio-group">
                                         <div class="radio-item">
-                                            <input type="radio" id="feminino" name="sexo" value="feminino" required>
+                                        
+    <input type="radio" id="feminino" name="sexo" value="feminino" required>
                                             <label for="feminino">Feminino</label>
                                         </div>
-                                        <div class="radio-item">
+      
+                                  <div class="radio-item">
                                             <input type="radio" id="masculino" name="sexo" value="masculino" required>
-                                            <label for="masculino">Masculino</label>
+                
+                            <label for="masculino">Masculino</label>
                                         </div>
-                                    </div>
+                               
+     </div>
                                 </div>
+                                
+                                <div class="form-field">
+                                    <label class="form-label">Naturalidade</label>
+                                    <input type="text" class="form-input" name="naturalidade" placeholder="Cidade de nascimento" required>
+                                </div>
+
                             </div>
                         </div>
 
-                        <div class="form-section">
+                                     <div class="form-section">
                             <h3 class="section-title">
                                 <i class="fas fa-phone"></i>
-                                Responsável
+                       
+         Responsável
                             </h3>
                             <div class="form-grid two-columns">
-                                <div class="form-field full-width">
-                                    <label class="form-label">Nome do Responsável</label>
+                                <div 
+class="form-field"> <label class="form-label">Nome do Responsável</label>
                                     <input type="text" class="form-input" name="responsavel" placeholder="Nome completo" required>
+                  
+              </div>
+
+                                <div class="form-field">
+                                    <label class="form-label">CPF do Responsável</label>
+                                    <input type="text" class="form-input" name="cpf_responsavel" placeholder="000.000.000-00" required>
                                 </div>
+
                                 <div class="form-field">
                                     <label class="form-label">Telefone</label>
-                                    <input type="tel" class="form-input" name="telefone" placeholder="(11) 99999-9999" required>
+                
+                    <input type="tel" class="form-input" name="telefone" placeholder="(11) 99999-9999" required>
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">E-mail</label>
+         
+                           <label class="form-label">E-mail</label>
                                     <input type="email" class="form-input" name="email" placeholder="exemplo@email.com" required>
-                                </div>
+                               
+ </div>
                             </div>
                         </div>
 
                         <div class="form-section">
-                            <h3 class="section-title">
+                      
+      <h3 class="section-title">
                                 <i class="fas fa-map-marker-alt"></i>
                                 Endereço
-                            </h3>
+                           
+ </h3>
                             <div class="form-grid two-columns">
                                 <div class="form-field">
-                                    <label class="form-label">CEP</label>
+                                    
+<label class="form-label">CEP</label>
                                     <input type="text" class="form-input" name="cep" placeholder="00000-000" required>
                                 </div>
-                                <div class="form-field">
+                          
+      <div class="form-field">
                                     <label class="form-label">Cidade</label>
                                     <input type="text" class="form-input" name="cidade" placeholder="Cidade" required>
-                                </div>
-                                <div class="form-field full-width">
-                                    <label class="form-label">Logradouro</label>
-                                    <input type="text" class="form-input" name="logradouro" placeholder="Rua, Avenida, etc." required>
-                                </div>
+               
+                 </div>
+
                                 <div class="form-field">
-                                    <label class="form-label">Número</label>
+                                    <label class="form-label">Estado</label>
+                                    <input type="text" class="form-input" name="estado" placeholder="Estado" required>
+                                </div>
+
+                                <div class="form-field">
+                                    <label class="form-label">Logradouro</label>
+            
+                        <input type="text" class="form-input" name="logradouro" placeholder="Rua, Avenida, etc."
+required>
+                                </div>
+
+                                <div class="form-field">
+                                   
+ <label class="form-label">Número</label>
                                     <input type="text" class="form-input" name="numero" placeholder="123" required>
                                 </div>
-                                <div class="form-field">
+                         
+       <div class="form-field">
                                     <label class="form-label">Bairro</label>
                                     <input type="text" class="form-input" name="bairro" placeholder="Bairro" required>
-                                </div>
+              
+                  </div>
                             </div>
                         </div>
 
                         <div class="form-section">
-                            <h3 class="section-title">
+     
+                       <h3 class="section-title">
                                <i class="fas fa-address-card"></i>
                                 Informações de Saúde
-                            </h3>
+         
+                   </h3>
                             <div class="form-grid two-columns">
                                 <div class="form-field full-width">
-                                    <label class="form-label">Observações</label>
+                 
+                   <label class="form-label">Observações</label>
                                     <textarea class="form-textarea" name="observacoes" placeholder="Informações adicionais, alergias, medicações..."></textarea>
                                 </div>
-                            </div>
+      
+                      </div>
                         </div>
 
                         <div class="action-buttons">
-                            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            <button 
+type="button" class="btn btn-secondary" onclick="resetForm()">
                                 Limpar
                             </button>
                             <button type="submit" class="btn btn-primary">
-                                Cadastrar Criança
+      
+                          Cadastrar Criança
                             </button>
                         </div>
                     </form>
-                </div>
+ 
+               </div>
             </div>
         </div>
     </div>
@@ -909,14 +988,23 @@
         <div class="modal-content">
             <h3>Cadastro Realizado!</h3>
             <p id="successMessage">A criança foi cadastrada com sucesso no sistema.</p>
-            <button class="modal-btn" onclick="closeModal()">Entendi</button>
+            <button 
+class="modal-btn" onclick="closeModal('successModal')">Entendi</button>
+        </div>
+    </div>
+
+    <div class="modal" id="errorModal">
+        <div class="modal-content error">
+            <h3>Ocorreu um Erro!</h3>
+            <p id="errorMessage">Não foi possível completar o cadastro.</p>
+            <button class="modal-btn error-btn" onclick="closeModal('errorModal')">Tentar Novamente</button>
         </div>
     </div>
 
     <script>
         function toggleMobileMenu() {
             const sidebar = document.getElementById('sidebar');
-            const overlay = document.querySelector('.sidebar-overlay');
+const overlay = document.querySelector('.sidebar-overlay');
             
             sidebar.classList.toggle('mobile-hidden');
             overlay.classList.toggle('active');
@@ -927,13 +1015,15 @@
                 if (window.innerWidth <= 768) {
                     toggleMobileMenu();
                 }
-                
+              
+  
                 document.querySelectorAll('.menu-item').forEach(i => {
                     i.classList.remove('active');
                 });
                 
                 this.classList.add('active');
-            });
+            
+});
         });
 
         function navegarPara(pagina) {
@@ -942,84 +1032,118 @@
                 'professor': '/professores',
                 'financeiro': '/financeiro',
                 'turmas': '/turmas-cadastradas',
-                'matricula': '/matricula',
-                'cadastro': '/cadastro-aluno'
+      
+          'matricula': '/matriculas',
+                'cadastro': '/acessar-aluno' // CORRIGIDO: O botão "CADASTRO" no menu agora leva para a lista
             };
-
-            if (rotas[pagina]) {
+if (rotas[pagina]) {
                 window.location.href = rotas[pagina];
-            }
+}
         }
 
         function uploadPhoto() {
             const input = document.createElement('input');
-            input.type = 'file';
+input.type = 'file';
             input.accept = 'image/*';
             input.onchange = function(e) {
                 const file = e.target.files[0];
-                if (file) {
+if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+reader.onload = function(e) {
                         const preview = document.getElementById('photoPreview');
-                        preview.innerHTML = `<img src="${e.target.result}" alt="Foto da criança">`;
+preview.innerHTML = `<img src="${e.target.result}" alt="Foto da criança">`;
                     };
                     reader.readAsDataURL(file);
                 }
             };
-            input.click();
+input.click();
         }
 
         function resetForm() {
             document.getElementById('registrationForm').reset();
-            document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
+document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
         }
 
-        function closeModal() {
-            document.getElementById('successModal').style.display = 'none';
-        }
-
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-            const dadosCrianca = {
-                nome: formData.get('nome'),
-                dataNascimento: formData.get('dataNascimento'),
-                cpf: formData.get('cpf'),
-                sexo: formData.get('sexo'),
-                responsavel: formData.get('responsavel'),
-                telefone: formData.get('telefone'),
-                email: formData.get('email'),
-                cep: formData.get('cep'),
-                cidade: formData.get('cidade'),
-                logradouro: formData.get('logradouro'),
-                numero: formData.get('numero'),
-                bairro: formData.get('bairro'),
-                observacoes: formData.get('observacoes'),
-                dataCadastro: new Date().toLocaleDateString(),
-                status: 'Ativo'
-            };
-
-            if (!window.criancasCadastradas) {
-                window.criancasCadastradas = [];
+        // ========================================================
+        //      FUNÇÃO CLOSEMODAL ATUALIZADA (COM REDIRECT)
+        // ========================================================
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            
+            // SE FOR O MODAL DE SUCESSO, REDIRECIONA PARA A LISTA
+            if (modalId === 'successModal') {
+                // Esta é a rota que você confirmou (acessar-aluno.ejs)
+                window.location.href = '/acessar-aluno'; 
             }
-            window.criancasCadastradas.push(dadosCrianca);
+        }
 
-            document.getElementById('successMessage').textContent = 
-                `${dadosCrianca.nome} foi cadastrada com sucesso!`;
-            document.getElementById('successModal').style.display = 'flex';
+        // ========================================================
+        //      SCRIPT DE SUBMISSÃO (FETCH) CORRIGIDO
+        //      (Substitui o script original )
+        // ========================================================
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Impede o envio tradicional
 
-            this.reset();
-            document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            // Converte FormData para um objeto JSON
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            
+            // Define o URL da action do formulário
+            const url = form.action;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // Mostra o modal de sucesso
+                 document.getElementById('successMessage').textContent = 
+                        `${data.nome} foi cadastrada com sucesso!`;
+                 document.getElementById('successModal').style.display = 'flex';
+                    
+                    // Limpa o formulário
+                    form.reset();
+                    document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
+
+                } else {
+                    // Se o servidor retornar um erro (ex: 4xx, 5xx)
+                    const errorData = await response.json();
+                    throw new Error(errorData.details || errorData.error || 'Erro desconhecido');
+                }
+
+            } catch (error) {
+                // Se houver um erro de rede ou na lógica acima
+                console.error('Erro no cadastro:', error);
+                
+                // Mostra o modal de erro
+                document.getElementById('errorMessage').textContent = 
+                    `Erro: ${error.message}. Por favor, verifique os dados e tente novamente.`;
+                document.getElementById('errorModal').style.display = 'flex';
+            }
         });
 
-        document.querySelector('.logout-button').addEventListener('click', function() {
+document.querySelector('.logout-button').addEventListener('click', function() {
             if (confirm('Tem certeza que deseja sair?')) {
                 window.location.href = '/login';
             }
         });
 
-        document.querySelector('input[name="cpf"]').addEventListener('input', function() {
+        // ========================================================
+        //      MÁSCARAS (COM A NOVA MÁSCARA DE CPF)
+        // ========================================================
+document.querySelector('input[name="cpf"]').addEventListener('input', function() {
             let value = this.value.replace(/\D/g, '');
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
             value = value.replace(/(\d{3})(\d)/, '$1.$2');
@@ -1027,30 +1151,49 @@
             this.value = value;
         });
 
-        document.querySelector('input[name="telefone"]').addEventListener('input', function() {
+        // --- MÁSCARA ADICIONADA ---
+        document.querySelector('input[name="cpf_responsavel"]').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            this.value = value;
+        });
+
+document.querySelector('input[name="telefone"]').addEventListener('input', function() {
             let value = this.value.replace(/\D/g, '');
             value = value.replace(/(\d{2})(\d)/, '($1) $2');
             value = value.replace(/(\d{5})(\d)/, '$1-$2');
             this.value = value;
         });
-
-        document.querySelector('input[name="cep"]').addEventListener('input', function() {
+document.querySelector('input[name="cep"]').addEventListener('input', function() {
             let value = this.value.replace(/\D/g, '');
             value = value.replace(/(\d{5})(\d)/, '$1-$2');
             this.value = value;
         });
-
-        window.addEventListener('resize', function() {
+window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 document.getElementById('sidebar').classList.remove('mobile-hidden');
                 document.querySelector('.sidebar-overlay').classList.remove('active');
             } else {
                 document.getElementById('sidebar').classList.add('mobile-hidden');
             }
-        });
+        
+});
 
+        // Fechar modais clicando fora
         document.getElementById('successModal').addEventListener('click', function(e) {
             if (e.target === this) {
-                closeModal();
+                closeModal('successModal');
             }
         });
+        
+        // Listener para o novo modal de erro
+        document.getElementById('errorModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal('errorModal');
+            }
+        });
+    </script>
+</body>
+</html>
