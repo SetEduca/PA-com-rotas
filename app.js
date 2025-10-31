@@ -6,8 +6,9 @@ import matriculasRouter from './routes/matricula.routes.js';
 import professoresRoutes from './routes/professores.routes.js';
 import cadastroRouter from './routes/cadastro.routes.js';
 import loginRouter from './routes/login.routes.js';
-import mensalidadeRouter from './routes/mensalidades.routes.js'
-import arquivadosRouter from './routes/arquivados.routes.js'
+import mensalidadeRouter from './routes/mensalidades.routes.js';
+import arquivadosRouter from './routes/arquivados.routes.js';
+import alunoAcessarRouter from './routes/aluno-acessar.routes.js';
 
 
  const app = express();
@@ -72,9 +73,7 @@ app.get("/senha-trocada", (req, res) => {
 
 //CADASTRO
 
-app.get("/acessar-aluno", (req, res) => {
-  res.render("ALUNO/acessar-aluno");
-});
+app.use("/cadastro-aluno", alunoAcessarRouter);
 
 app.get("/cadastro-responsavel", (req, res) => {
   res.render("ALUNO/cadastro1");

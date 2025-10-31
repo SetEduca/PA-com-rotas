@@ -82,11 +82,6 @@ transition: width 0.3s ease;
 border-radius: 1px;
 }
 
-.menu-item:hover::after,
-.menu-item.active::after {
-width: calc(100% - 40px);
-}
-
 .menu-item:nth-child(1)::after { background-color: #F4BF27; }
 .menu-item:nth-child(2)::after { background-color: #306bc2; }
 .menu-item:nth-child(3)::after { background-color: #9747FF; }
@@ -184,6 +179,93 @@ font-family: 'Kodchasan', sans-serif;
 margin-right: 15px;
 font-size: 28px;
 }
+
+/* === CSS ADICIONADO PARA O MENU DE PERFIL === */
+.profile {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-icon {
+    font-size: 28px;
+    color: white;
+}
+
+.profile-arrow {
+    font-size: 16px;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.profile-dropdown {
+    display: none; /* Começa escondido */
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 1000;
+    padding: 8px 0;
+    margin-top: 10px;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.profile-dropdown.show {
+    display: block; /* Mostra o dropdown */
+}
+
+.profile-dropdown a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.profile-dropdown a:hover {
+    background-color: #f4f4f4;
+}
+
+.profile-dropdown a i {
+    width: 20px;
+    text-align: center;
+    color: #555;
+}
+
+.profile.active .profile-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 8px 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* === FIM DO CSS ADICIONADO === */
+
 
 .content-area {
 padding: 30px;
@@ -407,22 +489,23 @@ text-transform: uppercase;
 letter-spacing: 0.5px;
 }
 
+/* Modificado para refletir a nova estrutura de dados (ativo/inativo) e cor-padrão */
 .status-ativo {
 background: linear-gradient(135deg, #d4edda, #c3e6cb);
 color: #155724;
 border: 1px solid #c3e6cb;
 }
 
-.status-pendente {
-background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-color: #856404;
-border: 1px solid #ffeaa7;
-}
-
 .status-inativo {
 background: linear-gradient(135deg, #f8d7da, #f5c6cb);
 color: #721c24;
 border: 1px solid #f5c6cb;
+}
+
+.status-pendente { /* Mantido para fallback */
+background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+color: #856404;
+border: 1px solid #ffeaa7;
 }
 
 .modal {
@@ -632,6 +715,20 @@ padding: 8px 10px;
 <i class="fas fa-child"></i>
 <span>Crianças <b>CADASTRADAS</b></span>
 </div>
+
+<div class="profile" id="profile-toggle">
+    <div class="profile-header">
+        <i class="fas fa-user-circle profile-icon"></i>
+        <i class="fas fa-chevron-down profile-arrow"></i>
+    </div>
+    <div class="profile-dropdown" id="profile-dropdown-menu">
+        <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
+        <a href="/mensalidade" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+        <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
+        <div class="dropdown-divider"></div>
+                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+    </div>
+</div>
 </div>
 <div class="content-area">
 <div class="search-section">
@@ -658,7 +755,8 @@ padding: 8px 10px;
 <th>Operações</th>
 </tr>
 </thead>
-<tbody id="criancasTableBody"></tbody>
+<tbody id="criancasTableBody">
+</tbody>
 </table>
 </div>
 </div>
@@ -680,45 +778,27 @@ padding: 8px 10px;
 </div>
 
 <script>
+// Variável global para armazenar os dados carregados
 let criancas = [];
-
-const dadosExemplo = [
-{
-id: 1,
-nome: "Maria Silva Santos",
-dataNasc: "15/03/2020",
-dataMatricula: "01/02/2024",
-responsavelPrincipal: "Ana Silva Santos",
-responsavelSecundario: "João Santos",
-telefone: "(71) 98765-4321",
-endereco: "Rua das Flores, 123 - Salvador/BA",
-status: "ativo",
-observacoes: "Criança com necessidades alimentares especiais"
-},
-{
-id: 2,
-nome: "Pedro Henrique Costa",
-dataNasc: "22/07/2019",
-dataMatricula: "15/01/2024",
-responsavelPrincipal: "Carla Costa",
-responsavelSecundario: "",
-telefone: "(71) 99876-5432",
-endereco: "Av. Principal, 456 - Salvador/BA",
-status: "ativo",
-observacoes: ""
-}
-];
 
 function calcularIdade(dataNasc) {
 const hoje = new Date();
-const nascimento = new Date(dataNasc.split('/').reverse().join('-'));
+// Garante que a data seja interpretada corretamente
+const dataFormatada = dataNasc.includes('T') ? dataNasc.split('T')[0] : dataNasc;
+const partesData = dataFormatada.split(dataFormatada.includes('/') ? '/' : '-');
+
+// Formato esperado: DD/MM/YYYY ou YYYY-MM-DD
+const nascimento = dataFormatada.includes('/')
+? new Date(partesData[2], partesData[1] - 1, partesData[0]) // DD/MM/YYYY
+: new Date(partesData[0], partesData[1] - 1, partesData[2]); // YYYY-MM-DD
+
 let idade = hoje.getFullYear() - nascimento.getFullYear();
 const mes = hoje.getMonth() - nascimento.getMonth();
-
 if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
 idade--;
 }
 
+if (idade < 0) return 'Data inválida';
 if (idade === 0) {
 const meses = hoje.getMonth() - nascimento.getMonth() + (12 * (hoje.getFullYear() - nascimento.getFullYear()));
 return `${meses} meses`;
@@ -734,7 +814,10 @@ const rotas = {
 'financeiro': '/financeiro',
 'turma': '/turmas-cadastradas',
 'matricula': '/matricula',
-'cadastro': '/acessar-aluno'
+'cadastro': '/acessar-aluno', // Esta rota leva para a lista, não para o cadastro
+'meu-perfil': '/meuperfil', // Rota adicionada
+'mensalidade': '/mensalidade', // Rota adicionada
+'arquivados': '/arquivados' // Rota adicionada
 };
 
 if (rotas[pagina]) {
@@ -751,49 +834,54 @@ window.location.href = '/login';
 }
 
 function criarNovoCadastro() {
-window.location.href = '/cadastro-aluno';
+window.location.href = '/cadastro-aluno'; // Rota para a página de cadastro
 }
 
-function carregarDoMemoria() {
-if (criancas.length === 0) {
-return dadosExemplo.slice();
-}
-return criancas;
-}
-
-function getStatusInfo(status) {
-switch (status.toLowerCase()) {
-case 'ativo':
+// REMOVIDO: getStatusInfo não é mais necessário, pois o back-end renderiza a tabela diretamente.
+// MANTIDO, mas ajustado para aceitar 'ativo' ou 'inativo' se for usado na busca
+function getStatusInfo(ativo) {
+if (ativo === true) {
 return { class: 'status-ativo', text: 'Ativo' };
-case 'inativo':
-return { class: 'status-inativo', text: 'Inativo' };
-default:
+} else if (ativo === false) {
+return { class: 'status-inativo', text: 'Arquivado' };
+}
+// Fallback para quando o front-end não tiver essa informação na listagem
 return { class: 'status-pendente', text: 'Indefinido' };
 }
-}
 
-function carregarCriancas() {
-criancas = carregarDoMemoria();
+
+// AJUSTADO: Esta função agora espera os dados renderizados pelo back-end em 'alunos'
+// e apenas preenche o campo de contagem e renderiza o HTML (se for uma chamada API de busca).
+function renderTable(criancasData) {
 const tbody = document.getElementById('criancasTableBody');
 const totalCriancas = document.getElementById('totalCriancas');
 tbody.innerHTML = '';
 
-if (criancas.length === 0) {
-tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#666; padding:40px;">Nenhuma criança cadastrada ainda</td></tr>';
-} else {
-criancas.forEach((crianca, index) => {
-const statusInfo = getStatusInfo(crianca.status);
-const idade = calcularIdade(crianca.dataNasc);
+if (!criancasData || criancasData.length === 0) {
+tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#666; padding:40px;">Nenhuma criança encontrada</td></tr>';
+totalCriancas.textContent = `Total de Crianças: 0`;
+return;
+}
+
+criancasData.forEach((crianca) => {
+// O back-end CADASTRO_CRIANCA está retornando 'ativo: true'
+// O status é agora 'Ativo' se 'ativo' for true.
+const statusInfo = getStatusInfo(crianca.ativo);
+const idade = calcularIdade(crianca.data_nascimento);
 const iniciais = crianca.nome.split(' ').map(n => n[0]).join('').substring(0, 2);
+
+// O back-end está retornando os dados aninhados
+const endereco = crianca.ENDERECO_CRIANCA[0]; // Assume que é um array com 1 elemento
+const obsSaude = crianca.SAUDE_CRIANCA[0]; // Assume que é um array com 1 elemento
 
 tbody.innerHTML += `
 <tr>
 <td class="avatar-cell">
-<div class="student-avatar">${iniciais}</div>
+<div class="student-avatar">${iniciais.toUpperCase()}</div>
 </td>
 <td style="font-weight: 600; text-align: left;">${crianca.nome}</td>
 <td><strong>${idade}</strong></td>
-<td>${crianca.responsavelPrincipal}</td>
+<td>${crianca.responsavel_principal || 'N/A'}</td>
 <td>
 <span class="status-badge ${statusInfo.class}">
 ${statusInfo.text}
@@ -801,196 +889,304 @@ ${statusInfo.text}
 </td>
 <td>
 <div class="operations">
-<button class="btn-action btn-view" onclick="visualizarCrianca(${index})" title="Ver detalhes">
+<button class="btn-action btn-view" onclick="visualizarCrianca(${crianca.id})" title="Ver detalhes">
 <i class="fas fa-eye"></i> Ver
 </button>
-<button class="btn-action btn-edit" onclick="editarCrianca(${index})" title="Editar cadastro">
+<button class="btn-action btn-edit" onclick="editarCrianca(${crianca.id})" title="Editar cadastro">
 <i class="fas fa-edit"></i> Editar
 </button>
-<button class="btn-action btn-delete" onclick="excluirCrianca(${index})" title="Arquivar cadastro">
+<button class="btn-action btn-delete" onclick="arquivarCrianca(${crianca.id}, '${crianca.nome}')" title="Arquivar Cadastro">
 <i class="fas fa-archive"></i> Arquivar
 </button>
 </div>
 </td>
 </tr>`;
 });
+totalCriancas.textContent = `Total de Crianças: ${criancasData.length}`;
 }
-totalCriancas.textContent = `Total de Crianças: ${criancas.length}`;
+
+// MUDANÇA: carregarCriancas
+// Agora busca a lista completa na rota principal (index) para armazenar globalmente,
+// e utiliza a rota /api/listar apenas para a listagem/busca inicial.
+// No seu novo back-end, a listagem inicial já é feita na rota '/', então não precisa do /api/listar.
+
+// O trecho abaixo assume que o EJS está sendo renderizado com uma variável `alunos`
+// injetada pelo back-end na rota '/' (conforme o seu novo `aluno-acessar.routes.js` snippet front):
+// res.render('ALUNO/acessar-aluno', { alunos: data });
+
+// Se estiver sendo renderizado assim, a variável `alunos` estaria disponível aqui.
+// Como não temos acesso ao seu EJS completo, vamos manter a chamada de API
+// de listagem, mas usando o novo formato de dados.
+
+async function carregarCriancas(searchTerm = '') {
+try {
+    let url = '/acessar-aluno/api/listar';
+    if (searchTerm.length > 0) {
+        url = `/acessar-aluno/api/buscar?termo=${encodeURIComponent(searchTerm)}`;
+    }
+    
+    // CORREÇÃO: Usamos a rota de listagem/busca
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error('Erro ao buscar dados do servidor');
+    }
+    
+    // O back-end agora retorna dados 'normalizados' ou 'data'
+    // O novo back-end retorna: alunosNormalizados para a listagem inicial e data para a busca
+    const data = await response.json(); 
+    
+    // Se a listagem inicial vier do render (res.render) com a variável `alunos`, 
+    // a variável `data` da busca deve ser usada. 
+    // Para simplificar, vamos assumir que a **API de listagem** é a fonte principal.
+    criancas = data; // Armazena os dados globalmente
+    renderTable(criancas);
+} catch (error) {
+    console.error('Falha ao carregar crianças:', error);
+    const tbody = document.getElementById('criancasTableBody');
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red; padding:40px;">Erro ao carregar dados do servidor. Tente novamente.</td></tr>`;
+    document.getElementById('totalCriancas').textContent = 'Total de Crianças: 0';
+}
 }
 
-function visualizarCrianca(index) {
-const crianca = criancas[index];
-const modal = document.getElementById('childDetailsModal');
-const modalTitle = document.getElementById('modalChildTitle');
-const container = document.getElementById('childDetailsContainer');
 
-modalTitle.textContent = `Detalhes: ${crianca.nome}`;
+// AJUSTADO: visualizarCrianca
+// Agora usa o formato de resposta da nova rota: 
+// .select('*, data_nascimento as \"dataNasc\", ENDERECO_CRIANCA(*), SAUDE_CRIANCA(*)')
+async function visualizarCrianca(id) {
+try {
+    // CORREÇÃO: Caminho absoluto para a nova rota de detalhes
+    const response = await fetch(`/acessar-aluno/api/detalhes/${id}`);
+    if (!response.ok) {
+        throw new Error('Criança não encontrada');
+    }
+    // A resposta agora contém o objeto completo da criança, com os dados aninhados
+    const crianca = await response.json(); 
+    
+    const modal = document.getElementById('childDetailsModal');
+    const modalTitle = document.getElementById('modalChildTitle');
+    const container = document.getElementById('childDetailsContainer');
+    
+    modalTitle.textContent = `Detalhes: ${crianca.nome}`;
 
-const idade = calcularIdade(crianca.dataNasc);
-const statusInfo = getStatusInfo(crianca.status);
+    const idade = calcularIdade(crianca.data_nascimento);
+    const statusInfo = getStatusInfo(crianca.ativo);
 
-container.innerHTML = `
-<div style="text-align: center; margin-bottom: 30px;">
-<div class="student-avatar" style="width: 80px; height: 80px; font-size: 28px; margin: 0 auto 15px;">
-${crianca.nome.split(' ').map(n => n[0]).join('').substring(0, 2)}
-</div>
-<h2 style="color: #333; margin-bottom: 10px;">${crianca.nome}</h2>
-<span class="status-badge ${statusInfo.class}">${statusInfo.text}</span>
-</div>
+    const endereco = crianca.ENDERECO_CRIANCA;
+    const saude = crianca.SAUDE_CRIANCA;
 
-<div class="info-grid">
-<div class="info-card">
-<h4><i class="fas fa-child"></i> Informações Pessoais</h4>
-<div class="info-details">
-<strong>Data de Nascimento:</strong> ${crianca.dataNasc}<br>
-<strong>Idade:</strong> ${idade}<br>
-<strong>Data de Matrícula:</strong> ${crianca.dataMatricula}
-</div>
-</div>
+    // Formatação dos dados aninhados
+    const enderecoFormatado = endereco 
+        ? `${endereco.rua || ''}, Nº ${endereco.numero || 'S/N'} - ${endereco.bairro || ''}<br>
+           ${endereco.cidade || ''}/${endereco.estado || ''} - CEP: ${endereco.cep || 'N/A'}`
+        : 'Nenhum endereço cadastrado.';
+        
+    const observacoes = saude && saude.observacoes ? saude.observacoes : 'Nenhuma observação de saúde registrada.';
 
-<div class="info-card">
-<h4><i class="fas fa-users"></i> Responsáveis</h4>
-<div class="info-details">
-<strong>Principal:</strong> ${crianca.responsavelPrincipal}<br>
-${crianca.responsavelSecundario ? `<strong>Secundário:</strong> ${crianca.responsavelSecundario}<br>` : ''}
-<strong>Telefone:</strong> ${crianca.telefone}
-</div>
-</div>
+    const dataNascFormatada = crianca.data_nascimento ? new Date(crianca.data_nascimento).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : 'N/A';
 
-<div class="info-card">
-<h4><i class="fas fa-map-marker-alt"></i> Endereço</h4>
-<div class="info-details">
-${crianca.endereco}
-</div>
-</div>
 
-${crianca.observacoes ? `
-<div class="info-card">
-<h4><i class="fas fa-sticky-note"></i> Observações</h4>
-<div class="info-details">
-${crianca.observacoes}
-</div>
-</div>
-` : ''}
-</div>
-`;
+    container.innerHTML = `
+    <div style="text-align: center; margin-bottom: 30px;">
+    <div class="student-avatar" style="width: 80px; height: 80px; font-size: 28px; margin: 0 auto 15px;">
+    ${crianca.nome.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
+    </div>
+    <h2 style="color: #333; margin-bottom: 10px;">${crianca.nome}</h2>
+    <span class="status-badge ${statusInfo.class}">${statusInfo.text}</span>
+    </div>
 
-modal.style.display = 'flex';
+    <div class="info-grid">
+    <div class="info-card">
+    <h4><i class="fas fa-child"></i> Informações Pessoais</h4>
+    <div class="info-details">
+    <strong>Data de Nascimento:</strong> ${dataNascFormatada}<br>
+    <strong>Idade:</strong> ${idade}<br>
+    <strong>Sexo:</strong> ${crianca.sexo || 'N/A'}<br>
+    <strong>Naturalidade:</strong> ${crianca.naturalidade || 'N/A'}
+    </div>
+    </div>
+
+    <div class="info-card">
+    <h4><i class="fas fa-users"></i> Responsáveis</h4>
+    <div class="info-details">
+    <strong>Principal:</strong> ${crianca.responsavel_principal || 'N/A'}<br>
+    <strong>Secundário:</strong> ${crianca.responsavel_secundario || 'N/A'}
+    </div>
+    </div>
+
+    <div class="info-card">
+    <h4><i class="fas fa-map-marker-alt"></i> Endereço</h4>
+    <div class="info-details">
+    ${enderecoFormatado}
+    </div>
+    </div>
+
+    <div class="info-card">
+    <h4><i class="fas fa-sticky-note"></i> Observações de Saúde</h4>
+    <div class="info-details">
+    ${observacoes}
+    </div>
+    </div>
+    </div>
+    `;
+
+    modal.style.display = 'flex';
+} catch (error) {
+    console.error('Erro ao visualizar criança:', error);
+    alert('Não foi possível carregar os detalhes da criança.');
+}
 }
 
 function closeModal() {
 document.getElementById('childDetailsModal').style.display = 'none';
 }
 
-function editarCrianca(index) {
-if (index >= 0 && index < criancas.length) {
-const criancaId = criancas[index].id;
-window.location.href = `/editar-aluno?id=${criancaId}`;
+function editarCrianca(id) {
+window.location.href = `/editar-aluno?id=${id}`; 
+}
+
+// ADICIONADO: Função para arquivar o cadastro (POST para exclusão lógica)
+async function arquivarCrianca(id, nome) {
+if (confirm(`Tem certeza que deseja arquivar (tornar inativo) o cadastro de "${nome}"?`)) {
+    try {
+        const response = await fetch(`/acessar-aluno/arquivar/${id}`, { 
+            method: 'POST', // Rota de arquivar é um POST no seu back-end
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const responseData = await response.json();
+
+        if (!response.ok) {
+            throw new Error(responseData.error || 'Falha ao arquivar');
+        }
+        
+        alert('Cadastro arquivado com sucesso! Ele não aparecerá mais nesta lista de ativos.');
+        carregarCriancas(); // Recarrega a lista para remover o aluno arquivado
+    } catch (error) {
+        console.error("Erro ao arquivar:", error);
+        alert(`Ocorreu um erro ao tentar arquivar: ${error.message}`);
+    }
 }
 }
 
-function excluirCrianca(index) {
-const crianca = criancas[index];
-
-if (confirm(`Tem certeza que deseja arquivar o cadastro de "${crianca.nome}"?`)) {
-criancas.splice(index, 1);
-carregarCriancas();
-alert('Cadastro arquivado com sucesso!');
-}
-}
-
-function adicionarCrianca(novaCrianca) {
-if (!novaCrianca.id) {
-novaCrianca.id = Date.now();
-}
-
-criancas.push(novaCrianca);
-carregarCriancas();
-alert('Criança cadastrada com sucesso!');
-}
-
+// Esta função agora deve ser usada para filtrar a lista global `criancas`
 function filtrarPorStatus(status) {
-const rows = document.querySelectorAll('#criancasTableBody tr');
-let visibleCount = 0;
+    // Esta função foi removida/adaptada no back-end,
+    // mas o filtro pode ser feito no front-end na variável global `criancas`
 
-rows.forEach(row => {
-if (row.children.length > 1) {
-const statusCell = row.children[4];
-const statusText = statusCell.textContent.toLowerCase();
-const isVisible = status === 'todos' || statusText.includes(status.toLowerCase());
-row.style.display = isVisible ? '' : 'none';
-if (isVisible) visibleCount++;
-}
-});
+    const criancasAtivas = criancas.filter(c => c.ativo); // Filtra só ativos
+    
+    let criancasFiltradas = criancasAtivas;
+    
+    if (status && status.toLowerCase() !== 'todos') {
+        // Se precisar de filtros adicionais além de 'ativo', implemente aqui
+        // Ex: criancasFiltradas = criancasAtivas.filter(c => c.status.toLowerCase() === status.toLowerCase());
+    }
 
-const totalCriancas = document.getElementById('totalCriancas');
-if (status === 'todos') {
-totalCriancas.textContent = `Total de Crianças: ${criancas.length}`;
-} else {
-totalCriancas.textContent = `${status.charAt(0).toUpperCase() + status.slice(1)}: ${visibleCount} de ${criancas.length}`;
-}
+    renderTable(criancasFiltradas);
 }
 
 function exportarDados() {
+if (criancas.length === 0) {
+alert('Não há dados para exportar.');
+return;
+}
 const dataStr = JSON.stringify(criancas, null, 2);
 const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-
 const exportFileDefaultName = `criancas_cadastradas_${new Date().toISOString().split('T')[0]}.json`;
-
 const linkElement = document.createElement('a');
 linkElement.setAttribute('href', dataUri);
 linkElement.setAttribute('download', exportFileDefaultName);
 linkElement.click();
 }
 
+// MODIFICADO: DOMContentLoaded
 document.addEventListener('DOMContentLoaded', function() {
-carregarCriancas();
+    // A listagem inicial na rota '/' está usando res.render no novo back-end.
+    // Para funcionar com o EJS renderizando e a busca por API, é melhor chamar a API de listagem.
+    // carregarCriancas() chama a API /acessar-aluno/api/listar
+    carregarCriancas(); 
 
-const searchInput = document.querySelector('.search-input');
-searchInput.addEventListener('input', function() {
-const searchTerm = this.value.toLowerCase();
-const rows = document.querySelectorAll('#criancasTableBody tr');
+    const searchInput = document.querySelector('.search-input');
+    let searchTimeout; 
 
-let visibleCount = 0;
-rows.forEach(row => {
-if (row.children.length > 1) {
-const text = row.textContent.toLowerCase();
-const isVisible = text.includes(searchTerm);
-row.style.display = isVisible ? '' : 'none';
-if (isVisible) visibleCount++;
-}
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        const searchTerm = this.value.toLowerCase();
+        const totalCriancas = document.getElementById('totalCriancas');
+
+        searchTimeout = setTimeout(async () => {
+            try {
+                if (searchTerm.length === 0) {
+                    carregarCriancas(); 
+                    return;
+                }
+                if (searchTerm.length < 2) {
+                    renderTable([]); 
+                    totalCriancas.textContent = 'Digite ao menos 2 letras...';
+                    return; 
+                }
+
+                // CORREÇÃO: Caminho absoluto para chamar /acessar-aluno/api/buscar
+                const response = await fetch(`/acessar-aluno/api/buscar?termo=${encodeURIComponent(searchTerm)}`);
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar');
+                }
+                const criancasFiltradas = await response.json();
+                renderTable(criancasFiltradas); 
+
+                totalCriancas.textContent = `Encontradas: ${criancasFiltradas.length}`;
+
+            } catch (error) {
+                console.error('Erro na busca:', error);
+                const tbody = document.getElementById('criancasTableBody');
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red; padding:40px;">Erro ao realizar busca.</td></tr>`;
+            }
+        }, 300);
+    });
+    // Lógica do Modal (original)
+    const modal = document.getElementById('childDetailsModal');
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    // === JAVASCRIPT ADICIONADO PARA O MENU DE PERFIL ===
+    const profileToggle = document.getElementById('profile-toggle');
+    const profileDropdown = document.getElementById('profile-dropdown-menu');
+
+    if (profileToggle && profileDropdown) {
+        profileToggle.addEventListener('click', function(e) {
+            e.stopPropagation(); // Impede que o clique feche o menu imediatamente
+            profileDropdown.classList.toggle('show');
+            profileToggle.classList.toggle('active');
+        });
+
+        // Fecha o dropdown se clicar em qualquer outro lugar
+        document.addEventListener('click', function(e) {
+            if (!profileToggle.contains(e.target) && profileDropdown.classList.contains('show')) {
+                profileDropdown.classList.remove('show');
+                profileToggle.classList.remove('active');
+            }
+        });
+    }
+    // === FIM DO JAVASCRIPT ADICIONADO ===
+
 });
 
-const totalCriancas = document.getElementById('totalCriancas');
-if (searchTerm) {
-totalCriancas.textContent = `Encontradas: ${visibleCount} de ${criancas.length}`;
-} else {
-totalCriancas.textContent = `Total de Crianças: ${criancas.length}`;
-}
-});
-
-const modal = document.getElementById('childDetailsModal');
-modal.addEventListener('click', function(e) {
-if (e.target === this) {
-closeModal();
-}
-});
-
-document.addEventListener('keydown', function(e) {
-if (e.key === 'Escape') {
-closeModal();
-}
-});
-});
-
-window.adicionarCrianca = adicionarCrianca;
+// EXPOSIÇÃO GLOBAL das funções
 window.navegarPara = navegarPara;
 window.logout = logout;
 window.criarNovoCadastro = criarNovoCadastro;
 window.visualizarCrianca = visualizarCrianca;
 window.closeModal = closeModal;
 window.editarCrianca = editarCrianca;
-window.excluirCrianca = excluirCrianca;
+window.arquivarCrianca = arquivarCrianca; 
 window.filtrarPorStatus = filtrarPorStatus;
 window.exportarDados = exportarDados;
 </script>
