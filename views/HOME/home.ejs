@@ -16,9 +16,13 @@
             --text-secondary: #6c757d;
             --sidebar-bg: #FFF4DF;
             --sidebar-width: 280px; 
+            
+            /* Adicionando cores do botão rosa */
+            --action-pink: #E91E63;
+            --action-pink-dark: #D81B60;
         }
 
-        /* SEU CÓDIGO CSS DA SIDEBAR (INTEGRADO E AJUSTADO PARA O LAYOUT GLOBAL) */
+        /* SEU CÓDIGO CSS DA SIDEBAR ... */
         * {
             margin: 0;
             padding: 0;
@@ -47,6 +51,8 @@
             z-index: 1000;
         }
 
+        /* ... (Restante do CSS da sidebar, menu, etc. permanece igual) ... */
+        
         .logo {
             padding: 0px 40px;
             text-align: center;
@@ -273,10 +279,8 @@
             margin: 8px 0;
         }
 
-        /* ====================================================== */
-        /* ============== ESTILOS DO CARROSSEL DE BOAS-VINDAS ============== */
-        /* ====================================================== */
-
+        /* ... (CSS do Carrossel e Cards de Info) ... */
+        
         .welcome-banner {
             position: relative;
             border-radius: 20px;
@@ -405,9 +409,6 @@
             background-color: #fff;
             transform: scale(1.1);
         }
-        /* ====================================================== */
-        /* ================ FIM DOS ESTILOS DO CARROSSEL ================ */
-        /* ====================================================== */
 
         /* Cards de Informações Rápidas */
         .quick-info-title {
@@ -466,7 +467,7 @@
         .card-professores .icon { background-color: #fdecd9; color: var(--orange); }
         .card-professores .card-number { color: var(--orange); }
         
-.card-alunos { border-color: #ba58f7; }
+        .card-alunos { border-color: #ba58f7; }
         .card-alunos .icon { background-color: #f3e0ff; color:  #ba58f7; }
         .card-alunos .card-number { color:  #ba58f7; }
 
@@ -474,32 +475,7 @@
         .card-turmas .icon { background-color: #ffe6e6; color: #fa1d1d }
         .card-turmas .card-number { color: #fa1d1d; }
 
-        .page-footer {
-            margin-top: 53px;
-            padding-top: 25px;
-            border-top: 1px solid #e0e0e0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            margin-left: 20px;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--text-primary);
-            text-decoration: underline;
-        }
-
-        /* --- NOVOS ESTILOS PARA O MODAL DE CONFIRMAÇÃO --- */
+        /* ... (CSS do Modal) ... */
         .modal-container {
             position: fixed;
             top: 0;
@@ -562,156 +538,146 @@
         .btn-confirm {
             background-color: var(--green); /* Verde */
         }
-        /* --- FIM DOS ESTILOS DO MODAL --- */
 
-         main {
-            flex-grow: 1; /* Faz com que o conteúdo principal ocupe o espaço restante */
-            padding: 20px; /* Apenas para simular conteúdo */
-            background-color: #f0f0f0;
-        }
+        /* ================================== */
+        /* === ESTILOS DO RODAPÉ (IGUAL À IMAGEM) === */
+        /* ================================== */
 
-            .main-footer {
-            background-color:  #f0f0f0; /* Ou a cor de fundo atual do seu rodapé */
-            color: #ecf0f1;
-            padding: 40px 20px 25px;
+        .main-footer {
+            background-color: #f9fafb; /* bg-gray-50 (cor da imagem) */
+            color: #6c757d; /* text-gray-600 */
+            padding: 60px 25px 0; /* py-16, px-6 (igual ao .main-content) */
             font-size: 0.9em;
-            border-top: 1px solid #b8b8b8; /* Uma linha sólida sutil */
-            margin-top: 170px;
-        
+            border-top: 1px solid #e5e7eb; /* border-t border-gray-200 */
+            margin-top: 80px; 
         }
 
         .footer-content {
-            display: flex;
-            flex-wrap: wrap; 
-            justify-content: space-around; 
+            display: grid;
+            grid-template-columns: repeat(1, 1fr); /* 1 coluna por padrão (mobile) */
+            gap: 40px; /* gap-10 */
             max-width: 1200px;
             margin: 0 auto;
-            gap: 30px; 
-            padding-bottom: 30px; 
-            border-bottom: 3px solid rgba(255, 255, 255, 0.1); 
+            text-align: center; /* text-center por padrão */
         }
+        
+        /* Media query para telas médias (tablet) */
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+                text-align: left; /* Alinha à esquerda */
+            }
+        }
+        
+        /* Media query para telas maiores (desktop), como na imagem */
+        @media (min-width: 1024px) {
+             .footer-content {
+                grid-template-columns: repeat(5, 1fr); /* 5 colunas como na imagem */
+            }
+        }
+
 
         .footer-section {
-            flex: 1; 
-            min-width: 150px; 
-            margin-bottom: 20px;
+            min-width: 150px;
         }
-
-        .footer-section.logo-area {
-            flex: 1.5; 
-            min-width: 180px;
+        
+        .footer-logo {
             display: flex;
-            align-items: center;
-            font-size: 2.5em; 
-            font-weight: bold;
-            color:#333;
+            justify-content: center; /* Padrão (mobile) */
+        }
+        
+        @media (min-width: 768px) {
+            .footer-logo {
+                justify-content: flex-start; /* Alinha à esquerda em desktop */
+            }
         }
 
         .footer-section h4 {
-            color:#333;
-            margin-bottom: 15px;
-            font-size: 1.1em;
+            color: var(--text-primary); /* text-gray-900 */
+            margin-bottom: 16px; /* mb-4 */
+            font-size: 1em;
+            font-weight: 600; /* font-bold */
             text-transform: uppercase;
+            letter-spacing: 0.05em; /* tracking-wider */
         }
 
         .footer-section ul {
             list-style: none;
             padding: 0;
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* space-y-3 */
         }
 
-        .footer-section ul li {
-            margin-bottom: 8px;
-        }
-
-        .footer-section ul li a,
-        .footer-section p {
-            color: #333; /* Cor dos links e parágrafos */
+        .footer-section ul li a {
+            color: var(--text-secondary); /* text-gray-600 */
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         .footer-section ul li a:hover {
-            color: #333;
+            color: var(--text-primary); /* hover:text-black */
         }
-
-        .footer-social-contact {
+        
+        .footer-contact {
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Alinha os itens à esquerda */
-            flex: 1;
-            min-width: 180px;
+            align-items: center; /* Padrão (mobile) */
         }
-
-        .footer-social-icons {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .footer-social-icons a {
-            color: #333;
-            font-size: 1.5em;
-            margin-right: 15px;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-social-icons a:hover {
-            color: #f0c040; /* Cor de destaque ao passar o mouse */
+        
+        /* Alinhamento para desktop */
+        @media (min-width: 1024px) {
+            .footer-contact {
+                grid-column: span 2 / span 2; /* Ocupa 2 colunas */
+                align-items: flex-end; /* Alinha à direita */
+                text-align: right; /* Alinha texto à direita */
+            }
         }
 
         .contact-info p {
             margin: 0 0 8px 0;
             line-height: 1.4;
-            color: #333;
-
+            color: var(--text-secondary);
         }
 
+        /* **** MODIFICAÇÃO **** Botão "Entre em Contato" agora é rosa preenchido */
         .contact-button {
-        background-color: #e91e63;
-        color: #333; /* Alterei para branco para melhor contraste */
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-        display: inline-block;
-        transition: background-color 0.3s ease;
-        padding: 15px 30px; /* Ajustado para um visual mais equilibrado */
-        height: 50px;
-    }
+            display: inline-block;
+            font-weight: 600; /* font-semibold */
+            padding: 12px 24px; /* px-6 py-3 */
+            border-radius: 8px; /* rounded-lg */
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-top: 20px; /* mt-4 */
+            
+            /* Estilo preenchido (como solicitado) */
+            background-color: var(--action-pink); /* #E91E63 */
+            color: #fff; /* Texto branco */
+            border: 2px solid var(--action-pink);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
         .contact-button:hover {
-            background-color: #d81b60;
+            background-color: var(--action-pink-dark); /* #D81B60 */
+            border-color: var(--action-pink-dark);
+            color: #fff; /* Texto branco no hover */
+            transform: translateY(-2px);
         }
+        /* **** FIM DA MODIFICAÇÃO **** */
 
         .footer-bottom {
             text-align: center;
-            padding-top: 20px;
-            color: #333;
+            padding: 24px 0; /* py-6 */
+            margin-top: 40px; /* mt-10 (implícito do padding-bottom do footer-content) */
+            color: var(--text-secondary);
             font-size: 0.85em;
-            max-width: 1200px;
-            margin: 0 auto;
+            border-top: 1px solid #e5e7eb; /* border-t border-gray-200 */
+            background-color: #f3f4f6; /* bg-gray-100 */
         }
-
-        /* Responsividade básica */
-        @media (max-width: 768px) {
-            .footer-content {
-                flex-direction: column;
-                align-items: center;
-            }
-            .footer-section, .footer-section.logo-area, .footer-social-contact {
-                min-width: unset; /* Remove largura mínima em telas pequenas */
-                width: 100%; /* Ocupa toda a largura */
-                text-align: center;
-            }
-            .footer-social-icons {
-                justify-content: center; /* Centraliza ícones em telas menores */
-                width: 100%;
-            }
-            .footer-social-contact {
-                align-items: center;
-            }
-        }
-
+        
+        /* --- FIM DOS ESTILOS DO RODAPÉ --- */
+        
         /* Media Queries para Responsividade */
         @media (max-width: 1024px) {
             .banner-text { max-width: 100%; }
@@ -763,7 +729,7 @@
                     <i class="fas fa-user-graduate"></i>
                     <span>MATRÍCULA</span>
                 </a>
-                <a href="/professores" class="menu-item" id="professor-link">
+                <a href="/prof-cadastrados" class="menu-item" id="professor-link">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>PROFESSOR</span>
                 </a>
@@ -791,7 +757,7 @@
     <main class="main-content">
         <header class="header">
             <div class="header-title">
-                <h1>Olá, Usuário!</h1>
+                <h1 id="welcome-greeting">Olá, Usuário!</h1>
                 <p>Como podemos te ajudar?</p>
             </div>
             <div class="profile" id="profile-toggle">
@@ -868,46 +834,49 @@
             </div>
         </div>
 
-
-    <footer class="main-footer">
-        <div class="footer-content">
-           <div class="sete">
-            <img src="imagem/sete.png" alt="sete" style="height: 250px; margin: -30px; margin-right: 20px;">
-           </div>
-
-            <div class="footer-section">
-                <h4>Início</h4>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Cadastro</a></li>
-                    <li><a href="#">Matrícula</a></li>
-                    <li><a href="#">Professor</a></li>
-                    <li><a href="#">Turma</a></li>
-                    <li><a href="#">Financeiro</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h4>Sobre Nós</h4>
-                <ul>
-                    <li><a href="#">Quem Somos</a></li>
-                    <li><a href="#">Equipe</a></li>
-                    <li><a href="#">Parceiros - SENAI CIMATEC/ SESI</a></li>
-                </ul>
-            </div>
-
-                <div class="contact-info">
-                    <p>Telefone: (71) 98765-4321</p>
-                    <p>Email: contato@seteeduca.com.br</p>
+        <footer class="main-footer">
+            <div class="footer-content">
+               <div class="footer-section footer-logo">
+                    <img src="img/nome.png" alt="Seteeduca Logo" style="height: 80px; margin-top: -15px;">
+               </div>
+    
+                <div class="footer-section">
+                    <h4>Início</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Cadastro</a></li>
+                        <li><a href="#">Matrícula</a></li>
+                        <li><a href="#">Professor</a></li>
+                        <li><a href="#">Turma</a></li>
+                        <li><a href="#">Financeiro</a></li>
+                    </ul>
                 </div>
-                <a href="#" class="contact-button">Entre em Contato</a>
+    
+                <div class="footer-section">
+                    <h4>Sobre Nós</h4>
+                    <ul>
+                        <li><a href="#">Quem Somos</a></li>
+                        <li><a href="#">Equipe</a></li>
+                        <li><a href="#">Parceiros - SENAI CIMATEC/ SESI</a></li>
+                    </ul>
+                </div>
+    
+                <div class="footer-section footer-contact">
+                    <h4>Contato</h4>
+                    <div class="contact-info">
+                        <p>Telefone: (71) 98765-4321</p>
+                        <p>Email: contato@seteeduca.com.br</p>
+                    </div>
+                    <a href="mailto:seteeducaa@gmail.com?subject=Mensagem%20de%20Contato&body=Ol%C3%A1%2C%20gostaria%20de%20entrar%20em%20contato." class="contact-button">
+                        Entre em Contato
+                    </a>
+                </div>
             </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p>&copy; 2025 Seteeduca. Todos os direitos reservados. Design e Desenvolvimento Seteeduca.</p>
-        </div>
-    </footer>
+    
+            <div class="footer-bottom">
+                <p>&copy; 2025 Seteeduca. Todos os direitos reservados. Design e Desenvolvimento Seteeduca.</p>
+            </div>
+        </footer>
 
     </main>
 
@@ -926,7 +895,6 @@
         // Função dummy para simular navegação
         function navegarPara(pagina) {
             console.log("Navegando para: " + pagina);
-            // Aqui você implementaria a lógica real de navegação (SPA, redirecionamento, etc.)
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -958,7 +926,7 @@
             const nextButton = carouselContainer.querySelector('.carousel-button.next');
             const indicatorsContainer = carouselContainer.querySelector('.carousel-indicators');
 
-            if (slides.length > 0) { // Garante que o script só rode se houver slides
+            if (slides.length > 0) { 
                 let currentIndex = 0;
                 let slideInterval;
 
@@ -993,7 +961,7 @@
 
                 function resetInterval() {
                     clearInterval(slideInterval);
-                    slideInterval = setInterval(() => goToSlide(currentIndex + 1), 5000); // Muda a cada 5 segundos
+                    slideInterval = setInterval(() => goToSlide(currentIndex + 1), 5000); 
                 }
 
                 prevButton.addEventListener('click', () => {
@@ -1052,21 +1020,32 @@
 
             // --- BUSCAR DADOS DO BACKEND ---
             fetch('/api/dashboard-data')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao buscar dados da API');
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    // 1. Atualiza a saudação
+                    if (data.daycareName) {
+                        document.getElementById('welcome-greeting').textContent = `Olá, ${data.daycareName}!`;
+                    }
+
+                    // 2. Atualiza os cards
                     document.getElementById('prof-count').textContent = data.professores;
                     document.getElementById('alunos-count').textContent = data.alunos;
                     document.getElementById('turmas-count').textContent = data.turmas;
                 })
                 .catch(error => {
+                    // Em caso de erro, usamos dados de exemplo para o layout não quebrar
                     console.error('Erro ao buscar dados (usando dados de exemplo):', error);
+                    document.getElementById('welcome-greeting').textContent = 'Olá, Creche Exemplo!'; // Nome de exemplo
                     document.getElementById('prof-count').textContent = 10;
                     document.getElementById('alunos-count').textContent = 10;
                     document.getElementById('turmas-count').textContent = 10;
                 });
             });
-
-            // O segundo DOMContentLoaded é redundante e pode causar problemas. A lógica foi unificada no primeiro.
 
     </script>
 </body>
