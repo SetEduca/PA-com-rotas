@@ -10,6 +10,7 @@ import loginRouter from './routes/login.routes.js';
 import mensalidadeRouter from './routes/mensalidades.routes.js'
 import arquivadosRouter from './routes/arquivados.routes.js'
 import apiRoutes from './routes/api.js';
+import senhaRouter from './routes/senha.routes.js';
 
 const app = express();
 const PORT = 3020;
@@ -73,7 +74,7 @@ app.get("/home", (req, res) => {
 
 // SENHA
 
-
+app.use('/senha', senhaRouter);
 
 //CADASTRO
 
@@ -120,7 +121,7 @@ app.get("/editar-prof", (req, res) => {
   res.render("PROFESSOR/editarp");
 });
 
-// FINANCEIRO
+
 
 
 
