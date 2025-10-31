@@ -9,17 +9,16 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         const { data, error } = await supabase
-            .from('CADASTRO_CRIANCA')
+            .from('cadastro_crianca')
             .select(`
                 id, 
                 nome, 
                 data_nascimento,
                 sexo, 
                 naturalidade, 
-                responsavel_principal, 
-                responsavel_secundario,
-                ENDERECO_CRIANCA(rua, numero, bairro, cidade, estado, cep),
-                SAUDE_CRIANCA(observacoes)
+                responsavel_id,
+                endereco_crianca(rua, numero, bairro, cidade, estado, cep),
+                saude_crianca(observacoes)
             `)
             .eq('ativo', true)
             .order('nome', { ascending: true });
@@ -36,10 +35,9 @@ router.get('/', async (req, res) => {
             dataNasc: aluno.data_nascimento,
             sexo: aluno.sexo,
             naturalidade: aluno.naturalidade,
-            responsavelPrincipal: aluno.responsavel_principal,
-            responsavelSecundario: aluno.responsavel_secundario,
-            ENDERECO_CRIANCA: aluno.ENDERECO_CRIANCA || [],
-            SAUDE_CRIANCA: aluno.SAUDE_CRIANCA || []
+            responsavelPrincipal: aluno.responsavel_id,
+            endereco_crianca: aluno.endereco_crianca || [],
+            saude_crianca: aluno.saude_crianca || []
         }));
         
         res.render('ALUNO/acessar-aluno', { alunos: alunosNormalizados }); 
@@ -56,15 +54,14 @@ router.get('/', async (req, res) => {
 router.get('/api/listar', async (req, res) => {
     try {
         const { data, error } = await supabase
-            .from('CADASTRO_CRIANCA')
+            .from('cadastro_crianca')
             .select(`
                 id, 
                 nome, 
                 data_nascimento,
                 sexo, 
-                responsavel_principal,
-                responsavel_secundario,
-                ENDERECO_CRIANCA(rua, numero, bairro, cidade, estado, cep)
+                responsavel_id,
+                endereco_crianca(rua, numero, bairro, cidade, estado, cep)
             `)
             .eq('ativo', true)
             .order('nome', { ascending: true });
@@ -77,9 +74,8 @@ router.get('/api/listar', async (req, res) => {
             nome: crianca.nome,
             dataNasc: crianca.data_nascimento,
             sexo: crianca.sexo,
-            responsavelPrincipal: crianca.responsavel_principal,
-            responsavelSecundario: crianca.responsavel_secundario,
-            ENDERECO_CRIANCA: crianca.ENDERECO_CRIANCA || []
+            responsavelPrincipal: crianca.responsavel_id,
+            endereco_crianca: crianca.endereco_crianca || []
         }));
         
         res.json(criancasNormalizadas);
@@ -102,15 +98,14 @@ router.get('/api/buscar', async (req, res) => {
 
     try {
         const { data, error } = await supabase
-            .from('CADASTRO_CRIANCA')
+            .from('cadastro_crianca')
             .select(`
                 id, 
                 nome, 
                 data_nascimento,
                 sexo, 
-                responsavel_principal,
-                responsavel_secundario,
-                ENDERECO_CRIANCA(rua, numero, bairro, cidade, estado, cep)
+                responsavel_id,
+                endereco_crianca(rua, numero, bairro, cidade, estado, cep)
             `)
             .eq('ativo', true)
             .ilike('nome', `%${termo}%`)
@@ -124,9 +119,8 @@ router.get('/api/buscar', async (req, res) => {
             nome: crianca.nome,
             dataNasc: crianca.data_nascimento,
             sexo: crianca.sexo,
-            responsavelPrincipal: crianca.responsavel_principal,
-            responsavelSecundario: crianca.responsavel_secundario,
-            ENDERECO_CRIANCA: crianca.ENDERECO_CRIANCA || []
+            responsavelPrincipal: crianca.responsavel_id,
+            endereco_crianca: crianca.endereco_crianca || []
         }));
         
         res.json(criancasNormalizadas);
@@ -145,18 +139,17 @@ router.get('/api/detalhes/:id', async (req, res) => {
     
     try {
         const { data, error } = await supabase
-            .from('CADASTRO_CRIANCA')
+            .from('cadastro_crianca')
             .select(`
                 id,
                 nome,
                 data_nascimento,
                 sexo,
                 naturalidade,
-                responsavel_principal,
-                responsavel_secundario,
-                ENDERECO_CRIANCA(rua, numero, bairro, cidade, estado, cep),
-                SAUDE_CRIANCA(observacoes),
-                TEL_CRIANCA(telefone, tipo)
+                responsavel_id,
+                endereco_crianca(rua, numero, bairro, cidade, estado, cep),
+                saude_crianca(observacoes),
+                tel_crianca(telefone, tipo)
             `)
             .eq('id', id)
             .eq('ativo', true)
@@ -180,11 +173,10 @@ router.get('/api/detalhes/:id', async (req, res) => {
             dataNasc: data.data_nascimento,
             sexo: data.sexo,
             naturalidade: data.naturalidade,
-            responsavelPrincipal: data.responsavel_principal,
-            responsavelSecundario: data.responsavel_secundario,
-            ENDERECO_CRIANCA: data.ENDERECO_CRIANCA || [],
-            SAUDE_CRIANCA: data.SAUDE_CRIANCA || [],
-            TEL_CRIANCA: data.TEL_CRIANCA || []
+            responsavelPrincipal: data.responsavel_id,
+            endereco_crianca: data.endereco_crianca || [],
+            saude_crianca: data.saude_crianca || [],
+            tel_crianca: data.tel_crianca || []
         };
 
         res.json(criancaNormalizada);
@@ -204,7 +196,7 @@ router.post('/arquivar/:id', async (req, res) => {
     try {
         // Primeiro verifica se a criança existe
         const { data: criancaExiste, error: erroVerificacao } = await supabase
-            .from('CADASTRO_CRIANCA')
+            .from('cadastro_crianca')
             .select('id')
             .eq('id', id)
             .eq('ativo', true)
@@ -218,7 +210,7 @@ router.post('/arquivar/:id', async (req, res) => {
 
         // Arquiva a criança
         const { error } = await supabase
-            .from('CADASTRO_CRIANCA')
+            .from('cadastro_crianca')
             .update({ ativo: false })
             .eq('id', id);
 
