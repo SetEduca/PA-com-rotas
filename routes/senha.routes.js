@@ -7,12 +7,9 @@ const router = Router();
 const SALT_ROUNDS = 10; // Padrão para criptografar
 
 // --- 1. CONFIGURAÇÃO DO NODEMAILER ---
-// Isso usa as variáveis do seu arquivo .env (EMAIL_HOST, EMAIL_PORT, etc.)
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
-    // A porta 587 (seu .env) usa secure: false (para STARTTLS)
-    // A porta 465 usa secure: true
     secure: process.env.EMAIL_PORT == 465, 
     auth: {
         user: process.env.EMAIL_USER,
@@ -32,10 +29,11 @@ router.post('/enviar-codigo', async (req, res) => {
     const { email } = req.body;
 
     try {
-        // 1. Verifica se o e-mail existe na tabela de cadastro
+        // 1. Verifica se o e-mail existe E PEGA O ID
+        //    IMPORTANTE: Estou assumindo que sua coluna de ID em 'cadastro_creche' se chama 'id'
         const { data: usuario, error } = await supabase
             .from('cadastro_creche')
-            .select('email')
+            .select('id, email') // <<< MUDANÇA AQUI
             .eq('email', email)
             .single();
 
@@ -49,12 +47,13 @@ router.post('/enviar-codigo', async (req, res) => {
         // 2. Gera um código de 6 dígitos
         const codigoVerificacao = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // 3. Salva o código e o e-mail na sessão do usuário
+        // 3. Salva os dados na sessão
         req.session.recoveryCode = codigoVerificacao;
         req.session.recoveryEmail = email;
-        req.session.recoveryVerified = false; // Ainda não verificado
+        req.session.recoveryUserId = usuario.id; // <<< MUDANÇA AQUI (Salvando o ID)
+        req.session.recoveryVerified = false; 
 
-        // 4. Envia o e-mail com o código
+        // 4. Envia o e-mail
         await transporter.sendMail({
             from: `"Equipe Sete" <${process.env.EMAIL_USER}>`,
             to: email,
@@ -68,7 +67,6 @@ router.post('/enviar-codigo', async (req, res) => {
                         ${codigoVerificacao}
                     </p>
                     <p>Este código expira em 10 minutos.</p>
-                    <p>Se você não solicitou isso, pode ignorar este e-mail.</p>
                 </div>
             `,
         });
@@ -96,19 +94,16 @@ router.post('/verificar-codigo', (req, res) => {
     const codigoSalvo = req.session.recoveryCode;
 
     if (!email || !codigoSalvo) {
-        // Sessão expirou ou acesso direto
         return res.redirect('/senha/esqueci');
     }
 
     if (code === codigoSalvo) {
-        // Deu certo! Marca a sessão como verificada
         req.session.recoveryVerified = true;
         res.render('TROCARSENHA/redefinir', {
             title: 'Redefinir Senha',
             erro: null
         });
     } else {
-        // Código errado
         res.render('TROCARSENHA/verifica', {
             title: 'Verificar Código',
             email: email,
@@ -120,11 +115,14 @@ router.post('/verificar-codigo', (req, res) => {
 // ETAPA 4: REDEFINIR A SENHA
 router.post('/redefinir-senha', async (req, res) => {
     const { newPassword, confirmPassword } = req.body;
+    
+    // Pega todos os dados da sessão
     const email = req.session.recoveryEmail;
-    const codigoUsado = req.session.recoveryCode; // O token que o usuário usou
+    const codigoUsado = req.session.recoveryCode; 
+    const idDoUsuario = req.session.recoveryUserId; // <<< MUDANÇA AQUI
 
     // 1. Verifica se o usuário passou pela etapa de verificação
-    if (!req.session.recoveryVerified || !email) {
+    if (!req.session.recoveryVerified || !email || !idDoUsuario) {
         return res.redirect('/senha/esqueci');
     }
 
@@ -136,8 +134,7 @@ router.post('/redefinir-senha', async (req, res) => {
         });
     }
 
-    // <<< NOVO: Validação de força da senha (como na sua foto) >>>
-    // Pelo menos 6 caracteres, 1 maiúscula, 1 minúscula, 1 número
+    // Validação de força da senha
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     if (!passwordRegex.test(newPassword)) {
         return res.render('TROCARSENHA/redefinir', {
@@ -153,35 +150,35 @@ router.post('/redefinir-senha', async (req, res) => {
         // 4. Atualiza a senha na tabela principal de usuários
         const { error: updateError } = await supabase
             .from('cadastro_creche')
-            .update({ senha: hashedPassword }) // IMPORTANTE: verifique se o nome da coluna é 'senha'
-            .eq('email', email);
+            .update({ senha: hashedPassword }) 
+            .eq('id', idDoUsuario); // <<< MUDANÇA AQUI (mais seguro atualizar pelo ID)
 
         if (updateError) {
-            throw new Error(`Erro ao atualizar a senha no Supabase: ${updateError.message}`);
+            throw new Error(`Erro ao atualizar a senha: ${updateError.message}`);
         }
 
-        // <<< NOVO: Salva o log na tabela 'troca_senha' >>>
-        // Salva a senha nova, a confirmação (que é igual) e o token (código de 6 dígitos)
+        // 5. Salva o log na tabela 'troca_senha'
+        //    (Agora com todas as colunas corretas)
         const { error: logError } = await supabase
             .from('troca_senha')
             .insert({
                 senha_nova: hashedPassword,
-                confirmar_senha: hashedPassword, // Como você pediu, estamos salvando a mesma senha aqui
-                token: codigoUsado // Este é o código de 6 dígitos que o usuário digitou
-                // Adicione outras colunas se necessário, ex: `email_usuario: email`
+                confirmar_senha: hashedPassword, 
+                token: codigoUsado,
+                email: email, 
+                usuario_id: idDoUsuario // <<< MUDANÇA AQUI (salvando o ID)
             });
 
         if (logError) {
-            // Não quebra a operação se o log falhar, mas avisa no console
+            // Se o log falhar, ele não vai parar a operação, mas vai avisar no console.
             console.warn('AVISO: A senha foi redefinida, mas falhou ao salvar o log na tabela "troca_senha".', logError.message);
         }
 
-        // 5. Limpa a sessão de recuperação
+        // 6. Limpa a sessão de recuperação
         req.session.destroy();
 
-        // 6. Redireciona para o login com mensagem de sucesso
-        // (Isso requer que sua rota /login esteja configurada para ler 'success')
-        res.redirect('/login?success=true');
+        // 7. Redireciona para o login com mensagem de sucesso
+        res.redirect('/login?success=true'); 
 
     } catch (error) {
         console.error('Erro ao redefinir senha:', error);
@@ -193,5 +190,7 @@ router.post('/redefinir-senha', async (req, res) => {
 });
 
 export default router;
+
+
 
 
