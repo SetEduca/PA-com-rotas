@@ -757,7 +757,7 @@
     <main class="main-content">
         <header class="header">
             <div class="header-title">
-                <h1 id="welcome-greeting">Olá, Usuário!</h1>
+             <h1 id="welcome-greeting">Olá, <%= locals.daycareName || 'Usuário' %>!</h1>
                 <p>Como podemos te ajudar?</p>
             </div>
             <div class="profile" id="profile-toggle">
@@ -819,17 +819,17 @@
         <div class="info-cards-container">
             <div class="info-card card-professores">
                 <div class="card-header"><div class="icon"><i class="fas fa-chalkboard-teacher"></i></div></div>
-                <div class="card-number" id="prof-count">...</div>
+                <div class="card-number" id="prof-count"><%= locals.professores || 0 %></div>
                 <div class="card-label">Professores cadastrados</div>
             </div>
             <div class="info-card card-alunos">
                 <div class="card-header"><div class="icon"><i class="fas fa-user-graduate"></i></div></div>
-                <div class="card-number" id="alunos-count">...</div>
+                <div class="card-number" id="alunos-count"><%= locals.alunos || 0 %></div>
                 <div class="card-label">Alunos matriculados</div>
             </div>
             <div class="info-card card-turmas">
                 <div class="card-header"><div class="icon"><i class="fas fa-users"></i></div></div>
-                <div class="card-number" id="turmas-count">...</div>
+                <div class="card-number" id="turmas-count"><%= locals.turmas || 0 %></div>
                 <div class="card-label">Turmas ativas</div>
             </div>
         </div>
@@ -1018,35 +1018,8 @@
             });
 
 
-            // --- BUSCAR DADOS DO BACKEND ---
-            fetch('/api/dashboard-data')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao buscar dados da API');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // 1. Atualiza a saudação
-                    if (data.daycareName) {
-                        document.getElementById('welcome-greeting').textContent = `Olá, ${data.daycareName}!`;
-                    }
-
-                    // 2. Atualiza os cards
-                    document.getElementById('prof-count').textContent = data.professores;
-                    document.getElementById('alunos-count').textContent = data.alunos;
-                    document.getElementById('turmas-count').textContent = data.turmas;
-                })
-                .catch(error => {
-                    // Em caso de erro, usamos dados de exemplo para o layout não quebrar
-                    console.error('Erro ao buscar dados (usando dados de exemplo):', error);
-                    document.getElementById('welcome-greeting').textContent = 'Olá, Creche Exemplo!'; // Nome de exemplo
-                    document.getElementById('prof-count').textContent = 10;
-                    document.getElementById('alunos-count').textContent = 10;
-                    document.getElementById('turmas-count').textContent = 10;
-                });
-            });
-
+           
+        
     </script>
 </body>
 </html>
