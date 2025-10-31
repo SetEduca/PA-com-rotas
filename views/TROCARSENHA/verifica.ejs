@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'Verificar Código' %></title>
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .form-card {
+            background: #fce9d6;
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 420px;
+            box-sizing: border-box;
+        }
+        .form-card h2 {
+            text-align: center;
+            color: #1c1e21;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+        }
+        .form-card p {
+            text-align: center;
+            color: #555;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #4b4f56;
+        }
+        input[type="email"],
+        input[type="text"],
+        input[type="password"] {
+            padding: 0.9rem;
+            margin-bottom: 1.25rem;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        input[type="email"]:focus,
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #ffaa00;
+            box-shadow: 0 0 0 2px rgba(255, 132, 0, 0.2);
+        }
+        .button {
+            padding: 0.9rem;
+         background-color: #fdd03c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+         .button:hover {
+            background-color: #b37a00;
+        }
+        .form-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .form-link a {
+            color: #ff6a00;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .form-link a:hover {
+            text-decoration: underline;
+        }
+        /* --- ESTILO DA MENSAGEM DE ERRO --- */
+        .error-message {
+            color: #D8000C;
+            background-color: #FFD2D2;
+            border: 1px solid #D8000C;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-card">
+            <h2>Verifique seu E-mail</h2>
+            <p>Enviamos um código de 6 dígitos para <strong><%= typeof email !== 'undefined' ? email : 'seu e-mail' %></strong>. Insira-o abaixo.</p>
+            
+            <% if (typeof erro !== 'undefined' && erro) { %>
+                <div class="error-message"><%= erro %></div>
+            <% } %>
+
+            <!-- 
+              ---
+              A CORREÇÃO ESTÁ AQUI
+              ---
+              O action DEVE ser "/senha/verificar-codigo"
+            -->
+            <form action="/senha/verificar-codigo" method="POST">
+                
+                <label for="code">Código de Verificação:</label>
+                <input type="text" id="code" name="code" placeholder="123456" required>
+                
+                <button type="submit" class="button">Verificar</button>
+            </form>
+
+            <div class="form-link">
+                <a href="/senha/esqueci">Não recebeu? Reenviar código</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

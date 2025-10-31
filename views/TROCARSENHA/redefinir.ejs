@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'Redefinir Senha' %></title>
+    <!-- Link para ícones (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .form-card {
+            background: #fce9d6;
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 420px;
+            box-sizing: border-box;
+        }
+        .form-card h2 {
+            text-align: center;
+            color: #1c1e21;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.75rem;
+        }
+        .form-card p {
+            text-align: center;
+            color: #555;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #4b4f56;
+        }
+        
+        /* --- Wrapper para Senha com Ícone --- */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 1.25rem; /* Adiciona o espaço que o input tinha */
+        }
+        
+        input[type="email"],
+        input[type="text"],
+        input[type="password"] {
+            padding: 0.9rem;
+            /* margin-bottom removido e passado para o wrapper */
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            width: 100%; /* Garante que o input ocupe o wrapper */
+        }
+
+        /* Adiciona padding à direita no input de senha para o ícone não sobrepor */
+        .password-wrapper input[type="password"],
+        .password-wrapper input[type="text"] { /* Usado quando o tipo muda para texto */
+             padding-right: 40px; 
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+            font-size: 1.1rem;
+        }
+        /* ------------------------------------- */
+
+        input[type="email"]:focus,
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #ffaa00;
+            box-shadow: 0 0 0 2px rgba(255, 132, 0, 0.2);
+        }
+        .button {
+            padding: 0.9rem;
+          background-color: #fdd03c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 1rem; /* Espaço acima do botão */
+        }
+         .button:hover {
+            background-color: #b37a00;
+        }
+        
+        /* --- ESTILO DA MENSAGEM DE ERRO --- */
+        .error-message {
+            color: #D8000C;
+            background-color: #FFD2D2;
+            border: 1px solid #D8000C;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* --- ESTILOS DA CAIXA DE VALIDAÇÃO (DA FOTO) --- */
+        #validation-box {
+            background-color: #e7f3fe; /* Fundo azul claro */
+            border: 1px solid #bce8f1; /* Borda azul */
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 5px; /* Espaço abaixo do campo de senha */
+            font-size: 0.9rem;
+        }
+        #validation-box p {
+            font-weight: 600;
+            color: #ff910a; /* Azul escuro */
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .validation-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            color: #a94442; /* Vermelho (Inválido) por padrão */
+            transition: color 0.3s ease;
+        }
+        .validation-item.valid {
+            color: #3c763d; /* Verde (Válido) */
+            text-decoration: line-through; /* Tacha o texto quando válido */
+        }
+        .validation-item i {
+            margin-right: 8px;
+            font-size: 0.8rem; /* Tamanho do ícone 'x' ou 'check' */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-card">
+            <h2>Crie uma nova senha</h2>
+            <p>Sua nova senha deve ser diferente da senha anterior.</p>
+            
+            <% if (typeof erro !== 'undefined' && erro) { %>
+                <div class="error-message"><%= erro %></div>
+            <% } %>
+
+            <!-- 
+              ---
+              A CORREÇÃO DO ERRO 'Cannot POST' ESTÁ AQUI
+              ---
+              O action DEVE ser "/senha/redefinir-senha"
+            -->
+            <form action="/senha/redefinir-senha" method="POST">
+
+                <label for="new-password">Nova Senha:</label>
+                <!-- Wrapper para o campo de senha 1 -->
+                <div class="password-wrapper">
+                    <input type="password" id="new-password" name="newPassword" required>
+                    <!-- Ícone do olho -->
+                    <i class="fas fa-eye toggle-password" data-target="new-password"></i>
+                </div>
+
+                <!-- Caixa de Validação (da foto) -->
+                <div id="validation-box">
+                    <p>Sua senha deve ter:</p>
+                    <div class="validation-item" id="val-length">
+                        <i class="fas fa-times"></i> Pelo menos 6 caracteres
+                    </div>
+                    <div class="validation-item" id="val-lower">
+                        <i class="fas fa-times"></i> Pelo menos 1 letra minúscula
+                    </div>
+                    <div class="validation-item" id="val-upper">
+                        <i class="fas fa-times"></i> Pelo menos 1 letra MAIÚSCULA
+                    </div>
+                    <div class="validation-item" id="val-number">
+                        <i class="fas fa-times"></i> Pelo menos 1 número
+                    </div>
+                </div>
+
+                <label for="confirm-password" style="margin-top: 1rem;">Confirmar Nova Senha:</label>
+                <!-- Wrapper para o campo de senha 2 -->
+                <div class="password-wrapper">
+                    <input type="password" id="confirm-password" name="confirmPassword" required>
+                    <!-- Ícone do olho -->
+                    <i class="fas fa-eye toggle-password" data-target="confirm-password"></i>
+                </div>
+                
+                <button type="submit" class="button">Salvar Nova Senha</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT para o "olho" e a validação -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- LÓGICA DO "OLHO" DE VER/ESCONDER SENHA ---
+            document.querySelectorAll('.toggle-password').forEach(icon => {
+                icon.addEventListener('click', function () {
+                    const targetId = this.dataset.target;
+                    const input = document.getElementById(targetId);
+                    if (input) {
+                        // Muda o tipo do input
+                        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                        input.setAttribute('type', type);
+                        
+                        // Muda o ícone do olho
+                        this.classList.toggle('fa-eye');
+                        this.classList.toggle('fa-eye-slash');
+                    }
+                });
+            });
+
+            // --- LÓGICA DA VALIDAÇÃO DA SENHA EM TEMPO REAL ---
+            const newPasswordInput = document.getElementById('new-password');
+            const validations = {
+                length: document.getElementById('val-length'),
+                lower: document.getElementById('val-lower'),
+                upper: document.getElementById('val-upper'),
+                number: document.getElementById('val-number')
+            };
+
+            // Função para atualizar o ícone e a classe
+            const updateValidation = (element, isValid) => {
+                const icon = element.querySelector('i');
+                if (isValid) {
+                    element.classList.add('valid');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-check');
+                } else {
+                    element.classList.remove('valid');
+                    icon.classList.remove('fa-check');
+                    icon.classList.add('fa-times');
+                }
+            };
+
+            // Escuta o evento de digitação no campo de nova senha
+            newPasswordInput.addEventListener('input', () => {
+                const pass = newPasswordInput.value;
+                
+                // 1. Verifica tamanho
+                updateValidation(validations.length, pass.length >= 6);
+                
+                // 2. Verifica minúscula
+                updateValidation(validations.lower, /[a-z]/.test(pass));
+                
+                // 3. Verifica maiúscula
+                updateValidation(validations.upper, /[A-Z]/.test(pass));
+                
+                // 4. Verifica número
+                updateValidation(validations.number, /[0-9]/.test(pass));
+            });
+
+        }); // Fim do DOMContentLoaded
+    </script>
+
+</body>
+</html>
