@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import express from 'express';
-import session from 'express-session'; // <<< 1. IMPORTE O PACOTE DE SESSÃO
 import supabase from './supabase.js';
 import turmasRouter from './routes/turmas.routes.js';
 import matriculasRouter from './routes/matricula.routes.js';
@@ -10,8 +9,6 @@ import loginRouter from './routes/login.routes.js';
 import mensalidadeRouter from './routes/mensalidades.routes.js';
 import arquivadosRouter from './routes/arquivados.routes.js';
 import alunoAcessarRouter from './routes/aluno-acessar.routes.js';
-import apiRoutes from './routes/api.js';
-import senhaRouter from './routes/senha.routes.js';
 
 
  const app = express();
@@ -24,17 +21,6 @@ app.use(express.json());
  app.set("views", "./views");
  app.use(express.static('public'));
  app.use(express.urlencoded({ extended: true }));
-
-
- app.use(session({
-    secret: 'coloque-uma-chave-secreta-forte-aqui-depois', // IMPORTANTE: Mude isso para uma string segura
-    resave: false,
-    saveUninitialized: true,
-    cookie: { 
-        secure: false, // Em produção (com HTTPS), mude para 'true'
-        maxAge: 24 * 60 * 60 * 1000 // Ex: sessão dura 1 dia (em milissegundos)
-    } 
-}));
  
  
 
@@ -69,7 +55,21 @@ app.get("/home", (req, res) => {
 
 // SENHA
 
-app.use('/senha', senhaRouter);
+app.get("/trocar-senha", (req, res) => {
+  res.render("SENHA/senha");
+});
+
+app.get("/codigo-confirmacao", (req, res) => {
+  res.render("SENHA/codigo");
+});
+
+app.get("/nova-senha", (req, res) => {
+  res.render("SENHA/trocar");
+});
+
+app.get("/senha-trocada", (req, res) => {
+  res.render("SENHA/pronto");
+});
 
 //CADASTRO
 
@@ -96,12 +96,30 @@ app.use("/acessar-aluno", alunoAcessarRouter);
 
 //FINANCEIRO
 
-
-app.use('/api', apiRoutes);
-
-app.get('/financeiro', (req, res) => {
-    res.render('FINANCEIRO/financeiro');
+app.get("/relatorio", (req, res) => {
+  res.render("FINANCEIRO/relatorio");
 });
+
+app.get("/relatorio-diario", (req, res) => {
+  res.render("FINANCEIRO/rel_diario");
+});
+
+app.get("/relatorio-mensal", (req, res) => {
+  res.render("FINANCEIRO/rel_mensal");
+});
+
+app.get("/fluxo-de-caixa", (req, res) => {
+  res.render("FINANCEIRO/fluxo_de_caixa");
+});
+
+app.get("/relatorio-financeiro", (req, res) => {
+  res.render("FINANCEIRO/financial_report_page");
+});
+
+app.get("/adimplentes-inadimplentes", (req, res) => {
+  res.render("FINANCEIRO/adimplentes");
+});
+
 //TURMAS
 
 app.use('/turmas', turmasRouter);
@@ -114,6 +132,10 @@ app.use('/matriculas', matriculasRouter);
 
 app.use('/professores', professoresRoutes);
 
+// FINANCEIRO
+app.get("/financeiro", (req, res) => {
+  res.render("FINANCEIRO/financeiro");
+});
 
 //TESTANDO O BANCO
 
@@ -147,5 +169,3 @@ app.get('/testar-banco', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
-
-// <-- O '}' EXTRA QUE ESTAVA AQUI FOI REMOVIDO

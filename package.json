@@ -4,7 +4,11 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest",
+    "test:silent": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --silent",
+    "test:login": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test/login.routes.test.js",
+    "test:cadastro": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test/cadastro.routes.test.js",
+    "test:coverage": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --coverage",
     "start": "node src/app.js",
     "dev": "nodemon  src/app.js"
   },
@@ -13,17 +17,27 @@
   "license": "ISC",
   "dependencies": {
     "@supabase/supabase-js": "^2.74.0",
+    "axios": "^1.13.1",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
-    "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "express-session": "^1.18.2",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.10",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@babel/preset-env": "^7.28.5",
+    "babel-jest": "^30.2.0",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.2.3",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4"
   },
   "repository": {
     "type": "git",
@@ -35,3 +49,5 @@
   "homepage": "https://github.com/SetEduca/PA-com-rotas#readme",
   "description": ""
 }
+
+

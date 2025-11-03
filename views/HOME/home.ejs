@@ -15,8 +15,7 @@
             --text-primary: #333;
             --text-secondary: #6c757d;
             --sidebar-bg: #FFF4DF;
-            --sidebar-width: 280px; 
-            
+            --sidebar-width: 280px;
             /* Adicionando cores do botão rosa */
             --action-pink: #E91E63;
             --action-pink-dark: #D81B60;
@@ -31,13 +30,13 @@
         }
         
         body {
-            background-color: var(--background); 
+            background-color: var(--background);
             min-height: 100vh;
             display: flex; 
         }
 
         .sidebar {
-            width: var(--sidebar-width); 
+            width: var(--sidebar-width);
             background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
             display: flex;
             flex-direction: column;
@@ -60,11 +59,11 @@
             margin-top: 30px;
         }
         .logo img {
-            max-width: 150px; 
+            max-width: 150px;
         }
 
         .menu {
-            flex: 1; 
+            flex: 1;
             padding: 20px 18px;
             overflow-y: auto; 
         }
@@ -171,14 +170,14 @@
         }
 
         .logout-button:hover {
-            background-color: rgba(210, 42, 42, 0.1); 
+            background-color: rgba(210, 42, 42, 0.1);
             color: #D22A2A; 
             font-weight: 600;
         }
 
         /* CONTEÚDO PRINCIPAL */
         .main-content {
-            margin-left: var(--sidebar-width); 
+            margin-left: var(--sidebar-width);
             padding: 30px 25px; 
             width: calc(100% - var(--sidebar-width));
             flex-grow: 1; 
@@ -302,8 +301,10 @@
             position: relative;
             background-size: cover;
             background-position: center center;
-            padding: 85px 60px; /* Padding interno do slide */
-            min-height: 450px; /* Altura do banner */
+            padding: 85px 60px;
+            /* Padding interno do slide */
+            min-height: 450px;
+            /* Altura do banner */
             display: flex;
             align-items: center;
         }
@@ -316,7 +317,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 100%); /* Gradiente sutil */
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.2) 100%);
+            /* Gradiente sutil */
             z-index: 1;
         }
 
@@ -483,7 +485,8 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            display: none; /* Escondido por padrão */
+            display: none;
+            /* Escondido por padrão */
             align-items: center;
             justify-content: center;
             z-index: 2000;
@@ -533,10 +536,12 @@
             transform: scale(1.05);
         }
         .btn-cancel {
-            background-color: #D22A2A; /* Vermelho */
+            background-color: #D22A2A;
+            /* Vermelho */
         }
         .btn-confirm {
-            background-color: var(--green); /* Verde */
+            background-color: var(--green);
+            /* Verde */
         }
 
         /* ================================== */
@@ -544,18 +549,22 @@
         /* ================================== */
 
         .main-footer {
-            background-color: #f9fafb; /* bg-gray-50 (cor da imagem) */
-            color: #6c757d; /* text-gray-600 */
-            padding: 60px 25px 0; /* py-16, px-6 (igual ao .main-content) */
+            background-color: #f9fafb;
+            /* bg-gray-50 (cor da imagem) */
+            color: #6c757d;
+            /* text-gray-600 */
+            padding: 60px 25px 0;
+            /* py-16, px-6 (igual ao .main-content) */
             font-size: 0.9em;
             border-top: 1px solid #e5e7eb; /* border-t border-gray-200 */
-            margin-top: 80px; 
+            margin-top: 80px;
         }
 
         .footer-content {
             display: grid;
             grid-template-columns: repeat(1, 1fr); /* 1 coluna por padrão (mobile) */
-            gap: 40px; /* gap-10 */
+            gap: 40px;
+            /* gap-10 */
             max-width: 1200px;
             margin: 0 auto;
             text-align: center; /* text-center por padrão */
@@ -564,15 +573,18 @@
         /* Media query para telas médias (tablet) */
         @media (min-width: 768px) {
             .footer-content {
-                grid-template-columns: repeat(2, 1fr); /* 2 colunas */
-                text-align: left; /* Alinha à esquerda */
+                grid-template-columns: repeat(2, 1fr);
+                /* 2 colunas */
+                text-align: left;
+                /* Alinha à esquerda */
             }
         }
         
         /* Media query para telas maiores (desktop), como na imagem */
         @media (min-width: 1024px) {
              .footer-content {
-                grid-template-columns: repeat(5, 1fr); /* 5 colunas como na imagem */
+                grid-template-columns: repeat(5, 1fr);
+                /* 5 colunas como na imagem */
             }
         }
 
@@ -588,17 +600,22 @@
         
         @media (min-width: 768px) {
             .footer-logo {
-                justify-content: flex-start; /* Alinha à esquerda em desktop */
+                justify-content: flex-start;
+                /* Alinha à esquerda em desktop */
             }
         }
 
         .footer-section h4 {
-            color: var(--text-primary); /* text-gray-900 */
-            margin-bottom: 16px; /* mb-4 */
+            color: var(--text-primary);
+            /* text-gray-900 */
+            margin-bottom: 16px;
+            /* mb-4 */
             font-size: 1em;
-            font-weight: 600; /* font-bold */
+            font-weight: 600;
+            /* font-bold */
             text-transform: uppercase;
-            letter-spacing: 0.05em; /* tracking-wider */
+            letter-spacing: 0.05em;
+            /* tracking-wider */
         }
 
         .footer-section ul {
@@ -607,17 +624,20 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 12px; /* space-y-3 */
+            gap: 12px;
+            /* space-y-3 */
         }
 
         .footer-section ul li a {
-            color: var(--text-secondary); /* text-gray-600 */
+            color: var(--text-secondary);
+            /* text-gray-600 */
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         .footer-section ul li a:hover {
-            color: var(--text-primary); /* hover:text-black */
+            color: var(--text-primary);
+            /* hover:text-black */
         }
         
         .footer-contact {
@@ -629,9 +649,12 @@
         /* Alinhamento para desktop */
         @media (min-width: 1024px) {
             .footer-contact {
-                grid-column: span 2 / span 2; /* Ocupa 2 colunas */
-                align-items: flex-end; /* Alinha à direita */
-                text-align: right; /* Alinha texto à direita */
+                grid-column: span 2 / span 2;
+                /* Ocupa 2 colunas */
+                align-items: flex-end;
+                /* Alinha à direita */
+                text-align: right;
+                /* Alinha texto à direita */
             }
         }
 
@@ -645,23 +668,29 @@
         .contact-button {
             display: inline-block;
             font-weight: 600; /* font-semibold */
-            padding: 12px 24px; /* px-6 py-3 */
-            border-radius: 8px; /* rounded-lg */
+            padding: 12px 24px;
+            /* px-6 py-3 */
+            border-radius: 8px;
+            /* rounded-lg */
             text-decoration: none;
             transition: all 0.3s ease;
             margin-top: 20px; /* mt-4 */
             
             /* Estilo preenchido (como solicitado) */
-            background-color: var(--action-pink); /* #E91E63 */
-            color: #fff; /* Texto branco */
+            background-color: var(--action-pink);
+            /* #E91E63 */
+            color: #fff;
+            /* Texto branco */
             border: 2px solid var(--action-pink);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .contact-button:hover {
-            background-color: var(--action-pink-dark); /* #D81B60 */
+            background-color: var(--action-pink-dark);
+            /* #D81B60 */
             border-color: var(--action-pink-dark);
-            color: #fff; /* Texto branco no hover */
+            color: #fff;
+            /* Texto branco no hover */
             transform: translateY(-2px);
         }
         /* **** FIM DA MODIFICAÇÃO **** */
@@ -669,11 +698,13 @@
         .footer-bottom {
             text-align: center;
             padding: 24px 0; /* py-6 */
-            margin-top: 40px; /* mt-10 (implícito do padding-bottom do footer-content) */
+            margin-top: 40px;
+            /* mt-10 (implícito do padding-bottom do footer-content) */
             color: var(--text-secondary);
             font-size: 0.85em;
             border-top: 1px solid #e5e7eb; /* border-t border-gray-200 */
-            background-color: #f3f4f6; /* bg-gray-100 */
+            background-color: #f3f4f6;
+            /* bg-gray-100 */
         }
         
         /* --- FIM DOS ESTILOS DO RODAPÉ --- */
@@ -714,39 +745,45 @@
     <div class="sidebar">
         <div>
             <div class="logo">
-                <img src="logo.png" alt="logo">
+                <img src="/logo.png" alt="logo">
             </div>
             <div class="menu">
-                <a href="/home" class="menu-item active" onclick="navegarPara('inicio')">
+               
+                 <a href="/home" class="menu-item active" onclick="navegarPara('inicio')">
                     <i class="fas fa-home"></i>
                     <span>INÍCIO</span>
                 </a>
                 <a href="/acessar-aluno" class="menu-item" onclick="navegarPara('cadastro')">
-                    <i class="fas fa-address-card"></i>
+                  
+                  <i class="fas fa-address-card"></i>
                     <span>CADASTRO</span>
                 </a>
                 <a href="/matricula" class="menu-item" onclick="navegarPara('matricula')">
                     <i class="fas fa-user-graduate"></i>
-                    <span>MATRÍCULA</span>
+                   
+                 <span>MATRÍCULA</span>
                 </a>
                 <a href="/prof-cadastrados" class="menu-item" id="professor-link">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <span>PROFESSOR</span>
                 </a>
     
-                <a href="/turmas-cadastradas" class="menu-item" onclick="navegarPara('turmas')"> 
+  
+                  <a href="/turmas-cadastradas" class="menu-item" onclick="navegarPara('turmas')"> 
                     <i class="fas fa-users"></i>
                     <span>TURMA</span>
                 </a>
                 <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
-                    <i class="fas fa-dollar-sign"></i>
+     
+                   <i class="fas fa-dollar-sign"></i>
                     <span>FINANCEIRO</span>
                 </a>
             </div>
         </div>
         <div>
             <div class="sidebar-footer">
-                <a href="#" class="logout-button logout-trigger">
+      
+                  <a href="#" class="logout-button logout-trigger">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Sair</span>
                 </a>
@@ -754,58 +791,70 @@
         </div>
     </div>  
 
-    <main class="main-content">
+   
+     <main class="main-content">
         <header class="header">
             <div class="header-title">
-             <h1 id="welcome-greeting">Olá, <%= locals.daycareName || 'Usuário' %>!</h1>
-                <p>Como podemos te ajudar?</p>
+                <h1 id="welcome-greeting">Olá, Usuário!</h1>
+                <p><%= message %></p>
             </div>
             <div class="profile" id="profile-toggle">
-                <div class="profile-header">
+             
+               <div class="profile-header">
                     <i class="fas fa-user-circle profile-icon"></i>
                     <i class="fas fa-chevron-down profile-arrow"></i>
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown-menu">
+                
                     <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
                     <a href="/mensalidade" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
                     <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
                     <div class="dropdown-divider"></div>
-                    
+                   
+                 
                 </div>
             </div>
         </header>
 
         <div class="welcome-banner">
             <div class="carousel-slides">
-                <div class="carousel-slide" style="background-image: url('imagem/creche.png');">
+                <div class="carousel-slide" style="background-image: url('/imagem/creche.png');">
                     <div class="banner-text">
+ 
                         <h2>Gerencie sua creche de forma completa!</h2>
                         <p>Simplifique matrículas, organize turmas e professores e visualize as finanças em um único painel intuitivo.</p>
                         <ul class="banner-features">
-                            <li><i class="fas fa-check-circle"></i>Cadastro de alunos</li>
+         
+                           <li><i class="fas fa-check-circle"></i>Cadastro de alunos</li>
                             <li><i class="fas fa-check-circle"></i>Gestão de professores</li>
                             <li><i class="fas fa-check-circle"></i>Matrículas online</li>
-                             <li><i class="fas fa-check-circle"></i>Organização turmas</li>
+              
+                           <li><i class="fas fa-check-circle"></i>Organização turmas</li>
                             <li><i class="fas fa-check-circle"></i>Administração financeira</li>
                         </ul>
                     </div>
-                </div>
-                <div class="carousel-slide" style="background-image: url('imagem/kids.png');">
+       
+                 </div>
+                <div class="carousel-slide" style="background-image: url('/imagem/kids.png');">
                     <div class="banner-text">
                         <h2>Otimize Cada Detalhe da Sua Instituição</h2>
-                        <p>Automatize tarefas e libere tempo para o que realmente importa: a educação.</p>
+                      
+                  <p>Automatize tarefas e libere tempo para o que realmente importa: a educação.</p>
                     </div>
                 </div>
                  <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1588075592446-265fd1e6e76f?q=80&w=2072&auto=format&fit=crop');">
                     <div class="banner-text">
-                        <h2>Relatórios e Insights</h2>
+          
+                      <h2>Relatórios e Insights</h2>
                         <p>Tome decisões baseadas em dados com relatórios detalhados sobre matrículas, finanças e desempenho.</p>
                          <ul class="banner-features">
-                            <li><i class="fas fa-check-circle"></i>Relatórios financeiros</li>
+                      
+                          <li><i class="fas fa-check-circle"></i>Relatórios financeiros</li>
                             <li><i class="fas fa-check-circle"></i>Visão geral de turmas</li>
                             <li><i class="fas fa-check-circle"></i>Acompanhamento de matrículas</li>
                         </ul>
-                    </div>
+  
+                   </div>
                 </div>
             </div>
 
@@ -815,65 +864,76 @@
             <div class="carousel-indicators"></div>
         </div>
 
+ 
         <h3 class="quick-info-title">Informações rápidas</h3>
         <div class="info-cards-container">
             <div class="info-card card-professores">
                 <div class="card-header"><div class="icon"><i class="fas fa-chalkboard-teacher"></i></div></div>
-                <div class="card-number" id="prof-count"><%= locals.professores || 0 %></div>
+                <div class="card-number" id="prof-count">...</div>
                 <div class="card-label">Professores cadastrados</div>
+            
             </div>
             <div class="info-card card-alunos">
                 <div class="card-header"><div class="icon"><i class="fas fa-user-graduate"></i></div></div>
-                <div class="card-number" id="alunos-count"><%= locals.alunos || 0 %></div>
+                <div class="card-number" id="alunos-count">...</div>
                 <div class="card-label">Alunos matriculados</div>
             </div>
             <div class="info-card card-turmas">
+    
                 <div class="card-header"><div class="icon"><i class="fas fa-users"></i></div></div>
-                <div class="card-number" id="turmas-count"><%= locals.turmas || 0 %></div>
+                <div class="card-number" id="turmas-count">...</div>
                 <div class="card-label">Turmas ativas</div>
             </div>
         </div>
 
         <footer class="main-footer">
             <div class="footer-content">
-               <div class="footer-section footer-logo">
-                    <img src="img/nome.png" alt="Seteeduca Logo" style="height: 80px; margin-top: -15px;">
+      
+                 <div class="footer-section footer-logo">
+                    <img src="/img/nome.png" alt="Seteeduca Logo" style="height: 80px; margin-top: -15px;">
                </div>
     
                 <div class="footer-section">
                     <h4>Início</h4>
                     <ul>
-                        <li><a href="#">Home</a></li>
+                       
+                 <li><a href="#">Home</a></li>
                         <li><a href="#">Cadastro</a></li>
                         <li><a href="#">Matrícula</a></li>
                         <li><a href="#">Professor</a></li>
-                        <li><a href="#">Turma</a></li>
+                       
+                 <li><a href="#">Turma</a></li>
                         <li><a href="#">Financeiro</a></li>
                     </ul>
                 </div>
     
                 <div class="footer-section">
+                
                     <h4>Sobre Nós</h4>
                     <ul>
                         <li><a href="#">Quem Somos</a></li>
                         <li><a href="#">Equipe</a></li>
+                        
                         <li><a href="#">Parceiros - SENAI CIMATEC/ SESI</a></li>
                     </ul>
                 </div>
     
                 <div class="footer-section footer-contact">
                     <h4>Contato</h4>
-                    <div class="contact-info">
+                 
+                   <div class="contact-info">
                         <p>Telefone: (71) 98765-4321</p>
                         <p>Email: contato@seteeduca.com.br</p>
                     </div>
                     <a href="mailto:seteeducaa@gmail.com?subject=Mensagem%20de%20Contato&body=Ol%C3%A1%2C%20gostaria%20de%20entrar%20em%20contato." class="contact-button">
-                        Entre em Contato
+   
+                         Entre em Contato
                     </a>
                 </div>
             </div>
     
             <div class="footer-bottom">
+            
                 <p>&copy; 2025 Seteeduca. Todos os direitos reservados. Design e Desenvolvimento Seteeduca.</p>
             </div>
         </footer>
@@ -885,7 +945,8 @@
             <p>Tem certeza que deseja sair dessa conta?</p>
             <div class="modal-buttons">
                 <button id="cancel-logout" class="btn-cancel">Cancelar</button>
-                <button id="confirm-logout" class="btn-confirm">Confirmar</button>
+         
+               <button id="confirm-logout" class="btn-confirm">Confirmar</button>
             </div>
         </div>
     </div>
@@ -904,28 +965,37 @@
             const profileArrow = profileToggle.querySelector('.profile-arrow');
 
             profileToggle.addEventListener('click', function(event) {
-                event.stopPropagation();
+           
+                 event.stopPropagation();
                 dropdownMenu.classList.toggle('show');
                 profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
             });
 
             window.addEventListener('click', function() {
                 if (dropdownMenu.classList.contains('show')) {
-                    dropdownMenu.classList.remove('show');
+             
+                   dropdownMenu.classList.remove('show');
                     profileArrow.style.transform = 'rotate(0deg)';
                 }
             });
 
+            // ================== CORREÇÃO 2 (Bug do Dropdown) ==================
+            // Impede que cliques DENTRO do menu façam ele fechar
+            dropdownMenu.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+            // ================================================================
+
           
             // ============== INÍCIO DA LÓGICA DO CARROSSEL ==============
           
-            const carouselContainer = document.querySelector('.welcome-banner');
+    
+                const carouselContainer = document.querySelector('.welcome-banner');
             const slidesContainer = carouselContainer.querySelector('.carousel-slides');
             const slides = carouselContainer.querySelectorAll('.carousel-slide');
             const prevButton = carouselContainer.querySelector('.carousel-button.prev');
             const nextButton = carouselContainer.querySelector('.carousel-button.next');
             const indicatorsContainer = carouselContainer.querySelector('.carousel-indicators');
-
             if (slides.length > 0) { 
                 let currentIndex = 0;
                 let slideInterval;
@@ -935,19 +1005,20 @@
                     const dot = document.createElement('div');
                     dot.classList.add('indicator-dot');
                     dot.addEventListener('click', () => {
-                        goToSlide(index);
+         
+                       goToSlide(index);
                         resetInterval();
                     });
                     indicatorsContainer.appendChild(dot);
                 });
-
                 const dots = indicatorsContainer.querySelectorAll('.indicator-dot');
 
                 function updateIndicators() {
                     dots.forEach((dot, index) => {
                         if (index === currentIndex) {
                             dot.classList.add('active');
-                        } else {
+               
+                         } else {
                             dot.classList.remove('active');
                         }
                     });
@@ -968,12 +1039,10 @@
                     goToSlide(currentIndex - 1);
                     resetInterval();
                 });
-
                 nextButton.addEventListener('click', () => {
                     goToSlide(currentIndex + 1);
                     resetInterval();
                 });
-                
                 carouselContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
                 carouselContainer.addEventListener('mouseleave', () => resetInterval());
 
@@ -990,36 +1059,63 @@
             const logoutTriggers = document.querySelectorAll('.logout-trigger');
             const cancelLogoutBtn = document.getElementById('cancel-logout');
             const confirmLogoutBtn = document.getElementById('confirm-logout');
-
             // Abrir o modal
             logoutTriggers.forEach(trigger => {
                 trigger.addEventListener('click', function(event) {
                     event.preventDefault();
                     logoutModal.classList.add('active');
                 });
-            });
+         
+           });
 
             // Fechar o modal com o botão "Cancelar"
             cancelLogoutBtn.addEventListener('click', function() {
                 logoutModal.classList.remove('active');
             });
-
             // Fechar o modal clicando fora dele
             logoutModal.addEventListener('click', function(event) {
                 if (event.target === this) {
                     logoutModal.classList.remove('active');
                 }
             });
-
             // Ação de confirmar o logout
             confirmLogoutBtn.addEventListener('click', function() {
                 console.log("Usuário deslogado! Redirecionando...");
                 window.location.href = '/login';
             });
-
-
+            // --- BUSCAR DADOS DO BACKEND ---
+            fetch('/api/dashboard-data')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao buscar dados da API');
            
-        
+                         }
+                    return response.json();
+                })
+                .then(data => {
+                    // 1. Atualiza a saudação
+            
+                    if (data.daycareName) {
+                        document.getElementById('welcome-greeting').textContent = `Olá, ${data.daycareName}!`;
+                    }
+
+                    // 2. Atualiza os cards
+                   
+                 document.getElementById('prof-count').textContent = data.professores;
+                    document.getElementById('alunos-count').textContent = data.alunos;
+                    document.getElementById('turmas-count').textContent = data.turmas;
+                })
+                .catch(error => {
+                   
+                 // Em caso de erro, usamos dados de exemplo para o layout não quebrar
+                    console.error('Erro ao buscar dados (usando dados de exemplo):', error);
+                    document.getElementById('welcome-greeting').textContent = 'Olá, Creche Exemplo!'; // Nome de exemplo
+                    document.getElementById('prof-count').textContent = 10;
+                    document.getElementById('alunos-count').textContent = 10;
+                    document.getElementById('turmas-count').textContent = 10;
+                });
+            });
+
     </script>
 </body>
 </html>
