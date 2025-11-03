@@ -359,5 +359,4 @@ router.post('/cadastrar', async (req, res) => {
     }
 });
 
-
 export default router;
