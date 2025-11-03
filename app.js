@@ -12,6 +12,7 @@ import arquivadosRouter from './routes/arquivados.routes.js';
 import alunoAcessarRouter from './routes/aluno-acessar.routes.js';
 import apiRoutes from './routes/api.js';
 import senhaRouter from './routes/senha.routes.js';
+import homeRouter from './routes/home.routes.js';
 
 
  const app = express();
@@ -63,9 +64,8 @@ app.use('/arquivados', arquivadosRouter);
 
 //HOME
 
-app.get("/home", (req, res) => {
-  res.render("HOME/home");
-});
+
+ app.use('/home', homeRouter);
 
 // SENHA
 

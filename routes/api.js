@@ -7,24 +7,24 @@ import Transacao from '../models/Transacao.js';
 
 // Rota para buscar os alunos (AGORA DO NOSSO BANCO)
 router.get('/alunos', async (req, res) => {
-    try {
-        const alunosDoBanco = await Aluno.findAll(); 
-        
-        // Formata os dados para o frontend (com nomes das crianças)
-        const alunosFormatados = alunosDoBanco.map(aluno => ({
-            id: aluno.id, // ID do nosso banco (ex: 1, 2, 3)
-            asaasId: aluno.asaasCustomerId, // A "ponte" (ex: cus_123)
-            studentName: aluno.nomeCrianca, // Nome correto
-            parentName: aluno.nomeResponsavel,
-            mensalidade: 550.00, // Exemplo
-            vencimento: 'N/A', 
-            status: 'pago' 
-        }));
-        res.json(alunosFormatados);
-    } catch (error) {
-        console.error('Erro ao buscar alunos no BD:', error);
-        res.status(500).json({ message: 'Erro ao buscar alunos' });
-    }
+    try {
+     const alunosDoBanco = await Aluno.findAll(); 
+ 
+// Formata os dados para o frontend (com nomes das crianças)
+ const alunosFormatados = alunosDoBanco.map(aluno => ({
+ id: aluno.id, // ID do nosso banco (ex: 1, 2, 3)
+ asaasId: aluno.asaasCustomerId, // A "ponte" (ex: cus_123)
+ studentName: aluno.nomeCrianca, // Nome correto
+ parentName: aluno.nomeResponsavel,
+ mensalidade: 550.00, // Exemplo
+ vencimento: 'N/A', 
+ status: 'pago' 
+ }));
+ res.json(alunosFormatados);
+ } catch (error) {
+ console.error('Erro ao buscar alunos no BD:', error);
+ res.status(500).json({ message: 'Erro ao buscar alunos' });
+ }
 });
 
 // Rota para buscar transações (AGORA DE DOIS LUGARES)
