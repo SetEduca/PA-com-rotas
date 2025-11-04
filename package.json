@@ -8,6 +8,7 @@
     "test:silent": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --silent",
     "test:login": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test/login.routes.test.js",
     "test:cadastro": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test/cadastro.routes.test.js",
+     "test:financeiro": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test/financeiro.routes.test.js",
     "test:coverage": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --coverage",
     "start": "node src/app.js",
     "dev": "nodemon  src/app.js"
@@ -47,7 +48,8 @@
     "url": "https://github.com/SetEduca/PA-com-rotas/issues"
   },
   "homepage": "https://github.com/SetEduca/PA-com-rotas#readme",
+  "directories": {
+    "test": "test"
+  },
   "description": ""
 }
-
-
