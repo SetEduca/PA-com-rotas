@@ -50,8 +50,16 @@
     "url": "https://github.com/SetEduca/PA-com-rotas/issues"
   },
   "homepage": "https://github.com/SetEduca/PA-com-rotas#readme",
+<<<<<<< HEAD
   "description": "",
   "directories": {
     "test": "test"
   }
 }
+=======
+  "directories": {
+    "test": "test"
+  },
+  "description": ""
+}
+>>>>>>> d50ef5af6d4a11da53f2a5a75a46e08e0308e1dc
