@@ -4,13 +4,16 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest",
-    "test:silent": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --silent",
-    "test:login": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test/login.routes.test.js",
-    "test:cadastro": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest test/cadastro.routes.test.js",
-    "test:coverage": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --coverage",
-    "start": "node src/app.js",
-    "dev": "nodemon  src/app.js"
+    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:silent": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --silent",
+    "test:login": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest test/login.routes.test.js",
+    "test:cadastro": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest test/cadastro.routes.test.js",
+    "test:coverage": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "test:turma": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest test/turma.service.test.js",
+    "test:aluno": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest test/aluno.service.test.js",
+    "test:professores": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest test/professores.routes.test.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -47,7 +50,8 @@
     "url": "https://github.com/SetEduca/PA-com-rotas/issues"
   },
   "homepage": "https://github.com/SetEduca/PA-com-rotas#readme",
-  "description": ""
+  "description": "",
+  "directories": {
+    "test": "test"
+  }
 }
-
-

@@ -130,7 +130,7 @@ app.use('/matriculas', matriculasRouter);
 
 //PROFESSOR
 
-app.use('/professores', professoresRoutes);
+app.use('/api/professores', professoresRoutes);
 
 // FINANCEIRO
 app.get("/financeiro", (req, res) => {
@@ -169,3 +169,23 @@ app.get('/testar-banco', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+
+// app.js
+// ... todo o código anterior ...
+
+// Apenas inicia o servidor se não estiver em modo de teste
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3020;
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
+}
+
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3020;
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+  });
+}
+
+export default app;

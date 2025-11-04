@@ -229,7 +229,7 @@ router.get("/ver/:id", async (req, res) => {
     const { id } = req.params;
 
     try {
-        const { data: professor, error } = await supabase
+        const { data: professores, error } = await supabase
             .from('professor')
             .select(`
                 id,
@@ -241,23 +241,25 @@ router.get("/ver/:id", async (req, res) => {
                 tel_professor ( ddd, numero ), 
                 end_professor ( end_descricao )
             `)
-            .eq('id', id)
-            .single(); // .single() pega apenas um resultado como objeto
+            .eq('id', id); // ✅ Remove o .single()
 
         if (error) {
             throw new Error(`Erro ao buscar detalhes do professor: ${error.message}`);
         }
 
+        // ✅ Pega o primeiro resultado manualmente
+        const professor = professores?.[0];
+
         if (!professor) {
-            return res.status(404).send("Professor não encontrado.");
+            return res.status(404).json({ error: "Professor não encontrado." });
         }
 
-        // Renderiza a nova página de detalhes
+        // Retorna como JSON
         res.json(professor);
 
     } catch (err) {
         console.error(err.message);
-        res.status(500).send(err.message);
+        res.status(500).json({ error: err.message });
     }
 });
 
