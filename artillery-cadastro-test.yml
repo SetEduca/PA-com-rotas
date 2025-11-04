@@ -1,0 +1,39 @@
+# artillery-debug-test.yml
+# Este teste é para verificar se o servidor funciona SEM o upload da foto.
+
+config:
+  target: "http://localhost:3020" # <-- CONFIRME SUA PORTA
+  phases:
+    - duration: 30
+      arrivalRate: 5
+
+scenarios:
+  - flow:
+      - post:
+          url: "/cadastro"
+          
+          # Usando formData, mas SEM a linha do $file
+          formData:
+            
+            # 1. O Arquivo (REMOVIDO PARA O TESTE)
+            # foto_creche:
+            #   $file: "./test-assets/imagem-teste.png" 
+
+            # 2. Os Campos de Texto
+            nome_creche: "Creche Teste Sem Foto"
+            senha: "senha123"
+            confirmar_senha: "senha123"
+            terms: "on"
+            telefone: "11987654321"
+            cep: "01001000"
+            rua: "Rua do Teste"
+            bairro: "Bairro Debug"
+            cidade: "Cidade Teste"
+            
+            # 3. Campos Únicos
+            email: "creche-debug-{{ $randomString }}@teste.com"
+            cnpj: "{{ $randomInt(100000000, 999999999) }}0001"
+
+          # 4. Verificação (Ainda esperamos 201, pois a foto é opcional)
+          expect:
+            - statusCode: 201

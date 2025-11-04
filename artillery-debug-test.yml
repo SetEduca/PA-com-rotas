@@ -1,0 +1,43 @@
+# artillery-debug-test.yml
+# VERSÃO CORRIGIDA (O ARQUIVO NOVO)
+
+config:
+  # Alvo: Seu servidor local
+  target: "http://localhost:3020" # <-- CONFIRME SUA PORTA (pode ser 3000, 3020, etc.)
+  
+  # Carga: 5 novos usuários chegando por segundo, durante 30 segundos
+  phases:
+    - duration: 30
+      arrivalRate: 5
+
+scenarios:
+  # O cenário de teste
+  - flow:
+      - post:
+          # A rota de cadastro
+          url: "/cadastro"
+          
+          # Dados do formulário (sem a foto)
+          formData:
+            
+            # Campos de Texto Padrão
+            nome_creche: "Creche Teste Sem Foto"
+            senha: "senha123"
+            confirmar_senha: "senha123"
+            terms: "on"
+            telefone: "11987654321"
+            cep: "01001000"
+            rua: "Rua do Teste"
+            bairro: "Bairro Debug"
+            cidade: "Cidade Teste"
+            
+            # --- CORREÇÃO DE UNICIDADE ---
+            # Usando as variáveis internas corretas do Artillery para
+            # garantir que cada requisição tenha dados únicos.
+            email: "creche-{{ $randomUUID }}@teste.com"
+            cnpj: "{{ $timestamp }}{{ $randomInt(10, 99) }}" # Timestamp + 2 dígitos aleatórios
+
+          # Verificação: Agora esperamos 201 (Created), pois os dados serão únicos
+          expect:
+            - statusCode: 201
+
