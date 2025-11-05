@@ -49,8 +49,43 @@ app.use('/arquivados', arquivadosRouter);
 
 //HOME
 
-app.get("/home", (req, res) => {
-  res.render("HOME/home");
+app.get("/home", async (req, res) => { // 1. Adicionado 'async'
+    try {
+        // 2. BUSQUE OS DADOS REAIS AQUI
+        // (Substitua 'professor', 'aluno', 'turma' pelos nomes reais das suas tabelas)
+        let { count: profCount } = await supabase
+            .from('professor')
+            .select('*', { count: 'exact', head: true });
+
+        let { count: alunoCount } = await supabase
+            .from('aluno')
+            .select('*', { count: 'exact', head: true });
+
+        let { count: turmaCount } = await supabase
+            .from('turma')
+            .select('*', { count: 'exact', head: true });
+
+
+        // 3. PASSE TODAS AS VARIÁVEIS PARA O EJS
+        res.render("HOME/home", {
+            message: "Como podemos te ajudar hoje?",
+            daycareName: "Minha Creche", // <-- Corrige 'daycareName is not defined'
+            professores: profCount || 0, // <-- Passa a contagem de professores
+            alunos: alunoCount || 0,     // <-- Passa a contagem de alunos
+            turmas: turmaCount || 0      // <-- Passa a contagem de turmas
+        });
+
+    } catch (error) {
+        // 4. Se o Supabase falhar, envie dados de erro
+        console.error("Erro ao carregar a rota /home:", error.message);
+        res.render("HOME/home", {
+            message: "Erro ao carregar dados.",
+            daycareName: "Erro", // <-- Passa 'Erro' para não travar
+            professores: '!',
+            alunos: '!',
+            turmas: '!'
+        });
+    }
 });
 
 // SENHA

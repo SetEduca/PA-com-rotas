@@ -1,27 +1,53 @@
 // src/routes/home.routes.js
 import express from 'express';
-import supabase from '../supabase.js'; // (Caminho '../' para voltar de 'routes' para 'src')
+// Ajuste o caminho para o seu supabase.js (../sai da pasta 'routes')
+import supabase from '../supabase.js'; 
 
 const router = express.Router();
 
-
-// Esta rota agora é "/", porque o 'app.js'
-// vai nos dar o prefixo '/home'.
-//
-// (app.use('/home', ...) + router.get('/', ...) = rota final '/home'
-// ==========================================================
+// Esta é a sua rota /home
 router.get("/", async (req, res) => {
     try {
-        // (Sua lógica do Supabase aqui, se necessário)
+        // ========================================================
+        // 1. VAMOS BUSCAR OS DADOS REAIS AQUI
+        // (Substitua 'professor', 'aluno', 'turma' pelos nomes reais das suas tabelas)
+        // ========================================================
+        
+        let { count: profCount } = await supabase
+            .from('professor')
+            .select('*', { count: 'exact', head: true });
 
-        // Renderiza o EJS e passa a variável 'message'
+        let { count: alunoCount } = await supabase
+            .from('aluno')
+            .select('*', { count: 'exact', head: true });
+
+        let { count: turmaCount } = await supabase
+            .from('turma')
+            .select('*', { count: 'exact', head: true });
+
+        // ========================================================
+        // 2. VAMOS PASSAR OS DADOS (E A MENSAGEM) PARA O EJS
+        // (Isto corrige AMBOS os erros)
+        // ========================================================
         res.render("HOME/home", {
-            message: "Como podemos te ajudar hoje?"
+            message: "Como podemos te ajudar hoje?",
+            daycareName: "Minha Creche", // <-- Substitui "Creche Exemplo!"
+            professores: profCount || 0, // Passa a contagem de professores
+            alunos: alunoCount || 0,     // Passa a contagem de alunos
+            turmas: turmaCount || 0      // Passa a contagem de turmas
         });
 
     } catch (error) {
         console.error("Erro ao carregar a rota /home:", error.message);
-        res.status(500).send("Erro interno do servidor.");
+        
+        // Se o Supabase falhar, enviamos dados de erro
+        res.render("HOME/home", {
+            message: "Erro ao carregar dados.",
+            daycareName: "Erro",
+            professores: '!',
+            alunos: '!',
+            turmas: '!'
+        });
     }
 });
 

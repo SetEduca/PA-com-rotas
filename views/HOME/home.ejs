@@ -795,9 +795,9 @@
      <main class="main-content">
         <header class="header">
             <div class="header-title">
-                <h1 id="welcome-greeting">Olá, Usuário!</h1>
-                <p><%= message %></p>
-            </div>
+                <h1 id="welcome-greeting">Olá, <%= daycareName %>!</h1>
+                <p><%= message %> </p>
+                </div>
             <div class="profile" id="profile-toggle">
              
                <div class="profile-header">
@@ -869,19 +869,17 @@
         <div class="info-cards-container">
             <div class="info-card card-professores">
                 <div class="card-header"><div class="icon"><i class="fas fa-chalkboard-teacher"></i></div></div>
-                <div class="card-number" id="prof-count">...</div>
+                <div class="card-number" id="prof-count"><%= professores %></div>
                 <div class="card-label">Professores cadastrados</div>
-            
             </div>
             <div class="info-card card-alunos">
                 <div class="card-header"><div class="icon"><i class="fas fa-user-graduate"></i></div></div>
-                <div class="card-number" id="alunos-count">...</div>
+                <div class="card-number" id="alunos-count"><%= alunos %></div>
                 <div class="card-label">Alunos matriculados</div>
             </div>
             <div class="info-card card-turmas">
-    
                 <div class="card-header"><div class="icon"><i class="fas fa-users"></i></div></div>
-                <div class="card-number" id="turmas-count">...</div>
+                <div class="card-number" id="turmas-count"><%= turmas %></div>
                 <div class="card-label">Turmas ativas</div>
             </div>
         </div>
@@ -965,32 +963,25 @@
             const profileArrow = profileToggle.querySelector('.profile-arrow');
 
             profileToggle.addEventListener('click', function(event) {
-           
-                 event.stopPropagation();
+                event.stopPropagation();
                 dropdownMenu.classList.toggle('show');
                 profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
             });
 
             window.addEventListener('click', function() {
                 if (dropdownMenu.classList.contains('show')) {
-             
-                   dropdownMenu.classList.remove('show');
+                    dropdownMenu.classList.remove('show');
                     profileArrow.style.transform = 'rotate(0deg)';
                 }
             });
-
-            // ================== CORREÇÃO 2 (Bug do Dropdown) ==================
-            // Impede que cliques DENTRO do menu façam ele fechar
+            
             dropdownMenu.addEventListener('click', function(event) {
                 event.stopPropagation();
             });
-            // ================================================================
-
           
-            // ============== INÍCIO DA LÓGICA DO CARROSSEL ==============
-          
-    
-                const carouselContainer = document.querySelector('.welcome-banner');
+            // ============== LÓGICA DO CARROSSEL ==============
+            // ... (Toda a lógica do carrossel fica igual) ...
+            const carouselContainer = document.querySelector('.welcome-banner');
             const slidesContainer = carouselContainer.querySelector('.carousel-slides');
             const slides = carouselContainer.querySelectorAll('.carousel-slide');
             const prevButton = carouselContainer.querySelector('.carousel-button.prev');
@@ -999,122 +990,68 @@
             if (slides.length > 0) { 
                 let currentIndex = 0;
                 let slideInterval;
-
-                // Criar os pontos indicadores
                 slides.forEach((_, index) => {
                     const dot = document.createElement('div');
                     dot.classList.add('indicator-dot');
                     dot.addEventListener('click', () => {
-         
-                       goToSlide(index);
+                        goToSlide(index);
                         resetInterval();
                     });
                     indicatorsContainer.appendChild(dot);
                 });
                 const dots = indicatorsContainer.querySelectorAll('.indicator-dot');
-
                 function updateIndicators() {
                     dots.forEach((dot, index) => {
-                        if (index === currentIndex) {
-                            dot.classList.add('active');
-               
-                         } else {
-                            dot.classList.remove('active');
-                        }
+                        dot.classList.toggle('active', index === currentIndex);
                     });
                 }
-
                 function goToSlide(index) {
                     currentIndex = (index + slides.length) % slides.length;
                     slidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
                     updateIndicators();
                 }
-
                 function resetInterval() {
                     clearInterval(slideInterval);
                     slideInterval = setInterval(() => goToSlide(currentIndex + 1), 5000); 
                 }
-
-                prevButton.addEventListener('click', () => {
-                    goToSlide(currentIndex - 1);
-                    resetInterval();
-                });
-                nextButton.addEventListener('click', () => {
-                    goToSlide(currentIndex + 1);
-                    resetInterval();
-                });
+                prevButton.addEventListener('click', () => { goToSlide(currentIndex - 1); resetInterval(); });
+                nextButton.addEventListener('click', () => { goToSlide(currentIndex + 1); resetInterval(); });
                 carouselContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
                 carouselContainer.addEventListener('mouseleave', () => resetInterval());
-
-                // Iniciar
                 goToSlide(0);
                 resetInterval();
             }
         
-            // ================ FIM DA LÓGICA DO CARROSSEL ================
-       
-
-            // --- NOVA LÓGICA PARA O MODAL DE LOGOUT ---
+            // --- LÓGICA PARA O MODAL DE LOGOUT ---
+             // ... (Toda a lógica do modal de logout fica igual) ...
             const logoutModal = document.getElementById('logout-modal');
             const logoutTriggers = document.querySelectorAll('.logout-trigger');
             const cancelLogoutBtn = document.getElementById('cancel-logout');
             const confirmLogoutBtn = document.getElementById('confirm-logout');
-            // Abrir o modal
             logoutTriggers.forEach(trigger => {
                 trigger.addEventListener('click', function(event) {
                     event.preventDefault();
                     logoutModal.classList.add('active');
                 });
-         
-           });
-
-            // Fechar o modal com o botão "Cancelar"
+            });
             cancelLogoutBtn.addEventListener('click', function() {
                 logoutModal.classList.remove('active');
             });
-            // Fechar o modal clicando fora dele
             logoutModal.addEventListener('click', function(event) {
                 if (event.target === this) {
                     logoutModal.classList.remove('active');
                 }
             });
-            // Ação de confirmar o logout
             confirmLogoutBtn.addEventListener('click', function() {
                 console.log("Usuário deslogado! Redirecionando...");
                 window.location.href = '/login';
             });
-            // --- BUSCAR DADOS DO BACKEND ---
-            fetch('/api/dashboard-data')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao buscar dados da API');
-           
-                         }
-                    return response.json();
-                })
-                .then(data => {
-                    // 1. Atualiza a saudação
-            
-                    if (data.daycareName) {
-                        document.getElementById('welcome-greeting').textContent = `Olá, ${data.daycareName}!`;
-                    }
 
-                    // 2. Atualiza os cards
-                   
-                 document.getElementById('prof-count').textContent = data.professores;
-                    document.getElementById('alunos-count').textContent = data.alunos;
-                    document.getElementById('turmas-count').textContent = data.turmas;
-                })
-                .catch(error => {
-                   
-                 // Em caso de erro, usamos dados de exemplo para o layout não quebrar
-                    console.error('Erro ao buscar dados (usando dados de exemplo):', error);
-                    document.getElementById('welcome-greeting').textContent = 'Olá, Creche Exemplo!'; // Nome de exemplo
-                    document.getElementById('prof-count').textContent = 10;
-                    document.getElementById('alunos-count').textContent = 10;
-                    document.getElementById('turmas-count').textContent = 10;
-                });
-            });
+            // ===========================================================
+            // O BLOCO 'fetch('/api/dashboard-data')' FOI REMOVIDO DAQUI
+            // PORQUE OS DADOS AGORA VÊM DO SERVIDOR (EJS)
+            // ===========================================================
+        });
 
     </script>
 </body>
