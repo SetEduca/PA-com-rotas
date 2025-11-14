@@ -9,6 +9,7 @@ import loginRouter from './routes/login.routes.js';
 import mensalidadeRouter from './routes/mensalidades.routes.js';
 import arquivadosRouter from './routes/arquivados.routes.js';
 import alunoAcessarRouter from './routes/aluno-acessar.routes.js';
+import perfilRouter from './routes/perfil.routes.js';
 
 
  const app = express();
@@ -46,6 +47,8 @@ app.get("/meuperfil", (req, res) => {
 app.use('/mensalidade', mensalidadeRouter);
 
 app.use('/arquivados', arquivadosRouter);
+
+app.use('/api/perfil', perfilRouter);
 
 //HOME
 

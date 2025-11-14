@@ -32,6 +32,44 @@ const ensureAuthenticated = (req, res, next) => {
 // Exemplo: app.use('/api/perfil', perfilRouter);
 // -------------------------------------------------------------------
 
+// ROTA NOVA: BUSCAR INFORMAÇÕES COMPLETAS POR E-MAIL (GET)
+// GET /api/perfil/dados-cadastro?email=exemplo@email.com
+router.get('/dados-cadastro', async (req, res) => {
+    const { email } = req.query; // Pega o e-mail da query string
+
+    if (!email) {
+        return res.status(400).json({ error: 'O parâmetro de e-mail é obrigatório.' });
+    }
+
+    try {
+        // Busca todas as colunas da tabela CADASTRO_CRECHE que correspondem ao email
+        // A coluna 'senha' é explicitamente omitida por segurança.
+        const { data, error } = await supabase
+            .from('CADASTRO_CRECHE')
+            .select('id, nome, cnpj, email, url_foto, created_at') // Selecione apenas as colunas necessárias e seguras
+            .eq('email', email)
+            .single(); // Espera apenas um registro
+
+        if (error && error.code !== 'PGRST116') { // PGRST116 é quando não encontra o registro (equivalente ao .single())
+            throw error;
+        }
+
+        if (!data) {
+            return res.status(404).json({ error: 'Creche não encontrada com este e-mail.' });
+        }
+
+        // Retorna os dados da creche (exceto a senha)
+        res.json({ creche: data });
+
+    } catch (e) {
+        console.error('Erro ao buscar dados de cadastro por e-mail:', e.message);
+        res.status(500).json({ error: 'Erro interno do servidor ao buscar dados de cadastro.' });
+    }
+});
+// -------------------------------------------------------------------
+// As rotas PUT existentes (ATUALIZAR INFORMAÇÕES BÁSICAS, ALTERAR SENHA, ATUALIZAR ENDEREÇO) seguem abaixo...
+// -------------------------------------------------------------------
+
 // ROTA 1: ATUALIZAR INFORMAÇÕES BÁSICAS (Nome, Email)
 // PUT /api/perfil/:id/info
 router.put('/:id/info', ensureAuthenticated, async (req, res) => {
