@@ -339,10 +339,10 @@ color: #D22A2A;
             background-color: #f7f8fa;
         }
         .profile-dropdown a i {
-            width: 20px;
-            text-align: center;
-            color: #6c757d;
-        }
+        font-size: 20px;  /* <--- Esta é a propriedade correta */
+        text-align: center;
+        color: #6c757d;
+    }
         .dropdown-divider {
             height: 1px;
             background-color: #e9ecef;
@@ -408,6 +408,8 @@ color: #D22A2A;
         </div>
     </aside>
     
+
+    
     <div class="flex flex-col flex-1 lg:ml-[280px] min-h-screen">
         
         <header class="bg-brand-green-header text-brand-text p-4 md:p-5 flex justify-between items-center w-full shadow-md sticky top-0 z-30" style="background-color: #59C631;">
@@ -430,7 +432,7 @@ font-size: 20px;"></span>
                         <i class="fas fa-chevron-down profile-arrow"></i>
                     </div>
                     <div class="profile-dropdown" id="profile-dropdown-menu">
-                        <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
+                        <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user";"></i> Meu perfil</a>
                         <a href="/mensalidade" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
                         <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
                         <div class="dropdown-divider"></div>

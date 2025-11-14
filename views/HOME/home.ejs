@@ -568,6 +568,7 @@
             max-width: 1200px;
             margin: 0 auto;
             text-align: center; /* text-center por padrão */
+            margin-top: 120px;
         }
         
         /* Media query para telas médias (tablet) */
@@ -587,7 +588,6 @@
                 /* 5 colunas como na imagem */
             }
         }
-
 
         .footer-section {
             min-width: 150px;
@@ -706,38 +706,99 @@
             background-color: #f3f4f6;
             /* bg-gray-100 */
         }
-        
-        /* --- FIM DOS ESTILOS DO RODAPÉ --- */
-        
-        /* Media Queries para Responsividade */
-        @media (max-width: 1024px) {
-            .banner-text { max-width: 100%; }
-            .carousel-slide { padding: 60px 40px; text-align: center; }
-            .banner-features { justify-content: center; grid-template-columns: 1fr; }
+            .footer-container {
+            display: flex; /* A MÁGICA ACONTECE AQUI! */
+            justify-content: space-between; /* Distribui as colunas igualmente */
+            flex-wrap: wrap; /* Faz quebrar a linha em telas pequenas */
+            max-width: 1200px; /* Limita a largura máxima */
+            margin: 0 auto; /* Centraliza o container */
+            padding: 20px; /* Espaçamento interno */
         }
-        
-        @media (max-width: 768px) {
-            :root { --sidebar-width: 70px; }
-            .menu-item span, .logout-button span, .seteeduca { display: none; }
-            .menu-item i, .logout-button i { margin-right: 0; }
-            .sidebar .logo { padding: 0 10px; } 
-            .sidebar .logo img { max-width: 50px; } 
-            .sidebar-footer { padding: 10px 5px; } 
-            .menu { padding: 10px 5px; } 
-            .menu-item { padding: 15px 5px; justify-content: center; } 
-            .menu-item::after { display: none; } 
-            .menu-item.active::before { right: 5px; } 
-            .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
-            .header-title h1 { font-size: 22px; }
-            .header-title p { font-size: 14px; }
-            
-            .carousel-slide { min-height: 450px; padding: 40px 25px; }
-            .banner-text h2 { font-size: 28px; }
-            .banner-text p { font-size: 15px; }
 
-            .page-footer { flex-direction: column; justify-content: center; text-align: center; }
-            .footer-links a { margin: 0 10px; }
-        }
+            /* Estilo para cada coluna "filha" */
+            .footer-section {
+                flex: 1; /* Faz com que tentem ocupar o mesmo espaço */
+                min-width: 200px; /* Largura mínima de cada coluna */
+                margin: 15px; /* Espaçamento entre as colunas */
+            }
+
+            /* Estilo para a barra de copyright */
+            .copyright-bar {
+                text-align: center; /* Centraliza o texto */
+                padding: 15px;
+                margin-top: 20px; /* Separa a barra das colunas */
+                border-top: 1px solid #e0e0e0; /* Adiciona uma linha divisória sutil */
+            }
+
+            /* ----- ESTILOS BÔNUS PARA DEIXAR BONITO ----- */
+
+            .footer-section h4 {
+                margin-bottom: 15px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .footer-section ul {
+                list-style: none; /* Remove as bolinhas */
+                padding: 0;
+                margin: 0;
+            }
+
+            .footer-section ul li {
+                margin-bottom: 8px;
+            }
+
+            .footer-section ul li a {
+                text-decoration: none; /* Remove o sublinhado */
+                color: #555; /* Cor do link */
+            }
+
+            .footer-section p {
+                margin-bottom: 10px;
+                color: #555;
+            }
+
+            /* Estilo do botão de contato (exemplo) */
+            .btn-contato {
+                display: inline-block;
+                background-color: #e91e63; /* Cor rosa do seu botão */
+                color: white;
+                padding: 10px 15px;
+                border-radius: 5px;
+                text-decoration: none;
+                font-weight: bold;
+            }
+                /* --- FIM DOS ESTILOS DO RODAPÉ --- */
+                
+                /* Media Queries para Responsividade */
+                @media (max-width: 1024px) {
+                    .banner-text { max-width: 100%; }
+                    .carousel-slide { padding: 60px 40px; text-align: center; }
+                    .banner-features { justify-content: center; grid-template-columns: 1fr; }
+                }
+                
+                @media (max-width: 768px) {
+                    :root { --sidebar-width: 70px; }
+                    .menu-item span, .logout-button span, .seteeduca { display: none; }
+                    .menu-item i, .logout-button i { margin-right: 0; }
+                    .sidebar .logo { padding: 0 10px; } 
+                    .sidebar .logo img { max-width: 50px; } 
+                    .sidebar-footer { padding: 10px 5px; } 
+                    .menu { padding: 10px 5px; } 
+                    .menu-item { padding: 15px 5px; justify-content: center; } 
+                    .menu-item::after { display: none; } 
+                    .menu-item.active::before { right: 5px; } 
+                    .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
+                    .header-title h1 { font-size: 22px; }
+                    .header-title p { font-size: 14px; }
+                    
+                    .carousel-slide { min-height: 450px; padding: 40px 25px; }
+                    .banner-text h2 { font-size: 28px; }
+                    .banner-text p { font-size: 15px; }
+
+                    .page-footer { flex-direction: column; justify-content: center; text-align: center; }
+                    .footer-links a { margin: 0 10px; }
+            }
     </style>
 </head>
 <body>
@@ -884,57 +945,46 @@
             </div>
         </div>
 
-        <footer class="main-footer">
-            <div class="footer-content">
-      
-                 <div class="footer-section footer-logo">
-                    <img src="/img/nome.png" alt="Seteeduca Logo" style="height: 80px; margin-top: -15px;">
-               </div>
-    
-                <div class="footer-section">
-                    <h4>Início</h4>
-                    <ul>
-                       
-                 <li><a href="#">Home</a></li>
-                        <li><a href="#">Cadastro</a></li>
-                        <li><a href="#">Matrícula</a></li>
-                        <li><a href="#">Professor</a></li>
-                       
-                 <li><a href="#">Turma</a></li>
-                        <li><a href="#">Financeiro</a></li>
-                    </ul>
-                </div>
-    
-                <div class="footer-section">
-                
-                    <h4>Sobre Nós</h4>
-                    <ul>
-                        <li><a href="#">Quem Somos</a></li>
-                        <li><a href="#">Equipe</a></li>
-                        
-                        <li><a href="#">Parceiros - SENAI CIMATEC/ SESI</a></li>
-                    </ul>
-                </div>
-    
-                <div class="footer-section footer-contact">
-                    <h4>Contato</h4>
-                 
-                   <div class="contact-info">
-                        <p>Telefone: (71) 98765-4321</p>
-                        <p>Email: contato@seteeduca.com.br</p>
-                    </div>
-                    <a href="mailto:seteeducaa@gmail.com?subject=Mensagem%20de%20Contato&body=Ol%C3%A1%2C%20gostaria%20de%20entrar%20em%20contato." class="contact-button">
-   
-                         Entre em Contato
-                    </a>
-                </div>
-            </div>
-    
-            <div class="footer-bottom">
-            
-                <p>&copy; 2025 Seteeduca. Todos os direitos reservados. Design e Desenvolvimento Seteeduca.</p>
-            </div>
-        </footer>
+       <footer>
+    <div class="footer-container">
+        
+        <div class="footer-section footer-logo">
+            <img src="/imagem/sete.png" alt="Seteeduca Logo" style="height: 250px; margin-top: -20px; margin-left: 30px; " >
+        </div>
+
+        <div class="footer-section">
+            <h4>INÍCIO</h4>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Cadastro</a></li>
+                <li><a href="#">Matrícula</a></li>
+                <li><a href="#">Professor</a></li>
+                <li><a href="#">Turma</a></li>
+                <li><a href="#">Financeiro</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>SOBRE NÓS</h4>
+            <ul>
+                <li><a href="#">Quem Somos</a></li>
+                <li><a href="#">Equipe</a></li>
+                <li><a href="#">Parceiros - SENAI CIMATEC / SESI</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-section">
+            <h4>CONTATO</h4>
+            <p>Telefone: (71) 98765-4321</p>
+            <p>Email: contato@seteeduca.com.br</p>
+            <a href="#" class="btn-contato">Entre em Contato</a>
+        </div>
+
+    </div> <div class="copyright-bar">
+        <p>© 2025 Seteeduca. Todos os direitos reservados. Design e Desenvolvimento Seteeduca.</p>
+    </div>
+
+</footer>
 
     </main>
 
@@ -943,7 +993,6 @@
             <p>Tem certeza que deseja sair dessa conta?</p>
             <div class="modal-buttons">
                 <button id="cancel-logout" class="btn-cancel">Cancelar</button>
-         
                <button id="confirm-logout" class="btn-confirm">Confirmar</button>
             </div>
         </div>
@@ -1047,10 +1096,7 @@
                 window.location.href = '/login';
             });
 
-            // ===========================================================
-            // O BLOCO 'fetch('/api/dashboard-data')' FOI REMOVIDO DAQUI
-            // PORQUE OS DADOS AGORA VÊM DO SERVIDOR (EJS)
-            // ===========================================================
+            
         });
 
     </script>
