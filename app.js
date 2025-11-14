@@ -168,7 +168,7 @@ app.use('/matriculas', matriculasRouter);
 
 //PROFESSOR
 
-app.use('/api/professores', professoresRoutes);
+app.use('/professores', professoresRoutes);
 
 // FINANCEIRO
 app.get("/financeiro", (req, res) => {
