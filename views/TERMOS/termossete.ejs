@@ -1,0 +1,140 @@
+<!-- Salvar como: views/termossete.ejs -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- A variável 'title' será enviada pelo app.js -->
+    <title><%= title %></title>
+    
+    <!-- Inclua seu CSS aqui -->
+    <!-- <link rel="stylesheet" href="/css/style.css"> -->
+
+    <!-- Estilos rápidos para este exemplo (opcional) -->
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 900px;
+            margin: 20px auto;
+            color: #333;
+        }
+        .container {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 25px 40px;
+        }
+        h1, h2, h3 {
+            color: #222;
+        }
+        h1 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        h2 {
+            margin-top: 35px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 5px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        strong {
+            color: #000;
+        }
+        .disclaimer {
+            background: #fffbe6;
+            border: 1px solid #ffe58f;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .disclaimer a, .container a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .disclaimer a:hover, .container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1><%= title %></h1>
+        <p><strong>Data da última atualização:</strong> 14 de Novembro de 2025</p>
+
+        <!-- AVISO LEGAL IMPORTANTE FOI REMOVIDO DAQUI -->
+
+        <h2>1. Bem-vindo(a) ao Sete Educacional</h2>
+        <p>Obrigado por escolher o Sete Educacional ("Sete Educacional", "nós", "nosso"). Ao usar nossos serviços, que incluem nosso website, plataforma de aulas online, materiais de estudo, mentorias e cursos preparatórios ("Serviços"), você está concordando com estes termos. Por favor, leia-os com atenção.</p>
+        <p>Nossos Serviços são voltados para a preparação acadêmica e profissional, incluindo (mas não se limitando a) aulas particulares, preparação para vestibulares (como Medicina) e concursos (como VUNESP).</p>
+
+        <h2>2. Uso dos Nossos Serviços</h2>
+        
+        <h3>Quem pode usar:</h3>
+        <p>Você deve ter 18 anos ou mais para criar uma conta e concordar com estes termos. Se você for menor de 18 anos, só poderá usar nossos Serviços com o consentimento e a supervisão de seus pais ou responsáveis legais.</p>
+        
+        <h3>Sua Conta:</h3>
+        <p>Para acessar a maioria dos Serviços, você precisará de uma conta. Você é responsável por manter a confidencialidade de sua senha e por todas as atividades que ocorram em sua conta. Não compartilhe suas credenciais de acesso com ninguém.</p>
+
+        <h2>3. Suas Responsabilidades e Conduta</h2>
+        <p>Esperamos que você use nossos Serviços de forma responsável. Você concorda em <strong>não</strong> fazer o seguinte:</p>
+        <ul>
+            <li><strong>Uso Indevido:</strong> Usar os Serviços para qualquer finalidade ilegal ou que viole estes termos.</li>
+            <li><strong>Violação de Propriedade Intelectual:</strong> Copiar, redistribuir, vender, "piratear" ou modificar qualquer conteúdo dos Serviços, incluindo videoaulas, simulados e materiais de apoio, sem nossa permissão explícita.</li>
+            <li><strong>Compartilhamento de Conta:</strong> Permitir que outra pessoa use sua conta para acessar os Serviços.</li>
+            <li><strong>Comportamento Disruptivo:</strong> Interferir no aprendizado de outros alunos ou no trabalho de nossos professores e mentores (por exemplo, através de assédio, spam ou comportamento inadequado em aulas ao vivo).</li>
+            <li><strong>Integridade Acadêmica:</strong> Usar os Serviços para praticar qualquer forma de desonestidade acadêmica (como "cola" ou plágio).</li>
+        </ul>
+        <p>O não cumprimento dessas regras pode resultar na suspensão ou cancelamento imediato da sua conta, sem reembolso.</p>
+
+        <h2>4. Conteúdo e Propriedade Intelectual</h2>
+        
+        <h3>Nosso Conteúdo:</h3>
+        <p>Todo o conteúdo fornecido nos Serviços (aulas, textos, gráficos, simulados, etc.) é de propriedade exclusiva do Sete Educacional ou de seus licenciadores. Concedemos a você uma licença limitada, não exclusiva e intransferível para acessar e usar o conteúdo apenas para seus fins pessoais e educacionais, enquanto sua assinatura estiver ativa.</p>
+        
+        <h3>Seu Conteúdo:</h3>
+        <p>Se você enviar conteúdo (como dúvidas em fóruns ou trabalhos de mentoria), você nos concede uma licença mundial para usar, hospedar e armazenar esse conteúdo com o objetivo de operar e melhorar os Serviços. Você continua sendo o proprietário dos seus direitos autorais sobre esse conteúdo.</p>
+
+        <h2>5. Pagamentos, Assinaturas e Reembolsos</h2>
+        
+        <h3>Pagamentos:</h3>
+        <p>O acesso a determinados Serviços (como cursos preparatórios e mentorias) exige o pagamento de taxas. Você concorda em fornecer informações de pagamento atuais e precisas.</p>
+        
+        <h3>Assinaturas:</h3>
+        <p>Se os Serviços forem oferecidos por assinatura, eles serão renovados automaticamente, a menos que você cancele sua assinatura antes do final do período de cobrança atual.</p>
+        
+        <h3>Reembolsos:</h3>
+        <p>Nossa política de reembolso está detalhada em <a href="#" onclick="return false;">Política de Cancelamento</a>, de acordo com o Código de Defesa do Consumidor (ex: permitindo o cancelamento em até 7 dias após a compra).</p>
+
+        <h2>6. Privacidade</h2>
+        <p>Sua privacidade é fundamental. Nossa <strong><a href="/politica-de-privacidade" onclick="return false;">Política de Privacidade</a></strong> explica como coletamos, usamos e protegemos seus dados pessoais quando você usa nossos Serviços. Ao concordar com estes Termos, você também concorda com nossa Política de Privacidade.</p>
+
+        <h2>7. Garantias e Limitação de Responsabilidade</h2>
+        <p>Os Serviços são fornecidos "como estão". O Sete Educacional não faz garantias específicas sobre os Serviços, exceto as expressamente declaradas.</p>
+        <p>Não garantimos que o uso dos Serviços resultará em sua aprovação em qualquer exame, vestibular ou concurso. Nosso objetivo é fornecer as melhores ferramentas de preparação, mas seu sucesso depende do seu esforfo individual e de múltiplos fatores fora do nosso controle.</p>
+        <p>Na medida máxima permitida por lei, o Sete Educacional não será responsável por perdas de receita, lucros cessantes, perda de dados ou danos indiretos, especiais ou consequenciais.</p>
+
+        <h2>8. Alterações e Encerramento</h2>
+        
+        <h3>Alterações nos Termos:</h3>
+        <p>Podemos modificar estes termos para refletir alterações na lei ou em nossos Serviços. Publicaremos um aviso sobre alterações relevantes, e seu uso contínuo dos Serviços após a alteração significará sua aceitação dos novos termos.</p>
+        
+        <h3>Encerramento:</h3>
+        <p>Você pode parar de usar nossos Serviços a qualquer momento. Nós também podemos suspender ou encerrar seu acesso aos Serviços se você violar estes termos, ou por razões legais ou operacionais.</p>
+
+        <h2>9. Disposições Gerais</h2>
+        <p>Estes termos são regidos pelas leis da República Federativa do Brasil. Você concorda que qualquer disputa legal será resolvida no foro da comarca de São Paulo/SP.</p>
+
+    </div>
+
+</body>
+</html>

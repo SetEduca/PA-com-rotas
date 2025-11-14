@@ -349,6 +349,17 @@
             text-decoration: underline;
         }
 
+        /* Estilo de erro para checkbox de termos */
+        .terms-container.error .terms-text {
+            color: #dc3545;
+            font-weight: 500;
+        }
+
+        .terms-container.error .terms-checkbox {
+            outline: 2px solid #dc3545;
+            outline-offset: 2px;
+        }
+
         /* =========================================
         8. BOTÕES DE AÇÃO
         ========================================= */
@@ -766,10 +777,10 @@
                               <i class="fas fa-eye password-toggle-icon" id="toggleConfirmarSenha"></i>
                               <div id="password-error-message" class="password-error-message"></div>
                          </div>
-                    </div> <div class="terms-container">
+                    </div> <div class="terms-container" id="terms-container">
                          <input type="checkbox" id="terms" name="terms" class="terms-checkbox" required>
                          <label for="terms" class="terms-text">
-                              Eu concordo com os <a href="#" target="_blank">Termos de Serviço do Seteeduca</a>
+                              Eu concordo com os <a href="/termossete" target="_blank">Termos de Serviço do Seteeduca</a>
                          </label>
                     </div>
 
@@ -819,6 +830,8 @@
                 });
                 // Remover classe de erro dos inputs
                 document.querySelectorAll('.form-group input.error').forEach(input => input.classList.remove('error'));
+                // Remover classe de erro dos termos
+                document.getElementById('terms-container').classList.remove('error');
                 // Resetar ícones de olho
                 document.querySelectorAll('.password-toggle-icon').forEach(icon => {
                      icon.classList.remove('fa-eye-slash');
@@ -846,6 +859,8 @@
             const errorMessage = document.getElementById('error-message'); // Div GERAL de erro (JS)
             const errorText = document.getElementById('error-text'); // Texto da div GERAL de erro (JS)
             const passwordRequirements = document.getElementById('password-requirements');
+            const termsCheckbox = document.getElementById('terms');
+            const termsContainer = document.getElementById('terms-container');
 
             // Seleciona os ícones de olho
             const toggleSenhaIcon = document.getElementById('toggleSenha');
@@ -873,6 +888,13 @@
             confirmarSenhaInput.addEventListener('input', function() {
                 const senha = senhaInput.value; const confirmarSenha = this.value;
                 if (confirmarSenha && senha !== confirmarSenha) { errorMessageDiv.textContent = 'As senhas não coincidem'; this.classList.add('error'); } else { errorMessageDiv.textContent = ''; this.classList.remove('error'); }
+            });
+
+            // ========== VALIDAÇÃO DO CHECKBOX DE TERMOS ==========
+            termsCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    termsContainer.classList.remove('error');
+                }
             });
 
             // ========== FUNCIONALIDADE DE UPLOAD DE FOTO ==========
@@ -914,9 +936,9 @@
             form.addEventListener('submit', async (event) => {
                 event.preventDefault(); // Impede envio padrão
                 // --- Limpeza ---
-                errorMessageDiv.textContent = ''; errorMessage.style.display = 'none'; successOverlay.style.display = 'none'; document.getElementById('error-message-server')?.remove(); document.getElementById('success-message-server')?.remove();
+                errorMessageDiv.textContent = ''; errorMessage.style.display = 'none'; successOverlay.style.display = 'none'; document.getElementById('error-message-server')?.remove(); document.getElementById('success-message-server')?.remove(); termsContainer.classList.remove('error');
                 // --- Validações ---
-                const senha = senhaInput.value; const confirmarSenha = confirmarSenhaInput.value; if (senha !== confirmarSenha) { errorMessageDiv.textContent = 'As senhas não coincidem.'; confirmarSenhaInput.classList.add('error'); confirmarSenhaInput.focus(); return; } if (!validatePassword(senha)) { errorText.textContent = 'A senha não atende aos requisitos.'; errorMessage.style.display = 'flex'; senhaInput.focus(); return; } const termsCheckbox = document.getElementById('terms'); if (!termsCheckbox.checked) { errorText.textContent = 'Aceite os Termos.'; errorMessage.style.display = 'flex'; termsCheckbox.focus(); termsCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+                const senha = senhaInput.value; const confirmarSenha = confirmarSenhaInput.value; if (senha !== confirmarSenha) { errorMessageDiv.textContent = 'As senhas não coincidem.'; confirmarSenhaInput.classList.add('error'); confirmarSenhaInput.focus(); return; } if (!validatePassword(senha)) { errorText.textContent = 'A senha não atende aos requisitos.'; errorMessage.style.display = 'flex'; senhaInput.focus(); return; } if (!termsCheckbox.checked) { errorText.textContent = 'Você precisa aceitar os Termos de Serviço para continuar.'; errorMessage.style.display = 'flex'; termsContainer.classList.add('error'); termsCheckbox.focus(); termsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
                 // --- Envio ---
                 cadastrarBtn.disabled = true; cadastrarBtn.textContent = 'Cadastrando...'; cadastrarBtn.style.opacity = '0.7'; const formData = new FormData(form);
                 try {
