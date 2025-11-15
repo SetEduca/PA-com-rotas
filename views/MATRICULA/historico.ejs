@@ -112,31 +112,31 @@
                     
                     <table class="table">
                         <thead>
-                            <tr>
-                                <th>Aluno</th>
-                                <th>Turma (Antiga)</th>
-                                <th>Ano Letivo</th>
-                                <th>Data (Início)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% if (historico && historico.length > 0) { %>
-                                <% historico.forEach(item => { %>
-                                    <tr>
-                                        <td><strong><%= item.alunoNome %></strong></td>
-                                        <td><%= item.turmaNome %></td>
-                                        <td><%= item.ano %></td>
-                                        <td><%= item.data %></td>
-                                    </tr>
-                                <% }) %>
-                            <% } else { %>
-                                <tr>
-                                    <td colspan="4" style="text-align: center; padding: 40px; color: #777;">
-                                        Nenhuma matrícula antiga encontrada no histórico.
-                                    </td>
-                                </tr>
-                            <% } %>
-                        </tbody>
+    <tr>
+        <th>Aluno</th>
+        <th>Turma Arquivada</th>
+        <th>Ano Letivo</th>
+        <th>Data da Matrícula Original</th>
+    </tr>
+</thead>
+<tbody>
+    <% if (historico && historico.length > 0) { %>
+        <% historico.forEach(item => { %>
+            <tr>
+                <td><strong><%= item.alunoNome %></strong></td>
+                <td><%= item.turmaNome %></td>
+                <td><%= item.ano %></td>
+                <td><%= item.data %></td>
+            </tr>
+        <% }) %>
+    <% } else { %>
+        <tr>
+            <td colspan="4" style="text-align: center; padding: 40px; color: #777;">
+                Nenhuma matrícula antiga encontrada no histórico.
+            </td>
+        </tr>
+    <% } %>
+</tbody>
                     </table>
 
                 </section>

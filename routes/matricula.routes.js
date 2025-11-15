@@ -5,15 +5,46 @@ import supabase from '../supabase.js';
 
 const router = express.Router();
 
+// --- FUNÇÃO AUXILIAR PARA BUSCAR E FILTRAR TURMAS COM VAGAS ---
+async function fetchTurmasComVagas() {
+    const { data: todasAsTurmas, error } = await supabase
+        .from('turma')
+        .select('id, nome_turma, limite_vagas, quantidade_alunos')
+        .eq('ativo', true);
+
+    if (error) {
+        console.error("Erro ao buscar turmas para re-renderização:", error);
+        return [];
+    }
+
+    // Filtra em JavaScript (Node.js) as turmas que têm vagas disponíveis
+    return todasAsTurmas.filter(t => {
+        const qtd = parseInt(t.quantidade_alunos || 0);
+        const limite = parseInt(t.limite_vagas);
+        return !isNaN(qtd) && !isNaN(limite) && qtd < limite;
+    });
+}
+
+
 // 1. EXIBIR A PÁGINA DE MATRÍCULA COM TURMAS DISPONÍVEIS
 router.get('/', async (req, res) => {
     // Pega mensagens de sucesso ou erro da URL (query string)
     const { sucesso, erro: erroQuery } = req.query;
     let successMsg = null;
     let errorMsg = erroQuery ? erroQuery : null; // Pega erro da query se existir
+    
+    // Variável para erro específico da Rematrícula (ajuste para receber do POST)
+    let rematriculaError = null; 
 
     if (sucesso === 'rematricula') {
         successMsg = "Rematrícula (mudança de turma) realizada com sucesso!";
+    }
+
+    // Verifica se há erro de rematrícula vindo de um redirect do POST /rematricular
+    if (req.session && req.session.rematricula_error) {
+        rematriculaError = req.session.rematricula_error;
+        // Limpa a sessão após usar (Importante!)
+        delete req.session.rematricula_error; 
     }
     
     try {
@@ -30,7 +61,7 @@ router.get('/', async (req, res) => {
                 turmas: [], 
                 error: "Erro ao carregar turmas.",
                 success: null,
-                rematricula_error: null
+                rematricula_error: null // Usa null se não houver
             });
         }
 
@@ -46,7 +77,7 @@ router.get('/', async (req, res) => {
             turmas: turmasComVagas, 
             error: errorMsg, // Passa o erro da query (se houver)
             success: successMsg, // Passa a msg de sucesso (se houver)
-            rematricula_error: res.locals.rematricula_error // Passa erro específico da rota POST /rematricular
+            rematricula_error: rematriculaError // Passa erro específico da rematrícula
         });
 
     } catch (err) {
@@ -137,12 +168,15 @@ router.post('/', async (req, res) => {
         // --- Validações no Banco de Dados ---
 
         // Validação 1: O aluno já tem matrícula ativa neste ano letivo?
+        // NOTA: A tabela MATRICULA tem uma constraint UNIQUE (crianca_id, turma_id). 
+        // Se quisermos garantir apenas UMA matrícula por ano, precisamos da coluna 'ano_letivo' no UNIQUE.
+        // A lógica abaixo verifica se já existe UMA matrícula ATIVA (se ativo for mantido).
         const { data: matriculaExistente, error: checkMatriculaError } = await supabase
             .from('matricula')
             .select('id')
             .eq('crianca_id', aluno_id) // Coluna correta: crianca_id
             .eq('ano_letivo', ano_letivo) // Verifica no ano letivo atual
-            .eq('ativo', true)
+            .eq('ativo', true) // Considerando que você pode manter esta coluna e ela será TRUE
             .maybeSingle(); // Retorna null se não encontrar
 
         if (checkMatriculaError) throw checkMatriculaError;
@@ -202,7 +236,7 @@ router.post('/', async (req, res) => {
 
         // Sucesso! Redireciona para a lista de turmas (ou outra página de sucesso)
         console.log(`Matrícula para aluno ${aluno_id} na turma ${turma_id} realizada com sucesso.`);
-        res.redirect('/turmas'); // Redireciona para a lista de turmas
+        res.redirect('/matriculas'); // Redireciona para a lista de turmas
 
     } catch (error) { // Captura qualquer erro ocorrido no bloco 'try'
         console.error("Erro geral ao processar matrícula:", error);
@@ -275,7 +309,11 @@ router.post('/rematricular', async (req, res) => {
     let turmaAntigaId = null;
 
     if (!matricula_id || !nova_turma_id) {
-        return res.status(400).send("Dados incompletos (ID da Matrícula e Nova Turma são obrigatórios).");
+        // Usa a sessão para passar o erro, pois é um POST que redireciona para um GET
+        if (req.session) {
+            req.session.rematricula_error = "Dados incompletos (ID da Matrícula e Nova Turma são obrigatórios).";
+        }
+        return res.redirect('/matriculas');
     }
 
     try {
@@ -313,10 +351,8 @@ router.post('/rematricular', async (req, res) => {
             throw new Error("A nova turma selecionada não possui vagas disponíveis.");
         }
 
-        // --- Operações (em transação) ---
-        // Usamos uma função RPC (Remote Procedure Call) do Supabase para garantir
-        // que todas as atualizações aconteçam juntas (ou nenhuma aconteça).
-        // Você precisará criar esta função no seu Supabase (ver Passo 2).
+        // --- Operações (em transação via RPC) ---
+        // A RPC mudar_turma_aluno agora COPIA para o histórico e ATUALIZA a matrícula.
 
         const { error: rpcError } = await supabase.rpc('mudar_turma_aluno', {
             p_matricula_id: matricula_id,
@@ -330,41 +366,36 @@ router.post('/rematricular', async (req, res) => {
         }
 
         // Sucesso! Redireciona de volta para a página de matrícula com msg de sucesso
-        // (Precisamos adicionar a lógica de sucesso no GET /)
         res.redirect('/matriculas?sucesso=rematricula');
 
     } catch (error) {
         console.error("Erro geral ao processar rematrícula:", error.message);
-        // Recarrega a página de matrícula mostrando o erro
-        try {
-            const { data: turmasComVagas } = await supabase.from('turma').select('id, nome_turma, limite_vagas, quantidade_alunos').eq('ativo', true).lt('quantidade_alunos', supabase.sql('limite_vagas'));
-            // Passa o erro para a aba de rematrícula (precisamos ajustar o EJS)
-            return res.status(400).render('MATRICULA/matricula', { 
-                turmas: turmasComVagas || [], 
-                error: null, // Erro da aba 1
-                rematricula_error: error.message // Erro da aba 2
-            });
-        } catch (loadError) {
-             return res.status(500).send(error.message); // Fallback
+        
+        // Armazena o erro na sessão e redireciona para o GET /matriculas
+        if (req.session) {
+            req.session.rematricula_error = error.message;
         }
+        return res.redirect('/matriculas'); // O GET /matriculas irá carregar o erro da sessão
     }
 });
 
 // --- ROTA GET PARA VER O HISTÓRICO DE MATRÍCULAS ---
-// (Mostra matrículas desativadas, ex: após uma rematrícula)
+// *** ATUALIZADA para buscar na nova tabela HISTORICO_MATRICULA ***
 router.get('/historico', async (req, res) => {
     try {
+        // A CHAVE: Buscar na nova tabela HISTORICO_MATRICULA
         const { data: historico, error } = await supabase
-            .from('matricula')
+            .from('historico_matricula') 
             .select(`
                 id,
                 data_matricula,
                 ano_letivo,
+                data_arquivamento,
                 cadastro_crianca ( nome ),
                 turma ( nome_turma )
             `)
-            .eq('ativo', false) // A CHAVE: Buscar apenas matrículas INATIVAS
-            .order('data_matricula', { ascending: false }); // Mostrar as mais recentes primeiro
+            // Ordenar pela data que a mudança ocorreu (data_arquivamento)
+            .order('data_arquivamento', { ascending: false }); 
 
         if (error) {
             console.error("Erro ao buscar histórico de matrículas:", error);
@@ -376,8 +407,10 @@ router.get('/historico', async (req, res) => {
             id: m.id,
             data: m.data_matricula ? new Date(m.data_matricula).toLocaleDateString('pt-BR') : 'Sem data',
             ano: m.ano_letivo,
+            // A turma e o aluno vêm da matrícula que foi arquivada (Turma Antiga)
             alunoNome: m.cadastro_crianca ? m.cadastro_crianca.nome : 'Aluno não encontrado',
-            turmaNome: m.turma ? m.turma.nome_turma : 'Turma não encontrada'
+            turmaNome: m.turma ? m.turma.nome_turma : 'Turma (Antiga) não encontrada',
+            dataArquivamento: m.data_arquivamento ? new Date(m.data_arquivamento).toLocaleDateString('pt-BR') : 'N/A'
         }));
 
         // Renderiza a nova página de histórico

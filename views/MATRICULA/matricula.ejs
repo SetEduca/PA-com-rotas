@@ -308,23 +308,28 @@ Mensalidade</a>
                             <i class="fas fa-history"></i> Ver Histórico de Matrículas
                         </a>
                      </div>
-                     <div style="clear: both;"></div> <% if (typeof error !== 'undefined' && error) { %>
-                         <div class="error-message-box" id="matricula_error_box">
-                             <i class="fas fa-exclamation-triangle"></i> <%= error %>
-                         </div>
-                     <% } %>
-                     
-                     <% if (typeof success !== 'undefined' && success) { %>
-                          <div class="success-message-box" id="success_box">
-                              <i class="fas fa-check-circle"></i> <%= success %>
-                          </div>
-                     <% } %>
+                   <div style="clear: both;"></div> 
 
-                     <% if (typeof rematricula_error !== 'undefined' && rematricula_error) { %>
-                         <div class="error-message-box" id="rematricula_error_box">
-                             <i class="fas fa-exclamation-triangle"></i> <%= rematricula_error %>
-                         </div>
-                     <% } %>
+<% if (typeof error !== 'undefined' && error) { %>
+    <div class="error-message-box" id="error_box">
+        <i class="fas fa-exclamation-circle"></i> 
+        <span>Erro de Matrícula: <%= error %></span>
+    </div>
+<% } %>
+
+<% if (typeof rematricula_error !== 'undefined' && rematricula_error) { %>
+    <div class="error-message-box" id="rematricula_error_box">
+        <i class="fas fa-exclamation-circle"></i> 
+        <span>Erro de Rematrícula: <%= rematricula_error %></span>
+    </div>
+<% } %>
+
+<% if (typeof success !== 'undefined' && success) { %>
+    <div class="success-message-box" id="success_box">
+        <i class="fas fa-check-circle"></i> 
+        <span><%= success %></span>
+    </div>
+<% } %>
 
 
                     <div class="tab-content active" id="matricula-content">
@@ -425,278 +430,293 @@ type="hidden" id="aluno_id" name="aluno_id" required>
         </main>
     </div>
 
-    <script>
-        // Função de Logout
-        function logout() {
-            if (confirm('Deseja realmente sair do sistema?')) {
-                window.location.href = '/login';
-            }
-    
+   <script>
+    // Função de Logout (mantida)
+    function logout() {
+        if (confirm('Deseja realmente sair do sistema?')) {
+            window.location.href = '/login';
+        }
     }
 
-        // Troca de Abas (Matrícula/Rematrícula)
-        function switchTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            const activeTabButton = document.querySelector(`.tab[onclick="switchTab('${tab}')"]`);
-            if (activeTabButton) activeTabButton.classList.add('active');
-            const activeTabContent = document.getElementById(`${tab}-content`);
-if (activeTabContent) activeTabContent.classList.add('active');
+    // Troca de Abas (Matrícula/Rematrícula) - Adaptada para seus elementos
+    function switchTab(tab) {
+        // Remove 'active' dos botões e dos conteúdos
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
 
-            // Limpa mensagens de erro/sucesso ao trocar de aba
-            const errorBox1 = document.getElementById('matricula_error_box');
-            const errorBox2 = document.getElementById('rematricula_error_box');
-            const successBox = document.getElementById('success_box');
-            if (errorBox1) errorBox1.style.display = 'none';
-            if (errorBox2) errorBox2.style.display = 'none';
-            if (successBox) successBox.style.display = 'none';
+        // Adiciona 'active' ao botão e conteúdo da aba selecionada
+        const activeTabButton = document.querySelector(`.tab[onclick="switchTab('${tab}')"]`);
+        if (activeTabButton) activeTabButton.classList.add('active');
+        
+        const activeTabContent = document.getElementById(`${tab}-content`);
+        if (activeTabContent) activeTabContent.classList.add('active');
+
+        // Lógica de limpar as caixas de mensagem ao trocar de aba (opcional, mas mantida)
+        document.getElementById('error_box')?.style.setProperty('display', 'none', 'important');
+        document.getElementById('rematricula_error_box')?.style.setProperty('display', 'none', 'important');
+        document.getElementById('success_box')?.style.setProperty('display', 'none', 'important');
+    }
+
+    // --- Lógica Principal da Página (DOM Carregado) ---
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // --- Lógica do Menu Dropdown do Perfil (mantida) ---
+        const profileToggle = document.getElementById('profile-toggle');
+        const dropdownMenu = document.getElementById('profile-dropdown-menu');
+        const profileArrow = profileToggle?.querySelector('.profile-arrow');
+
+        profileToggle?.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const isShown = dropdownMenu.classList.toggle('show');
+            if (profileArrow) profileArrow.style.transform = isShown ? 'rotate(180deg)' : 'rotate(0deg)';
+        });
+        
+        window.addEventListener('click', function() {
+            if (dropdownMenu?.classList.contains('show')) {
+                dropdownMenu.classList.remove('show');
+                if (profileArrow) profileArrow.style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // --- Lógica para mostrar aba correta se houver erro ou sucesso ---
+        // Verifica se as variáveis EJS de erro de Rematrícula existem na renderização
+        const rematriculaErrorExists = typeof rematricula_error !== 'undefined' && rematricula_error;
+        const matriculaErrorExists = typeof error !== 'undefined' && error;
+
+        if (rematriculaErrorExists) {
+            // Se houver erro de rematrícula, força a aba de Rematrícula
+            switchTab('rematricula');
+        } else {
+            // Caso contrário (Matrícula com erro, Sucesso ou sem mensagens), usa a aba de Matrícula (padrão)
+            switchTab('matricula');
         }
 
-        // --- Lógica Principal da Página (DOM Carregado) ---
-        document.addEventListener('DOMContentLoaded', function() {
 
-            // --- Lógica do Menu Dropdown do Perfil ---
-            const profileToggle = document.getElementById('profile-toggle');
-            const dropdownMenu = document.getElementById('profile-dropdown-menu');
-            const profileArrow = profileToggle?.querySelector('.profile-arrow');
+        // ===========================================
+        // --- Lógica da ABA 1 (Nova Matrícula) ---
+        // ===========================================
+        const searchInput = document.getElementById('nomeAluno');
+        const searchResults = document.getElementById('searchResults');
+        const studentInfo = document.getElementById('studentInfo');
+        const studentName = document.getElementById('studentName');
+        const studentDetails = document.getElementById('studentDetails');
+        const hiddenAlunoId = document.getElementById('aluno_id');
+        const turmaSelect = document.getElementById('turma_id');
+        const btnMatricular = document.getElementById('btnMatricular');
+        const dataMatriculaInput = document.getElementById('data_matricula');
 
-      
-      profileToggle?.addEventListener('click', function(event) {
-                event.stopPropagation();
-                const isShown = dropdownMenu.classList.toggle('show');
-                if (profileArrow) profileArrow.style.transform = isShown ? 'rotate(180deg)' : 'rotate(0deg)';
-            });
-            
-         
-   window.addEventListener('click', function() {
-                if (dropdownMenu?.classList.contains('show')) {
-                    dropdownMenu.classList.remove('show');
-                    if (profileArrow) profileArrow.style.transform = 'rotate(0deg)';
-}
-            });
+        // Preenche data atual por padrão
+        if (dataMatriculaInput) dataMatriculaInput.value = new Date().toISOString().split('T')[0];
+        let searchTimeout;
 
-            // --- Lógica para mostrar aba correta se houver erro ou sucesso ---
-            <% if (typeof rematricula_error !== 'undefined' && rematricula_error) { %>
-                // Se o erro veio da rematrícula, troca para essa aba
-                switchTab('rematricula');
-            <% } else if (typeof success !== 'undefined' && success) { %>
-                // Se veio msg de sucesso, mostra, mas fica na aba 1
-            <% } else if (typeof error !== 'undefined' && error) { %>
-                // Se veio erro da matricula 1, fica na aba 1
-            <% } %>
+        // Função para resetar o formulário da Nova Matrícula
+        function resetMatriculaForm() {
+            searchResults.innerHTML = '';
+            searchResults.classList.remove('visible');
+            studentInfo.style.display = 'none';
+            hiddenAlunoId.value = '';
+            // Reseta a seleção de turma e desabilita o botão
+            turmaSelect.value = '';
+            btnMatricular.disabled = true;
+        }
 
+        // Evento de digitação no campo de busca (ABA 1)
+        searchInput?.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.trim();
+            clearTimeout(searchTimeout);
 
-            // ===========================================
-            // --- Lógica da ABA 1 (Nova Matrícula) ---
-            // ===========================================
-            const searchInput = document.getElementById('nomeAluno');
-const searchResults = document.getElementById('searchResults');
-            const studentInfo = document.getElementById('studentInfo');
-            const studentName = document.getElementById('studentName');
-            const studentDetails = document.getElementById('studentDetails');
-            const hiddenAlunoId = document.getElementById('aluno_id');
-const btnMatricular = document.getElementById('btnMatricular');
-            const dataMatriculaInput = document.getElementById('data_matricula');
+            if (searchTerm.length < 3) {
+                resetMatriculaForm();
+                return;
+            }
 
-            // Preenche data atual por padrão
-            if (dataMatriculaInput) dataMatriculaInput.value = new Date().toISOString().split('T')[0];
-let searchTimeout;
-
-            // Evento de digitação no campo de busca (ABA 1)
-            searchInput?.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.trim();
-                clearTimeout(searchTimeout);
-
-                if (searchTerm.length < 3) {
-                    searchResults.innerHTML 
-= '';
-                    searchResults.classList.remove('visible');
-                    studentInfo.style.display = 'none';
-                    hiddenAlunoId.value = '';
-                    btnMatricular.disabled = true;
-             
-       return;
-                }
-
-                searchTimeout = setTimeout(async () => {
-                    try {
-                        // Chama a API de alunos (todos os ativos do cadastro)
-                        const response = await fetch(`/matriculas/api/buscar-aluno?nome=${encodeURIComponent(searchTerm)}`);
-       
-                 if (!response.ok) {
-                             throw new Error(`Erro ${response.status}: ${await response.text()}`);
-                        }
-                       
- const alunos = await response.json();
-
-                        searchResults.innerHTML = '';
-
-                        if (alunos.length > 0) {
-                            alunos.forEach(aluno => {
-                                const item = document.createElement('div');
-                      
-          item.className = 'search-result-item';
-
-                                // Verifica se 'aluno.responsavel' existe e tem 'nome'
-                                let nomeResponsavel = (aluno.responsavel && aluno.responsavel.nome) ? aluno.responsavel.nome : 'Resp. não associado';
-
-                                item.innerHTML = `<strong>${aluno.nome}</strong> (Responsável: ${nomeResponsavel})`;
-
-           
-                     item.dataset.alunoId = aluno.id;
-                                item.dataset.alunoData = JSON.stringify(aluno);
-
-                                searchResults.appendChild(item);
-           
-                 });
-                            searchResults.classList.add('visible');
-} else {
-                            searchResults.innerHTML = '<div class="search-result-item" style="color: #666; cursor: default;">Nenhum aluno encontrado</div>';
-searchResults.classList.add('visible');
-                        }
-                    } catch (error) {
-                        console.error('Erro ao buscar alunos:', error);
-searchResults.innerHTML = `<div class="search-result-item" style="color: red; cursor: default;">Erro na busca: ${error.message}</div>`;
-                        searchResults.classList.add('visible');
-}
-                }, 300);
-            });
-
-            // Evento de clique nos resultados da busca (ABA 1)
-            searchResults?.addEventListener('click', (e) => {
-                const selectedItem = e.target.closest('.search-result-item[data-aluno-id]');
-
-                if (selectedItem) {
-                    const alunoData = JSON.parse(selectedItem.dataset.alunoData);
-
-                  
-  searchInput.value = alunoData.nome;
-                    studentName.textContent = alunoData.nome;
-
-                    let detalhesHtml = `<div><strong>CPF Criança:</strong> ${alunoData.cpf || 'Não informado'}</div>`;
-
-                    if (alunoData.responsavel) {
-                        
-detalhesHtml += `<div><strong>Responsável:</strong> ${alunoData.responsavel.nome || 'Nome não informado'}</div>`;
-                        detalhesHtml += `<div><strong>CPF Responsável:</strong> ${alunoData.responsavel.cpf || 'Não informado'}</div>`;
-                    } else {
-                        detalhesHtml += `<div><strong>Responsável:</strong> Não associado</div>`;
-}
-
-                    studentDetails.innerHTML = detalhesHtml;
-studentInfo.style.display = 'block';
-
-                    hiddenAlunoId.value = alunoData.id;
+            searchTimeout = setTimeout(async () => {
+                try {
+                    // Endpoint: /matriculas/api/buscar-aluno (alunos não matriculados)
+                    const response = await fetch(`/matriculas/api/buscar-aluno?nome=${encodeURIComponent(searchTerm)}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Erro ${response.status}: ${await response.text()}`);
+                    }
+                    
+                    const alunos = await response.json();
 
                     searchResults.innerHTML = '';
-                    searchResults.classList.remove('visible');
-                    btnMatricular.disabled = false;
-}
-            });
 
-
-            // ===========================================
-            // --- Lógica da ABA 2 (Rematrícula) ---
-            // ===========================================
-            const searchInputMat = document.getElementById('nomeAlunoMatriculado');
-            const searchResultsMat = document.getElementById('searchResultsMatriculado');
-            const studentInfoMat = document.getElementById('studentInfoMatriculado');
-            const studentNameMat = document.getElementById('studentNameMatriculado');
-            const studentDetailsMat = document.getElementById('studentDetailsMatriculado');
-            const hiddenMatriculaId = document.getElementById('rematricula_matricula_id');
-            const hiddenCriancaId = document.getElementById('rematricula_crianca_id');
-            const hiddenTurmaAntigaId = document.getElementById('rematricula_turma_antiga_id');
-            const btnRematricular = document.getElementById('btnRematricular');
-            const dataRematriculaInput = document.getElementById('data_rematricula');
-            let searchTimeoutMat;
-
-            // Preenche data atual por padrão
-            if (dataRematriculaInput) dataRematriculaInput.value = new Date().toISOString().split('T')[0];
-
-            // Evento de digitação no campo de busca (ABA 2)
-            searchInputMat?.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.trim();
-                clearTimeout(searchTimeoutMat);
-
-                if (searchTerm.length < 3) {
-                    searchResultsMat.innerHTML = '';
-                    searchResultsMat.classList.remove('visible');
-                    studentInfoMat.style.display = 'none';
-                    hiddenMatriculaId.value = '';
-                    hiddenCriancaId.value = '';
-                    hiddenTurmaAntigaId.value = '';
-                    btnRematricular.disabled = true;
-                    return;
-                }
-
-                searchTimeoutMat = setTimeout(async () => {
-                    try {
-                        // Chama a API de alunos JÁ matriculados
-                        const response = await fetch(`/matriculas/api/buscar-matriculados?nome=${encodeURIComponent(searchTerm)}`);
-                        if (!response.ok) {
-                             throw new Error(`Erro ${response.status}: ${await response.text()}`);
-                        }
-                        const alunos = await response.json();
-                        searchResultsMat.innerHTML = '';
-
-                        if (alunos.length > 0) {
-                            alunos.forEach(aluno => {
-                                const item = document.createElement('div');
-                                item.className = 'search-result-item';
-                                item.innerHTML = `<strong>${aluno.nome_crianca}</strong> <span class="turma-atual">(Turma Atual: ${aluno.turma_atual_nome})</span>`;
-                                item.dataset.alunoData = JSON.stringify(aluno); // Guarda todos os dados
-                                searchResultsMat.appendChild(item);
-                            });
-                            searchResultsMat.classList.add('visible');
-                        } else {
-                            searchResultsMat.innerHTML = '<div class="search-result-item" style="color: #666; cursor: default;">Nenhum aluno matriculado encontrado</div>';
-                            searchResultsMat.classList.add('visible');
-                        }
-                    } catch (error) {
-                        console.error('Erro ao buscar alunos matriculados:', error);
-                        searchResultsMat.innerHTML = `<div class="search-result-item" style="color: red; cursor: default;">Erro na busca: ${error.message}</div>`;
-                        searchResultsMat.classList.add('visible');
+                    if (alunos.length > 0) {
+                        alunos.forEach(aluno => {
+                            const item = document.createElement('div');
+                            item.className = 'search-result-item';
+                            let nomeResponsavel = (aluno.responsavel && aluno.responsavel.nome) ? aluno.responsavel.nome : 'Resp. não associado';
+                            
+                            item.innerHTML = `<strong>${aluno.nome}</strong> (Responsável: ${nomeResponsavel})`;
+                            item.dataset.alunoId = aluno.id;
+                            item.dataset.alunoData = JSON.stringify(aluno);
+                            
+                            searchResults.appendChild(item);
+                        });
+                        searchResults.classList.add('visible');
+                    } else {
+                        searchResults.innerHTML = '<div class="search-result-item" style="color: #666; cursor: default;">Nenhum aluno encontrado ou já matriculado.</div>';
+                        searchResults.classList.add('visible');
+                        resetMatriculaForm(); // Reseta se não encontrar
                     }
-                }, 300);
-            });
-
-            // Evento de clique nos resultados da busca (ABA 2)
-            searchResultsMat?.addEventListener('click', (e) => {
-                const selectedItem = e.target.closest('.search-result-item[data-aluno-data]');
-
-                if (selectedItem) {
-                    const alunoData = JSON.parse(selectedItem.dataset.alunoData);
-
-                    searchInputMat.value = alunoData.nome_crianca;
-                    studentNameMat.textContent = alunoData.nome_crianca;
-
-                    let detalhesHtml = `<div><strong>CPF:</strong> ${alunoData.cpf_crianca || 'Não informado'}</div>`;
-                    detalhesHtml += `<div style="margin-top: 10px;"><strong>Turma Atual:</strong> ${alunoData.turma_atual_nome}</div>`;
-                    
-                    studentDetailsMat.innerHTML = detalhesHtml;
-                    studentInfoMat.style.display = 'block';
-
-                    // Preenche TODOS os IDs ocultos necessários para o backend
-                    hiddenMatriculaId.value = alunoData.matricula_id;
-                    hiddenCriancaId.value = alunoData.crianca_id;
-                    hiddenTurmaAntigaId.value = alunoData.turma_atual_id;
-
-                    searchResultsMat.innerHTML = '';
-                    searchResultsMat.classList.remove('visible');
-                    btnRematricular.disabled = false; // Habilita o botão
+                } catch (error) {
+                    console.error('Erro ao buscar alunos:', error);
+                    searchResults.innerHTML = `<div class="search-result-item" style="color: red; cursor: default;">Erro na busca: ${error.message}</div>`;
+                    searchResults.classList.add('visible');
+                    resetMatriculaForm(); // Reseta em caso de erro
                 }
-            });
+            }, 300);
+        });
 
-            // Esconde resultados se clicar fora (para AMBAS as listas)
-             document.addEventListener('click', (e) => {
-                 if (!searchResults.contains(e.target) && e.target !== searchInput) {
-                     searchResults.classList.remove('visible');
-                 }
-                 if (!searchResultsMat.contains(e.target) && e.target !== searchInputMat) {
-                     searchResultsMat.classList.remove('visible');
-                 }
-             });
-}); // Fim do DOMContentLoaded
-    </script>
+        // Evento de clique nos resultados da busca (ABA 1)
+        searchResults?.addEventListener('click', (e) => {
+            const selectedItem = e.target.closest('.search-result-item[data-aluno-id]');
+
+            if (selectedItem) {
+                const alunoData = JSON.parse(selectedItem.dataset.alunoData);
+
+                // Preenche Input e Oculta Resultados
+                searchInput.value = alunoData.nome;
+                searchResults.classList.remove('visible');
+
+                // Preenche Detalhes
+                studentName.textContent = alunoData.nome;
+                let detalhesHtml = `<div><strong>CPF Criança:</strong> ${alunoData.cpf || 'Não informado'}</div>`;
+                if (alunoData.responsavel) {
+                    detalhesHtml += `<div><strong>Responsável:</strong> ${alunoData.responsavel.nome || 'Nome não informado'}</div>`;
+                    detalhesHtml += `<div><strong>CPF Responsável:</strong> ${alunoData.responsavel.cpf || 'Não informado'}</div>`;
+                } else {
+                    detalhesHtml += `<div><strong>Responsável:</strong> Não associado</div>`;
+                }
+
+                studentDetails.innerHTML = detalhesHtml;
+                studentInfo.style.display = 'block';
+
+                // Preenche ID Oculto e Habilita Botão
+                hiddenAlunoId.value = alunoData.id;
+                btnMatricular.disabled = false;
+            }
+        });
+
+
+        // ===========================================
+        // --- Lógica da ABA 2 (Rematrícula) ---
+        // ===========================================
+        const searchInputMat = document.getElementById('nomeAlunoMatriculado');
+        const searchResultsMat = document.getElementById('searchResultsMatriculado');
+        const studentInfoMat = document.getElementById('studentInfoMatriculado');
+        const studentNameMat = document.getElementById('studentNameMatriculado');
+        const studentDetailsMat = document.getElementById('studentDetailsMatriculado');
+        const hiddenMatriculaId = document.getElementById('rematricula_matricula_id');
+        const hiddenCriancaId = document.getElementById('rematricula_crianca_id');
+        const hiddenTurmaAntigaId = document.getElementById('rematricula_turma_antiga_id');
+        const novaTurmaSelect = document.getElementById('nova_turma_id');
+        const btnRematricular = document.getElementById('btnRematricular');
+        const dataRematriculaInput = document.getElementById('data_rematricula');
+        let searchTimeoutMat;
+
+        // Preenche data atual por padrão
+        if (dataRematriculaInput) dataRematriculaInput.value = new Date().toISOString().split('T')[0];
+
+        // Função para resetar o formulário da Rematrícula
+        function resetRematriculaForm() {
+            searchResultsMat.innerHTML = '';
+            searchResultsMat.classList.remove('visible');
+            studentInfoMat.style.display = 'none';
+            hiddenMatriculaId.value = '';
+            hiddenCriancaId.value = '';
+            hiddenTurmaAntigaId.value = '';
+            // Reseta a seleção de turma e desabilita o botão
+            novaTurmaSelect.value = '';
+            btnRematricular.disabled = true;
+        }
+
+        // Evento de digitação no campo de busca (ABA 2)
+        searchInputMat?.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.trim();
+            clearTimeout(searchTimeoutMat);
+
+            if (searchTerm.length < 3) {
+                resetRematriculaForm();
+                return;
+            }
+
+            searchTimeoutMat = setTimeout(async () => {
+                try {
+                    // Endpoint: /matriculas/api/buscar-matriculados (alunos já matriculados)
+                    const response = await fetch(`/matriculas/api/buscar-matriculados?nome=${encodeURIComponent(searchTerm)}`);
+                    if (!response.ok) {
+                        throw new Error(`Erro ${response.status}: ${await response.text()}`);
+                    }
+                    const alunos = await response.json();
+                    searchResultsMat.innerHTML = '';
+
+                    if (alunos.length > 0) {
+                        alunos.forEach(aluno => {
+                            const item = document.createElement('div');
+                            item.className = 'search-result-item';
+                            item.innerHTML = `<strong>${aluno.nome_crianca}</strong> <span class="turma-atual">(Turma Atual: ${aluno.turma_atual_nome})</span>`;
+                            item.dataset.alunoData = JSON.stringify(aluno);
+                            searchResultsMat.appendChild(item);
+                        });
+                        searchResultsMat.classList.add('visible');
+                    } else {
+                        searchResultsMat.innerHTML = '<div class="search-result-item" style="color: #666; cursor: default;">Nenhum aluno matriculado encontrado.</div>';
+                        searchResultsMat.classList.add('visible');
+                        resetRematriculaForm(); // Reseta se não encontrar
+                    }
+                } catch (error) {
+                    console.error('Erro ao buscar alunos matriculados:', error);
+                    searchResultsMat.innerHTML = `<div class="search-result-item" style="color: red; cursor: default;">Erro na busca: ${error.message}</div>`;
+                    searchResultsMat.classList.add('visible');
+                    resetRematriculaForm(); // Reseta em caso de erro
+                }
+            }, 300);
+        });
+
+        // Evento de clique nos resultados da busca (ABA 2)
+        searchResultsMat?.addEventListener('click', (e) => {
+            const selectedItem = e.target.closest('.search-result-item[data-aluno-data]');
+
+            if (selectedItem) {
+                const alunoData = JSON.parse(selectedItem.dataset.alunoData);
+
+                // Preenche Input e Oculta Resultados
+                searchInputMat.value = alunoData.nome_crianca;
+                searchResultsMat.classList.remove('visible');
+                
+                // Preenche Detalhes
+                studentNameMat.textContent = alunoData.nome_crianca;
+                let detalhesHtml = `<div><strong>CPF:</strong> ${alunoData.cpf_crianca || 'Não informado'}</div>`;
+                detalhesHtml += `<div style="margin-top: 10px;"><strong>Responsável:</strong> ${alunoData.nome_responsavel || 'Não informado'}</div>`;
+                detalhesHtml += `<div style="margin-top: 10px;"><strong>Turma Atual:</strong> ${alunoData.turma_atual_nome}</div>`;
+                
+                studentDetailsMat.innerHTML = detalhesHtml;
+                studentInfoMat.style.display = 'block';
+
+                // Preenche IDs Ocultos e Habilita Botão
+                hiddenMatriculaId.value = alunoData.matricula_id;
+                hiddenCriancaId.value = alunoData.crianca_id;
+                hiddenTurmaAntigaId.value = alunoData.turma_atual_id;
+                btnRematricular.disabled = false;
+                
+                // Reseta a seleção da nova turma para forçar o usuário a escolher
+                novaTurmaSelect.value = '';
+            }
+        });
+
+        // Esconde resultados se clicar fora (para AMBAS as listas)
+        document.addEventListener('click', (e) => {
+            if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                searchResults.classList.remove('visible');
+            }
+            if (!searchResultsMat.contains(e.target) && e.target !== searchInputMat) {
+                searchResultsMat.classList.remove('visible');
+            }
+        });
+    }); // Fim do DOMContentLoaded
+</script>
 </body>
 </html>
