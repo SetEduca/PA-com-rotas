@@ -1,30 +1,25 @@
-// Alterado de 'require' para 'import'
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/database.js'; // Adicionado .js
+// Importe com a extensão .js no final
+import sequelize from '../config/database.js';
+import Responsavel from './Responsavel.js'; // <-- .js é obrigatório
 
 const Aluno = sequelize.define('Aluno', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    nomeCrianca: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    nomeResponsavel: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    // ... outros dados da matrícula (CPF, email, etc.)
-
-    // --- A "PONTE" ---
-    // Aqui vamos guardar o ID que o Asaas criou (ex: cus_12345)
-    asaasCustomerId: {
-        type: DataTypes.STRING,
-        allowNull: true // Fica nulo até a sincronização
-    }
+    // ... (Colunas id, nomeCrianca, asaasCustomerId, etc. com "field:")
+    // (O conteúdo que você já tem aqui está correto)
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    nomeCrianca: { type: DataTypes.STRING, allowNull: false, field: 'nome' },
+    dataNascimento: { type: DataTypes.DATEONLY, field: 'data_nascimento' },
+    asaasCustomerId: { type: DataTypes.STRING, field: 'asaascustomerid' },
+    cpf: { type: DataTypes.STRING, field: 'cpf' },
+    sexo: { type: DataTypes.STRING, field: 'sexo' },
+    naturalidade: { type: DataTypes.STRING, field: 'naturalidade' },
+    responsavelId: { type: DataTypes.INTEGER, field: 'responsavel_id' }
+}, {
+    tableName: 'cadastro_crianca', 
+    timestamps: false 
 });
 
-// Alterado de 'module.exports' para 'export default'
+// A associação (JOIN)
+Aluno.belongsTo(Responsavel, { foreignKey: 'responsavelId', as: 'responsavel' });
+
 export default Aluno;

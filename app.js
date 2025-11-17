@@ -10,11 +10,12 @@ import mensalidadeRouter from './routes/mensalidades.routes.js';
 import arquivadosRouter from './routes/arquivados.routes.js';
 import alunoAcessarRouter from './routes/aluno-acessar.routes.js';
 import perfilRouter from './routes/perfil.routes.js';
-
+import financeiroRoutes from './routes/financeiro.routes.js';
 
  const app = express();
  const PORT = 3020;
  const SALT_ROUNDS = 10;
+
 
 // --- CONFIGURAÇÕES GERAIS ---
 app.use(express.json());
@@ -202,6 +203,15 @@ app.get('/testar-banco', async (req, res) => {
   }
 });
 
+
+app.use('/api', financeiroRoutes);
+
+// ... (provavelmente suas outras rotas, como app.get('/login', ...))
+
+// A linha do app.listen fica no final
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+});
 
 //RODANDO O SERVIDOR
 app.listen(PORT, () => {

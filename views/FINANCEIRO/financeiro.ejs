@@ -380,18 +380,18 @@ color: #D22A2A;
                     <i class="fas fa-address-card"></i>
                     <span>CADASTRO</span>
                 </a>
-                <a href="/matricula" class="menu-item" onclick="navegarPara('matricula')">
+                <a href="/matriculas" class="menu-item" onclick="navegarPara('matricula')">
      
                <i class="fas fa-user-graduate"></i>
                     <span>MATRÍCULA</span>
                 </a>
-                <a href="/prof-cadastrados" class="menu-item" id="professor-link">
+                <a href="/professores" class="menu-item" id="professor-link">
                     <i class="fas fa-chalkboard-teacher"></i>
       
               <span>PROFESSOR</span>
                 </a>
    
-                <a href="/turmas-cadastradas" class="menu-item" onclick="navegarPara('turmas')">
+                <a href="/turmas" class="menu-item" onclick="navegarPara('turmas')">
                     <i class="fas fa-users"></i>
                     <span>TURMA</span>
       
@@ -522,10 +522,14 @@ class="block text-sm font-medium text-gray-700">Selecione o Aluno</label>
         
         let relatoriosData = []; // Cache local dos dados
 
+       // Vamos "chumbar" (hardcode) a URL da sua API
+        const API_URL = 'http://localhost:3020'; // <-- Você definiu a porta aqui
+
         // --- LÓGICA DE DADOS (API) ---
         const getAlunos = async () => {
             try {
-                const response = await fetch('/api/alunos');
+                // Use a variável API_URL aqui
+                const response = await fetch(`${API_URL}/api/alunos`);
                 if (!response.ok) throw new Error('Falha ao buscar alunos');
                 return await response.json();
             } catch (error) { console.error(error); return []; }
@@ -533,12 +537,30 @@ class="block text-sm font-medium text-gray-700">Selecione o Aluno</label>
 
         async function fetchRelatorios() {
             try {
-                const response = await fetch('/api/transacoes');
+                // Use a variável API_URL aqui
+                const response = await fetch(`${API_URL}/api/transacoes`);
                 if (!response.ok) throw new Error('Falha ao buscar transações');
                 relatoriosData = await response.json();
                 return relatoriosData;
             } catch (error) { console.error(error); return []; }
         }
+
+        // --- IMPORTANTE ---
+        // Você também precisa corrigir o "submit" do formulário
+        addRevenueForm.addEventListener('submit', async (e) => {
+            // ... (seu código de submit) ...
+            try {
+                // Use a variável API_URL aqui também
+                const response = await fetch(`${API_URL}/api/transacoes`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                // ... (resto do código) ...
+            } catch (error) {
+                // ...
+            }
+        });
 
         // --- TEMPLATES HTML (O seu HTML para as abas) ---
         const dashboardTemplate = `
