@@ -1,6 +1,8 @@
 import express from 'express';
 import supabase from '../supabase.js';
 import crypto from 'crypto'; // Importa o módulo crypto
+import * as asaasService from '../services/asaasService.js';
+import Responsavel from '../models/Responsavel.js';
 
 const router = express.Router();
 
@@ -202,8 +204,7 @@ router.post('/arquivar/:id', async (req, res) => {
 });
 
 
-// ========================================================================
-// 6. ROTA POST PARA CADASTRAR NOVO ALUNO (ROTA ADICIONADA)
+// 6. ROTA POST PARA CADASTRAR NOVO ALUNO (COM INTEGRAÇÃO ASAAS AUTOMÁTICA)
 // ========================================================================
 // Rota: /acessar-aluno/cadastrar
 router.post('/cadastrar', async (req, res) => {
@@ -228,23 +229,50 @@ router.post('/cadastrar', async (req, res) => {
         
         // Passo 1: Encontrar ou Criar Responsável
         const { data: responsavelExistente, error: erroConsulta } = await supabase
-            .from('responsavel') // <-- CORRIGIDO
-            .select('id')
+            .from('responsavel')
+            .select('id, asaascustomerid') // <-- Verificamos se já tem ID Asaas
             .eq('cpf', cpfResponsavelLimpo)
             .single();
 
         if (responsavelExistente) {
             // Se encontrou, apenas usa o ID
             responsavelId = responsavelExistente.id;
+            console.log("Responsável já existe. ID:", responsavelId);
         
         } else if (erroConsulta && erroConsulta.code === 'PGRST116') {
-            // CPF não existe, então criamos um novo.
+            // ---------------------------------------------------------
+            // MUDANÇA AQUI: CRIAR NO ASAAS PRIMEIRO
+            // ---------------------------------------------------------
+            console.log(">>> Criando cliente no Asaas...");
+            let idAsaas = null;
+
+            try {
+                const clienteAsaas = await asaasService.criarCliente({
+                    name: responsavel_nome,
+                    cpfCnpj: cpfResponsavelLimpo,
+                    email: responsavel_email,
+                    mobilePhone: responsavel_telefone_completo
+                });
+                idAsaas = clienteAsaas.id; // Ex: 'cus_12345'
+                console.log(">>> ID Asaas gerado com sucesso:", idAsaas);
+            } catch (erroAsaas) {
+                console.error(">>> ALERTA: Falha ao criar no Asaas. O cadastro seguirá sem sincronia.", erroAsaas.message);
+                // Decisão: Continuamos o cadastro mesmo se o Asaas falhar? 
+                // Geralmente sim, para não travar a matrícula. O ID ficará null.
+                idAsaas = null; 
+            }
+
+            // ---------------------------------------------------------
+            // CRIAR NO BANCO (COM O ID DO ASAAS)
+            // ---------------------------------------------------------
             const { data: responsavelData, error: responsavelError } = await supabase
-                .from('responsavel') // <-- CORRIGIDO
+                .from('responsavel')
                 .insert({
                     nome: responsavel_nome,
                     email: responsavel_email,
-                    cpf: cpfResponsavelLimpo 
+                    cpf: cpfResponsavelLimpo,
+                    // AQUI ESTÁ A MÁGICA: Salvamos o ID que veio do Asaas
+                    asaascustomerid: idAsaas 
                 })
                 .select('id')
                 .single();
@@ -254,7 +282,7 @@ router.post('/cadastrar', async (req, res) => {
             }
             
             responsavelId = responsavelData.id;
-            responsavelFoiCriado = true; // Marca que criamos este responsável
+            responsavelFoiCriado = true;
 
         } else if (erroConsulta) {
             throw new Error(`Erro ao consultar responsável: ${erroConsulta.message}`);
@@ -267,7 +295,7 @@ router.post('/cadastrar', async (req, res) => {
             const numeroTel = telLimpo.substring(2);
             
             const { error: telError } = await supabase
-                .from('tel_resp') // <-- CORRIGIDO
+                .from('tel_resp')
                 .insert({
                     ddd: ddd,
                     numero: numeroTel,
@@ -281,16 +309,16 @@ router.post('/cadastrar', async (req, res) => {
         
         // Passo 3: Inserir a Criança
         const { data: criancaData, error: criancaError } = await supabase
-            .from('cadastro_crianca') // <-- CORRIGIDO
+            .from('cadastro_crianca')
             .insert({
                 cpf: cpfCriancaLimpo, 
                 nome: nome,
                 data_nascimento: data_nascimento,
                 sexo: sexo,
-                naturalidade: naturalidade, // Campo obrigatório
+                naturalidade: naturalidade,
                 responsavel_id: responsavelId,
-                ativo: true,
-                asaascustomerid: crypto.randomUUID() // Campo obrigatório
+                ativo: true
+                
             })
             .select('id')
             .single();
@@ -298,7 +326,7 @@ router.post('/cadastrar', async (req, res) => {
         if (criancaError) {
             console.error("Erro ao inserir criança:", criancaError.message);
             
-            // "Rollback": Só deleta o responsável se ele foi criado AGORA
+            // Rollback: Só deleta o responsável se ele foi criado AGORA
             if (responsavelFoiCriado) {
                 await supabase.from('responsavel').delete().eq('id', responsavelId);
             }
@@ -313,14 +341,14 @@ router.post('/cadastrar', async (req, res) => {
         // Passo 4: Inserir Endereço da Criança
         if (rua && end_numero && bairro && cidade && cep && estado) {
             const { error: endError } = await supabase
-                .from('endereco_crianca') // <-- CORRIGIDO
+                .from('endereco_crianca')
                 .insert({
                     rua: rua,
                     numero: end_numero,
                     bairro: bairro,
                     cidade: cidade,
                     cep: cep,
-                    estado: estado, // Campo obrigatório
+                    estado: estado,
                     crianca_id: criancaId
                 });
             
@@ -332,7 +360,7 @@ router.post('/cadastrar', async (req, res) => {
         // Passo 5: Inserir Saúde da Criança
         if (observacoes && observacoes.trim() !== '') {
             const { error: saudeError } = await supabase
-                .from('saude_crianca') // <-- CORRIGIDO
+                .from('saude_crianca')
                 .insert({
                     observacoes: observacoes,
                     crianca_id: criancaId
@@ -358,5 +386,4 @@ router.post('/cadastrar', async (req, res) => {
         });
     }
 });
-
 export default router;

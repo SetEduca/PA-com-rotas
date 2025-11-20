@@ -1,5 +1,4 @@
 import { DataTypes } from 'sequelize';
-// Importe com a extensão .js no final
 import sequelize from '../config/database.js';
 
 const Responsavel = sequelize.define('Responsavel', {
@@ -19,7 +18,16 @@ const Responsavel = sequelize.define('Responsavel', {
     email: {
         type: DataTypes.STRING,
         field: 'email'
+    },
+
+    // --- CAMPO ADICIONADO ---
+    // (Ajuste o "field" se o nome da coluna no Supabase for diferente)
+    asaasCustomerId: {
+        type: DataTypes.STRING,
+        field: 'asaascustomerid' 
     }
+    // -------------------------
+
 }, {
     tableName: 'responsavel',
     timestamps: false

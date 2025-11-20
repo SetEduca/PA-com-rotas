@@ -74,20 +74,35 @@ router.post('/transacoes', async (req, res) => {
     console.log('>>> [POST /transacoes] Recebido:', { tipo, valor, data, descricao, categoria, alunoId });
     try {
         if (tipo === 'Receita') {
-            const aluno = await Aluno.findByPk(alunoId); 
+            
+            // --- LÓGICA ALTERADA (INÍCIO) ---
+            // 1. Buscamos o Aluno E incluímos o Responsável (o JOIN)
+            const aluno = await Aluno.findByPk(alunoId, {
+                include: [{
+                    model: Responsavel,
+                    as: 'responsavel' 
+                }]
+            }); 
+            
             if (!aluno) {
                 console.error('>>> [POST /transacoes - Receita] Aluno não encontrado com ID:', alunoId);
                 return res.status(400).json({ message: 'Aluno não encontrado.' });
             }
-            if (!aluno.asaasCustomerId) {
-                console.error('>>> [POST /transacoes - Receita] Aluno sem Asaas Customer ID:', aluno.id);
-                return res.status(400).json({ message: 'Aluno não sincronizado com Asaas (ID de cliente Asaas ausente).' });
+
+            // 2. Verificamos se o responsável foi encontrado e se ele tem o ID do Asaas
+            if (!aluno.responsavel || !aluno.responsavel.asaasCustomerId) {
+                console.error('>>> [POST /transacoes - Receita] Responsável do aluno não encontrado ou não sincronizado com Asaas.');
+                return res.status(400).json({ message: 'Responsável do aluno não sincronizado com Asaas.' });
             }
-            
-            console.log('>>> [POST /transacoes - Receita] Criando cobrança Asaas para Customer ID:', aluno.asaasCustomerId);
+
+            // 3. Pegamos o ID do Asaas do RESPONSÁVEL
+            const customerId = aluno.responsavel.asaasCustomerId;
+            // --- LÓGICA ALTERADA (FIM) ---
+
+            console.log('>>> [POST /transacoes - Receita] Criando cobrança Asaas para Customer ID:', customerId);
             const novaCobranca = await asaasService.criarCobranca({
-                customer: aluno.asaasCustomerId,
-                billingType: 'BOLETO', // Ou 'CREDIT_CARD', 'UNDEFINED'
+                customer: customerId, // <-- Usamos a variável correta
+                billingType: 'BOLETO',
                 dueDate: data, 
                 value: valor, 
                 description: descricao
@@ -96,6 +111,7 @@ router.post('/transacoes', async (req, res) => {
             res.status(201).json(novaCobranca);
 
         } else if (tipo === 'Despesa') {
+            // (Esta parte não muda, continua funcionando)
             console.log('>>> [POST /transacoes - Despesa] Criando despesa no Supabase.');
             const novaDespesa = await Transacao.create({
                 descricao, valor, categoria, data
@@ -104,7 +120,6 @@ router.post('/transacoes', async (req, res) => {
             res.status(201).json(novaDespesa);
         }
     } catch (error) {
-         // --- ESTA É A MENSAGEM DE ERRO CRÍTICA ---
          console.error('>>> ERRO AO SALVAR LANÇAMENTO:', error.response?.data || error.message || error);
          res.status(500).json({ message: "Erro ao salvar lançamento." });
     }
