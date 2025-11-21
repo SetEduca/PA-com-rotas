@@ -1,10 +1,19 @@
 import axios from 'axios';
 import 'dotenv/config';
 
+
+console.log(">>> AMBIENTE ASAAS:", process.env.ASAAS_API_URL);
+// Mostra só os 10 primeiros caracteres da chave para conferir se é a certa
+console.log(">>> CHAVE USADA:", process.env.ASAAS_API_KEY ? process.env.ASAAS_API_KEY.substring(0, 10) + "..." : "SEM CHAVE");
+// ----------------------------------------------------------
+
 const asaasAPI = axios.create({
-    baseURL: process.env.ASAAS_API_URL,
+    // Forçando a URL de produção direto aqui:
+    baseURL: 'https://www.asaas.com/api/v3', 
     headers: { 'access_token': process.env.ASAAS_API_KEY }
 });
+
+export default asaasAPI; // ou export { ... } dependendo do seu arquivo
 
 // Troca "module.exports" por "export"
 export const getClientes = async () => {

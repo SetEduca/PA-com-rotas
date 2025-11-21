@@ -450,361 +450,549 @@ font-size: 20px;"></span>
                 </ul>
     
         </nav>
-            <div id="content-area" class="flex-1"></div>
-        </main>
-    </div>
 
-    <div id="nova-receita-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-40">
+
+    <section id="relatorios-section" class="hidden animate-fade-in" style="display: none;">
+        
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800" id="titulo-relatorio">Relatórios Financeiros</h2>
+                <p class="text-sm text-gray-500 mt-1">Acompanhe suas movimentações.</p>
+            </div>
+            
+            <button id="btn-novo-lancamento" onclick="window.abrirModalReceita()" 
+                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow transition transform hover:scale-105">
+                <i class="fas fa-plus"></i> 
+                <span>Novo Lançamento</span>
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Data</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Descrição</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Categoria</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Valor</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Tipo</th>
+                            <th class="px-6 py-3 text-xs font-bold text-center text-gray-500 uppercase">Ações / Status</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody id="tabela-relatorios-body" class="divide-y divide-gray-100">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="alunos-section" class="hidden animate-fade-in" style="display: none;">
+        
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800">Situação dos Alunos</h2>
+                <p class="text-sm text-gray-500 mt-1">Monitoramento de inadimplência em tempo real.</p>
+            </div>
+            <button onclick="carregarTabelaAlunos()" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                <i class="fas fa-sync-alt"></i> Atualizar Lista
+            </button>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Aluno</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Responsável</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Telefone</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase text-center">Situação</th>
+                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-alunos-body" class="divide-y divide-gray-100">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <div id="nova-receita-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-brand-text">Novo Lançamento</h3>
-  
-              <button id="close-nova-receita-modal" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+                <h3 class="text-xl font-bold text-gray-800">Novo Lançamento</h3>
+                <button id="close-nova-receita-modal" class="text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
             </div>
+            
             <form id="add-revenue-form">
                 <div class="space-y-4">
                     <div>
-                    
-    <label for="transaction-type" class="block text-sm font-medium text-gray-700">Tipo de Lançamento</label>
-                        <select id="transaction-type" name="transaction-type" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-green-medium focus:border-brand-green-medium">
-                            <option value="Receita" selected>Receita</option>
-                    
-        <option value="Despesa">Despesa</option>
+                        <label for="transaction-type" class="block text-sm font-medium text-gray-700">Tipo de Lançamento</label>
+                        <select id="transaction-type" name="transaction-type" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white">
+                            <option value="Receita">Receita</option>
+                            <option value="Despesa">Despesa</option>
                         </select>
                     </div>
+
                     <div id="customer-field">
-                        <label for="customerId" 
-class="block text-sm font-medium text-gray-700">Selecione o Aluno</label>
-                        <select id="customerId" name="customerId" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-green-medium focus:border-brand-green-medium"></select>
+                        <label for="customerId" class="block text-sm font-medium text-gray-700">Selecione o Aluno</label>
+                        <select id="customerId" name="customerId" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white">
+                            <option value="">Carregando...</option>
+                        </select>
                     </div>
                     <div>
-                 
-       <label for="category" class="block text-sm font-medium text-gray-700">Categoria</label>
-                        <select id="category" name="category" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-green-medium focus:border-brand-green-medium"></select>
+                        <label for="category" class="block text-sm font-medium text-gray-700">Categoria</label>
+                        <select id="category" name="category" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 bg-white focus:outline-none focus:ring-green-500 focus:border-green-500">
+                            </select>
                     </div>
+
                     <div>
-         
-               <label for="description" class="block text-sm font-medium text-gray-700">Descrição</label>
-                        <input type="text" id="description" name="description" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-green-medium focus:border-brand-green-medium">
+                        <label for="description" class="block text-sm font-medium text-gray-700">Descrição</label>
+                        <input type="text" id="description" name="description" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
                     </div>
-                    
- <div>
-                        <label for="revenue-value" class="block text-sm font-medium text-gray-700">Valor</label>
-                        <input type="number" step="0.01" id="revenue-value" name="value" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-green-medium focus:border-brand-green-medium">
+
+                    <div>
+                        <label for="revenue-value" class="block text-sm font-medium text-gray-700">Valor (R$)</label>
+                        <input type="number" step="0.01" id="revenue-value" name="value" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
                     </div>
-         
-           <div>
+
+                    <div>
                         <label for="revenue-dueDate" class="block text-sm font-medium text-gray-700">Data</label>
-                        <input type="date" id="revenue-dueDate" name="date" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-green-medium focus:border-brand-green-medium">
-                    
-</div>
+                        <input type="date" id="revenue-dueDate" name="date" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3">
+                    </div>
                 </div>
+
                 <div class="mt-6 flex justify-end gap-4">
-                    <button type="button" id="cancel-nova-receita-modal" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300">Cancelar</button>
-                    <button type="submit" class="bg-brand-green-dark text-white px-4 py-2 rounded-md hover:bg-brand-text">Salvar</button>
-         
-       </div>
+                    <button type="button" id="cancel-nova-receita-modal" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition">Cancelar</button>
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition font-medium">Salvar</button>
+                </div>
             </form>
         </div>
     </div>
+<section id="dashboard-section" class="animate-fade-in">
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">Saldo Atual</p>
+                            <h3 class="text-2xl font-bold text-gray-800 mt-1" id="saldo-atual">R$ --,--</h3>
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded-xl text-blue-600"><i class="fas fa-wallet"></i></div>
+                    </div>
+                </div>
 
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">Receitas (Mês)</p>
+                            <h3 class="text-2xl font-bold text-green-600 mt-1" id="receitas-mes">R$ --,--</h3>
+                        </div>
+                        <div class="bg-green-50 p-3 rounded-xl text-green-600"><i class="fas fa-arrow-up"></i></div>
+                    </div>
+                </div>
 
-   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // --- SELETORES DO DOM ---
-        const contentArea = document.getElementById('content-area');
-        const navTabs = document.querySelectorAll('.nav-tab');
-        const dateEl = document.getElementById('current-date');
-        const novaReceitaModal = document.getElementById('nova-receita-modal');
-        const addRevenueForm = document.getElementById('add-revenue-form');
-        const transactionTypeSelect = document.getElementById('transaction-type');
-        const profileToggle = document.getElementById('profile-toggle');
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-sm text-gray-500 font-medium">Despesas (Mês)</p>
+                            <h3 class="text-2xl font-bold text-red-600 mt-1" id="despesas-mes">R$ --,--</h3>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded-xl text-red-600"><i class="fas fa-arrow-down"></i></div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-64 flex items-center justify-center">
+                <p class="text-gray-400">Gráfico de Movimentação Financeira será carregado aqui.</p>
+            </div>
+        </section>
+
+  <script>
+    // --- CONFIGURAÇÕES GLOBAIS ---
+    const API_URL = ''; // Deixe vazio se estiver rodando localmente
+
+    // =================================================================
+    // 1. FUNÇÕES AUXILIARES (Carregar Alunos, Formatar Moeda)
+    // =================================================================
+
+    // Função para preencher o Select de Alunos (Agora blindada no window)
+    window.popularAlunosNoModal = async function() {
+        const select = document.getElementById('customerId');
+        if (!select) return;
         
-        let relatoriosData = []; // Cache local dos dados
+        // Se já tiver opções (além da padrão), não carrega de novo
+        if (select.options.length > 1) return;
 
-       // Vamos "chumbar" (hardcode) a URL da sua API
-        const API_URL = 'http://localhost:3020'; // <-- Você definiu a porta aqui
+        try {
+            const res = await fetch(API_URL + '/api/alunos');
+            if (!res.ok) throw new Error('Erro ao buscar alunos');
+            
+            const alunos = await res.json();
+            
+            // Limpa e adiciona opção padrão
+            select.innerHTML = '<option value="" disabled selected>Selecione...</option>';
+            
+            // Adiciona os alunos
+            alunos.forEach(a => {
+                const option = document.createElement('option');
+                option.value = a.id;
+                option.text = a.studentName || a.nome || 'Sem Nome';
+                select.appendChild(option);
+            });
+        } catch (e) {
+            console.error("Erro ao popular alunos:", e);
+            select.innerHTML = '<option value="">Erro ao carregar</option>';
+        }
+    };
 
-        // --- LÓGICA DE DADOS (API) ---
-        const getAlunos = async () => {
-            try {
-                // Use a variável API_URL aqui
-                const response = await fetch(`${API_URL}/api/alunos`);
-                if (!response.ok) throw new Error('Falha ao buscar alunos');
-                return await response.json();
-            } catch (error) { console.error(error); return []; }
-        };
+    // =================================================================
+    // 2. FUNÇÕES DO MODAL (Abrir, Fechar, Salvar)
+    // =================================================================
 
-        async function fetchRelatorios() {
-            try {
-                // Use a variável API_URL aqui
-                const response = await fetch(`${API_URL}/api/transacoes`);
-                if (!response.ok) throw new Error('Falha ao buscar transações');
-                relatoriosData = await response.json();
-                return relatoriosData;
-            } catch (error) { console.error(error); return []; }
+    window.abrirModalReceita = function() {
+        console.log("Abrindo modal...");
+        const modal = document.getElementById('nova-receita-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Chama a função de popular alunos
+            window.popularAlunosNoModal(); 
+        } else {
+            alert("Erro: Modal não encontrado no HTML.");
+        }
+    };
+
+    window.fecharModal = function() {
+        const modal = document.getElementById('nova-receita-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    };
+
+    // Lógica de Salvar o Formulário
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- LÓGICA PARA PREENCHER AS CATEGORIAS ---
+    const tipoSelect = document.getElementById('transaction-type');
+    const categoriaSelect = document.getElementById('category');
+
+    const opcoesReceita = [
+        { valor: 'Mensalidade', texto: 'Mensalidade (Gera Boleto Asaas)' },
+        { valor: 'Matrícula', texto: 'Matrícula (Gera Boleto Asaas)' },
+        { valor: 'Material Didático', texto: 'Material Didático (Gera Boleto Asaas)' },
+        { valor: 'Uniforme', texto: 'Uniforme (Interno - Não gera boleto)' },
+        { valor: 'Evento', texto: 'Evento/Passeio (Interno - Não gera boleto)' },
+        { valor: 'Taxa Extra', texto: 'Outros (Interno)' }
+    ];
+
+    const opcoesDespesa = [
+        { valor: 'Energia Elétrica', texto: 'Energia Elétrica' },
+        { valor: 'Água', texto: 'Água' },
+        { valor: 'Internet', texto: 'Internet' },
+        { valor: 'Aluguel', texto: 'Aluguel' },
+        { valor: 'Salário', texto: 'Salário' },
+        { valor: 'Manutenção', texto: 'Manutenção' },
+        { valor: 'Alimentação', texto: 'Alimentação' }
+    ];
+
+    function atualizarCategorias() {
+        const tipo = tipoSelect.value; 
+        const lista = (tipo === 'Receita') ? opcoesReceita : opcoesDespesa;
+
+        categoriaSelect.innerHTML = ''; // Limpa
+        lista.forEach(op => {
+            const option = document.createElement('option');
+            option.value = op.valor;
+            option.text = op.texto;
+            categoriaSelect.appendChild(option);
+        });
+        
+        // Esconde/Mostra campo de aluno
+        const divAluno = document.getElementById('customer-field');
+        if(divAluno) divAluno.style.display = (tipo === 'Despesa') ? 'none' : 'block';
+    }
+
+    // Ativa a mudança
+    if (tipoSelect) {
+        tipoSelect.addEventListener('change', atualizarCategorias);
+        atualizarCategorias(); // Roda uma vez ao iniciar
+    }
+        const form = document.getElementById('add-revenue-form');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                const dados = Object.fromEntries(formData.entries());
+                
+                const payload = {
+                    tipo: dados['transaction-type'],
+                    valor: parseFloat(dados.value),
+                    data: dados.date,
+                    descricao: dados.description,
+                    categoria: dados.category,
+                    alunoId: dados.customerId || null
+                };
+
+                try {
+                    const res = await fetch(API_URL + '/api/transacoes', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (res.ok) {
+                        alert("Salvo com sucesso!");
+                        window.fecharModal();
+                        e.target.reset();
+                        
+                        // Atualiza a tabela se estiver na aba de relatórios
+                        if (document.getElementById('relatorios-section').style.display === 'block') {
+                            window.carregarTabelaFinanceira('ativo');
+                        }
+                    } else {
+                        const err = await res.json();
+                        alert("Erro ao salvar: " + err.message);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("Erro de conexão.");
+                }
+            });
         }
 
-        // --- IMPORTANTE ---
-        // Você também precisa corrigir o "submit" do formulário
-        addRevenueForm.addEventListener('submit', async (e) => {
-            // ... (seu código de submit) ...
-            try {
-                // Use a variável API_URL aqui também
-                const response = await fetch(`${API_URL}/api/transacoes`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
-                // ... (resto do código) ...
-            } catch (error) {
-                // ...
-            }
+        // Botões de fechar modal
+        document.getElementById('close-nova-receita-modal')?.addEventListener('click', window.fecharModal);
+        document.getElementById('cancel-nova-receita-modal')?.addEventListener('click', window.fecharModal);
+        
+        // Esconder campo de aluno se for Despesa
+        document.getElementById('transaction-type')?.addEventListener('change', function(e) {
+            const divAluno = document.getElementById('customer-field');
+            if(divAluno) divAluno.style.display = (e.target.value === 'Despesa') ? 'none' : 'block';
+        });
+    });
+
+    // =================================================================
+    // 3. NAVEGAÇÃO E ABAS (RenderContent)
+    // =================================================================
+
+    window.renderContent = async function(tabId) {
+        // 1. Esconde tudo
+        ['dashboard-section', 'alunos-section', 'relatorios-section'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
         });
 
-        // --- TEMPLATES HTML (O seu HTML para as abas) ---
-        const dashboardTemplate = `
-            <div class="space-y-6">
-                <section>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
-                            <div class="bg-green-100 p-3 rounded-full"><i class="fas fa-arrow-up text-green-600 text-2xl"></i></div>
-                            <div><h3 class="text-md font-semibold text-gray-500">Receita Total (Mês)</h3><p class="text-2xl font-bold text-green-600" id="total-revenue">R$ 0,00</p></div>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
-                            <div class="bg-red-100 p-3 rounded-full"><i class="fas fa-arrow-down text-red-600 text-2xl"></i></div>
-                            <div><h3 class="text-md font-semibold text-gray-500">Despesas Totais (Mês)</h3><p class="text-2xl font-bold text-red-600" id="total-expense">R$ 0,00</p></div>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
-                            <div class="bg-blue-100 p-3 rounded-full"><i class="fas fa-balance-scale text-blue-600 text-2xl"></i></div>
-                            <div><h3 class="text-md font-semibold text-gray-500">Lucro Líquido (Mês)</h3><p class="text-2xl font-bold text-brand-text" id="net-profit">R$ 0,00</p></div>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-sm flex items-center gap-4">
-                            <div class="bg-yellow-100 p-3 rounded-full"><i class="fas fa-users text-yellow-600 text-2xl"></i></div>
-                            <div><h3 class="text-md font-semibold text-gray-500">Alunos Ativos</h3><p class="text-2xl font-bold text-brand-text" id="active-students">0</p></div>
-                        </div>
-                    </div>
-                </section>
-                <section class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                    <div class="lg:col-span-3 bg-white p-6 rounded-lg shadow-sm flex flex-col"><h3 class="text-xl font-semibold mb-4 text-brand-text">Fluxo de Caixa</h3><div class="relative flex-1 min-h-[300px]"><canvas id="cashflow-chart"></canvas></div></div>
-                    <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm flex flex-col"><h3 class="text-xl font-semibold mb-4 text-brand-text">Distribuição de Despesas</h3><div class="relative flex-1 min-h-[300px]"><canvas id="expenses-chart"></canvas></div></div>
-                </section>
-                 <section class="bg-white p-6 rounded-lg shadow-sm">
-                    <h3 class="text-xl font-semibold mb-4 text-brand-text">Atividade Recente</h3>
-                    <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-50"><tr><th class="p-3">Descrição</th><th class="p-3">Data</th><th class="p-3">Tipo</th><th class="p-3 text-right">Valor</th></tr></thead><tbody id="recent-activity-body"></tbody></table></div>
-                </section>
-            </div>`;
-        const alunosTemplate = `<div class="bg-white p-6 rounded-lg shadow-sm h-full"><h2 class="text-2xl font-bold mb-4 text-brand-text">Situação Financeira dos Alunos</h2><div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Nome do Aluno</th><th class="p-3">Responsável</th><th class="p-3">Mensalidade</th><th class="p-3">Vencimento</th><th class="p-3">Status</th></tr></thead><tbody id="alunos-table-body"></tbody></table></div></div>`;
-        const relatoriosTemplate = `<div class="bg-white p-6 rounded-lg shadow-sm h-full"><div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-bold text-brand-text">Relatório Detalhado</h2><button id="btn-novo-lancamento" class="bg-brand-green-dark text-white px-4 py-2 rounded-md hover:bg-brand-text flex items-center gap-2"><i class="fas fa-plus"></i>Novo Lançamento</button></div><div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Data</th><th class="p-3">Descrição</th><th class="p-3">Categoria</th><th class="p-3">Valor</th><th class="p-3">Tipo</th><th class="p-3">Ações</th></tr></thead><tbody id="relatorios-table-body"></tbody></table></div></div>`;
-        const historicoTemplate = `<div class="bg-white p-6 rounded-lg shadow-sm h-full"><h2 class="text-xl font-semibold mb-4 text-brand-text">Histórico de Relatórios Arquivados</h2><div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-100"><tr><th class="p-3">Data</th><th class="p-3">Descrição</th><th class="p-3">Categoria</th><th class="p-3">Valor</th><th class="p-3">Tipo</th><th class="p-3">Ações</th></tr></thead><tbody id="historico-table-body"></tbody></table></div></div>`;
+        // 2. Tira classe active das abas
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        const btn = document.getElementById(tabId);
+        if (btn) btn.classList.add('active');
+
+        // 3. Mostra a seção certa
+       if (tabId === 'btn-dashboard') {
+            const sec = document.getElementById('dashboard-section');
+            if (sec) sec.style.display = 'block';
+
+            // --- A PEÇA QUE FALTAVA ---
+            // Chama a função que atualiza os cards (Saldo, Receitas, Despesas)
+            if (typeof window.carregarDashboard === 'function') {
+                window.carregarDashboard(); 
+            }
         
-        // --- FUNÇÕES DE RENDERIZAÇÃO ---
-        function setupCharts() { /* ...Sua lógica de gráficos... */ }
-        
-        async function renderRecentActivity() {
-            const tbody = document.getElementById('recent-activity-body');
-            if (!tbody) return;
-            const recentData = relatoriosData.slice(0, 5);
+        } else if (tabId === 'btn-alunos') {
+            // ... resto do código ...
+            const sec = document.getElementById('alunos-section');
+            if (sec) sec.style.display = 'block';
+            window.carregarTabelaAlunos(); // Carrega alunos
+
+        } else if (tabId === 'btn-relatorios') {
+            const sec = document.getElementById('relatorios-section');
+            if (sec) {
+                sec.style.display = 'block';
+                document.getElementById('titulo-relatorio').innerText = 'Relatórios Ativos';
+                const btnAdd = document.getElementById('btn-novo-lancamento');
+                if (btnAdd) btnAdd.style.display = 'flex';
+                
+                window.carregarTabelaFinanceira('ativo');
+            }
+
+        } else if (tabId === 'btn-historico') {
+            const sec = document.getElementById('relatorios-section');
+            if (sec) {
+                sec.style.display = 'block';
+                document.getElementById('titulo-relatorio').innerText = 'Histórico de Arquivados';
+                const btnAdd = document.getElementById('btn-novo-lancamento');
+                if (btnAdd) btnAdd.style.display = 'none';
+                
+                window.carregarTabelaFinanceira('historico');
+            }
+        }
+    };
+
+    // =================================================================
+    // 4. CARREGAMENTO DE DADOS (Tabelas)
+    // =================================================================
+
+    // Tabela Financeira (Ativos e Histórico)
+    window.carregarTabelaFinanceira = async function(modo) {
+        const tbody = document.getElementById('tabela-relatorios-body');
+        if (!tbody) return;
+
+        tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center">Carregando...</td></tr>';
+
+        try {
+            const endpoint = (modo === 'ativo') ? '/api/transacoes' : '/api/transacoes/historico';
+            const res = await fetch(API_URL + endpoint);
+            const dados = await res.json();
+
             tbody.innerHTML = '';
-            if (recentData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Nenhuma atividade recente.</td></tr>`;
+            if (!dados || dados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Nenhum registro.</td></tr>`;
                 return;
             }
-            recentData.forEach(item => {
-                const valueClass = item.type === 'Receita' ? 'text-green-600' : 'text-red-600';
-                const formattedValue = `R$ ${Math.abs(item.value).toFixed(2).replace('.', ',')}`;
-                const row = `<tr class="border-b"><td class="p-3">${item.description}</td><td class="p-3">${new Date(item.date).toLocaleDateString('pt-BR')}</td><td class="p-3"><span class="px-2 py-1 text-xs font-semibold rounded-full ${item.type === 'Receita' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${item.type}</span></td><td class="p-3 font-medium text-right ${valueClass}">${formattedValue}</td></tr>`;
-                tbody.innerHTML += row;
-            });
-        }
 
-        async function renderAlunos() {
-            const alunos = await getAlunos(); 
-            const tbody = document.getElementById('alunos-table-body');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            const statusClasses = { pago: 'bg-green-100 text-green-700', pendente: 'bg-yellow-100 text-yellow-700', atrasado: 'bg-red-100 text-red-700' };
+            tbody.innerHTML = dados.map(item => {
+                const isReceita = item.type === 'Receita';
+                const corValor = isReceita ? 'text-green-600' : 'text-red-600';
+                const valorF = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Math.abs(item.value));
+                const dataF = new Date(item.date).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
 
-            if (alunos.length === 0) {
-                 tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-500">Nenhum aluno cadastrado no banco de dados.</td></tr>`;
-                 return;
-            }
-            
-            // "Mágica" para cruzar os dados dos alunos (Supabase) com as cobranças (Asaas)
-            alunos.forEach(aluno => {
-                const cobrancasDoAluno = relatoriosData.filter(c => c.customerId === aluno.asaasId && c.type === 'Receita');
-                let status = 'pago'; 
-                let vencimento = 'N/A';
-                let mensalidade = 550.00; // Valor padrão
-
-                if (cobrancasDoAluno.length > 0) {
-                    const ultimaCobranca = cobrancasDoAluno.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-                    status = ultimaCobranca.status === 'ativo' ? 'pago' : 'pendente'; 
-                    vencimento = new Date(ultimaCobranca.date).toLocaleDateString('pt-BR');
-                    mensalidade = ultimaCobranca.value;
-                }
-                
-                const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-                const row = `<tr><td class="p-3">${aluno.studentName}</td><td class="p-3">${aluno.parentName}</td><td class="p-3">R$ ${Number(mensalidade).toFixed(2).replace('.', ',')}</td><td class="p-3">${vencimento}</td><td class="p-3"><span class="px-2 py-1 rounded-full text-sm font-medium ${statusClasses[status]}">${statusText}</span></td></tr>`;
-                tbody.innerHTML += row;
-            });
-
-            const activeStudentsEl = document.getElementById('active-students');
-            if (activeStudentsEl) activeStudentsEl.textContent = alunos.length;
-        }
-
-        function renderRelatorios(filterStatus = 'ativo') {
-            const tbodyId = filterStatus === 'ativo' ? 'relatorios-table-body' : 'historico-table-body';
-            const tbody = document.getElementById(tbodyId);
-            if(!tbody) return;
-            
-            const relatorios = relatoriosData.filter(r => (filterStatus === 'ativo' ? (r.status === 'ativo' || r.status === 'pendente') : (r.status === 'arquivado')))
-                                             .sort((a, b) => new Date(b.date) - new Date(a.date));
-            tbody.innerHTML = '';
-            if (relatorios.length === 0) {
-                 tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-500">Nenhum lançamento encontrado.</td></tr>`;
-                 return;
-            }
-            relatorios.forEach(item => {
-                const valueClass = item.type === 'Receita' ? 'text-green-600' : 'text-red-600';
-                const actionButton = `<button data-id="${item.id}" class="archive-btn text-yellow-600 hover:underline">Arquivar</button>`;
-                const row = `<tr><td class="p-3">${new Date(item.date).toLocaleDateString('pt-BR')}</td><td class="p-3">${item.description}</td><td class="p-3">${item.category}</td><td class="p-3 font-medium ${valueClass}">R$ ${Math.abs(item.value).toFixed(2).replace('.',',')}</td><td class="p-3">${item.type}</td><td class="p-3">${actionButton}</td></tr>`;
-                tbody.innerHTML += row;
-            });
-        }
-
-        function updateDashboardCards() {
-            const totalRevenueEl = document.getElementById('total-revenue');
-            const totalExpenseEl = document.getElementById('total-expense');
-            const netProfitEl = document.getElementById('net-profit');
-            if (!totalRevenueEl) return;
-
-            const totalReceitas = relatoriosData.filter(r => r.type === 'Receita' && r.status === 'ativo').reduce((acc, r) => acc + r.value, 0);
-            const totalDespesas = relatoriosData.filter(r => r.type === 'Despesa').reduce((acc, r) => acc + r.value, 0); 
-
-            totalRevenueEl.textContent = `R$ ${totalReceitas.toFixed(2).replace('.', ',')}`;
-            totalExpenseEl.textContent = `R$ ${Math.abs(totalDespesas).toFixed(2).replace('.', ',')}`;
-            netProfitEl.textContent = `R$ ${(totalReceitas + totalDespesas).toFixed(2).replace('.', ',')}`;
-        }
-        
-        async function populateSelects() {
-            const alunos = await getAlunos(); // Busca alunos do Supabase
-            const customerSelect = document.getElementById('customerId');
-            if (!customerSelect) return;
-            // Usa o ID do Supabase (ex: 1)
-            customerSelect.innerHTML = alunos.map(a => `<option value="${a.id}">${a.studentName}</option>`).join('');
-        }
-        
-        function updateFormBasedOnType() {
-            const type = transactionTypeSelect.value;
-            const categorySelect = document.getElementById('category');
-            const customerField = document.getElementById('customer-field');
-            const revenueCategories = ['Mensalidade', 'Matrícula', 'Outras Receitas'];
-            const expenseCategories = ['Salários', 'Contas', 'Materiais', 'Alimentação', 'Aluguel', 'Outras Despesas'];
-
-            if (type === 'Receita') {
-                categorySelect.innerHTML = revenueCategories.map(c => `<option value="${c}">${c}</option>`).join('');
-                customerField.style.display = 'block';
-            } else {
-                categorySelect.innerHTML = expenseCategories.map(c => `<option value="${c}">${c}</option>`).join('');
-                customerField.style.display = 'none';
-            }
-        }
-        
-        function handleReportAction(e) { /* ...Sua lógica de arquivar... */ }
-
-        async function renderContent(tabId) {
-            contentArea.removeEventListener('click', handleReportAction);
-            await fetchRelatorios(); 
-            
-            if (tabId === 'btn-dashboard') {
-                contentArea.innerHTML = dashboardTemplate;
-                setTimeout(() => {
-                    setupCharts();
-                    renderRecentActivity();
-                    renderAlunos(); // Para atualizar o card de alunos
-                    updateDashboardCards(); // Atualiza cards
-                }, 0);
-            } else if (tabId === 'btn-alunos') {
-                contentArea.innerHTML = alunosTemplate;
-                renderAlunos();
-            } else if (tabId === 'btn-relatorios') {
-                contentArea.innerHTML = relatoriosTemplate;
-                renderRelatorios('ativo');
-                document.getElementById('btn-novo-lancamento').addEventListener('click', () => {
-                    addRevenueForm.reset();
-                    updateFormBasedOnType();
-                    novaReceitaModal.style.display = 'flex';
-                });
-                contentArea.addEventListener('click', handleReportAction);
-            } else if (tabId === 'btn-historico') {
-                contentArea.innerHTML = historicoTemplate;
-                renderRelatorios('arquivado');
-                contentArea.addEventListener('click', handleReportAction);
-            }
-        }
-
-        // --- EVENT LISTENERS ---
-        if (dateEl) {
-            dateEl.textContent = new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
-        }
-        if (profileToggle) {
-            profileToggle.addEventListener('click', () => {
-                profileToggle.classList.toggle('active');
-                document.getElementById('profile-dropdown-menu').classList.toggle('show');
-            });
-        }
-        document.getElementById('close-nova-receita-modal').addEventListener('click', () => novaReceitaModal.style.display = 'none');
-        document.getElementById('cancel-nova-receita-modal').addEventListener('click', () => novaReceitaModal.style.display = 'none');
-        transactionTypeSelect.addEventListener('change', updateFormBasedOnType);
-
-        // ATUALIZADO: Evento de submit para enviar dados ao BACKEND
-        addRevenueForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(addRevenueForm);
-            const data = Object.fromEntries(formData.entries());
-
-            const body = {
-                tipo: data['transaction-type'],
-                valor: parseFloat(data.value),
-                data: data.date,
-                descricao: data.description,
-                categoria: data.category,
-                alunoId: data.customerId // ID do nosso banco (ex: 1, 2)
-            };
-
-            try {
-                // Envia para o nosso backend
-                const response = await fetch('/api/transacoes', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
-
-                if (response.ok) {
-                    novaReceitaModal.style.display = 'none';
-                    const activeTab = document.querySelector('.nav-tab.active');
-                    renderContent(activeTab.id); // Re-renderiza a aba atual
+                let acaoHtml = '';
+                if (modo === 'ativo') {
+                    if (item.type === 'Despesa') {
+                        acaoHtml = `<button onclick="window.arquivarItem('${item.id}')" class="text-red-500 border border-red-200 px-2 py-1 rounded hover:bg-red-50 text-xs font-semibold">Arquivar</button>`;
+                    } else {
+                        const corSt = item.status === 'pago' ? 'text-green-600 bg-green-50' : 'text-yellow-600 bg-yellow-50';
+                        acaoHtml = `<span class="${corSt} px-2 py-1 rounded text-xs font-bold uppercase">${item.status}</span>`;
+                    }
                 } else {
-                    const error = await response.json();
-                    alert(`Erro ao salvar: ${error.message}`);
+                    acaoHtml = `<span class="text-gray-400 text-xs italic">Arquivado</span>`;
                 }
-            } catch (error) {
-                console.error("Erro no submit:", error);
-                alert('Erro de conexão ao salvar.');
-            }
-        });
-        
-        navTabs.forEach(tab => tab.addEventListener('click', (e) => {
-             navTabs.forEach(t => t.classList.remove('active'));
-             e.currentTarget.classList.add('active');
-             renderContent(e.currentTarget.id);
-        }));
 
-        // --- INICIALIZAÇÃO ---
-        populateSelects(); // Popula o select de alunos
-        document.getElementById('btn-dashboard').click(); // Começa na Visão Geral
+                return `
+                    <tr class="hover:bg-gray-50 border-b border-gray-100">
+                        <td class="p-3 text-sm text-gray-600">${dataF}</td>
+                        <td class="p-3 text-sm font-medium text-gray-800">${item.description}</td>
+                        <td class="p-3 text-sm text-gray-500">${item.category || '-'}</td>
+                        <td class="p-3 text-sm font-bold ${corValor}">${valorF}</td>
+                        <td class="p-3 text-sm">${item.type}</td>
+                        <td class="p-3 text-center">${acaoHtml}</td>
+                    </tr>`;
+            }).join('');
+        } catch (e) {
+            console.error(e);
+            tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-red-500">Erro de conexão.</td></tr>';
+        }
+    };
+
+    // Tabela de Situação dos Alunos
+    window.carregarTabelaAlunos = async function() {
+        const tbody = document.getElementById('tabela-alunos-body');
+        if (!tbody) return;
+
+        tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center">Consultando...</td></tr>';
+
+        try {
+            const res = await fetch(API_URL + '/api/alunos-status');
+            const alunos = await res.json();
+
+            tbody.innerHTML = '';
+            if (alunos.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center">Nenhum aluno.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = alunos.map(a => {
+                let corBadge = (a.cor === 'green') ? 'bg-green-100 text-green-800' : 
+                               (a.cor === 'red') ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800';
+                
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-3 text-sm font-medium">${a.nome}</td>
+                        <td class="p-3 text-sm text-gray-600">${a.responsavel}</td>
+                        <td class="p-3 text-sm text-gray-500">${a.telefone}</td>
+                        <td class="p-3 text-center"><span class="px-2 py-1 rounded-full text-xs font-bold ${corBadge}">${a.status}</span></td>
+                        <td class="p-3 text-center text-xs text-blue-600">Ver Detalhes</td>
+                    </tr>`;
+            }).join('');
+        } catch (e) {
+            tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-red-500">Erro ao buscar alunos.</td></tr>';
+        }
+    };
+
+    // Função de Arquivar
+    window.arquivarItem = async function(id) {
+        if (!confirm("Arquivar esta despesa?")) return;
+        try {
+            const res = await fetch(API_URL + `/api/transacoes/${id}/arquivar`, { method: 'PUT' });
+            if (res.ok) {
+                window.carregarTabelaFinanceira('ativo');
+                alert("Arquivado!");
+            } else {
+                alert("Erro ao arquivar.");
+            }
+        } catch (e) {
+            alert("Erro de conexão.");
+        }
+    };
+
+    // =================================================================
+    // 5. INICIALIZAÇÃO (Ao carregar a página)
+    // =================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        // Ativa cliques nas abas
+        document.querySelectorAll('.nav-tab').forEach(btn => {
+            btn.addEventListener('click', (e) => window.renderContent(e.target.id));
+        });
+
+        // Inicia na Visão Geral
+        window.renderContent('btn-dashboard');
+
+        // --- FUNÇÃO PARA ATUALIZAR OS CARDS DO DASHBOARD ---
+    window.carregarDashboard = async function() {
+        try {
+            // Chama a rota que acabamos de criar
+            const res = await fetch(API_URL + '/api/dashboard-resumo');
+            const dados = await res.json();
+
+            // Função auxiliar para formatar dinheiro (R$)
+            const formatar = (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+
+            // Atualiza os números na tela (buscando pelos IDs do HTML)
+            const elSaldo = document.getElementById('saldo-atual');
+            const elRec = document.getElementById('receitas-mes');
+            const elDesp = document.getElementById('despesas-mes');
+
+            if (elSaldo) elSaldo.innerText = formatar(dados.saldo);
+            if (elRec) elRec.innerText = formatar(dados.receitas);
+            if (elDesp) elDesp.innerText = formatar(dados.despesas); // Vai aparecer negativo, ex: -R$ 500,00
+
+            // Ajusta cor do saldo (Vermelho se negativo, Verde se positivo)
+            if (elSaldo) {
+                if (dados.saldo >= 0) elSaldo.className = "text-2xl font-bold text-gray-800 mt-1"; // Cor normal
+                else elSaldo.className = "text-2xl font-bold text-red-600 mt-1"; // Cor de alerta
+            }
+
+        } catch (error) {
+            console.error("Erro ao carregar dashboard:", error);
+        }
+    };
     });
+
+// Força atualização imediata (caso o DOMContentLoaded tenha passado batido)
+    setTimeout(() => {
+        if (typeof window.carregarDashboard === 'function') {
+            window.carregarDashboard();
+        }
+    }, 1000); // Espera 1 segundo e atualiza
 </script>
+
 </body>
 </html>

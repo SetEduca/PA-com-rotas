@@ -24,10 +24,10 @@ const Responsavel = sequelize.define('Responsavel', {
     // (Ajuste o "field" se o nome da coluna no Supabase for diferente)
     asaasCustomerId: {
         type: DataTypes.STRING,
-        field: 'asaascustomerid' 
+        field: 'asaascustomerid',
+        allowNull: true // <--- DEIXE ASSIM (Permite ficar vazio)
     }
-    // -------------------------
-
+    
 }, {
     tableName: 'responsavel',
     timestamps: false
