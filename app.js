@@ -133,7 +133,7 @@ app.use("/acessar-aluno", alunoAcessarRouter);
 
 //FINANCEIRO
 
-app.use('/api', apiRoutes);
+
 
 app.get('/financeiro', (req, res) => {
   res.render('FINANCEIRO/financeiro');
