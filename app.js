@@ -10,7 +10,6 @@ import loginRouter from './routes/login.routes.js';
 import mensalidadeRouter from './routes/mensalidades.routes.js';
 import arquivadosRouter from './routes/arquivados.routes.js';
 import alunoAcessarRouter from './routes/aluno-acessar.routes.js';
-import apiRoutes from './routes/api.js';
 import senhaRouter from './routes/senha.routes.js';
 import perfilRouter from './routes/perfil.routes.js';
 import financeiroRoutes from './routes/financeiro.routes.js';
