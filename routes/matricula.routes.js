@@ -5,12 +5,12 @@ import supabase from '../supabase.js';
 
 const router = express.Router();
 
-// --- FUNÇÃO AUXILIAR PARA BUSCAR E FILTRAR TURMAS COM VAGAS ---
+// --- FUNÇÃO AUXILIAR PARA BUSCAR E FILTRAR TURMAS COM VAGAS (CORREÇÃO) ---
 async function fetchTurmasComVagas() {
     const { data: todasAsTurmas, error } = await supabase
         .from('turma')
         .select('id, nome_turma, limite_vagas, quantidade_alunos')
-        .eq('ativo', true);
+        .eq('ativo', true); // Apenas turmas ativas
 
     if (error) {
         console.error("Erro ao buscar turmas para re-renderização:", error);
@@ -21,10 +21,11 @@ async function fetchTurmasComVagas() {
     return todasAsTurmas.filter(t => {
         const qtd = parseInt(t.quantidade_alunos || 0);
         const limite = parseInt(t.limite_vagas);
+        // Retorna TRUE se a quantidade de alunos for MENOR que o limite de vagas
         return !isNaN(qtd) && !isNaN(limite) && qtd < limite;
     });
 }
-
+// -----------------------------------------------------------------
 
 // 1. EXIBIR A PÁGINA DE MATRÍCULA COM TURMAS DISPONÍVEIS
 router.get('/', async (req, res) => {
@@ -283,19 +284,25 @@ router.get('/api/buscar-matriculados', async (req, res) => {
             return res.status(500).json({ error: 'Erro ao buscar alunos matriculados.' });
         }
 
+        // --- CORREÇÃO APLICADA AQUI PARA TRATAR O NULL/ORPHAN-RECORD (Linha 290 do erro) ---
         // Formata os dados para facilitar o uso no frontend
         const alunosFormatados = data.map(matricula => ({
             matricula_id: matricula.id,
-            crianca_id: matricula.cadastro_crianca.id,
-            nome_crianca: matricula.cadastro_crianca.nome,
-            cpf_crianca: matricula.cadastro_crianca.cpf,
-            turma_atual_id: matricula.turma.id,
-            turma_atual_nome: matricula.turma.nome_turma
+            
+            // USAR Optional Chaining (?.): Se a relação aninhada for NULL, retorna NULL/default
+            crianca_id: matricula.cadastro_crianca?.id ?? null,
+            nome_crianca: matricula.cadastro_crianca?.nome ?? 'Aluno Deletado/Não Encontrado',
+            cpf_crianca: matricula.cadastro_crianca?.cpf ?? 'N/A',
+            
+            turma_atual_id: matricula.turma?.id ?? null,
+            turma_atual_nome: matricula.turma?.nome_turma ?? 'Turma Deletada/Não Encontrada'
         }));
+        // -------------------------------------------------------------------------------------
 
         res.json(alunosFormatados || []);
 
     } catch (err) {
+         // Corrigido para usar 'err' no console.error (erro anterior era 'error is not defined')
          console.error("Erro inesperado na API /api/buscar-matriculados:", err);
          res.status(500).json({ error: 'Erro interno no servidor.' });
     }
@@ -407,9 +414,9 @@ router.get('/historico', async (req, res) => {
             id: m.id,
             data: m.data_matricula ? new Date(m.data_matricula).toLocaleDateString('pt-BR') : 'Sem data',
             ano: m.ano_letivo,
-            // A turma e o aluno vêm da matrícula que foi arquivada (Turma Antiga)
-            alunoNome: m.cadastro_crianca ? m.cadastro_crianca.nome : 'Aluno não encontrado',
-            turmaNome: m.turma ? m.turma.nome_turma : 'Turma (Antiga) não encontrada',
+            // Adicionado Optional Chaining aqui também, por segurança
+            alunoNome: m.cadastro_crianca?.nome ?? 'Aluno não encontrado',
+            turmaNome: m.turma?.nome_turma ?? 'Turma (Antiga) não encontrada',
             dataArquivamento: m.data_arquivamento ? new Date(m.data_arquivamento).toLocaleDateString('pt-BR') : 'N/A'
         }));
 
