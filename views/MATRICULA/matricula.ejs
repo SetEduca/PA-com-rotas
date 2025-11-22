@@ -434,7 +434,7 @@ type="hidden" id="aluno_id" name="aluno_id" required>
     // Função de Logout (mantida)
     function logout() {
         if (confirm('Deseja realmente sair do sistema?')) {
-            window.location.href = '/login';
+            window.location.href = '/login/sair';
         }
     }
 
@@ -717,6 +717,18 @@ type="hidden" id="aluno_id" name="aluno_id" required>
             }
         });
     }); // Fim do DOMContentLoaded
+
+    // Esse código verifica se a página foi aberta pelo botão "Voltar" do navegador
+    window.addEventListener( "pageshow", function ( event ) {
+        var historyTraversal = event.persisted || 
+                               ( typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2 );
+        if ( historyTraversal ) {
+            // Se for um "Voltar", força o navegador a recarregar a página
+            window.location.reload();
+        }
+    });
+    
 </script>
 </body>
 </html>

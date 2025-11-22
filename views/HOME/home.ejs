@@ -783,7 +783,7 @@
         <div>
             <div class="sidebar-footer">
       
-                  <a href="#" class="logout-button logout-trigger">
+                  <a href="/login/sair" class="logout-button logout-trigger">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Sair</span>
                 </a>
@@ -1044,7 +1044,7 @@
             });
             confirmLogoutBtn.addEventListener('click', function() {
                 console.log("Usuário deslogado! Redirecionando...");
-                window.location.href = '/login';
+                window.location.href = '/login/sair';
             });
 
             // ===========================================================
@@ -1052,6 +1052,17 @@
             // PORQUE OS DADOS AGORA VÊM DO SERVIDOR (EJS)
             // ===========================================================
         });
+
+        // Esse código verifica se a página foi aberta pelo botão "Voltar" do navegador
+    window.addEventListener( "pageshow", function ( event ) {
+        var historyTraversal = event.persisted || 
+                               ( typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2 );
+        if ( historyTraversal ) {
+            // Se for um "Voltar", força o navegador a recarregar a página
+            window.location.reload();
+        }
+    });
 
     </script>
 </body>

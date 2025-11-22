@@ -404,7 +404,7 @@ color: #D22A2A;
 </div>
         </div>
         <div class="sidebar-footer">
-            <a href="#" class="logout-button"><i class="fa-solid fa-right-from-bracket"></i><span>Sair</span></a>
+            <a href="/login/sair" class="logout-button"><i class="fa-solid fa-right-from-bracket"></i><span>Sair</span></a>
         </div>
     </aside>
     
@@ -992,6 +992,18 @@ font-size: 20px;"></span>
             window.carregarDashboard();
         }
     }, 1000); // Espera 1 segundo e atualiza
+
+    // Esse código verifica se a página foi aberta pelo botão "Voltar" do navegador
+    window.addEventListener( "pageshow", function ( event ) {
+        var historyTraversal = event.persisted || 
+                               ( typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2 );
+        if ( historyTraversal ) {
+            // Se for um "Voltar", força o navegador a recarregar a página
+            window.location.reload();
+        }
+    });
+    
 </script>
 
 </body>

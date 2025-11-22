@@ -83,7 +83,7 @@
                     <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
                     <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
                     <div class="dropdown-divider"></div>
-                    <a href="/login" onclick="event.preventDefault(); logout();"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                    <a href="/login/sair" onclick="event.preventDefault(); logout();"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
             </div>
         </div>
@@ -167,7 +167,7 @@
 
         function logout() {
             if (confirm('Deseja realmente sair do sistema?')) {
-                window.location.href = '/login';
+                window.location.href = '/login/sair';
             }
         }
 

@@ -595,7 +595,7 @@
       const logoutButton = document.querySelector('.logout-button');
       logoutButton.addEventListener('click', function() {
         if (confirm('Tem certeza que deseja sair?')) {
-          window.location.href = '/login'; // Redireciona para a página de login
+          window.location.href = '/login/sair'; // Redireciona para a página de login
         }
       });
     });
@@ -607,6 +607,17 @@
         });
         this.classList.add('active');
       });
+    });
+
+         // Esse código verifica se a página foi aberta pelo botão "Voltar" do navegador
+    window.addEventListener( "pageshow", function ( event ) {
+        var historyTraversal = event.persisted || 
+                               ( typeof window.performance != "undefined" && 
+                                window.performance.navigation.type === 2 );
+        if ( historyTraversal ) {
+            // Se for um "Voltar", força o navegador a recarregar a página
+            window.location.reload();
+        }
     });
   </script>
 </body>

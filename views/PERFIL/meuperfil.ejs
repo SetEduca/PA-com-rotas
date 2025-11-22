@@ -974,7 +974,7 @@
                     <a href="/mensalidade" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
                     <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
                     <div class="dropdown-divider"></div>
-                    <a href="/login" onclick="login()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                    <a href="/login/sair" onclick="login()"><i class="fas fa-sign-out-alt"></i> Sair</a>
                   
                 </div>
             </div>
@@ -1315,7 +1315,7 @@
 
         function login() {
             if (confirm('Deseja realmente sair do sistema?')) {
-                window.location.href = '/login';
+                window.location.href = '/login/sair';
             }
         }
         

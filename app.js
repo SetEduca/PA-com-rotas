@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
-import session from 'express-session'; // <<< 1. IMPORTE O PACOTE DE SESSÃO
+import session from 'express-session'; 
 import supabase from './supabase.js';
 import turmasRouter from './routes/turmas.routes.js';
 import matriculasRouter from './routes/matricula.routes.js';
@@ -14,9 +14,24 @@ import senhaRouter from './routes/senha.routes.js';
 import perfilRouter from './routes/perfil.routes.js';
 import financeiroRoutes from './routes/financeiro.routes.js';
 
+import privateRoute from './routes/private.route.js'; 
+
  const app = express();
  const PORT = 3020;
  const SALT_ROUNDS = 10;
+
+// ==================================================================
+// 🚨 MUDANÇA CRUCIAL: O MATADOR DE CACHE VEM PRIMEIRO! 🚨
+// Colocando aqui no topo, garantimos que NENHUMA página seja salva
+// na memória do navegador.
+// ==================================================================
+app.use((req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    next();
+});
+// ==================================================================
 
 
 // --- CONFIGURAÇÕES GERAIS ---
@@ -28,15 +43,14 @@ app.use(express.json());
 
 
  app.use(session({
-    secret: 'coloque-uma-chave-secreta-forte-aqui-depois', // IMPORTANTE: Mude isso para uma string segura
+    secret: 'coloque-uma-chave-secreta-forte-aqui-depois', 
     resave: false,
     saveUninitialized: true,
     cookie: { 
-        secure: false, // Em produção (com HTTPS), mude para 'true'
-        maxAge: 24 * 60 * 60 * 1000 // Ex: sessão dura 1 dia (em milissegundos)
+        secure: false, 
+        maxAge: 24 * 60 * 60 * 1000 
     } 
 }));
- 
  
 
 //INICIO
@@ -55,18 +69,18 @@ app.use('/cadastro', cadastroRouter);
 
 //PERFIL
 
-app.get("/meuperfil", (req, res) => {
+app.get("/meuperfil", privateRoute, (req, res) => { 
   res.render("PERFIL/meuperfil");});
 
-app.use('/mensalidade', mensalidadeRouter);
+app.use('/mensalidade', privateRoute, mensalidadeRouter); 
 
-app.use('/arquivados', arquivadosRouter);
+app.use('/arquivados', privateRoute, arquivadosRouter); 
 
-app.use('/api/perfil', perfilRouter);
+app.use('/api/perfil', privateRoute, perfilRouter); 
 
 //HOME
 
-app.get("/home", async (req, res) => {
+app.get("/home", privateRoute, async (req, res) => { 
     try {
         console.log("--- Carregando Home (Modo Infalível) ---");
 
@@ -150,11 +164,11 @@ app.use('/senha', senhaRouter);
 // 1. Esta rota GET específica para /cadastro-aluno (o formulário)
 //    deve vir ANTES do app.use() que captura o prefixo.
 // ========================================================================
-app.get("/cadastro-aluno", (req, res) => {
+app.get("/cadastro-aluno", privateRoute, (req, res) => { 
   res.render("ALUNO/cadastro-aluno");
 });
 
-app.get("/cadastro-responsavel", (req, res) => {
+app.get("/cadastro-responsavel", privateRoute, (req, res) => { 
   res.render("ALUNO/cadastro1");
 });
 
@@ -163,28 +177,28 @@ app.get("/cadastro-responsavel", (req, res) => {
 // 2. O prefixo deste router deve ser '/acessar-aluno' para bater
 //    com as chamadas de API (fetch) do seu arquivo 'acessar-aluno.ejs' 
 // ========================================================================
-app.use("/acessar-aluno", alunoAcessarRouter);
+app.use("/acessar-aluno", privateRoute, alunoAcessarRouter); 
 
 
 //FINANCEIRO
 
 
 
-app.get('/financeiro', (req, res) => {
+app.get('/financeiro', privateRoute, (req, res) => { 
   res.render('FINANCEIRO/financeiro');
 });
 
 //TURMAS
 
-app.use('/turmas', turmasRouter);
+app.use('/turmas', privateRoute, turmasRouter); 
 
 //MATRICULA
 
-app.use('/matriculas', matriculasRouter);
+app.use('/matriculas', privateRoute, matriculasRouter); 
 
 //PROFESSOR
 
-app.use('/professores', professoresRoutes);
+app.use('/professores', privateRoute, professoresRoutes); 
 
 //TERMOS
 app.get('/termossete', (req, res) => { // Rota alterada de /termos-de-uso para /termossete
@@ -226,7 +240,7 @@ app.get('/testar-banco', async (req, res) => {
 });
 
 
-app.use('/api', financeiroRoutes);
+app.use('/api', privateRoute, financeiroRoutes); 
 
 // ... (provavelmente suas outras rotas, como app.get('/login', ...))
 
