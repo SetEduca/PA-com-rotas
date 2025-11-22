@@ -209,26 +209,52 @@ router.post("/editar/:id", async (req, res) => {
     res.redirect('/turmas');
 });
 
-// --- ROTA PARA ARQUIVAR UMA TURMA (EXCLUSÃO LÓGICA) ---
-// Define uma rota que responde a requisições POST para "/turmas/arquivar/:id".
-// Isso é chamado quando o usuário clica em um botão "Arquivar".
-router.post('/arquivar/:id', async (req, res) => {
+// --- ROTA PARA EXCLUIR UMA TURMA (HARD DELETE) ---
+router.post('/excluir/:id', async (req, res) => {
     // Pega o ID da turma da URL.
     const { id } = req.params;
-    
-    // Isso é um "soft delete" (exclusão lógica). Em vez de apagar o registro do banco,
-    // nós apenas o marcamos como inativo, mudando a coluna 'ativo' para 'false'.
-    // Isso é útil para manter o histórico.
-    const { error } = await supabase.from('turma').update({ ativo: false }).eq('id', id);
 
-    // Verifica se ocorreu um erro ao tentar arquivar.
-    if (error) {
-        console.error('Erro ao arquivar turma:', error);
-        return res.status(500).send('Erro ao arquivar a turma.');
+    try {
+        // 1. VERIFICAÇÃO: Checa se existem alunos ATIVOS matriculados nesta turma.
+        const { count: alunosAtivosCount, error: countError } = await supabase
+            .from('matricula')
+            .select('id', { count: 'exact' })
+            .eq('turma_id', id)
+            .eq('ativo', true);
+
+        if (countError) throw countError;
+
+        if (alunosAtivosCount > 0) {
+            // Se houver alunos ativos, bloqueia a exclusão com uma mensagem aprimorada.
+            const s = alunosAtivosCount > 1 ? 's' : ''; // Para plural/singular
+            const mensagemErro = `
+                🚫 **Bloqueado! Turma em Uso.**
+                <br>
+                Não é possível excluir esta turma no momento.
+                <br>
+                Existem **${alunosAtivosCount} aluno${s} ativo${s}** ainda matriculado${s}.
+                <br><br>
+                Desative ou remova a matrícula dos alunos antes de prosseguir com a exclusão.
+            `;
+            // Envia a mensagem de erro com formatação HTML/Markdown, se o Express/EJS suportar, 
+            // ou apenas o texto, garantindo que o status 400 seja retornado.
+            return res.status(400).send(mensagemErro);
+        }
+
+        // 2. EXCLUSÃO: Se não houver alunos ativos, procede com a exclusão física (hard delete).
+        const { error: deleteError } = await supabase
+            .from('turma')
+            .delete()
+            .eq('id', id);
+
+        if (deleteError) throw deleteError;
+
+        // Se a exclusão foi bem-sucedida, redireciona para a lista de turmas.
+        res.redirect('/turmas');
+    } catch (error) {
+        console.error('Erro ao excluir turma:', error);
+        res.status(500).send('Erro no servidor ao tentar excluir a turma.');
     }
-    
-    // Se o arquivamento foi bem-sucedido, redireciona para a lista de turmas.
-    res.redirect('/turmas');
 });
 
 // Exporta o roteador com todas as suas rotas definidas.
