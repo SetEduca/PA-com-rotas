@@ -1,5 +1,3 @@
-// routes/login.routes.js
-
 import express from 'express';
 import bcrypt from 'bcrypt';
 import supabase from '../supabase.js';
@@ -55,23 +53,23 @@ router.post("/", async (req, res) => {
             req.session.userId = usuario.id;
             req.session.userName = usuario.nome;
             req.session.isAuthenticated = true;
-            
-            // CRUCIAL: O 'private.route.js' procura por isso aqui:
             req.session.user = usuario; 
 
             console.log("✅ Sessão CRIADA com sucesso para:", usuario.nome);
 
             req.session.save(err => {
                 if (err) console.error("Erro ao salvar sessão:", err);
-                // Redireciona APÓS salvar para evitar bugs
-                res.redirect('/home');
+                
+                // 👇 MUDANÇA AQUI 👇
+                // Aponta para a pasta CARREGAMENTO e o arquivo teladecarre
+                res.render('CARREGAMENTO/teladecarre');
             });
         } else {
             console.error("Erro: Sessão não configurada.");
             res.redirect('/home');
         }
         
-        // Log de acesso (opcional, mantido do seu código)
+        // Log de acesso
         try {
             await supabase.from('cliente_login').insert({
                 email_creche: email,       
@@ -86,33 +84,21 @@ router.post("/", async (req, res) => {
 });
 
 // ==========================================================
-// ☢️ ROTA SAIR (O LOGOUT NUCLEAR) ☢️
-// É aqui que o Cenário B morre.
+// ☢️ ROTA SAIR
 // ==========================================================
 router.get("/sair", (req, res) => {
     console.log("👋 ROTA DE SAIR ACIONADA. Destruindo tudo...");
 
     if (req.session) {
-        // 1. Apaga os dados manualmente primeiro (Garantia)
         req.session.user = null;
         req.session.isAuthenticated = false;
 
-        // 2. Destrói a sessão
         req.session.destroy((err) => {
-            if (err) {
-                console.error("❌ Erro ao destruir sessão:", err);
-            } else {
-                console.log("✅ Sessão destruída no servidor.");
-            }
-
-            // 3. Limpa o cookie do navegador
+            if (err) console.error("❌ Erro ao destruir sessão:", err);
             res.clearCookie('connect.sid', { path: '/' }); 
-            
-            // 4. Manda pro login
             res.redirect('/login');
         });
     } else {
-        console.log("⚠️ Nenhuma sessão encontrada para destruir.");
         res.redirect('/login');
     }
 });
