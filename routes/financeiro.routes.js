@@ -190,25 +190,27 @@ router.get('/transacoes/historico', async (req, res) => {
 });
 
 // Rota para Situação Financeira (COLE ISSO NO FINAL DO api.js)
+// Rota para Situação Financeira (Versão Blindada contra Erros)
+// Rota para Situação Financeira (Versão Blindada contra Erros)
+// Rota Inteligente: Consulta Status e Corrige IDs errados sozinho
+// Rota para Situação Financeira (Versão Blindada contra Erros)
 router.get('/alunos-status', async (req, res) => {
     try {
-        // Busca alunos INCLUINDO o responsável
         const alunos = await Aluno.findAll({
             include: [{ model: Responsavel, as: 'responsavel' }]
         });
 
-        // Se não achar ninguém, retorna lista vazia
-        if (!alunos) return res.json([]);
-
         const relatorio = await Promise.all(alunos.map(async (aluno) => {
             let status = 'Em dia';
             let cor = 'green';
+            
+            // Verifica se tem responsável e se tem o ID do Asaas
+            const idAsaas = aluno.responsavel ? aluno.responsavel.asaasCustomerId : null;
 
-            // Verifica Asaas
-            if (aluno.responsavel && aluno.responsavel.asaasCustomerId) {
+            if (idAsaas) {
+                // SÓ ENTRA AQUI SE TIVER ID REAL
                 try {
-                    // Tenta buscar no Asaas
-                    const cobrancas = await asaasService.listarCobrancasPorCliente(aluno.responsavel.asaasCustomerId);
+                    const cobrancas = await asaasService.listarCobrancasPorCliente(idAsaas);
                     const temAtraso = cobrancas.some(c => c.status === 'OVERDUE');
                     
                     if (temAtraso) {
@@ -216,20 +218,21 @@ router.get('/alunos-status', async (req, res) => {
                         cor = 'red';
                     }
                 } catch (err) {
-                    console.error("Erro ao consultar Asaas para:", aluno.nome);
-                    // Não trava o sistema, só marca como erro na consulta
-                    status = 'Erro Asaas';
+                    // Se der erro de conexão, avisa, mas não trava
+                    console.error(`Erro de conexão Asaas para ${aluno.nome}:`, err.message);
+                    status = 'Erro Consulta';
                     cor = 'gray';
                 }
             } else {
-                status = 'Sem Asaas';
+                // Se não tem ID, cai aqui direto (sem dar erro vermelho no terminal)
+                status = 'Sem Cadastro Asaas';
                 cor = 'yellow';
             }
 
             return {
                 id: aluno.id,
-                nome: aluno.nomeCrianca || aluno.nome, // Tenta os dois nomes
-                responsavel: aluno.responsavel ? aluno.responsavel.nome : 'Sem Resp.',
+                nome: aluno.nomeCrianca || aluno.nome,
+                responsavel: aluno.responsavel ? aluno.responsavel.nome : 'Sem Responsável',
                 telefone: aluno.responsavel ? (aluno.responsavel.mobilePhone || aluno.responsavel.telefone) : '-',
                 status: status,
                 cor: cor
@@ -239,10 +242,38 @@ router.get('/alunos-status', async (req, res) => {
         res.json(relatorio);
 
     } catch (error) {
-        console.error("ERRO CRÍTICO na rota /alunos-status:", error);
+        console.error("ERRO GERAL na rota /alunos-status:", error);
         res.status(500).json({ message: "Erro interno ao buscar status." });
     }
 });
+
+// --- FUNÇÕES AJUDANTES (Cole isso logo abaixo da rota, ou antes dela) ---
+
+function montarObjeto(aluno, status, cor) {
+    return {
+        id: aluno.id,
+        nome: aluno.nomeCrianca || aluno.nome,
+        responsavel: aluno.responsavel ? aluno.responsavel.nome : 'Sem Resp.',
+        telefone: aluno.responsavel ? (aluno.responsavel.mobilePhone || aluno.responsavel.telefone) : '-',
+        status: status,
+        cor: cor
+    };
+}
+
+async function buscarPorCpfNoAsaas(cpf) {
+    try {
+        // Usa a API direta para buscar por CPF
+        const response = await asaasAPI.get('/customers', {
+            params: { cpfCnpj: cpf }
+        });
+        if (response.data.data && response.data.data.length > 0) {
+            return response.data.data[0]; // Retorna o cliente achado
+        }
+        return null;
+    } catch (e) {
+        return null;
+    }
+}
 
 // Rota para o Dashboard (Resumo Financeiro do Mês)
 // Rota para o Dashboard (Resumo Financeiro do Mês)
@@ -315,6 +346,56 @@ router.get('/dashboard-resumo', async (req, res) => {
     } catch (error) {
         console.error("ERRO NO DASHBOARD:", error);
         res.status(500).json({ saldo: 0, receitas: 0, despesas: 0 });
+    }
+});
+
+// Rota para Forçar Sincronização do Responsável com Asaas
+router.post('/responsavel/:id/sincronizar', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // 1. Busca o Responsável no seu banco
+        const responsavel = await Responsavel.findByPk(id);
+        if (!responsavel) {
+            return res.status(404).json({ message: 'Responsável não encontrado.' });
+        }
+
+        console.log(`>>> Tentando sincronizar CPF: ${responsavel.cpf}`);
+
+        // 2. Pergunta pro Asaas: "Vocês tem alguém com esse CPF?"
+        // Nota: O método listarClientes precisa aceitar filtro por cpfCnpj
+        // Se seu asaasService não tiver isso, vamos usar o axios direto aqui pra garantir
+        const response = await asaasAPI.get('/customers', {
+            params: { cpfCnpj: responsavel.cpf }
+        });
+
+        let novoIdAsaas = null;
+
+        // CENÁRIO A: O cara já existe no Asaas (Recupera o ID)
+        if (response.data.data && response.data.data.length > 0) {
+            novoIdAsaas = response.data.data[0].id;
+            console.log(`>>> Encontrado no Asaas! ID recuperado: ${novoIdAsaas}`);
+        } 
+        // CENÁRIO B: Não existe (Cria um novo)
+        else {
+            console.log(">>> Não encontrado no Asaas. Criando novo...");
+            const novoCliente = await asaasService.criarCliente({
+                name: responsavel.nome,
+                cpfCnpj: responsavel.cpf,
+                email: responsavel.email,
+                mobilePhone: responsavel.telefone || responsavel.mobilePhone
+            });
+            novoIdAsaas = novoCliente.id;
+        }
+
+        // 3. Salva o ID correto no seu banco (A AUTO-CORREÇÃO)
+        await responsavel.update({ asaasCustomerId: novoIdAsaas });
+
+        res.json({ message: 'Sincronizado com sucesso!', asaasId: novoIdAsaas });
+
+    } catch (error) {
+        console.error("Erro ao sincronizar:", error.response ? error.response.data : error.message);
+        res.status(500).json({ message: "Erro ao tentar sincronizar." });
     }
 });
 // ... (o restante do seu arquivo routes/api.js)

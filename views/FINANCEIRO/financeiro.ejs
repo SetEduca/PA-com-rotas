@@ -289,65 +289,82 @@ color: #D22A2A;
          }
 
         /* Perfil do Usuário e Dropdown */
-        .profile {
-            position: relative;
-            cursor: pointer;
-            z-index: 10;
-        }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-        }
-        .profile-icon {
-            font-size: 24px;
-        }
-        .profile-arrow {
-            font-size: 14px;
-            transition: transform 0.3s ease;
-        }
-        .profile.active .profile-arrow {
-            transform: rotate(180deg);
-        }
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            top: calc(100% + 15px);
-            right: 0;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            width: 200px;
-            overflow: hidden;
-            z-index: 1001;
-        }
-        .profile-dropdown.show {
-            display: block;
-        }
-        .profile-dropdown a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            font-size: 15px;
-            color: #333;
-            text-decoration: none;
-            transition: background-color 0.2s ease;
-        }
-        .profile-dropdown a:hover {
-            background-color: #f7f8fa;
-        }
-        .profile-dropdown a i {
-            width: 20px;
-            text-align: center;
-            color: #6c757d;
-        }
-        .dropdown-divider {
-            height: 1px;
-            background-color: #e9ecef;
-            margin: 8px 0;
-        }
+       /* --- CSS DO DROPDOWN DE PERFIL --- */
+     .profile {
+                        position: relative;
+                        cursor: pointer;
+                        z-index: 10;
+                }
+
+                .profile-header {
+                        display: flex;
+                        align-items: center;
+                        padding: 5px;
+                        border-radius: 50px;
+                        transition: background-color 0.2s ease;
+                }
+
+                .profile-header:hover {
+                        background-color: rgba(255, 255, 255, 0.1);
+                }
+
+                .profile-icon {
+                        font-size: 38px;
+                        color: white;
+                }
+
+                .profile-arrow {
+                        font-size: 14px;
+                        margin-left: 8px;
+                        color: white;
+                        transition: transform 0.3s ease;
+                }
+
+                /* O menu dropdown começa escondido */
+                .profile-dropdown {
+                        display: none;
+                        position: absolute;
+                        top: 110%;
+                        right: 0;
+                        background-color: white;
+                        border-radius: 10px;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                        width: 200px;
+                        z-index: 1001;
+                        overflow: hidden;
+                        padding: 8px 0;
+                        border: 1px solid #eee;
+                }
+
+                /* A classe 'show' (adicionada via JS) torna o menu visível */
+                .profile-dropdown.show {
+                        display: block;
+                }
+
+                .profile-dropdown a {
+                        display: flex;
+                        align-items: center;
+                        padding: 12px 18px;
+                        text-decoration: none;
+                        color: #444;
+                        font-size: 15px;
+                        transition: background-color 0.2s ease;
+                }
+
+                .profile-dropdown a:hover {
+                        background-color: #f5f5f5;
+                }
+
+                .profile-dropdown a i {
+                        width: 20px;
+                        margin-right: 15px;
+                        color: #666;
+                        text-align: center;
+                }
+
+                @media (max-width: 768px) {
+
+}
     </style>
 
        <script>
@@ -404,8 +421,11 @@ color: #D22A2A;
 </div>
         </div>
         <div class="sidebar-footer">
-            <a href="/login/sair" class="logout-button"><i class="fa-solid fa-right-from-bracket"></i><span>Sair</span></a>
-        </div>
+    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Sair</span>
+    </a>
+</div>
     </aside>
     
     <div class="flex flex-col flex-1 lg:ml-[280px] min-h-screen">
@@ -509,7 +529,6 @@ font-size: 20px;"></span>
                             <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Responsável</th>
                             <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Telefone</th>
                             <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase text-center">Situação</th>
-                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody id="tabela-alunos-body" class="divide-y divide-gray-100">
@@ -678,6 +697,21 @@ font-size: 20px;"></span>
 
     // Lógica de Salvar o Formulário
     document.addEventListener('DOMContentLoaded', () => {
+
+    // --- LÓGICA DO CALENDÁRIO (DATA ATUAL) ---
+    const dateElement = document.getElementById('current-date');
+    if (dateElement) {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date();
+        
+        // Formata para "Sexta-feira, 22 de Novembro de 2025"
+        let dateString = today.toLocaleDateString('pt-BR', options);
+        
+        // Deixa a primeira letra Maiúscula (opcional, fica mais bonito)
+        dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+        
+        dateElement.innerText = dateString;
+    }
 
         // --- LÓGICA PARA PREENCHER AS CATEGORIAS ---
     const tipoSelect = document.getElementById('transaction-type');
@@ -897,33 +931,44 @@ font-size: 20px;"></span>
         const tbody = document.getElementById('tabela-alunos-body');
         if (!tbody) return;
 
-        tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center">Consultando...</td></tr>';
+        // Ajuste: colspan="4" pois removemos a coluna de ações
+        tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Consultando...</td></tr>';
 
         try {
             const res = await fetch(API_URL + '/api/alunos-status');
             const alunos = await res.json();
 
             tbody.innerHTML = '';
+            
             if (alunos.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center">Nenhum aluno.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Nenhum aluno encontrado.</td></tr>';
                 return;
             }
 
             tbody.innerHTML = alunos.map(a => {
-                let corBadge = (a.cor === 'green') ? 'bg-green-100 text-green-800' : 
-                               (a.cor === 'red') ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800';
+                // Lógica de Cores Completa (Verde, Vermelho e Amarelo)
+                let corBadge = '';
+                if (a.cor === 'green') corBadge = 'bg-green-100 text-green-800';
+                else if (a.cor === 'red') corBadge = 'bg-red-100 text-red-800';
+                else if (a.cor === 'yellow') corBadge = 'bg-yellow-100 text-yellow-800';
+                else corBadge = 'bg-gray-100 text-gray-800';
                 
                 return `
-                    <tr class="hover:bg-gray-50">
-                        <td class="p-3 text-sm font-medium">${a.nome}</td>
+                    <tr class="hover:bg-gray-50 border-b border-gray-100 transition">
+                        <td class="p-3 text-sm font-medium text-gray-800">${a.nome}</td>
                         <td class="p-3 text-sm text-gray-600">${a.responsavel}</td>
                         <td class="p-3 text-sm text-gray-500">${a.telefone}</td>
-                        <td class="p-3 text-center"><span class="px-2 py-1 rounded-full text-xs font-bold ${corBadge}">${a.status}</span></td>
-                        <td class="p-3 text-center text-xs text-blue-600">Ver Detalhes</td>
+                        <td class="p-3 text-center">
+                            <span class="px-2 py-1 rounded-full text-xs font-bold uppercase ${corBadge}">
+                                ${a.status}
+                            </span>
+                        </td>
                     </tr>`;
             }).join('');
+            
         } catch (e) {
-            tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center text-red-500">Erro ao buscar alunos.</td></tr>';
+            console.error(e);
+            tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-red-500">Erro ao buscar alunos.</td></tr>';
         }
     };
 
@@ -1004,6 +1049,50 @@ font-size: 20px;"></span>
         }
     });
     
+     // Executa o código JavaScript depois que todo o HTML da página foi carregado
+                document.addEventListener('DOMContentLoaded', function () {
+                        const profileToggle = document.getElementById('profile-toggle');
+                        const dropdownMenu = document.getElementById('profile-dropdown-menu');
+                        const profileArrow = profileToggle.querySelector('.profile-arrow');
+
+            // Adiciona um evento de clique ao ícone do perfil para mostrar / esconder o dropdown
+                        profileToggle.addEventListener('click', function (event) {
+                                event.stopPropagation(); // Impede que o clique se propague para o 'window'
+                                dropdownMenu.classList.toggle('show'); // Adiciona ou remove a classe 'show'
+                                // Gira a seta para baixo ou para cima
+
+                                profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+                        });
+
+                        // Adiciona um evento de clique na janela inteira para fechar o dropdown se ele estiver aberto
+                        window.addEventListener('click', function () {
+                                if (dropdownMenu.classList.contains('show')) {
+
+                                        dropdownMenu.classList.remove('show');
+                                        profileArrow.style.transform = 'rotate(0deg)';
+                                }
+                        });
+                        // --- Lógica da Barra de Pesquisa ---
+                        const searchInput = document.querySelector('.search-input');
+                        // Adiciona um evento que é disparado toda vez que o usuário digita algo
+                        searchInput.addEventListener('input', function () {
+                                const searchTerm = this.value.toLowerCase(); // Pega o texto e converte para minúsculas
+                                const rows = document.querySelectorAll('#turmasTableBody tr'); // Pega todas as linhas da tabela
+
+
+                                rows.forEach(row => {
+                                        // Verifica se a linha não é a mensagem "Nenhuma turma cadastrada"
+                                        if (row.children.length > 1) {
+                                                const rowText = row.textContent.toLowerCase();
+                                                // Pega todo o texto da linha
+                                                // Se o texto da linha incluir o termo pesquisado, mostra a linha. Senão, esconde.
+                                                row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+                                        }
+
+                                });
+                        });
+                });
+
 </script>
 
 </body>

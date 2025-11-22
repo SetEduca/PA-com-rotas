@@ -482,6 +482,31 @@
         margin-left: 0;
       }
     }
+
+    @media (max-width: 768px) {
+    :root { --sidebar-width: 70px; } /* 1. Diminui a largura da barra */
+    
+    /* 2. ESCONDE O TEXTO (Aqui é o segredo) */
+    .menu-item span, .logout-button span, .seteeduca { display: none; }
+    
+    /* 3. Ajusta o ícone para ficar centralizado */
+    .menu-item i, .logout-button i { margin-right: 0; }
+    
+    .sidebar .logo { padding: 0 10px; } 
+    .sidebar .logo img { max-width: 50px; } 
+    .sidebar-footer { padding: 10px 5px; } 
+    .menu { padding: 10px 5px; } 
+    
+    /* 4. Centraliza o conteúdo (que agora é só o ícone) */
+    .menu-item { padding: 15px 5px; justify-content: center; } 
+    
+    .menu-item::after { display: none; } 
+    .menu-item.active::before { right: 5px; } 
+    
+    /* Ajusta o resto do site para acompanhar a sidebar menor */
+    .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
+    /* ... resto do código ... */
+}
   </style>
 </head>
 <body>
