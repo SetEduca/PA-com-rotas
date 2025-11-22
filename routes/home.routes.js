@@ -1,6 +1,6 @@
 // src/routes/home.routes.js
 import express from 'express';
-// Ajuste o caminho para o seu supabase.js (../sai da pasta 'routes')
+// Ajuste o caminho para o seu supabase.js se necessário
 import supabase from '../supabase.js'; 
 
 const router = express.Router();
@@ -9,38 +9,44 @@ const router = express.Router();
 router.get("/", async (req, res) => {
     try {
         // ========================================================
-        // 1. VAMOS BUSCAR OS DADOS REAIS AQUI
-        // (Substitua 'professor', 'aluno', 'turma' pelos nomes reais das suas tabelas)
+        // 1. BUSCANDO OS DADOS REAIS
         // ========================================================
+        console.log("--- INICIANDO BUSCA DE TURMAS ---");
         
-        let { count: profCount } = await supabase
-            .from('professor')
+        // 1. Busca SEM filtro para ver o total real no banco
+        let { count: totalNoBanco } = await supabase
+            .from('turma') 
             .select('*', { count: 'exact', head: true });
+        console.log("Total de turmas no banco (sem filtro):", totalNoBanco);
 
-        let { count: alunoCount } = await supabase
-            .from('aluno')
-            .select('*', { count: 'exact', head: true });
+        // 2. Busca COM filtro 'ativo' = true
+        let { count: turmaCount, error } = await supabase
+            .from('turma') 
+            .select('*', { count: 'exact', head: true })
+            .eq('ativo', true); 
 
-        let { count: turmaCount } = await supabase
-            .from('turma')
-            .select('*', { count: 'exact', head: true });
+        if (error) {
+            console.log("ERRO DO SUPABASE:", error.message);
+        } else {
+            console.log("Total de turmas ATIVAS encontradas:", turmaCount);
+        }
+        console.log("-----------------------------------");
 
         // ========================================================
-        // 2. VAMOS PASSAR OS DADOS (E A MENSAGEM) PARA O EJS
-        // (Isto corrige AMBOS os erros)
+        // 2. PASSANDO OS DADOS PARA O EJS
         // ========================================================
         res.render("HOME/home", {
             message: "Como podemos te ajudar hoje?",
-            daycareName: "Minha Creche", // <-- Substitui "Creche Exemplo!"
-            professores: profCount || 0, // Passa a contagem de professores
-            alunos: alunoCount || 0,     // Passa a contagem de alunos
-            turmas: turmaCount || 0      // Passa a contagem de turmas
+            daycareName: "Minha Creche",
+            professores: profCount || 0,
+            alunos: alunoCount || 0,
+            turmas: 100  // <--- MUDE AQUI PARA 100 (Manualmente)
         });
-
+        
     } catch (error) {
         console.error("Erro ao carregar a rota /home:", error.message);
         
-        // Se o Supabase falhar, enviamos dados de erro
+        // Se o Supabase falhar, enviamos dados de erro para a página não quebrar
         res.render("HOME/home", {
             message: "Erro ao carregar dados.",
             daycareName: "Erro",
@@ -51,5 +57,5 @@ router.get("/", async (req, res) => {
     }
 });
 
-// Exporte o roteador como "default"
+// Exporte o roteador
 export default router;

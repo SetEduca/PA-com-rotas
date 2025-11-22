@@ -66,41 +66,76 @@ app.use('/api/perfil', perfilRouter);
 
 //HOME
 
-app.get("/home", async (req, res) => { // 1. Adicionado 'async'
+app.get("/home", async (req, res) => {
     try {
-        // 2. BUSQUE OS DADOS REAIS AQUI
-        // (Substitua 'professor', 'aluno', 'turma' pelos nomes reais das suas tabelas)
+        console.log("--- Carregando Home (Modo Infalível) ---");
+
+        // 1. Professores
         let { count: profCount } = await supabase
             .from('professor')
             .select('*', { count: 'exact', head: true });
 
+        // 2. Alunos
         let { count: alunoCount } = await supabase
             .from('aluno')
             .select('*', { count: 'exact', head: true });
 
-        let { count: turmaCount } = await supabase
+        // 3. Turmas (Filtro JS para garantir)
+        let { data: turmasData } = await supabase
             .from('turma')
-            .select('*', { count: 'exact', head: true });
+            .select('ativo');
+        
+        // Conta manualmente qualquer coisa que pareça "verdadeiro"
+        let turmaFinal = 0;
+        if (turmasData) {
+            turmaFinal = turmasData.filter(t => t.ativo === true || t.ativo === 'true' || t.ativo === 'TRUE').length;
+        }
 
+        // 4. Matrículas (A CORREÇÃO PRINCIPAL)
+        // Baixa TODAS as matrículas sem filtro no banco
+        let { data: todasMatriculas, error: erroMat } = await supabase
+            .from('matricula') 
+            .select('ativo'); // Só traz a coluna ativo
 
-        // 3. PASSE TODAS AS VARIÁVEIS PARA O EJS
+        let matriculaFinal = 0;
+
+        if (erroMat) {
+            console.log("❌ Erro ao buscar tabela matricula:", erroMat.message);
+        } else if (todasMatriculas) {
+            // Filtra NA MÃO aqui no servidor. Pega true (booleano) ou "true" (texto)
+            const ativas = todasMatriculas.filter(m => 
+                m.ativo === true || m.ativo === 'true' || m.ativo === 'TRUE'
+            );
+            matriculaFinal = ativas.length;
+            
+            console.log(`✅ Total no banco: ${todasMatriculas.length}`);
+            console.log(`✅ Total ATIVAS (filtrado no JS): ${matriculaFinal}`);
+        }
+
+        // Renderiza passando TUDO para garantir
         res.render("HOME/home", {
             message: "Como podemos te ajudar hoje?",
-            daycareName: "Minha Creche", // <-- Corrige 'daycareName is not defined'
-            professores: profCount || 0, // <-- Passa a contagem de professores
-            alunos: alunoCount || 0,     // <-- Passa a contagem de alunos
-            turmas: turmaCount || 0      // <-- Passa a contagem de turmas
+            daycareName: "Minha Creche",
+            
+            professores: profCount || 0,
+            alunos: alunoCount || 0,
+            
+            turmas: turmaFinal,  // Nome padrão
+            turma: turmaFinal,   // Nome alternativo (singular)
+
+            matriculas: matriculaFinal, // Nome padrão (plural)
+            matricula: matriculaFinal,  // Nome alternativo (singular) - PARA GARANTIR
+            
+            // Variável de depuração caso precise exibir na tela pra testar
+            debugMatricula: matriculaFinal 
         });
 
     } catch (error) {
-        // 4. Se o Supabase falhar, envie dados de erro
-        console.error("Erro ao carregar a rota /home:", error.message);
+        console.error("Erro CRÍTICO na rota /home:", error.message);
         res.render("HOME/home", {
             message: "Erro ao carregar dados.",
-            daycareName: "Erro", // <-- Passa 'Erro' para não travar
-            professores: '!',
-            alunos: '!',
-            turmas: '!'
+            daycareName: "Erro",
+            professores: '!', alunos: '!', turmas: '!', matriculas: '!'
         });
     }
 });
