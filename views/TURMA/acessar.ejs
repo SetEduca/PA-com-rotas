@@ -653,41 +653,106 @@
         .btn-confirm:hover {
             background-color: #a01820;
         }
+
+             @media (max-width: 768px) {
+    :root { --sidebar-width: 70px; } /* 1. Diminui a largura da barra */
+   
+    /* 2. ESCONDE O TEXTO (Aqui é o segredo) */
+    .menu-item span, .logout-button span, .seteeduca { display: none; }
+   
+    /* 3. Ajusta o ícone para ficar centralizado */
+    .menu-item i, .logout-button i { margin-right: 0; }
+   
+    .sidebar .logo { padding: 0 10px; }
+    .sidebar .logo img { max-width: 50px; }
+    .sidebar-footer { padding: 10px 5px; }
+    .menu { padding: 10px 5px; }
+   
+    /* 4. Centraliza o conteúdo (que agora é só o ícone) */
+    .menu-item { padding: 15px 5px; justify-content: center; }
+   
+    .menu-item::after { display: none; }
+    .menu-item.active::before { right: 5px; }
+   
+    /* Ajusta o resto do site para acompanhar a sidebar menor */
+    .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
+    /* ... resto do código ... */
+}
+
+        
     </style>
 </head>
 
 <body>
 
-    <aside class="sidebar">
-        <div>
+   <aside class="sidebar">
+                <div>
+
+
             <div class="logo">
-                <img src="/imagem/logo.png" alt="logo">
-
-            </div>
-            <div class="menu">
-                <a href="/home" class="menu-item"><i class="fas fa-home"></i><span>INÍCIO</span></a>
 
 
-                <a href="/acessar-aluno" class="menu-item"><i class="fas fa-address-card"></i><span>CADASTRO</span></a>
-                <a href="/matriculas" class="menu-item"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></a>
-                <a href="/professores" class="menu-item"><i
-                        class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></a>
-                <a href="/turmas" class="menu-item active"><i class="fas fa-users"></i><span>TURMA</span></a>
-                <a href="/financeiro" class="menu-item"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></a>
+                <img src="logo.png" alt="logo">
 
-
-            </div>
         </div>
-        <div>
-            <div class="seteeduca" style="color: #333;
- text-align: center; margin-bottom: 10px;">@Seteeduca</div>
-            <div class="sidebar-footer">
-                <button class="logout-button" onclick="logout()">
-                    <i class="fa-solid fa-right-from-bracket"></i><span>Sair</span>
-                </button>
-            </div>
+
+             <div class="menu">
+                <a href="/home" class="menu-item" onclick="navegarPara('inicio')">
+
+
+                    <i class="fas fa-home"></i>
+
+                    <span>INÍCIO</span>
+                </a>
+
+               <a href="/acessar-aluno" class="menu-item" onclick="navegarPara('cadastro')">
+                    <i class="fas fa-address-card"></i>
+                    <span>CADASTRO</span>
+                </a>
+                <a href="/matriculas"class="menu-item" onclick="navegarPara('matricula')">
+
+               <i class="fas fa-user-graduate"></i>
+                    <span>MATRÍCULA</span>
+                </a>
+
+
+                <a href="/professores" class="menu-item" id="professor-link">
+
+
+                    <i class="fas fa-chalkboard-teacher"></i>
+
+              <span>PROFESSOR</span>
+                </a>
+
+                <a href="/turmas" class="menu-item active" onclick="navegarPara('turmas')">
+                    <i class="fas fa-users"></i>
+                    <span>TURMA</span>
+          </a>
+
+
+                <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>FINANCEIRO</span>
+                </a>
+</div>
+
+
         </div>
-    </aside>
+
+
+        <div class="sidebar-footer">
+
+
+    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
+
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+
+        <span>Sair</span>
+    </a>
+</div>
+        </aside>
 
 
     <div class="main-content">
@@ -873,7 +938,7 @@
         <div class="modal-content">
             <div class="modal-icon"><i class="fas fa-exclamation-triangle"></i></div>
             <h3 id="modalTitle">Confirmação de Exclusão</h3>
-            <p>
+             <p>
                 Você está prestes a **excluir** permanentemente a turma **<span id="turmaNomeModal"></span>**.
                 <br><br>
                 🚨 **AVISO IMPORTANTE:** A exclusão é **IRREVERSÍVEL** e só será permitida se **NÃO houver NENHUM aluno
@@ -887,6 +952,15 @@
     </div>
 
     <script>
+
+         // Função para sair do sistema
+        function logout() {
+                        // Pede confirmação ao usuário antes de redirecionar
+                        if (confirm('Deseja realmente sair do sistema?')) {
+                                window.location.href = '/login/sair';
+                        }
+        }
+
         // Variável global para guardar o ID da turma a ser excluída
         let turmaIdToDelete = null;
 
@@ -915,6 +989,8 @@
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = `/turmas/excluir/${turmaIdToDelete}`;
+
+            
                 document.body.appendChild(form);
                 form.submit();
             }

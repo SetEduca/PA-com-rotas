@@ -286,6 +286,7 @@ color: #D22A2A;
 }
             .header-title p { font-size: 14px;
 }
+
          }
 
         /* Perfil do Usuário e Dropdown */
@@ -361,10 +362,54 @@ color: #D22A2A;
                         color: #666;
                         text-align: center;
                 }
+    /* --- RESPONSIVIDADE (SIDEBAR MINI) --- */
+    @media (max-width: 768px) {
+        /* 1. Reduz a largura da variável */
+        :root {
+            --sidebar-width: 80px; /* Largura reduzida */
+        }
 
-                @media (max-width: 768px) {
+        /* 2. Esconde os textos */
+        .menu-item span, 
+        .logout-button span {
+            display: none; /* Some com o texto */
+        }
 
-}
+        /* 3. Centraliza os ícones */
+        .menu-item, 
+        .logout-button {
+            justify-content: center; /* Centraliza horizontalmente */
+            padding: 15px 10px;      /* Ajusta padding */
+        }
+
+        .menu-item i, 
+        .logout-button i {
+            margin-right: 0; /* Remove margem direita do ícone */
+            font-size: 22px; /* Aumenta um pouco o ícone para destaque */
+        }
+
+        /* 4. Ajustes do Logo no modo Mini */
+        .logo { padding: 0 10px; margin-top: 20px; }
+        .logo img { 
+            max-width: 50px; /* Logo pequena */
+        }
+
+        /* 5. Ajuste da bolinha do item ativo */
+        .menu-item.active::before {
+            right: 8px; /* Aproxima a bolinha pois a caixa é menor */
+            width: 4px;
+            height: 4px;
+        }
+        
+        /* 6. Ajuste do rodapé */
+        .sidebar-footer { padding: 10px 5px; }
+
+        /* Ajuste do conteúdo principal (Isso é crucial) */
+        .main-content, header {
+            margin-left: 80px !important; /* Conteúdo encosta na barra mini */
+            width: calc(100% - 80px) !important;
+        }
+    }
     </style>
 
        <script>
@@ -381,7 +426,7 @@ color: #D22A2A;
 </head>
 <body class="bg-brand-gray text-brand-gray-text">
 
-    <aside class="sidebar hidden lg:flex">
+    <aside class="sidebar">
          <div>
             <div class="logo">
                 <img src="logo.png" alt="logo">

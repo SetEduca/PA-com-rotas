@@ -192,11 +192,6 @@ position: fixed;
 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .mobile-menu-toggle i {
-            font-size: 20px;
-color: #306bc2;
-        }
-
         .sidebar-overlay {
             display: none;
 position: fixed;
@@ -606,9 +601,7 @@ transform: translateY(0) scale(1);
         }
 
         @media (max-width: 768px) {
-            .mobile-menu-toggle {
-                display: block;
-}
+           
 
             .sidebar {
                 width: 280px;
@@ -732,36 +725,64 @@ margin: 20px;
 }
         }
 
-        @media (max-width: 768px) {
-    :root { --sidebar-width: 70px; } /* 1. Diminui a largura da barra */
-    
-    /* 2. ESCONDE O TEXTO (Aqui é o segredo) */
-    .menu-item span, .logout-button span, .seteeduca { display: none; }
-    
-    /* 3. Ajusta o ícone para ficar centralizado */
-    .menu-item i, .logout-button i { margin-right: 0; }
-    
-    .sidebar .logo { padding: 0 10px; } 
-    .sidebar .logo img { max-width: 50px; } 
-    .sidebar-footer { padding: 10px 5px; } 
-    .menu { padding: 10px 5px; } 
-    
-    /* 4. Centraliza o conteúdo (que agora é só o ícone) */
-    .menu-item { padding: 15px 5px; justify-content: center; } 
-    
-    .menu-item::after { display: none; } 
-    .menu-item.active::before { right: 5px; } 
-    
-    /* Ajusta o resto do site para acompanhar a sidebar menor */
-    .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
-    /* ... resto do código ... */
-}
+        
+        /* --- RESPONSIVIDADE (CELULAR E TABLET - MINI BARRA) --- */
+        @media (max-width: 900px) { /* Ajustei para 900px para pegar tablets também */
+            
+            /* 1. Sidebar Fina */
+            .sidebar {
+                width: var(--sidebar-mini); /* Vira 80px */
+            }
+
+            /* 2. Ajuste do Conteúdo Principal */
+            .main-content {
+                margin-left: var(--sidebar-mini) !important;
+                width: calc(100% - var(--sidebar-mini)) !important;
+            }
+
+            /* 3. Esconde os textos */
+            .menu-item span, 
+            .logout-button span, 
+            .seteeduca {
+                display: none !important;
+            }
+
+            /* 4. Centraliza os ícones */
+            .menu-item, .logout-button {
+                justify-content: center !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
+            .menu-item i, .logout-button i {
+                margin-right: 0 !important; /* Tira a margem direita do ícone */
+                font-size: 24px; /* Aumenta um pouco o ícone */
+            }
+
+            /* 5. Ajustes Visuais */
+            .logo { padding: 0 10px; margin-top: 20px; }
+            .logo img { max-width: 50px; } /* Logo pequena */
+            
+            /* Tira os detalhes extras no mobile */
+            .menu-item::after { display: none; } 
+            .menu-item.active::before { right: 5px; width: 4px; height: 4px; }
+            .sidebar-footer { padding: 10px 5px; }
+
+            /* Ajustes do Formulário no Mobile */
+            .header { padding: 0 20px; }
+            .content-area { padding: 15px; }
+            .panel-content { padding: 20px; }
+            .form-grid.two-columns { grid-template-columns: 1fr; } /* Coluna única */
+            .profile-arrow { display: none; }
+        }
+
+        /* --- GARANTIA: REMOVE QUALQUER BOTÃO TOGGLE ANTIGO --- */
+        .mobile-menu-toggle, .sidebar-overlay { display: none !important; }
+
+
     </style>
 </head>
-<body>
-    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-        <i class="fas fa-bars"></i>
-    </button>
+<body></body>
 
     <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 
@@ -1064,7 +1085,7 @@ const overlay = document.querySelector('.sidebar-overlay');
                 'inicio': '/home',
                 'professor': '/professores',
                 'financeiro': '/financeiro',
-                'turmas': '/turmas-cadastradas',
+                'turmas': '/turmas',
       
           'matricula': '/matriculas',
                 'cadastro': '/acessar-aluno' // CORRIGIDO: O botão "CADASTRO" no menu agora leva para a lista
