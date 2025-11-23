@@ -35,8 +35,18 @@
         .menu-item:nth-child(6)::after { background-color: #59C631; }
         
         .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
-        .menu-item.active::before { content: ''; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); width: 8px; height: 8px; border-radius: 50%; box-shadow: black; z-index: 2; }
-        
+       .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            z-index: 2;
+        }
         .seteeduca { color: #333; margin-top: 90px; position: absolute; margin-left: 70px; }
         .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); }
         
@@ -168,6 +178,83 @@
         @media (min-width: 769px) {
             .sidebar { transform: translateX(0) !important; }
         }
+        /* --- COLE ISSO NO FINAL DO SEU STYLE --- */
+
+@media (max-width: 768px) {
+    
+    /* 1. MATAR O QUADRADINHO E O FUNDO ESCURO */
+    .mobile-menu-toggle, 
+    .sidebar-overlay {
+        display: none !important;    /* Remove da tela */
+        opacity: 0 !important;       /* Torna invisível */
+        pointer-events: none !important; /* Impede cliques fantasmas */
+        width: 0 !important;
+        height: 0 !important;
+    }
+
+    /* 2. FORÇAR A BARRA A APARECER (MINI) */
+    .sidebar, 
+    .sidebar.mobile-hidden {
+        transform: none !important;      /* Cancela o movimento de esconder */
+        left: 0 !important;              /* Cola na esquerda */
+        width: 70px !important;          /* Largura fina */
+        display: flex !important;        /* Garante que o container exista */
+        z-index: 9999 !important;        /* Fica por cima de tudo */
+    }
+
+    /* 3. EMPURRAR O CONTEÚDO PARA A DIREITA */
+    .main-content {
+        margin-left: 70px !important;        /* Espaço para a barra fina */
+        width: calc(100% - 70px) !important; /* Ocupa o resto da tela */
+    }
+
+    /* 4. ESCONDER TEXTOS (Deixar só ícones) */
+    .menu-item span, 
+    .logout-button span, 
+    .seteeduca, 
+    .header-title i, /* Se o ícone do header parecer um menu, isso remove */
+    .profile-arrow {
+        display: none !important;
+    }
+
+    /* 5. CENTRALIZAR ÍCONES PERFEITAMENTE */
+    .menu-item, 
+    .logout-button {
+        justify-content: center !important;
+        padding: 20px 0 !important;
+    }
+
+    .menu-item i, 
+    .logout-button i {
+        margin-right: 0 !important;
+        font-size: 22px !important;
+        display: block !important;
+    }
+
+    /* 6. AJUSTAR LOGO PEQUENA */
+    .logo {
+        padding: 0 !important;
+        margin-top: 20px !important; 
+        text-align: center !important;
+    }
+    .logo img {
+        max-width: 40px !important;
+    }
+
+    /* 7. REMOVER LINHAS DECORATIVAS EXTRAS */
+    .menu-item::after { display: none !important; }
+    
+    /* Ajuste da bolinha de item ativo */
+    .menu-item.active::before {
+        right: 5px !important;
+    }
+
+    /* 8. AJUSTES DO FORMULÁRIO (Para não quebrar) */
+    .content-area { padding: 15px !important; }
+    .form-grid.two-columns { grid-template-columns: 1fr !important; }
+    .form-field.full-width { grid-column: 1 !important; }
+    .btn { width: 100% !important; }
+}
     </style>
 </head>
 <body>
@@ -179,7 +266,7 @@
 
     <div class="sidebar mobile-hidden" id="sidebar">
         <div class="logo">
-           <img src="imagem/logo.png" alt="logo" onerror="this.style.display='none'">
+           <img src="/logo.png" alt="logo">
         </div>
         
         <div class="menu">
@@ -425,7 +512,7 @@
                 'inicio': '/home',
                 'professor': '/professores',
                 'financeiro': '/financeiro',
-                'turmas': '/turmas-cadastradas',
+                'turmas': '/turmas',
                 'matricula': '/matriculas',
                 'cadastro': '/acessar-aluno' 
             };
@@ -507,7 +594,7 @@
         });
 
         document.querySelector('.logout-button').addEventListener('click', function() {
-            if (confirm('Tem certeza que deseja sair?')) {
+            if ( confirm('Deseja realmente sair do sistema?')) {
                 window.location.href = '/login';
             }
         });

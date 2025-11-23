@@ -8,18 +8,81 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #e8e8e8; min-height: 100vh; display: flex; }
-    .sidebar { width: 280px; background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1); min-height: 100vh; flex-shrink: 0; }
+   .sidebar { width: 280px; background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1); min-height: 100vh; flex-shrink: 0;   
+    a {
+    text-decoration: none;
+                } }
+    .logo { padding: 0 40px; text-align: center; margin: 30px 0 25px 0; }
     .logo { padding: 0 40px; text-align: center; margin: 30px 0 25px 0; }
     .menu { flex: 1; padding: 20px 18px; overflow-y: auto; }
     .menu-item { padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; position: relative; display: flex; align-items: center; font-weight: 500; color: black; }
     .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
     .menu-item span { z-index: 2; font-size: 15px; }
     .menu-item:hover { background-color: #6c757d21; }
-    .menu-item::after { content: ''; position: absolute; bottom: -3px; left: 20px; height: 2px; width: 0; transition: width 0.3s ease; border-radius: 1px; }
-    .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
+   /* Configuração da Linha (Traço) */
+.menu-item::after {
+    content: '';
+    position: absolute;
+    bottom: 10px; /* Altura da linha em relação ao botão */
+    left: 20px;   /* Alinhamento a esquerda (igual ao ícone) */
+    height: 3px;  /* Espessura da linha */
+    width: 25px;  /* LARGURA FIXA (Para aparecer sempre) */
+    border-radius: 2px;
+}
+
+/* Removemos a animação de crescer, para ficar fixo */
+.menu-item:hover::after, .menu-item.active::after {
+    width: 25px; /* Mantém o tamanho fixo mesmo ao passar o mouse */
+}
+
+/* --- CORES DE CADA ITEM --- */
+
+/* 1. Início (Amarelo) */
+.menu-item:nth-child(1)::after {
+    background-color: #F4BF27;
+}
+
+/* 2. Cadastro (Cinza/Bege no print, mas aqui está azul. Ajuste a cor se quiser) */
+/* Se quiser a cor do print original (bege escuro): use #C4C4C4 ou similar */
+.menu-item:nth-child(2)::after {
+    background-color: #A0A0A0; /* Ajustei para cinza para testar */
+}
+
+/* 3. Matrícula (Roxo) */
+.menu-item:nth-child(3)::after {
+    background-color: #9747FF;
+}
+
+/* 4. Professor (Laranja) */
+.menu-item:nth-child(4)::after {
+    background-color: #F88C12;
+}
+
+/* 5. Turma (Vermelho) */
+.menu-item:nth-child(5)::after {
+    background-color: #D22A2A;
+}
+
+/* 6. Financeiro (Verde) */
+.menu-item:nth-child(6)::after {
+    background-color: #59C631;
+
+        }
     .menu-item:nth-child(2)::after { background-color: #306bc2; } 
     .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
-    .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); }
+     .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            z-index: 2;
+        }
+     .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; border: none; background: transparent; }
     .logout-button:hover { background-color: rgba(210, 42, 42, 0.1); color: #c01e26; font-weight: 600; }
     .main-content { flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
@@ -52,6 +115,7 @@
     .btn-edit { background: #e3f2fd; color: #1976d2; border: 2px solid #bbdefb; }
     .btn-archive { background: #fce4ec; color: #c01e26; border: 2px solid #f8bbd9; }
     
+    
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
     .modal-overlay.show { display: flex; }
     .modal-caixa { background: #fff; width: 90%; max-width: 700px; border-radius: 12px; border-top: 5px solid #306bc2; padding: 20px; }
@@ -61,21 +125,109 @@
     .detalhe-item { display: flex; margin-bottom: 5px; align-items: baseline; }
     .detalhe-item label { font-weight: bold; width: 140px; flex-shrink: 0; }
     .modal-fechar { background: none; border: none; font-size: 20px; cursor: pointer; }
+
+    
+    @media (max-width: 1024px) {
+        
+        /* 1. Sidebar Fina */
+        .sidebar {
+            width: 70px;
+        }
+
+        /* 2. Esconde Textos */
+        .menu-item span,
+        .logout-button span,
+        .profile-header span, /* Nome do perfil */
+        .header-title span {  /* Texto do topo se tiver */
+            display: none !important;
+        }
+
+        /* 3. Centraliza Ícones */
+        .menu-item, 
+        .logout-button {
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .menu-item i, 
+        .logout-button i {
+            margin-right: 0;
+            font-size: 22px;
+        }
+
+        /* 4. Ajuste da Logo */
+        .logo {
+            padding: 0 10px;
+            margin-top: 20px;
+        }
+        .logo img {
+            max-width: 40px;
+        }
+
+        /* 5. Ajustes Visuais (Remove linhas coloridas no modo mini) */
+        .menu-item::after { display: none; }
+        
+        /* Ajuste da bolinha preta de ativo */
+        .menu-item.active::before {
+            right: 5px;
+        }
+
+        /* 6. Ajustes do Conteúdo */
+        .content-area { padding: 15px; }
+        .header { padding: 0 15px; }
+        
+        /* Ajuste da busca para caber */
+        .search-container { width: 100%; }
+        .search-section { flex-direction: column; align-items: stretch; }
+        .new-button { flex-direction: row; justify-content: center; margin-bottom: 10px; }
+    }
   </style>
 </head>
 <body>
   <div class="sidebar">
-    <div class="logo"><img src="imagem/logo.png" alt="logo"></div>
-    <div class="menu">
-        <div class="menu-item" onclick="window.location.href='/home'"><i class="fas fa-home"></i><span>INÍCIO</span></div>
-        <div class="menu-item active" onclick="window.location.href='/acessar-aluno'"><i class="fas fa-address-card"></i><span>CADASTRO</span></div>
-        <div class="menu-item" onclick="window.location.href='/matricula'"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></div>
-        <div class="menu-item" onclick="window.location.href='/professores'"><i class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></div>
-        <div class="menu-item" onclick="window.location.href='/turmas'"><i class="fas fa-users"></i><span>TURMA</span></div>
-        <div class="menu-item" onclick="window.location.href='/financeiro'"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></div>
+    <div class="logo">
+        <img src="/imagem/logo.png" alt="logo">
     </div>
-    <div class="sidebar-footer"><button class="logout-button" onclick="if(confirm('Sair?')) window.location.href='/login'"><i class="fas fa-sign-out-alt"></i><span>SAIR</span></button></div>
-  </div>
+
+    <div class="menu">
+        <a href="/home" class="menu-item">
+            <i class="fas fa-home"></i>
+            <span>INÍCIO</span>
+        </a>
+
+        <a href="/acessar-aluno" class="menu-item active">
+            <i class="fas fa-address-card"></i>
+            <span>CADASTRO</span>
+        </a>
+
+        <a href="/matriculas" class="menu-item">
+            <i class="fas fa-user-graduate"></i>
+            <span>MATRÍCULA</span>
+        </a>
+
+        <a href="/professores" class="menu-item">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>PROFESSOR</span>
+        </a>
+
+        <a href="/turmas" class="menu-item">
+            <i class="fas fa-users"></i>
+            <span>TURMA</span>
+        </a>
+
+        <a href="/financeiro" class="menu-item">
+            <i class="fas fa-dollar-sign"></i>
+            <span>FINANCEIRO</span>
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+        <a href="/login" class="logout-button" onclick="return  confirm('Deseja realmente sair do sistema?')">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>SAIR</span>
+        </a>
+    </div>
+</div>
 
   <div class="main-content">
     <div class="header">

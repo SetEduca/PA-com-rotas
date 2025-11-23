@@ -23,16 +23,25 @@
     }
 
     .sidebar {
-      width: 280px;
-      background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-      min-height: 100vh;
-      flex-shrink: 0;
-    }
-
+    width: 280px;
+    height: 100vh; /* Ocupa a altura total */
+    background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+    
+    /* Configuração de Posição Fixa */
+    position: fixed; 
+    left: 0;
+    top: 0;
+    z-index: 1000; /* Garante que fique na frente, mas não tanto que quebre modais */
+    
+    /* Organização interna */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinha tudo no topo */
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+     a {
+    text-decoration: none;
+                }
+}
     .logo {
       padding: 0px 40px;
       text-align: center;
@@ -127,10 +136,11 @@
       margin-bottom: 10px;
     }
 
-    .sidebar-footer {
-      padding: 20px 18px;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
+  .sidebar-footer {
+    padding: 20px 18px;
+    margin-top: 10rem; /* A distância que definimos antes */
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
     
     .logout-button {
       padding: 16px 20px;
@@ -158,11 +168,14 @@
     }
 
     .main-content {
-      flex: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    /* O SEGREDO: Margem esquerda igual à largura da sidebar */
+    margin-left: 280px; 
+    width: calc(100% - 280px); /* Ocupa o restante da tela */
+    
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
     .header {
       background: #ef7215;
@@ -463,49 +476,94 @@
 </head>
 <body>
   
+  <!-- Sidebar -->
   <div class="sidebar">
-    <div>
-      <div class="logo">
-        <img src="imagem/logo.png" alt="logo">
-      </div>
-      <div class="menu">
-                <div class="menu-item" onclick="navegarPara('inicio')">
+      <div>
+
+            <div class="logo">
+
+                <img src="/logo.png" alt="logo">
+    
+
+        </div>
+
+             <div class="menu">
+
+                <a href="/home" class="menu-item" onclick="navegarPara('inicio')">
+
                     <i class="fas fa-home"></i>
+
                     <span>INÍCIO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('cadastro')">
+
+                </a>
+
+ 
+
+               <a href="/acessar-aluno" class="menu-item" onclick="navegarPara('cadastro')">
+
                     <i class="fas fa-address-card"></i>
+
                     <span>CADASTRO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('matricula')">
-                    <i class="fas fa-user-graduate"></i>
+
+                </a>
+
+                <a href="/matriculas"class="menu-item" onclick="navegarPara('matricula')">
+
+     
+
+               <i class="fas fa-user-graduate"></i>
+
                     <span>MATRÍCULA</span>
-                </div>
-                <div class="menu-item active">
+
+                </a>
+
+                <a href="/professores" class="menu-item active" id="professor-link">
+
                     <i class="fas fa-chalkboard-teacher"></i>
-                    <span>PROFESSOR</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('turmas')"> 
+
+      
+
+              <span>PROFESSOR</span>
+
+                </a>
+
+   
+
+                <a href="/turmas" class="menu-item" onclick="navegarPara('turmas')">
+
                     <i class="fas fa-users"></i>
+
                     <span>TURMA</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('financeiro')">
+
+      
+
+          </a>
+
+                <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
+
                     <i class="fas fa-dollar-sign"></i>
+
                     <span>FINANCEIRO</span>
-                </div>
-            </div>
+
+                </a>
+
+            
+
+</div>
+
         </div>
-    <div>
-      <div class="seteeduca">
-        <p></p>
-      </div>
-      <div class="sidebar-footer">
-        <div class="logout-button">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span>Sair</span>
-        </div>
-      </div>
-    </div>
+
+        <div class="sidebar-footer">
+
+    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+        <span>Sair</span>
+
+    </a>
+
+</div>
   </div>
 
   <!-- Main Content -->
@@ -618,7 +676,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       const logoutButton = document.querySelector('.logout-button');
       logoutButton.addEventListener('click', function() {
-        if (confirm('Tem certeza que deseja sair?')) {
+        if ( confirm('Deseja realmente sair do sistema?')) {
           window.location.href = '/login/sair'; // Redireciona para a página de login
         }
       });

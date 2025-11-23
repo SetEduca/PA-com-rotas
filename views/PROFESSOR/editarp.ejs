@@ -22,16 +22,22 @@
       display: flex;
     }
 
-    .sidebar {
+     .sidebar {
       width: 280px;
       background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
       min-height: 100vh;
       flex-shrink: 0;
+       a {
+    text-decoration: none;
+                }
+            /* Posicionamento e ordem de sobreposição */
+        
     }
+
 
     .logo {
       padding: 0px 40px;
@@ -41,11 +47,10 @@
     }
 
     .menu {
-      flex: 1;
-      padding: 20px 18px;
-      overflow-y: auto;
-    }
-
+    flex: 0 0 auto; /* ISSO IMPEDE O MENU DE ESTICAR */
+    padding: 20px 18px;
+    overflow-y: auto;
+}
     .menu-item {
       padding: 30px 20px;
       margin-bottom: 6px;
@@ -108,18 +113,25 @@
       font-weight: 600;
     }
 
-    .menu-item.active::before {
-      content: '';
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      box-shadow: black;
-      z-index: 2;
-    }
+   .menu-item.active::before {
+    content: '';
+    position: absolute;
+    
+    /* Mudei para LEFT para ficar no começo do botão (lado esquerdo) */
+    right: 15px;
+    /* Se preferir na direita, troque 'left' por 'right' */
+    
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    
+    /* O ERRO ESTAVA AQUI: Use background-color para pintar a bolinha */
+    background-color: #333; 
+    
+    z-index: 2;
+}
         
     .seteeduca {
       color: #333;
@@ -128,9 +140,17 @@
     }
 
     .sidebar-footer {
-      padding: 20px 18px;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
+    padding: 20px 18px;
+    margin-top: 10rem; /* AQUI ESTÁ A DISTÂNCIA (Aumente ou diminua se precisar) */
+    
+    /* Se quiser tirar a linha cinza, use border-top: none; */
+    border-top: 1px solid rgba(0, 0, 0, 0.1); 
+     a {
+    text-decoration: none;
+                }
+            /* Posicionamento e ordem de sobreposição */
+        }
+
     
     .logout-button {
       padding: 16px 20px;
@@ -463,9 +483,14 @@
       }
       
       .main-content {
-        margin-left: 70px;
-      }
-
+    margin-left: 280px; /* <--- O PULO DO GATO: Empurra o site para a direita */
+    width: calc(100% - 280px); /* Garante que o conteúdo ocupe apenas o espaço restante */
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s ease; /* Suaviza se redimensionar a tela */
+}
       .button-container {
         flex-direction: column;
         align-items: center;
@@ -494,7 +519,10 @@
     
     .sidebar .logo { padding: 0 10px; } 
     .sidebar .logo img { max-width: 50px; } 
-    .sidebar-footer { padding: 10px 5px; } 
+       .sidebar-footer {
+            padding: 20px 18px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+} 
     .menu { padding: 10px 5px; } 
     
     /* 4. Centraliza o conteúdo (que agora é só o ícone) */
@@ -511,49 +539,94 @@
 </head>
 <body>
   
+   <!-- Sidebar -->
   <div class="sidebar">
-    <div>
-      <div class="logo">
-        <img src="imagem/logo.png" alt="logo">
-      </div>
-            <div class="menu">
-                <div class="menu-item" onclick="navegarPara('inicio')">
+      <div>
+
+            <div class="logo">
+
+             <img src="/logo.png" alt="logo">
+    
+
+        </div>
+
+             <div class="menu">
+
+                <a href="/home" class="menu-item" onclick="navegarPara('inicio')">
+
                     <i class="fas fa-home"></i>
+
                     <span>INÍCIO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('cadastro')">
+
+                </a>
+
+ 
+
+               <a href="/acessar-aluno" class="menu-item" onclick="navegarPara('cadastro')">
+
                     <i class="fas fa-address-card"></i>
+
                     <span>CADASTRO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('matricula')">
-                    <i class="fas fa-user-graduate"></i>
+
+                </a>
+
+                <a href="/matriculas"class="menu-item" onclick="navegarPara('matricula')">
+
+     
+
+               <i class="fas fa-user-graduate"></i>
+
                     <span>MATRÍCULA</span>
-                </div>
-                <div class="menu-item active">
+
+                </a>
+
+                <a href="/professores" class="menu-item active" id="professor-link">
+
                     <i class="fas fa-chalkboard-teacher"></i>
-                    <span>PROFESSOR</span>
-                </div>
-                <div class="menu-item " onclick="navegarPara('turma')"> 
+
+      
+
+              <span>PROFESSOR</span>
+
+                </a>
+
+   
+
+                <a href="/turmas" class="menu-item" onclick="navegarPara('turmas')">
+
                     <i class="fas fa-users"></i>
+
                     <span>TURMA</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('financeiro')">
+
+      
+
+          </a>
+
+                <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
+
                     <i class="fas fa-dollar-sign"></i>
+
                     <span>FINANCEIRO</span>
-                </div>
-            </div>
+
+                </a>
+
+            
+
+</div>
+
         </div>
-    <div>
-      <div class="seteeduca">
-        <p></p>
-      </div>
-      <div class="sidebar-footer">
-        <div class="logout-button">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span>Sair</span>
-        </div>
-      </div>
-    </div>
+
+        <div class="sidebar-footer">
+
+    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+        <span>Sair</span>
+
+    </a>
+
+</div>
   </div>
 
   <!-- Main Content -->

@@ -9,9 +9,37 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #e8e8e8; min-height: 100vh; display: flex; }
-    .sidebar { width: 280px; background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1); min-height: 100vh; flex-shrink: 0; }
+    .sidebar {
+            width: 280px; 
+            height: 100vh;
+            /* Largura definida pela variável CSS */
+            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+            /* Fundo com um gradiente suave */
+            display: flex;
+            /* Habilita o Flexbox para os itens internos */
+            flex-direction: column;
+            /* Organiza os itens em coluna (logo/menu em cima, footer embaixo) */
+            justify-content: space-between;
+            /* Distribui o espaço entre os itens */
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            /* Sombra sutil para dar profundidade */
+            min-height: 100vh;
+            /* Altura mínima de 100% da tela */
+            flex-shrink: 0;
+            /* Impede que a sidebar encolha se o conteúdo for muito grande */
+            position: fixed;
+            /* Fixa a sidebar na tela, para que não role com a página */
+            left: 0;
+            top: 0;
+            z-index: 1000;
+
+            a {
+    text-decoration: none;
+                }
+            /* Posicionamento e ordem de sobreposição */
+        }
     .logo { padding: 0px 40px; text-align: center; margin-bottom: 25px; margin-top: 30px; }
-    .menu { flex: 1; padding: 20px 18px; overflow-y: auto; }
+    .menu { flex: 0 0 auto; padding: 20px 18px;overflow: visible; flex-grow: 0 !important; height: auto !important; margin-bottom: 20px; height: auto;}
     .menu-item { padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; position: relative; display: flex; align-items: center; font-weight: 500; color: black; }
     .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
     .menu-item span { z-index: 2; font-size: 15px; }
@@ -20,8 +48,30 @@
     .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
     .menu-item:nth-child(2)::after { background-color: #306bc2; }
     .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
-    .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); }
-    .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; }
+    .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            z-index: 2;
+        }
+     .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+        .menu-item:nth-child(2)::after { background-color: #306bc2; }
+        .menu-item:nth-child(3)::after { background-color: #9747FF; }
+        .menu-item:nth-child(4)::after { background-color: #F88C12; }
+        .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+        .menu-item:nth-child(6)::after { background-color: #59C631; }
+     .sidebar-footer {
+            padding: 20px 18px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        
+}
+    .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; gap: 15px; padding-left: 20px; color: inherit; text-decoration: none; cursor: pointer;  }
     .logout-button:hover { background-color: rgba(210, 42, 42, 0.1); color: #ef7215; font-weight: 600; }
     .main-content { flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
     .header { background: #306bc2; height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; color: white; width: 100%; }
@@ -43,22 +93,143 @@
     .photo-preview { width: 100px; height: 100px; border-radius: 50%; background: #f0f0f0; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
     .upload-btn { padding: 8px 15px; background: #306bc2; color: white; border: none; border-radius: 5px; cursor: pointer; }
-    @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
+    /* --- RESPONSIVIDADE DA SIDEBAR (Adicione ao final do seu CSS) --- */
+@media (max-width: 768px) {
+    /* 1. Reduz a largura da barra */
+    .sidebar {
+        width: 70px;
+        display: flex; /* Força ela a aparecer (antes estava 'none') */
+    }
+
+    /* 2. Esconde os textos (Nome dos menus e Sair) */
+    .menu-item span, 
+    .logout-button span {
+        display: none;
+    }
+
+    /* 3. Centraliza os ícones */
+    .menu-item, 
+    .logout-button {
+        justify-content: center; /* Centraliza o conteúdo horizontalmente */
+        padding: 20px 0;         /* Ajusta o espaço vertical */
+    }
+
+    .menu-item i, 
+    .logout-button i {
+        margin-right: 0;         /* Remove o espaço à direita do ícone */
+    }
+
+    /* 4. Ajusta o tamanho da Logo para caber na barra fina */
+    .logo {
+        padding: 0 5px;
+        margin-top: 20px;
+    }
+    .logo img {
+        max-width: 40px; /* Logo pequena */
+    }
+
+    /* 5. Ajustes visuais finos (bolinha e linhas) */
+    .menu-item::after { display: none; } /* Remove as linhas coloridas embaixo */
+    
+    .menu-item.active::before {
+        right: 5px; /* Ajusta a posição da bolinha de ativo */
+    }
+
+    .sidebar-footer {
+        padding: 10px 5px;
+    }
+
+    /* 6. Ajuste IMPORTANTE do conteúdo principal */
+    /* Se a barra diminuiu, o conteúdo tem que voltar um pouco para a esquerda */
+    .main-content {
+        margin-left: 70px; /* Mesma largura da sidebar pequena */
+        width: calc(100% - 70px);
+    }
+}
+
+/* Ajuste para celulares muito pequenos (Opcional) */
+@media (max-width: 480px) {
+    .main-content {
+        margin-left: 0; /* Em telas muito pequenas, talvez seja melhor esconder a barra ou jogar o conteúdo por cima */
+        width: 100%;
+    }
+    .sidebar {
+        display: none; /* Oculta a barra em celulares minúsculos se preferir */
+    }
+}
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <div class="logo"><img src="imagem/logo.png" alt="logo"></div>
-    <div class="menu">
-        <div class="menu-item" onclick="window.location.href='/home'"><i class="fas fa-home"></i><span>INÍCIO</span></div>
-        <div class="menu-item active" onclick="window.location.href='/acessar-aluno'"><i class="fas fa-address-card"></i><span>CADASTRO</span></div>
-        <div class="menu-item" onclick="window.location.href='/matricula'"><i class="fas fa-user-graduate"></i><span>MATRÍCULA</span></div>
-        <div class="menu-item" onclick="window.location.href='/professores'"><i class="fas fa-chalkboard-teacher"></i><span>PROFESSOR</span></div>
-        <div class="menu-item" onclick="window.location.href='/turmas'"><i class="fas fa-users"></i><span>TURMA</span></div>
-        <div class="menu-item" onclick="window.location.href='/financeiro'"><i class="fas fa-dollar-sign"></i><span>FINANCEIRO</span></div>
-    </div>
-    <div class="sidebar-footer"><div class="logout-button" onclick="window.location.href='/login'"><i class="fa-solid fa-right-from-bracket"></i><span>Sair</span></div></div>
-  </div>
+ <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="sidebar mobile-hidden" id="sidebar">
+         <div>
+
+
+            <div class="logo">
+
+
+                <img src="/logo.png" alt="logo">
+
+        </div>
+
+             <div class="menu">
+                <a href="/home" class="menu-item" onclick="navegarPara('inicio')">
+
+
+                    <i class="fas fa-home"></i>
+
+                    <span>INÍCIO</span>
+                </a>
+
+               <a href="/acessar-aluno" class="menu-item active" onclick="navegarPara('cadastro')">
+                    <i class="fas fa-address-card"></i>
+                    <span>CADASTRO</span>
+                </a>
+                <a href="/matriculas"class="menu-item" onclick="navegarPara('matricula')">
+
+               <i class="fas fa-user-graduate"></i>
+                    <span>MATRÍCULA</span>
+                </a>
+
+
+                <a href="/professores" class="menu-item" id="professor-link">
+
+
+                    <i class="fas fa-chalkboard-teacher"></i>
+
+              <span>PROFESSOR</span>
+                </a>
+
+                <a href="/turmas" class="menu-item" onclick="navegarPara('turmas')">
+                    <i class="fas fa-users"></i>
+                    <span>TURMA</span>
+          </a>
+
+
+                <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>FINANCEIRO</span>
+                </a>
+</div>
+
+
+        </div>
+
+
+        <div class="sidebar-footer">
+
+
+    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
+
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+
+        <span>Sair</span>
+    </a>
+</div>
+        </div> 
 
   <div class="main-content">
     <div class="header">
