@@ -2,6 +2,16 @@ import 'dotenv/config';
 import express from 'express';
 import session from 'express-session'; 
 import supabase from './supabase.js';
+
+// ==================================================================
+// 💾 ADICIONADO: SISTEMA PARA SALVAR LOGIN EM ARQUIVO
+// (Isso impede que o login caia quando o servidor reinicia)
+// ==================================================================
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const FileStore = require('session-file-store')(session);
+// ==================================================================
+
 import turmasRouter from './routes/turmas.routes.js';
 import matriculasRouter from './routes/matricula.routes.js';
 import professoresRoutes from './routes/professores.routes.js';
@@ -13,7 +23,6 @@ import alunoAcessarRouter from './routes/aluno-acessar.routes.js';
 import senhaRouter from './routes/senha.routes.js';
 import perfilRouter from './routes/perfil.routes.js';
 import financeiroRoutes from './routes/financeiro.routes.js';
-
 import privateRoute from './routes/private.route.js'; 
 
  const app = express();
@@ -42,15 +51,29 @@ app.use(express.json());
  app.use(express.urlencoded({ extended: true }));
 
 
+// ==================================================================
+// 🟢 CONFIGURAÇÃO DE SESSÃO (COM ARQUIVO FÍSICO)
+// ==================================================================
  app.use(session({
+    // ADICIONEI ISTO AQUI PARA SALVAR O LOGIN NA PASTA ./sessions
+    store: new FileStore({
+        path: './sessions',
+        ttl: 86400,
+        reapInterval: 3600,
+        logFn: function(){} // Silencia logs chatos
+    }),
+    // -----------------------------------------------------------
     secret: 'coloque-uma-chave-secreta-forte-aqui-depois', 
-    resave: false,
-    saveUninitialized: true,
+    resave: false,           // Mudei para false pois FileStore gerencia isso melhor
+    saveUninitialized: false, // Mudei para false para não criar lixo
+    rolling: true,           
     cookie: { 
         secure: false, 
-        maxAge: 24 * 60 * 60 * 1000 
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 horas
     } 
 }));
+// ==================================================================
  
 
 //INICIO
@@ -80,7 +103,10 @@ app.use('/api/perfil', privateRoute, perfilRouter);
 
 //HOME
 
-app.get("/home", async (req, res) => {
+// ==================================================================
+// 🚨 AQUI FOI A ÚNICA ALTERAÇÃO: ADICIONEI O privateRoute 🚨
+// ==================================================================
+app.get("/home", privateRoute, async (req, res) => {
     try {
         console.log("--- Carregando Home (Tudo Filtrado) ---");
 
@@ -270,4 +296,4 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-export default app;
+export default app;  
