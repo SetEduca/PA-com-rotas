@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contrato - Seteeduca</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS mantido igual */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .bg-primary { background-color: #ffe5a4; }
+        .bg-action-orange { background-color: #ffbb68; }
+        .bg-action-orange-dark { background-color: #f57c00; } 
+        .bg-warm { background-color: #FFF4DF; }
+        
+        .bg-action-pink { background-color: #E91E63; }
+        .bg-action-pink-dark { background-color: #D81B60; }
+
+        .text-dark-gray { color: #333333; }
+        .border-action-orange { border-color: #f57c00; }
+
+        /* Classes de texto e borda adicionadas */
+        .text-action-pink { color: #E91E63; }
+        .border-action-pink { border-color: #E91E63; }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ffca0a; 
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.3s ease;
+        }
+        .nav-link:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .swiper-button-next, .swiper-button-prev, .swiper-pagination {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-warm">
+
+    <header id="header" class="bg-white/90 backdrop-blur-md shadow-sm fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="container mx-auto px-6 py-2 flex justify-between items-center">
+        <a href="site.html">
+            <img src="img/logo (2).png" alt="Logo Seteeduca" class="h-24 md:h-32 -my-4" style="padding: 30px;">
+        </a>
+        
+        <nav class="hidden md:flex items-center space-x-8">
+            <a href="site.html#quem-somos" class="nav-link text-gray-900 hover:text-action-orange transition">Quem Somos</a>
+            <a href="site.html#equipe" class="nav-link text-gray-900 hover:text-action-orange transition">Equipe</a>
+            <a href="site.html#recursos" class="nav-link text-gray-900 hover:text-action-orange transition">Recursos</a>
+            <a href="site.html#planos" class="nav-link text-gray-900 hover:text-action-orange transition">Plano</a>
+        </nav>
+        <button id="mobile-menu-button" class="md:hidden text-primary focus:outline-none" style="color: #f57c00;"> <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md shadow-lg z-40 border-t border-gray-200">
+            <nav class="flex flex-col p-6 space-y-4">
+                <a href="site.html#quem-somos" class="block py-2 text-gray-900 hover:text-action-orange transition font-medium">Quem Somos</a>
+                <a href="site.html#equipe" class="block py-2 text-gray-900 hover:text-action-orange transition font-medium">Equipe</a>
+                <a href="site.html#recursos" class="block py-2 text-gray-900 hover:text-action-orange transition font-medium">Recursos</a>
+                <a href="site.html#planos" class="block py-2 text-gray-900 hover:text-action-orange transition font-medium">Plano</a>
+            </nav>
+        </div>
+        </div>
+</header>
+
+    <main class="pt-32"> 
+        <section id="checkout" class="py-24 bg-warm">
+            <div class="container mx-auto px-6">
+                
+                <div class="bg-white max-w-4xl mx-auto rounded-2xl shadow-xl overflow-hidden md:grid md:grid-cols-2">
+                    
+                    <div class="p-8 md:p-12 bg-gray-50">
+                       <h2 class="text-2xl font-bold text-dark-gray mb-6">Resumo do Pedido</h2>
+                        
+                        <div class="bg-primary rounded-xl p-6 border-2 border-action-orange-dark shadow-lg">
+                             <span class="bg-action-orange-dark text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Plano Completo</span>
+                            <h3 class="text-3xl font-extrabold text-dark-gray my-4">Seteeduca Total</h3>
+                            <p class="text-4xl font-extrabold text-dark-gray mb-2">
+                                R$199<span class="text-2xl font-bold">,90</span>
+                                <span class="text-base font-medium text-gray-700">/mês</span>
+                            </p>
+                            <p class="text-gray-700 text-sm mt-4">Cobrança mensal recorrente. Cancele quando quiser.</p>
+                        </div>
+
+                        <h4 class="text-lg font-semibold text-dark-gray mt-8 mb-4">O que está incluso:</h4>
+                        <ul class="space-y-2 text-gray-600 text-sm">
+                            <li class="flex items-center"><svg class="w-4 h-4 text-green-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Alunos e Turmas Ilimitadas</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 text-green-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>App para Pais (Completo)</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 text-green-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Gestão Financeira e Boletos</li>
+                            <li class="flex items-center"><svg class="w-4 h-4 text-green-600 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Suporte Prioritário</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-8 md:p-12" id="form-container">
+                        <h2 class="text-2xl font-bold text-dark-gray mb-6">Crie sua Conta e Contrate</h2>
+                        
+                        <form id="contact-form" class="space-y-5"> 
+                            <div>
+                                <label for="school-name" class="block text-sm font-medium text-gray-700">Nome da Creche</label>
+                                <input type="text" id="school-name" name="school-name" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-action-orange transition">
+                            </div>
+                             <div>
+                                <label for="cnpj" class="block text-sm font-medium text-gray-700">CNPJ</label>
+                                <input type="text" id="cnpj" name="cnpj" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-action-orange transition">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700">Email de Administrador</label>
+                                <input type="email" id="email" name="email" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-action-orange transition">
+                            </div>
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-gray-700">Crie uma Senha</label>
+                                <input type="password" id="password" name="password" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-action-orange transition">
+                            </div>
+
+                             <div class="mt-6">
+                                <label class="block text-sm font-medium text-gray-700">Termos de Serviço</label>
+                                <div class="mt-1 h-32 w-full p-2 border border-gray-300 rounded-lg overflow-y-scroll bg-gray-50 text-xs text-gray-600">
+                                    <p>CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE SOFTWARE COMO SERVIÇO (SaaS)</p>
+                                    <p class="mt-2"><strong>CLÁUSULA 1ª – DO OBJETO</strong><br>O presente contrato tem por objeto a licença de uso, não exclusiva e intransferível, do software SETEEDUCA...</p>
+                                    <p class="mt-2"><strong>CLÁUSULA 2ª – DO PREÇO E PAGAMENTO</strong><br>A CONTRATANTE pagará à CONTRATADA o valor mensal de R$ 199,90...</p>
+                                </div>
+                                <div class="flex items-center mt-3">
+                                    <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 text-action-orange-dark border-gray-300 rounded focus:ring-action-orange">
+                                    <label for="terms" class="ml-2 block text-sm text-gray-900">Eu li e aceito os Termos de Serviço.</label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <button type="button" id="contact-button"
+                                   class="block w-full text-center mt-4 bg-action-orange-dark text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-orange-700 transition transform hover:-translate-y-1 text-lg">
+                                    Aceitar
+                                </button>
+                            </div>
+                        </form>
+                        </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-100 text-gray-700 border-t border-gray-200">
+        <div class="container mx-auto px-6 py-16">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 text-center md:text-left">
+                
+                <div class="flex justify-center md:justify-start">
+                     <img src="img/sete.svg" alt="Logo Seteeduca" class="h-20 -mt-6" style="height: 250px; margin: -30px; margin-right: 20px;"> 
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4 tracking-wider uppercase">Início</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-600 hover:text-black transition">Home</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-black transition">Cadastro</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-black transition">Matrícula</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-black transition">Professor</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-black transition">Turma</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-black transition">Financeiro</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4 tracking-wider uppercase">Sobre Nós</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#quem-somos" class="text-gray-600 hover:text-black transition">Quem Somos</a></li>
+                        <li><a href="#equipe" class="text-gray-600 hover:text-black transition">Equipe</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-black transition">Parceiros - SENAI CIMATEC/ SESI</a></li>
+                    </ul>
+                </div>
+
+                <div class="md:col-span-2 flex flex-col items-center md:items-end md:text-right">
+                     <h4 class="font-bold text-gray-900 mb-4 tracking-wider uppercase">Contato</h4>
+                     <p class="text-gray-600">Telefone: (71) 98765-4321</p>
+                     <p class="text-gray-600 mb-4">Email: contato@seteeduca.com.br</p>
+                     
+                     <a href="#contato" class="mt-4 inline-block bg-action-pink text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-action-pink-dark transition transform hover:-translate-y-0.5">
+                        Entre em Contato
+                     </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="border-t border-gray-200 bg-gray-200">
+            <div class="container mx-auto px-6 py-6 text-center text-sm text-gray-600">
+                <p>&copy; 2025 Seteeduca. Todos os direitos reservados. Design e Desenvolvimento Seteeduca.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+    // Lógica do Formulário
+    const contactButton = document.getElementById('contact-button');
+    const form = document.getElementById('contact-form');
+    const formContainer = document.getElementById('form-container');
+
+    contactButton.addEventListener('click', (event) => {
+        // 1. Verifica se os termos foram aceitos
+        const termsCheckbox = document.getElementById('terms');
+        if (!termsCheckbox.checked) {
+            alert('Você precisa aceitar os Termos de Serviço para continuar.');
+            return; // Para a execução aqui
+        }
+        
+        // 2. Validação simples de campos
+        const schoolName = document.getElementById('school-name').value;
+        const cnpj = document.getElementById('cnpj').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!schoolName || !cnpj || !email || !password) {
+            alert('Por favor, preencha todos os campos do formulário.');
+            return;
+        }
+
+        // 3. Monta o corpo do email
+        let body = "Olá, gostaria de contratar o Plano Seteeduca Total.\n\n";
+        body += `Nome da Creche: ${schoolName}\n`;
+        body += `CNPJ: ${cnpj}\n`;
+        body += `Email: ${email}\n\n`;
+        body += "Aguardo contato.";
+        
+        // 4. Monta o link mailto
+        const mailtoLink = `mailto:contato@seteeduca.com.br?subject=Interesse%20no%20Plano%20Seteeduca%20Total&body=${encodeURIComponent(body)}`;
+        
+        // 5. Aciona o cliente de email
+        window.location.href = mailtoLink;
+
+        // 6. Define a mensagem de sucesso
+        const successMessageHTML = `
+            <h2 class="text-2xl font-bold text-dark-gray mb-6">Solicitação Enviada!</h2>
+            <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-6 rounded-lg shadow-md">
+                <p class="font-bold text-lg">Obrigado pelo seu interesse!</p>
+                <p class="mt-3">Seu programa de email foi aberto para que você possa nos enviar sua solicitação.</p>
+                <p class="mt-2">Após o envio do email, nossa equipe analisará seus dados e <strong>entrará em contato em até 3 dias úteis</strong> para finalizar a ativação da sua conta.</p>
+            </div>
+            <div class="mt-8 text-center">
+                <svg class="w-20 h-20 text-green-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+        `;
+        
+        // 7. Substitui o formulário pela mensagem de sucesso
+        formContainer.innerHTML = successMessageHTML;
+    });
+
+    
+    // --- Lógica do Menu Mobile ---
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu'); // <-- Isso agora vai funcionar
+    
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+    
+    // Fecha o menu ao clicar em um link
+    const mobileLinks = document.querySelectorAll('#mobile-menu a, nav a');
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            // Verifica se é um link âncora ou para a mesma página
+            if(link.getAttribute('href').startsWith('#') || link.getAttribute('href').includes('site.html#')) {
+                // Só esconde o menu mobile, pois o 'nav a' (desktop) não deve ser afetado
+                if (!mobileMenu.classList.contains('hidden')) {
+                     mobileMenu.classList.add('hidden');
+                }
+            }
+        });
+    });
+</script>
+</body>
+
+</html>
