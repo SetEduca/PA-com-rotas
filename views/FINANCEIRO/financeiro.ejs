@@ -535,16 +535,16 @@ font-size: 20px;"></span>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
-                    <thead class="bg-gray-50 border-b border-gray-200">
-                        <tr>
-                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Data</th>
-                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Descrição</th>
-                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Categoria</th>
-                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Valor</th>
-                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Tipo</th>
-                            <th class="px-6 py-3 text-xs font-bold text-center text-gray-500 uppercase">Ações / Status</th>
-                        </tr>
-                    </thead>
+                    <thead>
+                <tr class="bg-gray-50 border-b border-gray-200">
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Data</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Descrição</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Categoria</th>
+                    <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Valor</th>
+                    <th class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">Ação</th>
+                </tr>
+            </thead>
                     
                     <tbody id="tabela-relatorios-body" class="divide-y divide-gray-100">
                         </tbody>
@@ -572,7 +572,6 @@ font-size: 20px;"></span>
                         <tr>
                             <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Aluno</th>
                             <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Responsável</th>
-                            <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase">Telefone</th>
                             <th class="px-6 py-3 text-xs font-bold text-gray-500 uppercase text-center">Situação</th>
                         </tr>
                     </thead>
@@ -671,9 +670,27 @@ font-size: 20px;"></span>
 
             </div>
             
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-64 flex items-center justify-center">
-                <p class="text-gray-400">Gráfico de Movimentação Financeira será carregado aqui.</p>
+           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 mb-8">
+        
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="text-gray-700 font-semibold mb-4 text-lg">
+                <i class="fas fa-chart-pie mr-2 text-blue-500"></i> Distribuição Financeira
+            </h3>
+            <div class="relative h-64 w-full flex justify-center">
+                <canvas id="graficoPizza"></canvas>
             </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="text-gray-700 font-semibold mb-4 text-lg">
+                <i class="fas fa-chart-bar mr-2 text-orange-500"></i> Comparativo Mensal
+            </h3>
+            <div class="relative h-64 w-full">
+                <canvas id="graficoBarras"></canvas>
+            </div>
+        </div>
+    </div>
+    
         </section>
 
   <script>
@@ -766,9 +783,6 @@ font-size: 20px;"></span>
         { valor: 'Mensalidade', texto: 'Mensalidade (Gera Boleto Asaas)' },
         { valor: 'Matrícula', texto: 'Matrícula (Gera Boleto Asaas)' },
         { valor: 'Material Didático', texto: 'Material Didático (Gera Boleto Asaas)' },
-        { valor: 'Uniforme', texto: 'Uniforme (Interno - Não gera boleto)' },
-        { valor: 'Evento', texto: 'Evento/Passeio (Interno - Não gera boleto)' },
-        { valor: 'Taxa Extra', texto: 'Outros (Interno)' }
     ];
 
     const opcoesDespesa = [
@@ -976,8 +990,8 @@ font-size: 20px;"></span>
         const tbody = document.getElementById('tabela-alunos-body');
         if (!tbody) return;
 
-        // Ajuste: colspan="4" pois removemos a coluna de ações
-        tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Consultando...</td></tr>';
+        // MUDANÇA 1: Colspan agora é 3 (eram 4 colunas, tiramos 1)
+        tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center">Consultando...</td></tr>';
 
         try {
             const res = await fetch(API_URL + '/api/alunos-status');
@@ -986,12 +1000,12 @@ font-size: 20px;"></span>
             tbody.innerHTML = '';
             
             if (alunos.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">Nenhum aluno encontrado.</td></tr>';
+                // MUDANÇA 2: Colspan 3 aqui também
+                tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center">Nenhum aluno encontrado.</td></tr>';
                 return;
             }
 
             tbody.innerHTML = alunos.map(a => {
-                // Lógica de Cores Completa (Verde, Vermelho e Amarelo)
                 let corBadge = '';
                 if (a.cor === 'green') corBadge = 'bg-green-100 text-green-800';
                 else if (a.cor === 'red') corBadge = 'bg-red-100 text-red-800';
@@ -1002,7 +1016,7 @@ font-size: 20px;"></span>
                     <tr class="hover:bg-gray-50 border-b border-gray-100 transition">
                         <td class="p-3 text-sm font-medium text-gray-800">${a.nome}</td>
                         <td class="p-3 text-sm text-gray-600">${a.responsavel}</td>
-                        <td class="p-3 text-sm text-gray-500">${a.telefone}</td>
+                        
                         <td class="p-3 text-center">
                             <span class="px-2 py-1 rounded-full text-xs font-bold uppercase ${corBadge}">
                                 ${a.status}
@@ -1013,10 +1027,10 @@ font-size: 20px;"></span>
             
         } catch (e) {
             console.error(e);
-            tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-red-500">Erro ao buscar alunos.</td></tr>';
+            // MUDANÇA 3: Colspan 3 aqui também
+            tbody.innerHTML = '<tr><td colspan="3" class="p-4 text-center text-red-500">Erro ao buscar alunos.</td></tr>';
         }
     };
-
     // Função de Arquivar
     window.arquivarItem = async function(id) {
         if (!confirm("Arquivar esta despesa?")) return;
@@ -1033,55 +1047,118 @@ font-size: 20px;"></span>
         }
     };
 
+   // =================================================================
+    // 5. VARIÁVEIS GLOBAIS E FUNÇÕES (Dashboard + Gráficos)
     // =================================================================
-    // 5. INICIALIZAÇÃO (Ao carregar a página)
+    
+    let chartPizza = null;
+    let chartBarras = null;
+
+    window.carregarDashboard = async function() {
+        try {
+            // 1. BUSCA DADOS
+            const res = await fetch(API_URL + '/api/dashboard-resumo');
+            const dados = await res.json();
+
+            // 2. ATUALIZA TEXTOS (Números)
+            const formatar = (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+
+            // Tenta achar os IDs (Tanto o antigo quanto o novo, pra garantir)
+            const elSaldo = document.getElementById('saldo-atual') || document.getElementById('saldo-total');
+            const elRec = document.getElementById('receitas-mes') || document.getElementById('receitas-total');
+            const elDesp = document.getElementById('despesas-mes') || document.getElementById('despesas-total');
+
+            if (elSaldo) elSaldo.innerText = formatar(dados.saldo);
+            if (elRec) elRec.innerText = formatar(dados.receitas);
+            if (elDesp) elDesp.innerText = formatar(dados.despesas);
+
+            // Cor do Saldo
+            if (elSaldo) {
+                elSaldo.className = dados.saldo >= 0 
+                    ? "text-2xl font-bold text-gray-800 mt-1" 
+                    : "text-2xl font-bold text-red-600 mt-1";
+            }
+
+            // 3. DESENHA OS GRÁFICOS
+            const valorReceitas = dados.receitas;
+            const valorDespesas = Math.abs(dados.despesas);
+            const corReceita = '#59C631';
+            const corDespesa = '#F88C12';
+
+            // --- PIZZA ---
+            const ctxPizza = document.getElementById('graficoPizza');
+            if (ctxPizza) {
+                if (chartPizza) chartPizza.destroy();
+                chartPizza = new Chart(ctxPizza, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Receitas', 'Despesas'],
+                        datasets: [{
+                            data: [valorReceitas, valorDespesas],
+                            backgroundColor: [corReceita, corDespesa],
+                            borderWidth: 0,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                });
+            }
+
+            // --- BARRAS ---
+            const ctxBarras = document.getElementById('graficoBarras');
+            if (ctxBarras) {
+                if (chartBarras) chartBarras.destroy();
+                chartBarras = new Chart(ctxBarras, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Receitas', 'Despesas'],
+                        datasets: [{
+                            label: 'Valor (R$)',
+                            data: [valorReceitas, valorDespesas],
+                            backgroundColor: [corReceita, corDespesa],
+                            borderRadius: 5,
+                            barThickness: 50
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: '#f3f4f6' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+        } catch (error) {
+            console.error("Erro dashboard:", error);
+        }
+    };
+
+    // =================================================================
+    // 6. INICIALIZAÇÃO (Onde tudo começa)
     // =================================================================
     document.addEventListener('DOMContentLoaded', () => {
-        // Ativa cliques nas abas
+        // 1. Configura as abas
         document.querySelectorAll('.nav-tab').forEach(btn => {
             btn.addEventListener('click', (e) => window.renderContent(e.target.id));
         });
 
-        // Inicia na Visão Geral
+        // 2. Inicia na Visão Geral
         window.renderContent('btn-dashboard');
 
-        // --- FUNÇÃO PARA ATUALIZAR OS CARDS DO DASHBOARD ---
-    window.carregarDashboard = async function() {
-        try {
-            // Chama a rota que acabamos de criar
-            const res = await fetch(API_URL + '/api/dashboard-resumo');
-            const dados = await res.json();
-
-            // Função auxiliar para formatar dinheiro (R$)
-            const formatar = (val) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
-
-            // Atualiza os números na tela (buscando pelos IDs do HTML)
-            const elSaldo = document.getElementById('saldo-atual');
-            const elRec = document.getElementById('receitas-mes');
-            const elDesp = document.getElementById('despesas-mes');
-
-            if (elSaldo) elSaldo.innerText = formatar(dados.saldo);
-            if (elRec) elRec.innerText = formatar(dados.receitas);
-            if (elDesp) elDesp.innerText = formatar(dados.despesas); // Vai aparecer negativo, ex: -R$ 500,00
-
-            // Ajusta cor do saldo (Vermelho se negativo, Verde se positivo)
-            if (elSaldo) {
-                if (dados.saldo >= 0) elSaldo.className = "text-2xl font-bold text-gray-800 mt-1"; // Cor normal
-                else elSaldo.className = "text-2xl font-bold text-red-600 mt-1"; // Cor de alerta
-            }
-
-        } catch (error) {
-            console.error("Erro ao carregar dashboard:", error);
-        }
-    };
+        // 3. Carrega os dados iniciais
+        window.carregarDashboard();
+        
+        // Se tiver a tabela, carrega ela também
+        if(typeof window.carregarTabela === 'function') window.carregarTabela();
     });
-
-// Força atualização imediata (caso o DOMContentLoaded tenha passado batido)
-    setTimeout(() => {
-        if (typeof window.carregarDashboard === 'function') {
-            window.carregarDashboard();
-        }
-    }, 1000); // Espera 1 segundo e atualiza
 
     // Esse código verifica se a página foi aberta pelo botão "Voltar" do navegador
     window.addEventListener( "pageshow", function ( event ) {

@@ -41,41 +41,66 @@ router.get('/alunos', async (req, res) => {
 
 // Rota de Transações (GET)
 // Rota para buscar transações (COM FILTRO DE ATIVOS)
+// =================================================================
+// 3. ROTA DE LISTAGEM (STATUS CORRIGIDOS: PAGO, PENDENTE, VENCIDA)
+// =================================================================
 router.get('/transacoes', async (req, res) => {
     try {
-        // 1. Busca Receitas do Asaas (Mensalidades)
         let receitasAsaas = [];
         try {
-            const dadosAsaas = await asaasService.getCobrancas();
-            receitasAsaas = dadosAsaas.map(c => ({
-                id: c.id, // ID do Asaas (string)
-                date: c.dueDate,
-                description: c.description || 'Mensalidade',
-                category: 'Mensalidade',
-                value: c.value,
-                type: 'Receita',
-                status: c.status === 'PAID' ? 'pago' : 'pendente'
-            }));
-        } catch (e) { console.error("Asaas off:", e.message); }
+            // Busca cobranças do Asaas
+            const dadosAsaas = await asaasService.getCobrancas(); 
+            
+            if(Array.isArray(dadosAsaas)) {
+                receitasAsaas = dadosAsaas.map(c => {
+                    
+                    // --- LÓGICA DE STATUS DO ASAAS ---
+                    let statusFinal = 'pendente'; // Padrão
 
-        // 2. Busca Transações Internas (Despesas + Receitas Manuais de Uniforme, etc)
-        // Importante: Buscamos TUDO que está ativo no banco
-        const transacoesBanco = await Transacao.findAll({
-            where: { ativo: true }
+                    // Lista de status que significam "Dinheiro na Mão"
+                    const statusPagos = ['RECEIVED', 'RECEIVED_IN_CASH', 'CONFIRMED', 'PAID'];
+                    
+                    if (statusPagos.includes(c.status)) {
+                        statusFinal = 'pago';
+                    } else if (c.status === 'OVERDUE') {
+                        statusFinal = 'vencida'; // Está atrasado
+                    } else {
+                        statusFinal = 'pendente'; // Ainda vai vencer
+                    }
+
+                    return {
+                        id: c.id, 
+                        date: c.dueDate, 
+                        description: c.description || 'Mensalidade',
+                        category: 'Mensalidade', 
+                        value: c.value, 
+                        type: 'Receita',
+                        status: statusFinal
+                    };
+                });
+            }
+        } catch (e) { 
+            console.log("Aviso: Erro ao buscar do Asaas.", e.message); 
+        }
+
+        // --- LÓGICA DAS TRANSAÇÕES MANUAIS (BANCO) ---
+        const transacoesBanco = await Transacao.findAll({ where: { ativo: true } });
+        
+        const itensBanco = transacoesBanco.map(t => {
+            // Se foi lançado manualmente (Dinheiro/Pix na mão), consideramos como 'pago'
+            // Se você quiser lançar dívida manual pendente, precisaria de um campo 'status' no banco
+            return {
+                id: t.id, 
+                date: t.data, 
+                description: t.descricao, 
+                category: t.categoria,
+                value: parseFloat(t.valor), 
+                type: parseFloat(t.valor) >= 0 ? 'Receita' : 'Despesa',
+                status: 'pago' // Mudamos de 'ativo' para 'pago' para não confundir
+            };
         });
 
-        const itensBanco = transacoesBanco.map(t => ({
-            id: t.id, // ID do Banco (número)
-            date: t.data,
-            description: t.descricao,
-            category: t.categoria,
-            value: parseFloat(t.valor),
-            // Se valor for positivo é Receita, negativo é Despesa
-            type: parseFloat(t.valor) >= 0 ? 'Receita' : 'Despesa',
-            status: 'ativo' // Itens manuais geralmente já nascem "pagos" ou ativos
-        }));
-
-        // 3. Mistura tudo e ordena por data
+        // Junta tudo e ordena
         const relatorioFinal = [...receitasAsaas, ...itensBanco];
         relatorioFinal.sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -220,7 +245,7 @@ router.get('/alunos-status', async (req, res) => {
                 } catch (err) {
                     // Se der erro de conexão, avisa, mas não trava
                     console.error(`Erro de conexão Asaas para ${aluno.nome}:`, err.message);
-                    status = 'Erro Consulta';
+                    status = 'Cadastrado no Asaas';
                     cor = 'gray';
                 }
             } else {
@@ -277,75 +302,65 @@ async function buscarPorCpfNoAsaas(cpf) {
 
 // Rota para o Dashboard (Resumo Financeiro do Mês)
 // Rota para o Dashboard (Resumo Financeiro do Mês)
+// =================================================================
+// 4. ROTA DO DASHBOARD (COM PROTEÇÃO CONTRA FALHAS)
+// =================================================================
 router.get('/dashboard-resumo', async (req, res) => {
+    console.log(">>> Calculando Dashboard...");
     try {
-        // Define o início do mês atual (ex: 2025-11-01)
         const hoje = new Date();
-        const ano = hoje.getFullYear();
-        const mes = hoje.getMonth(); // 0 a 11
-        
-        // Data de corte: Primeiro dia do mês às 00:00:00
-        const inicioMes = new Date(ano, mes, 1);
+        // Pega o primeiro dia do mês atual (Ex: 2023-11-01)
+        const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1).toISOString().split('T')[0];
 
-        console.log(">>> Calculando Dashboard a partir de:", inicioMes.toISOString());
-
-        // 1. BUSCAR RECEITAS DO ASAAS (Só as Recebidas)
+        // 1. Tenta somar RECEITAS DO ASAAS (Se falhar, considera 0)
         let totalAsaas = 0;
         try {
-            // Busca recebidas após o início do mês
+            // Busca apenas pagamentos CONFIRMADOS/RECEBIDOS deste mês
             const cobrancas = await asaasService.listarCobrancas({ 
                 status: 'RECEIVED', 
-                datePaymentAfter: inicioMes.toISOString().split('T')[0] // Formato YYYY-MM-DD
+                datePaymentAfter: inicioMes 
             });
             
-            if (cobrancas && cobrancas.length > 0) {
+            if (cobrancas && Array.isArray(cobrancas)) {
                 totalAsaas = cobrancas.reduce((acc, c) => acc + c.value, 0);
             }
         } catch (e) {
-            console.warn("Aviso: Não foi possível somar Asaas (ou não tem dados).", e.message);
+            console.log("Aviso: Não foi possível somar Asaas (ou não tem dados).", e.message);
         }
 
-        // 2. BUSCAR TRANSAÇÕES DO BANCO (ATIVAS)
-        const transacoes = await Transacao.findAll({
-            where: { ativo: true }
-        });
-
-        let totalReceitasManuais = 0;
+        // 2. Soma o BANCO DE DADOS (Manual)
+        const transacoes = await Transacao.findAll({ where: { ativo: true } });
+        let totalManuais = 0; 
         let totalDespesas = 0;
 
         transacoes.forEach(t => {
-            // Converte a data do banco para Objeto JS para comparar corretamente
-            // (Adiciona 'T00:00:00' para garantir que pegue o dia todo se for string simples)
-            const dataTransacao = new Date(t.data.includes('T') ? t.data : t.data + 'T12:00:00');
-            
-            // Se a transação for deste mês (ou futuro)
-            if (dataTransacao >= inicioMes) {
-                
-                const valor = parseFloat(t.valor);
-                
-                if (valor >= 0) {
-                    totalReceitasManuais += valor;
+            // Filtra só o mês atual (opcional, se quiser geral tire o if)
+            if (t.data >= inicioMes) {
+                const val = parseFloat(t.valor);
+                if (val >= 0) {
+                    totalManuais += val; // Receita Manual
                 } else {
-                    totalDespesas += valor; // Soma negativos
+                    totalDespesas += val; // Despesa (já é negativo)
                 }
             }
         });
 
-        // 3. RESULTADO FINAL
-        const totalReceitas = totalAsaas + totalReceitasManuais;
-        const saldo = totalReceitas + totalDespesas;
+        // 3. Calcula o Final
+        const totalReceitas = totalAsaas + totalManuais;
+        const saldoFinal = totalReceitas + totalDespesas; // Despesa é negativa, então soma subtraindo
 
-        console.log(`>>> RESUMO: Receitas: ${totalReceitas} | Despesas: ${totalDespesas} | Saldo: ${saldo}`);
+        console.log(`>>> RESUMO: Receitas: ${totalReceitas} | Despesas: ${totalDespesas} | Saldo: ${saldoFinal}`);
 
         res.json({
-            saldo: saldo,
+            saldo: saldoFinal,
             receitas: totalReceitas,
             despesas: totalDespesas
         });
 
     } catch (error) {
-        console.error("ERRO NO DASHBOARD:", error);
-        res.status(500).json({ saldo: 0, receitas: 0, despesas: 0 });
+        console.error("Erro fatal no dashboard:", error);
+        // Em último caso, retorna tudo zero para não quebrar a tela
+        res.json({ saldo: 0, receitas: 0, despesas: 0 });
     }
 });
 
