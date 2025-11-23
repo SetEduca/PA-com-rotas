@@ -18,7 +18,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #FCFCFC;
             background-image: var(--background-image);
             background-size: cover;
@@ -55,11 +55,8 @@
             gap: 15px;
         }
 
-        /* INÍCIO ESTILOS DO NOVO CABEÇALHO E DROPDOWN */
-
-        /* Estilo comum para ícones de imagem (Home) */
         .header-icon {
-            width: 50px; 
+            width: 50px;
             height: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -69,50 +66,44 @@
             transform: scale(1.1);
         }
 
-        /* Contêiner do Perfil e Dropdown (MODIFICADO) */
         .profile {
             position: relative;
             cursor: pointer;
             z-index: 150;
-            padding: 8px 10px; /* Adiciona padding para aumentar a área de clique */
+            padding: 8px 10px;
             border-radius: 10px;
             transition: background-color 0.2s ease;
-        
         }
         
         .profile:hover {
-            background-color: #4e4e4e18; /* Fundo suave ao passar o mouse */
+            background-color: #4e4e4e18;
         }
         
         .profile-header {
             display: flex;
             align-items: center;
-            gap: 8px; /* Espaçamento entre o ícone do usuário e a seta */
+            gap: 8px;
         }
 
-        /* Estilo para o ícone de usuário Font Awesome */
         .profile-header .profile-icon {
-            font-size: 43px; 
+            font-size: 43px;
             color: #000000;
         }
         
-        /* Esconde a classe .profile-icon antiga */
         .home-icon, .profile-icon:not(.profile-header .profile-icon) { 
-             display: none; 
+             display: none;
         }
 
         .profile-arrow {
-            font-size: 14px; 
+            font-size: 14px;
             color: #2c3e50;
             transition: transform 0.3s ease;
         }
 
-        /* Rotação da seta quando o dropdown estiver aberto */
         .profile.active .profile-arrow {
             transform: rotate(180deg);
         }
 
-        /* REGRAS DO DROPDOWN (mantidas) */
         .profile-dropdown {
             position: absolute;
             top: 100%; 
@@ -149,7 +140,6 @@
             overflow: hidden;
             background-color: #e9ecef;
         }
-        /* FIM ESTILOS DO NOVO CABEÇALHO E DROPDOWN */
 
         .container {
             max-width: 1100px;
@@ -159,7 +149,7 @@
 
         .profile-card {
             background: white;
-            border-radius: 10px; /* ALTERADO: Mais quadrado */
+            border-radius: 10px;
             padding: 30px;
             box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
         }
@@ -191,11 +181,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
 
         .avatar img {
-            width: 70px;
-            height: auto;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .camera-icon {
@@ -226,7 +218,6 @@
             gap: 5px;
         }
         
-        /* Novo estilo para o grupo de senha */
         .password-group {
             display: flex;
             align-items: flex-end;
@@ -245,14 +236,13 @@
         .form-group input {
             padding: 10px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 25px) */
+            border-radius: 10px;
             font-size: 14px;
             outline: none;
             transition: border-color 0.3s, background-color 0.3s;
             background-color: #f0f0f0;
         }
         
-        /* Estilo para campos editáveis */
         .form-group input:not([readonly]) {
             background-color: white;
             border-color: #fff4c2;
@@ -271,7 +261,7 @@
         .save-btn, .edit-btn, .change-password-btn {
             padding: 10px 20px;
             border: none;
-            border-radius: 10px; /* ALTERADO: Mais quadrado */
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
             font-size: 14px;
@@ -288,7 +278,6 @@
             color: #666;
         }
         
-        /* NOVO ESTILO: Botão de editar endereço */
         .edit-address-btn {
             background: #e0e0e0;
             color: #666;
@@ -329,6 +318,10 @@
             flex: 1 1 100%;
         }
 
+        .address-group.half-width {
+            flex: 1 1 calc(50% - 7.5px);
+        }
+
         .address-group label {
             color: #2c3e50;
             font-size: 14px;
@@ -339,7 +332,7 @@
         .address-field {
             padding: 12px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 25px) */
+            border-radius: 10px;
             font-size: 14px;
             outline: none;
             transition: all 0.3s ease;
@@ -361,16 +354,6 @@
         .address-field[readonly] {
             background-color: #f9f9f9;
             border-color: #ddd;
-        }
-
-        .address-select {
-            cursor: pointer;
-            padding-right: 35px;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 16px;
-            appearance: none;
         }
 
         .cep-container {
@@ -399,7 +382,6 @@
             transition: all 0.2s ease;
         }
         
-        /* NOVO ESTILO: Desabilitar botão de busca CEP em modo de leitura */
         .cep-search-btn:disabled {
             background: #e0e0e0;
             cursor: not-allowed;
@@ -407,31 +389,14 @@
             transform: none;
         }
 
-        .cep-search-btn:hover:not(:disabled) {
-            background: #fcd66e;
-            transform: scale(1.1);
-        }
-
-        .cep-search-btn:active {
-            transform: scale(0.95);
-        }
-
         .cep-error, .cep-loading {
             display: none;
             font-size: 12px;
             margin-top: 5px;
             padding: 8px 12px;
-            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 15px) */
+            border-radius: 10px;
             animation: slideDown 0.3s ease-out;
         }
-
-        .cep-error {
-            color: #e74c3c;
-            background: #fdf2f2;
-            border: 1px solid #fadbd8;
-        }
-
-        
 
         .cep-error.show, .cep-loading.show {
             display: flex;
@@ -449,7 +414,7 @@
         .address-btn {
             padding: 12px 24px;
             border: none;
-            border-radius: 10px; /* ALTERADO: Mais quadrado */
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
             font-size: 14px;
@@ -463,54 +428,19 @@
             border: 2px solid #e9ecef;
         }
         
-        /* NOVO ESTILO: Botão de editar endereço */
         .edit-address-btn {
             background: #e0e0e0;
             color: #666;
             border: 2px solid #e0e0e0;
         }
         
-        .edit-address-btn:hover {
-            background: #d4d4d4;
-            color: #495057;
-        }
-
-
-        .clear-address:hover {
-            background: #e9ecef;
-            color: #495057;
-        }
-
         .save-address {
             background: #fff6a5;
             color: #2c3e50;
             border: 2px solid #ffbb00;
         }
         
-        /* NOVO ESTILO: Corrigir cor do hover do botão de salvar endereço */
-        .save-address:hover {
-            background: #fcd66e;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(252, 214, 110, 0.3); /* Alterado de cor verde para cor amarela/laranja */
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Modal de alteração de senha */
+        /* --- ESTILOS DO MODAL DE SENHA CORRIGIDOS --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -522,7 +452,6 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            animation: fadeIn 0.3s ease-out;
         }
 
         .modal-overlay.show {
@@ -531,421 +460,79 @@
 
         .password-modal {
             background: white;
-            padding: 30px;
-            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 20px) */
+            padding: 35px 30px 30px 30px; /* Ajuste para dar espaço ao 'X' */
+            border-radius: 10px;
             width: 90%;
             max-width: 450px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease-out;
             position: relative;
         }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .close-modal {
+        .close-modal { /* Posição absoluta para o "X" no canto superior direito */
+            position: absolute;
+            top: 10px;
+            right: 10px;
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 28px; 
             cursor: pointer;
-            color: #666;
-            width: 30px;
-            height: 30px;
+            color: #999; 
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, color 0.2s;
+            z-index: 100;
         }
-
+        
         .close-modal:hover {
             background-color: #f0f0f0;
+            color: #333;
         }
-
+        
+        .modal-header {
+            display: block; /* Remove o flexbox original para centralizar o título */
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
         .password-form {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
-        .password-input-group {
-            position: relative;
-        }
-
-        .password-input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #2c3e50;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .password-input-container {
-            position: relative;
-        }
-
-        .password-input {
-            width: 100%;
-            padding: 12px 45px 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 25px) */
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .password-input:focus {
-            border-color: #fcd66e;
-        }
-
-        /* INÍCIO DAS MUDANÇAS PARA SVG */
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 0; /* Para garantir que o emoji sumiu caso volte */
-            color: #666;
-        }
-
-        .password-icon {
-            display: inline-block;
-            width: 18px; /* Tamanho do ícone */
-            height: 18px;
-        }
-
-        .password-icon svg {
-            width: 100%;
-            height: 100%;
-            color: #666; 
-            stroke: currentColor;
-            fill: none;
-        }
-        /* FIM DAS MUDANÇAS PARA SVG */
-
-
-        .error-message {
-            color: #e74c3c;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .password-requirements {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-
-        .password-requirements h4 {
-            font-size: 14px;
-            margin-bottom: 8px;
-            color: #2c3e50;
-        }
-
-        .requirement {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 4px;
-        }
-
-        .requirement.valid {
-            color: #27ae60;
-        }
-
-        .requirement.invalid {
-            color: #e74c3c;
-        }
-
-        .requirement-icon {
-            width: 12px;
-            height: 12px;
-        }
-
         .modal-buttons {
             display: flex;
             gap: 10px;
             margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
+            justify-content: space-between;
         }
 
         .modal-cancel-btn, .modal-save-btn {
             flex: 1;
             padding: 12px 20px;
             border: none;
-            border-radius: 10px; /* ALTERADO: Mais quadrado */
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .modal-cancel-btn {
-            background: #f0f0f0;
-            color: #666;
-        }
-
-        .modal-cancel-btn:hover {
-            background: #e0e0e0;
         }
 
         .modal-save-btn {
             background: #fcd66e;
             color: #2c3e50;
         }
+        /* --- FIM DOS ESTILOS DO MODAL DE SENHA CORRIGIDOS --- */
 
-        .modal-save-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(252, 214, 110, 0.4);
-        }
-
-        .modal-save-btn:disabled {
-            background: #ddd;
-            color: #999;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Modal de alteração de foto */
-        .photo-modal {
-            background: white;
-            padding: 30px;
-            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 20px) */
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease-out;
-            position: relative;
-        }
-
-        .photo-upload-area {
-            border: 2px dashed #fcd66e;
-            border-radius: 10px; /* ALTERADO: Mais quadrado (Era 15px) */
-            padding: 40px 20px;
-            text-align: center;
-            margin: 20px 0;
-            background: #fefcf0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .photo-upload-area:hover {
-            border-color: #f1c40f;
-            background: #fdf8e1;
-        }
-
-        .photo-upload-area.dragover {
-            border-color: #f39c12;
-            background: #fcf3cd;
-            transform: scale(1.02);
-        }
-
-        .upload-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-            color: #fcd66e;
-        }
-
-        .upload-text {
-            color: #2c3e50;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .upload-hint {
-            color: #666;
-            font-size: 12px;
-        }
-
-        .photo-preview-container {
-            display: none;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .photo-preview-container.show {
-            display: block;
-        }
-
-        .photo-preview {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #fcd66e;
-            margin: 0 auto 15px;
-            display: block;
-        }
-
-        .photo-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            text-align: left;
-        }
-
-        .photo-info-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .photo-info-label {
-            font-weight: 500;
-            color: #2c3e50;
-        }
-
-        .photo-info-value {
-            color: #666;
-        }
-
-        .photo-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 15px;
-        }
-
-        .photo-action-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 10px; /* ALTERADO: Mais quadrado */
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .remove-photo-btn {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .remove-photo-btn:hover {
-            background: #c0392b;
-        }
-
-        .change-photo-btn {
-            background: #dbc234;
-            color: white;
-        }
-
-        .change-photo-btn:hover {
-            background: #fcd66e;
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .current-photo-display {
-            text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-        }
-
-        .current-photo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #e0e0e0;
-            margin: 0 auto 10px;
-            display: block;
-        }
-
-        .current-photo-label {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        @media (max-width: 768px) {
-            .profile-info {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .address-row {
-                flex-direction: column;
-            }
-
-            .address-group {
-                min-width: unset;
-            }
-
-            .address-actions {
-                flex-direction: column;
-            }
-
-            .address-btn {
-                min-width: unset;
-            }
-
-            .header {
-                padding: 15px 20px;
-            }
-
-            .password-modal, .photo-modal {
-                margin: 20px;
-                width: calc(100% - 40px);
-            }
-
-            .photo-upload-area {
-                padding: 30px 15px;
-            }
-
-            .photo-preview {
-                width: 150px;
-                height: 150px;
-            }
-
-            .photo-actions {
-                flex-direction: column;
-            }
-        }
     </style>
 </head>
 <body>
@@ -963,19 +550,20 @@
                 alt="Home Icon" 
                 title="Início"
             >
-            
+         
             <div class="profile" id="profile-toggle" onclick="toggleDropdown(event)">
                 <div class="profile-header">
                     <i class="fas fa-user-circle profile-icon"></i>
                     <i class="fas fa-chevron-down profile-arrow"></i>
                 </div>
+   
                 <div class="profile-dropdown" id="profile-dropdown-menu">
                     <a href="/meuperfil" onclick="navegarPara('meu-perfil')"><i class="fas fa-user"></i> Meu perfil</a>
                     <a href="/mensalidade" onclick="navegarPara('mensalidade')"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
                     <a href="/arquivados" onclick="navegarPara('arquivados')"><i class="fas fa-archive"></i> Arquivados</a>
+         
                     <div class="dropdown-divider"></div>
-                    <a href="/login/sair" onclick="login()"><i class="fas fa-sign-out-alt"></i> Sair</a>
-                  
+                    <a href="/login" onclick="navegarPara('login')"><i class="fas fa-sign-out-alt"></i> Sair</a>
                 </div>
             </div>
         </div>
@@ -983,42 +571,49 @@
 
     <div class="container">
         <div class="profile-card">
+         
             <div class="profile-section">
                 <h2>Informações do perfil</h2>
                 
                 <div class="profile-info">
                     <div class="avatar-container">
+                        
                         <div class="avatar">
-                            <img src="imagem/perfil-de-usuario.png" alt="Avatar do usuário">
+                            <img src="<%= perfil.creche.foto_url ? perfil.creche.foto_url : 'imagem/perfil-de-usuario.png' %>" alt="Avatar do usuário">
                         </div>
                         <div class="camera-icon">📷</div>
+                  
                     </div>
                     
                     <div class="form-fields">
                         <div class="form-group">
                             <label for="creche">Nome da creche:</label>
-                            <input type="text" id="creche" name="creche" value="Creche do Zezinho" readonly>
+                            <input type="text" id="creche" name="creche" value="<%= perfil.creche.nome %>" readonly>
                         </div>
                         
+                  
                         <div class="form-group">
                             <label for="email">E-mail:</label>
-                            <input type="email" id="email" name="email" value="creche.zezinho@exemplo.com" readonly>
+                            <input type="email" id="email" name="email" value="<%= perfil.creche.email %>" readonly>
                         </div>
-                        
+     
+                    
                         <div class="password-group">
                             <div class="form-group">
+                           
                                 <label for="password">Senha:</label>
                                 <input type="password" id="password" name="password" value="********" readonly>
                             </div>
                             <div class="button-group">
-                                <button class="change-password-btn">Alterar Senha</button>
+                                <button class="change-password-btn" type="button">Alterar Senha</button>
                             </div>
                         </div>
 
                         <div class="button-group">
-                            <button class="edit-btn">Editar</button>
-                            <button class="save-btn">Salvar alterações</button>
+                            <button class="edit-btn" type="button">Editar</button>
+                            <button class="save-btn" type="submit" style="display: none;">Salvar alterações</button>
                         </div>
+      
                     </div>
                 </div>
             </div>
@@ -1026,1002 +621,340 @@
             <div class="address-section">
                 <h2>Endereço</h2>
                 
+             
                 <div class="address-form">
                     <div class="address-row">
-                        <div class="address-group">
+                        <div class="address-group full-width">
                             <label for="cep">CEP:</label>
                             <div class="cep-container">
-                                <input type="text" id="cep" name="cep" class="address-field cep-field" placeholder="00000-000" maxlength="9">
-                                <button type="button" class="cep-search-btn" id="searchCep" title="Buscar CEP">
+                                <input type="text" id="cep" name="cep" class="address-field cep-field" placeholder="00000-000" maxlength="9" value="<%= perfil.endereco.cep %>" readonly>
+                                <button type="button" class="cep-search-btn" id="searchCep" title="Buscar CEP" disabled>
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
                                     </svg>
                                 </button>
                             </div>
                             <div class="cep-error" id="cepError">CEP não encontrado</div>
-                            
                         </div>
                     </div>
 
                     <div class="address-row">
                         <div class="address-group full-width">
                             <label for="logradouro">Rua/Avenida:</label>
-                            <input type="text" id="logradouro" name="logradouro" class="address-field" placeholder="Ex: Rua das Flores, Avenida Brasil">
+                            <input type="text" id="logradouro" name="logradouro" class="address-field" value="<%= perfil.endereco.rua %>" readonly>
                         </div>
                     </div>
 
                     <div class="address-row">
-                        <div class="address-group">
-                            <label for="numero">Número:</label>
-                            <input type="text" id="numero" name="numero" class="address-field" placeholder="123">
-                        </div>
-                        <div class="address-group">
-                            <label for="complemento">Complemento:</label>
-                            <input type="text" id="complemento" name="complemento" class="address-field" placeholder="Apto 45, Bloco B, Sala 102">
-                        </div>
-                    </div>
-
-                    <div class="address-row">
-                        <div class="address-group">
+                        <div class="address-group half-width">
                             <label for="bairro">Bairro:</label>
-                            <input type="text" id="bairro" name="bairro" class="address-field" placeholder="Centro, Copacabana">
+                            <input type="text" id="bairro" name="bairro" class="address-field" value="<%= perfil.endereco.bairro %>" readonly>
                         </div>
-                        <div class="address-group">
-                            <label for="localidade">Cidade:</label>
-                            <input type="text" id="localidade" name="localidade" class="address-field" placeholder="São Paulo, Rio de Janeiro">
+                        
+                        <div class="address-group half-width">
+                            <label for="cidade">Cidade:</label>
+                            <input type="text" id="cidade" name="cidade" class="address-field" value="<%= perfil.endereco.cidade %>" readonly>
                         </div>
                     </div>
-
-                    <div class="address-row">
-                        <div class="address-group">
-                            <label for="uf">Estado (UF):</label>
-                            <select id="uf" name="uf" class="address-field address-select">
-                                <option value="">Selecione o estado</option>
-                                <option value="AC">Acre</option>
-                                <option value="AL">Alagoas</option>
-                                <option value="AP">Amapá</option>
-                                <option value="AM">Amazonas</option>
-                                <option value="BA">Bahia</option>
-                                <option value="CE">Ceará</option>
-                                <option value="DF">Distrito Federal</option>
-                                <option value="ES">Espírito Santo</option>
-                                <option value="GO">Goiás</option>
-                                <option value="MA">Maranhão</option>
-                                <option value="MT">Mato Grosso</option>
-                                <option value="MS">Mato Grosso do Sul</option>
-                                <option value="MG">Minas Gerais</option>
-                                <option value="PA">Pará</option>
-                                <option value="PB">Paraíba</option>
-                                <option value="PR">Paraná</option>
-                                <option value="PE">Pernambuco</option>
-                                <option value="PI">Piauí</option>
-                                <option value="RJ">Rio de Janeiro</option>
-                                <option value="RN">Rio Grande do Norte</option>
-                                <option value="RS">Rio Grande do Sul</option>
-                                <option value="RO">Rondônia</option>
-                                <option value="RR">Roraima</option>
-                                <option value="SC">Santa Catarina</option>
-                                <option value="SP">São Paulo</option>
-                                <option value="SE">Sergipe</option>
-                                <option value="TO">Tocantins</option>
-                            </select>
-                        </div>
-                       
-                    </div>
-
+                    
                     <div class="address-actions">
-                        <button type="button" class="address-btn edit-address-btn" id="editAddress">Editar Endereço</button>
-                        
-                        <button type="button" class="address-btn clear-address" id="clearAddress">Limpar Endereço</button>
-                        
-                        <button type="button" class="address-btn save-address" id="saveAddress" style="display: none;">Salvar Alterações</button>
-                        
-                        <button type="button" class="address-btn clear-address" id="cancelAddress" style="display: none;">Cancelar</button>
+                        <button class="address-btn edit-address-btn" type="button">Editar Endereço</button>
+                        <button class="address-btn clear-address" type="button" style="display: none;">Limpar</button>
+                        <button class="address-btn save-address" type="submit" style="display: none;">Salvar Endereço</button>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="photoModal">
-        <div class="photo-modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Alterar Foto de Perfil</h3>
-                <button class="close-modal" type="button" id="closePhotoModal">&times;</button>
             </div>
             
-            <div class="current-photo-display">
-                <div class="current-photo-label">Foto atual:</div>
-                <img src="imagem/perfil-de-usuario.png" alt="Foto atual" class="current-photo" id="currentPhotoDisplay">
-            </div>
-
-            <div class="photo-upload-area" id="photoUploadArea">
-                <div class="upload-icon">📷</div>
-                <div class="upload-text">Clique aqui ou arraste uma nova foto</div>
-                <div class="upload-hint">Formatos aceitos: JPG, PNG, GIF (máx. 5MB)</div>
-            </div>
-
-            <input type="file" id="photoInput" class="file-input" accept="image/jpeg,image/jpg,image/png,image/gif">
-
-            <div class="photo-preview-container" id="photoPreviewContainer">
-                <img id="photoPreview" class="photo-preview" alt="Preview da nova foto">
-                <div class="photo-info" id="photoInfo">
-                    <div class="photo-info-item">
-                        <span class="photo-info-label">Nome:</span>
-                        <span class="photo-info-value" id="fileName"></span>
-                    </div>
-                    <div class="photo-info-item">
-                        <span class="photo-info-label">Tamanho:</span>
-                        <span class="photo-info-value" id="fileSize"></span>
-                    </div>
-                    <div class="photo-info-item">
-                        <span class="photo-info-label">Dimensões:</span>
-                        <span class="photo-info-value" id="fileDimensions"></span>
-                    </div>
-                </div>
-                <div class="photo-actions">
-                    <button type="button" class="photo-action-btn remove-photo-btn" id="removePhoto">Remover</button>
-                    <button type="button" class="photo-action-btn change-photo-btn" id="changePhoto">Escolher Outra</button>
-                </div>
-            </div>
-
-            <div class="modal-buttons">
-                <button type="button" class="modal-cancel-btn" id="cancelPhotoChange">Cancelar</button>
-                <button type="button" class="modal-save-btn" id="savePhotoChange" disabled>Salvar Foto</button>
-            </div>
         </div>
     </div>
-
-    <div class="modal-overlay" id="passwordModal">
+    
+    <div class="modal-overlay" id="password-modal-overlay">
         <div class="password-modal">
+            <button class="close-modal">&times;</button>
             <div class="modal-header">
                 <h3 class="modal-title">Alterar Senha</h3>
-                <button class="close-modal" type="button">&times;</button>
             </div>
-            
-            <form class="password-form" id="passwordForm">
+            <form class="password-form">
                 <div class="password-input-group">
-                    <label for="currentPassword">Senha Atual:</label>
-                    <div class="password-input-container">
-                        <input type="password" id="currentPassword" class="password-input" required>
-                        <button type="button" class="toggle-password" data-target="currentPassword">
-                            <span class="password-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            </span>
-                        </button>
-                    </div>
-                    <div class="error-message" id="currentPasswordError">Senha atual incorreta</div>
+                    <label for="current-password">Senha Atual:</label>
+                    <input type="password" id="current-password" class="password-input" required>
                 </div>
-
                 <div class="password-input-group">
-                    <label for="newPassword">Nova Senha:</label>
-                    <div class="password-input-container">
-                        <input type="password" id="newPassword" class="password-input" required>
-                        <button type="button" class="toggle-password" data-target="newPassword">
-                            <span class="password-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            </span>
-                        </button>
-                    </div>
-                    <div class="password-requirements">
-                        <h4>Requisitos da senha:</h4>
-                        <div class="requirement" data-requirement="length">
-                            <span class="requirement-icon">✗</span>
-                            <span>Pelo menos 8 caracteres</span>
-                        </div>
-                        <div class="requirement" data-requirement="uppercase">
-                            <span class="requirement-icon">✗</span>
-                            <span>Uma letra maiúscula</span>
-                        </div>
-                        <div class="requirement" data-requirement="lowercase">
-                            <span class="requirement-icon">✗</span>
-                            <span>Uma letra minúscula</span>
-                        </div>
-                        <div class="requirement" data-requirement="number">
-                            <span class="requirement-icon">✗</span>
-                            <span>Um número</span>
-                        </div>
-                        <div class="requirement" data-requirement="special">
-                            <span class="requirement-icon">✗</span>
-                            <span>Um caractere especial (!@#$%^&*)</span>
-                        </div>
-                    </div>
+                    <label for="new-password">Nova Senha:</label>
+                    <input type="password" id="new-password" class="password-input" required>
                 </div>
-
                 <div class="password-input-group">
-                    <label for="confirmPassword">Confirmar Nova Senha:</label>
-                    <div class="password-input-container">
-                        <input type="password" id="confirmPassword" class="password-input" required>
-                        <button type="button" class="toggle-password" data-target="confirmPassword">
-                            <span class="password-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            </span>
-                        </button>
-                    </div>
-                    <div class="error-message" id="confirmPasswordError">As senhas não coincidem</div>
+                    <label for="confirm-password">Confirmar Nova Senha:</label>
+                    <input type="password" id="confirm-password" class="password-input" required>
                 </div>
-
                 <div class="modal-buttons">
                     <button type="button" class="modal-cancel-btn">Cancelar</button>
-                    <button type="submit" class="modal-save-btn" disabled>Alterar Senha</button>
+                    <button type="submit" class="modal-save-btn">Salvar Nova Senha</button>
                 </div>
             </form>
         </div>
     </div>
-
+    
     <script>
-        // Variáveis globais
-        const editBtn = document.querySelector('.edit-btn');
-        const saveBtn = document.querySelector('.save-btn');
-        const changePasswordBtn = document.querySelector('.change-password-btn');
-        const profileInputs = document.querySelectorAll('#creche, #email');
-        const passwordModal = document.getElementById('passwordModal');
-        const photoModal = document.getElementById('photoModal');
-        const passwordForm = document.getElementById('passwordForm');
-        const closePhotoModal = document.getElementById('closePhotoModal');
-        const cancelPhotoBtn = document.getElementById('cancelPhotoChange');
-        const savePasswordBtn = document.querySelector('.modal-save-btn');
-        const savePhotoBtn = document.getElementById('savePhotoChange');
-        const cameraIcon = document.querySelector('.camera-icon');
-        const avatarImg = document.querySelector('.avatar img');
-        
-        // Senha atual simulada (em um sistema real, isso viria do backend)
-        const currentPasswordHash = 'minhasenhaatual123';
-        let selectedFile = null;
-
-        // ==========================================================
-        // NOVAS FUNÇÕES DE NAVEGAÇÃO E DROPDOWN
-        // ==========================================================
-        
+        // Função para alternar o dropdown do perfil
         function toggleDropdown(event) {
-            if (event) event.stopPropagation();
             const dropdown = document.getElementById('profile-dropdown-menu');
-            const profileContainer = document.querySelector('.profile');
-            
-            // Toggle visibility
-            const isVisible = dropdown.style.display === 'block';
-            dropdown.style.display = isVisible ? 'none' : 'block';
-            
-            // Toggle active class para rotação da seta
-            if (profileContainer) {
-                profileContainer.classList.toggle('active', !isVisible);
-            }
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            document.getElementById('profile-toggle').classList.toggle('active');
+            event.stopPropagation();
         }
 
-        function navegarPara(pagina) {
-            const rotas = {
-                'inicio': '/home',
-                'professor': '/cadastro-professor',
-                'financeiro': '/opcoes-financeiro',
-                'turma': '/turmas-cadastradas',
-                'matricula': '/matricula',
-                'cadastro': '/opcoes-aluno',
-                
-                'meu-perfil': '/perfil',
-                'mensalidade': '/mensalidade',
-                'arquivados': '/arquivados',
-                'ajuda': '/ajuda'
-            };
-
-            if (rotas[pagina]) {
-                const dropdown = document.getElementById('profile-dropdown-menu');
-                if (dropdown) dropdown.style.display = 'none';
-                
-                window.location.href = rotas[pagina];
+        document.addEventListener('click', (event) => {
+            const profileToggle = document.getElementById('profile-toggle');
+            const dropdownMenu = document.getElementById('profile-dropdown-menu');
+            if (profileToggle && dropdownMenu && !profileToggle.contains(event.target) && dropdownMenu.style.display === 'block') {
+                dropdownMenu.style.display = 'none';
+                profileToggle.classList.remove('active');
+            }
+        });
+        
+        function navegarPara(rota) {
+            if (rota === 'inicio') {
+                window.location.href = '/inicio';
+            } else if (rota === 'login') {
+                window.location.href = '/login'; 
             } else {
-                console.warn(`Rota não encontrada para: ${pagina}`);
+                // Outras rotas
             }
         }
 
-        function login() {
-            if (confirm('Deseja realmente sair do sistema?')) {
-                window.location.href = '/login/sair';
-            }
-        }
-        
-        // Expondo as funções
-        window.toggleDropdown = toggleDropdown;
-        window.navegarPara = navegarPara;
-        window.login = login;
+        // ----------------------------------------------------
+        // LÓGICA DE EDIÇÃO DO PERFIL (Nome da creche e E-mail)
+        // ----------------------------------------------------
 
+        function toggleEditMode(isEditing) {
+            const fields = document.querySelectorAll('#creche, #email');
+            const editBtn = document.querySelector('.edit-btn');
+            const saveBtn = document.querySelector('.save-btn');
 
-        // Funcionalidade para o botão de editar
-        editBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            profileInputs.forEach(input => {
-                input.removeAttribute('readonly');
+            fields.forEach(field => {
+                field.readOnly = !isEditing;
             });
 
-            document.getElementById('creche').focus();
-        });
-
-        // Funcionalidade para o botão de salvar
-        saveBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            profileInputs.forEach(input => {
-                input.setAttribute('readonly', true);
-            });
-            alert('Alterações salvas com sucesso!');
-        });
-        
-        // Funcionalidade para o botão de alterar senha
-        changePasswordBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            passwordModal.classList.add('show');
-            document.getElementById('currentPassword').focus();
-        });
-
-        // Fechar modal de senha
-        function closePasswordModal() {
-            passwordModal.classList.remove('show');
-            passwordForm.reset();
-            resetPasswordValidation();
-        }
-
-        // CORREÇÃO: Pegar o botão de fechar específico do modal de senha
-        const closePasswordModalBtn = passwordModal.querySelector('.close-modal');
-        const cancelBtn = passwordModal.querySelector('.modal-cancel-btn'); // Especifica o cancel button do modal de senha
-
-
-        closePasswordModalBtn.addEventListener('click', closePasswordModal); // O 'x' do modal de senha
-        cancelBtn.addEventListener('click', closePasswordModal); // O botão 'Cancelar' do modal de senha
-
-        // Fechar modal clicando fora
-        passwordModal.addEventListener('click', function(e) {
-            if (e.target === passwordModal) {
-                closePasswordModal();
-            }
-        });
-
-        // Toggle de visibilidade da senha (AGORA COM SVG)
-        document.querySelectorAll('.toggle-password').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-target');
-                const input = document.getElementById(targetId);
-                const iconSpan = this.querySelector('.password-icon');
-
-                // Ícones SVG
-                const eyeOpenSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
-                const eyeOffSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.07 3.49"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
-
-                
-                if (input.type === 'password') {
-                    // Mudar para ver a senha (Mostra o ícone de olho CORTADO, indicando que o próximo clique irá esconder)
-                    input.type = 'text';
-                    iconSpan.innerHTML = eyeOffSvg; 
-                } else {
-                    // Mudar para esconder a senha (Mostra o ícone de olho ABERTO, indicando que o próximo clique irá mostrar)
-                    input.type = 'password';
-                    iconSpan.innerHTML = eyeOpenSvg; 
-                }
-            });
-        });
-
-        // Validação da senha atual
-        document.getElementById('currentPassword').addEventListener('input', function() {
-            const errorDiv = document.getElementById('currentPasswordError');
-            errorDiv.style.display = 'none';
-            validateForm();
-        });
-
-        // Validação da nova senha
-        document.getElementById('newPassword').addEventListener('input', function() {
-            validateNewPassword();
-            validatePasswordMatch();
-            validateForm();
-        });
-
-        // Validação da confirmação de senha
-        document.getElementById('confirmPassword').addEventListener('input', function() {
-            validatePasswordMatch();
-            validateForm();
-        });
-
-        function validateNewPassword() {
-            const password = document.getElementById('newPassword').value;
-            const requirements = {
-                length: password.length >= 8,
-                uppercase: /[A-Z]/.test(password),
-                lowercase: /[a-z]/.test(password),
-                number: /\d/.test(password),
-                special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
-            };
-
-            Object.keys(requirements).forEach(req => {
-                const element = document.querySelector(`[data-requirement="${req}"]`);
-                const icon = element.querySelector('.requirement-icon');
-                
-                if (requirements[req]) {
-                    element.classList.add('valid');
-                    element.classList.remove('invalid');
-                    icon.textContent = '✓';
-                } else {
-                    element.classList.add('invalid');
-                    element.classList.remove('valid');
-                    icon.textContent = '✗';
-                }
-            });
-
-            return Object.values(requirements).every(req => req);
-        }
-
-        function validatePasswordMatch() {
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const errorDiv = document.getElementById('confirmPasswordError');
-
-            if (confirmPassword && newPassword !== confirmPassword) {
-                errorDiv.style.display = 'block';
-                return false;
+            if (isEditing) {
+                editBtn.style.display = 'none';
+                saveBtn.style.display = 'inline-block';
             } else {
-                errorDiv.style.display = 'none';
-                return true;
+                editBtn.style.display = 'inline-block';
+                saveBtn.style.display = 'none';
             }
         }
 
-        function validateForm() {
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            const isCurrentPasswordValid = currentPassword.length > 0;
-            const isNewPasswordValid = validateNewPassword();
-            const isPasswordMatch = validatePasswordMatch();
-            const isFormValid = isCurrentPasswordValid && isNewPasswordValid && isPasswordMatch && confirmPassword.length > 0;
-
-            savePasswordBtn.disabled = !isFormValid;
-        }
-
-        // Modificação no resetPasswordValidation para usar SVG
-        function resetPasswordValidation() {
-            // Reset error messages
-            document.querySelectorAll('.error-message').forEach(error => {
-                error.style.display = 'none';
-            });
-
-            // Reset password requirements
-            document.querySelectorAll('.requirement').forEach(req => {
-                req.classList.remove('valid', 'invalid');
-                req.querySelector('.requirement-icon').textContent = '✗';
-            });
-
-            // Reset password visibility e ícone para o estado inicial (Olho Aberto)
-            document.querySelectorAll('.password-input').forEach(input => {
-                input.type = 'password';
-            });
-            document.querySelectorAll('.toggle-password').forEach(btn => {
-                const eyeOpenSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
-                btn.querySelector('.password-icon').innerHTML = eyeOpenSvg;
-            });
-
-            savePasswordBtn.disabled = true;
-        }
-
-        // Submissão do formulário de senha
-        passwordForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newPassword = document.getElementById('newPassword').value;
-
-            // Verificar senha atual (em um sistema real, isso seria feito no backend)
-            if (currentPassword !== currentPasswordHash) {
-                document.getElementById('currentPasswordError').style.display = 'block';
-                return;
-            }
-
-            // Verificar se a nova senha é diferente da atual
-            if (newPassword === currentPassword) {
-                alert('A nova senha deve ser diferente da senha atual.');
-                return;
-            }
-
-            // Simular alteração de senha (em um sistema real, isso seria uma requisição para o backend)
-            setTimeout(() => {
-                alert('Senha alterada com sucesso!');
-                closePasswordModal();
-            }, 500);
+        // 1. Ação do botão "Editar" (Informações do Perfil)
+        document.querySelector('.edit-btn').addEventListener('click', () => {
+            toggleEditMode(true);
         });
 
-        // Funcionalidade para o ícone da câmera
-        cameraIcon.addEventListener('click', function() {
-            photoModal.classList.add('show');
-        });
+        // 2. Ação do botão "Salvar alterações" (Informações do Perfil) - IMPLEMENTAÇÃO DO FETCH
+        document.querySelector('.save-btn').addEventListener('click', async (e) => {
+            // e.preventDefault(); 
 
-        // Fechar modal de foto
-        function closePhotoModalFunction() {
-            photoModal.classList.remove('show');
-            resetPhotoUpload();
-        }
-
-        closePhotoModal.addEventListener('click', closePhotoModalFunction);
-        cancelPhotoBtn.addEventListener('click', closePhotoModalFunction);
-
-        // Fechar modal clicando fora
-        photoModal.addEventListener('click', function(e) {
-            if (e.target === photoModal) {
-                closePhotoModalFunction();
-            }
-        });
-
-        // Upload de foto - área de clique
-        document.getElementById('photoUploadArea').addEventListener('click', function() {
-            document.getElementById('photoInput').click();
-        });
-
-        // Upload de foto - drag and drop
-        const photoUploadArea = document.getElementById('photoUploadArea');
-        
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            photoUploadArea.addEventListener(eventName, preventDefaults, false);
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            photoUploadArea.addEventListener(eventName, () => {
-                photoUploadArea.classList.add('dragover');
-            });
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            photoUploadArea.addEventListener(eventName, () => {
-                photoUploadArea.classList.remove('dragover');
-            });
-        });
-
-        photoUploadArea.addEventListener('drop', function(e) {
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handlePhotoFile(files[0]);
-            }
-        });
-
-        // Input de arquivo
-        document.getElementById('photoInput').addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                handlePhotoFile(e.target.files[0]);
-            }
-        });
-
-        // Processar arquivo de foto
-        function handlePhotoFile(file) {
-            // Validar tipo de arquivo
-            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-            if (!validTypes.includes(file.type)) {
-                alert('Por favor, selecione uma imagem válida (JPG, PNG, GIF).');
-                return;
-            }
-
-            // Validar tamanho (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                alert('A imagem deve ter no máximo 5MB.');
-                return;
-            }
-
-            selectedFile = file;
-            
-            // Preview da imagem
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('photoPreview');
-                preview.src = e.target.result;
-                
-                // Mostrar informações do arquivo
-                document.getElementById('fileName').textContent = file.name;
-                document.getElementById('fileSize').textContent = formatFileSize(file.size);
-                
-                // Obter dimensões da imagem
-                const img = new Image();
-                img.onload = function() {
-                    document.getElementById('fileDimensions').textContent = `${this.width} x ${this.height}px`;
-                };
-                img.src = e.target.result;
-                
-                // Mostrar preview e esconder upload area
-                document.getElementById('photoPreviewContainer').classList.add('show');
-                photoUploadArea.style.display = 'none';
-                savePhotoBtn.disabled = false;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // Formatar tamanho do arquivo
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // Remover foto selecionada
-        document.getElementById('removePhoto').addEventListener('click', function() {
-            resetPhotoUpload();
-        });
-
-        // Escolher outra foto
-        document.getElementById('changePhoto').addEventListener('click', function() {
-            document.getElementById('photoInput').click();
-        });
-
-        // Reset do upload de foto
-        function resetPhotoUpload() {
-            selectedFile = null;
-            document.getElementById('photoInput').value = '';
-            document.getElementById('photoPreviewContainer').classList.remove('show');
-            photoUploadArea.style.display = 'block';
-            savePhotoBtn.disabled = true;
-        }
-
-        // Salvar nova foto
-        savePhotoBtn.addEventListener('click', function() {
-            if (selectedFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Atualizar foto no perfil
-                    avatarImg.src = e.target.result;
-                    document.getElementById('currentPhotoDisplay').src = e.target.result;
-                    
-                    // Simular upload (em um sistema real, enviaria para o servidor)
-                    setTimeout(() => {
-                        alert('Foto de perfil alterada com sucesso!');
-                        closePhotoModalFunction();
-                    }, 500);
-                };
-                reader.readAsDataURL(selectedFile);
-            }
-        });
-
-        // ==========================================================
-        // API DE CONSULTA DE CEP (ViaCEP) E LÓGICA DE ENDEREÇO
-        // ==========================================================
-
-        // Referências aos elementos do DOM para Endereço
-        const cepField = document.getElementById('cep');
-        const searchCepBtn = document.getElementById('searchCep');
-        const cepError = document.getElementById('cepError');
-
-        const addressFields = {
-            logradouro: document.getElementById('logradouro'),
-            bairro: document.getElementById('bairro'),
-            localidade: document.getElementById('localidade'),
-            uf: document.getElementById('uf'),
-            numero: document.getElementById('numero'), 
-            complemento: document.getElementById('complemento'), 
-        };
-        
-        // NOVO: Referências e array de campos para a funcionalidade de edição de endereço
-        const editAddressBtn = document.getElementById('editAddress');
-        const saveAddressBtn = document.getElementById('saveAddress');
-        const clearAddressBtn = document.getElementById('clearAddress');
-        const cancelAddressBtn = document.getElementById('cancelAddress');
-
-        const allAddressFields = [
-            cepField, 
-            addressFields.logradouro, 
-            addressFields.numero, 
-            addressFields.complemento, 
-            addressFields.bairro, 
-            addressFields.localidade, 
-            addressFields.uf
-        ];
-        
-        /**
-         * Define o estado de somente leitura para os campos de endereço
-         * @param {boolean} isReadOnly 
-         */
-        function setAddressFieldsReadOnly(isReadOnly) {
-            allAddressFields.forEach(field => {
-                if (field.tagName === 'SELECT') {
-                    field.disabled = isReadOnly;
-                } else {
-                    field.readOnly = isReadOnly;
-                }
-                
-                // Adiciona ou remove o atributo 'readonly' para que o CSS de leitura seja aplicado
-                if (isReadOnly) {
-                    field.setAttribute('readonly', 'readonly');
-                } else {
-                    field.removeAttribute('readonly');
-                }
-            });
-
-            // Desabilita/habilita o botão de busca de CEP
-            searchCepBtn.disabled = isReadOnly;
-        }
-
-
-        /**
-         * Implementação do debounce para limitar a frequência de chamadas de função
-         */
-        function debounce(func, delay) {
-            let timeout;
-            return function(...args) {
-                const context = this;
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), delay);
-            };
-        }
-
-        /**
-         * Limpa todos os campos de endereço
-         */
-        function clearAddressFields() {
-             Object.keys(addressFields).forEach(key => {
-                addressFields[key].value = key === 'uf' ? '' : ''; 
-            });
-            cepField.value = '';
-        }
-        
-        /**
-         * Busca dados de endereço completos a partir de um CEP usando o serviço ViaCEP.
-         */
-        async function searchAddress(cep) {
-            const cleanedCep = cep.replace(/\D/g, '');
-            if (!cleanedCep || cleanedCep.length !== 8) {
-                return { error: true, message: 'CEP inválido. Deve conter 8 dígitos.' };
-            }
-            
-            // Impedir busca se estiver em modo de leitura
-            if (searchCepBtn.disabled) {
-                return { error: true, message: 'Clique em Editar Endereço para realizar uma busca.'};
-            }
-
-            const url = `https://viacep.com.br/ws/${cleanedCep}/json/`;
+            const nomeCreche = document.getElementById('creche').value;
+            const email = document.getElementById('email').value;
 
             try {
-                const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: Status ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.erro) {
-                    return { error: true, message: 'CEP não encontrado. Verifique o número digitado.' };
-                }
-
-                return {
-                    error: false,
-                    data: {
-                        cep: data.cep,
-                        logradouro: data.logradouro,
-                        complemento: data.complemento,
-                        bairro: data.bairro,
-                        localidade: data.localidade,
-                        uf: data.uf,
-                        ibge: data.ibge
-                    }
-                };
-
-            } catch (e) {
-                console.error('Erro na consulta ViaCEP:', e.message);
-                return { error: true, message: 'Erro ao consultar o serviço de CEP. Tente novamente.' };
-            }
-        }
-
-        // Funções de manipulação da interface de Endereço
-
-        function fillAddressFields(data) {
-            // Campos que devem ser preenchidos automaticamente (se disponíveis)
-            addressFields.logradouro.value = data.logradouro || '';
-            addressFields.bairro.value = data.bairro || '';
-            addressFields.localidade.value = data.localidade || '';
-            addressFields.uf.value = data.uf || '';
-            
-            // Animação visual
-            Object.keys(addressFields).forEach(key => {
-                const field = addressFields[key];
-                // Não animar 'numero' e 'complemento'
-                if (field.value && key !== 'numero' && key !== 'complemento') {
-                    field.style.background = '#f0fff4';
-                    setTimeout(() => {
-                        field.style.background = '';
-                    }, 1000);
-                }
-            });
-        }
-
-        function showAddressError(message) {
-            hideAddressMessages();
-            cepError.textContent = message;
-            cepError.classList.add('show');
-        }
-
-        function showAddressLoading() {
-            hideAddressMessages();
-            // cepLoading.classList.add('show'); 
-        }
-
-        function hideAddressMessages() {
-            cepError.classList.remove('show');
-            // cepLoading.classList.remove('show');
-        }
-
-        // Lógica principal de busca e preenchimento
-        async function handleCepSearch(cep) {
-            const cleanedCep = cep.replace(/\D/g, '');
-
-            if (cleanedCep.length !== 8) {
-                hideAddressMessages(); 
-                return;
-            }
-
-            showAddressLoading();
-            
-            const result = await searchAddress(cleanedCep); 
-
-            // Oculta o loading imediatamente após a requisição, independentemente do sucesso/erro
-            hideAddressMessages(); 
-
-            if (result.error) {
-                // Não limpa todos os campos, apenas mostra o erro
-                showAddressError(result.message);
-            } else {
-                fillAddressFields(result.data);
-                
-                // Focar no campo número se logradouro foi preenchido
-                if (result.data.logradouro) {
-                    setTimeout(() => {
-                        document.getElementById('numero').focus();
-                    }, 100);
-                }
-            }
-        }
-
-        // Cria a versão "debounced" (atrasada) da busca para a digitação
-        const debouncedHandleCepSearch = debounce(handleCepSearch, 500);
-
-
-        // Event Listeners
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // NOVO: Configura o estado inicial dos campos de endereço como somente leitura
-            setAddressFieldsReadOnly(true);
-            
-            // Máscara para CEP
-            cepField.addEventListener('input', function() {
-                let value = this.value.replace(/\D/g, '');
-                if (value.length > 5) {
-                    value = value.replace(/^(\d{5})(\d{1,3}).*/, '$1-$2');
-                }
-                this.value = value;
-                
-                hideAddressMessages(); 
-
-                // Auto-buscar quando CEP estiver completo (9 caracteres com o hífen)
-                if (value.length === 9 && !this.readOnly) {
-                    // Usa a função debounced para evitar chamadas rápidas
-                    debouncedHandleCepSearch(value);
-                }
-            });
-
-            // Buscar ao clicar no botão (sem debounce, para execução imediata)
-            searchCepBtn.addEventListener('click', function() {
-                const cep = cepField.value.replace(/\D/g, '');
-                handleCepSearch(cep);
-            });
-
-            // Buscar ao pressionar Enter no campo CEP (sem debounce)
-            cepField.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const cep = this.value.replace(/\D/g, '');
-                    handleCepSearch(cep);
-                }
-            });
-            
-            // Listener para fechar o dropdown quando clicar fora dele (AJUSTADO)
-            document.addEventListener('click', function(event) {
-                const dropdown = document.getElementById('profile-dropdown-menu');
-                const profileContainer = document.querySelector('.profile'); // Seleciona o container do perfil
-                
-                // Verifica se o clique não foi no container do perfil e nem no dropdown
-                if (dropdown && dropdown.style.display === 'block' && profileContainer && !profileContainer.contains(event.target)) {
-                    dropdown.style.display = 'none';
-                    profileContainer.classList.remove('active'); // Remove a classe active ao fechar
-                }
-            });
-            
-            // Lógica para o botão de Editar Endereço
-            editAddressBtn.addEventListener('click', function() {
-                setAddressFieldsReadOnly(false);
-                
-                // Toggle button visibility
-                editAddressBtn.style.display = 'none';
-                clearAddressBtn.style.display = 'none'; // Esconde 'Limpar Endereço' durante a edição
-                cancelAddressBtn.style.display = 'block'; 
-                saveAddressBtn.style.display = 'block';
-            
-                cepField.focus();
-                
-                // Armazena valores originais em um atributo de dados para restaurar se cancelar
-                allAddressFields.forEach(field => {
-                    field.setAttribute('data-original-value', field.value);
+                const response = await fetch('/meuperfil/info', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome_creche: nomeCreche, email: email })
                 });
-            });
-            
-            // Lógica para o botão de Cancelar Endereço
-            cancelAddressBtn.addEventListener('click', function() {
-                if (confirm('Deseja realmente cancelar as alterações no endereço?')) {
-                    // Restaura valores originais
-                    allAddressFields.forEach(field => {
-                        field.value = field.getAttribute('data-original-value') || '';
-                        field.removeAttribute('data-original-value');
-                    });
-                    
-                    setAddressFieldsReadOnly(true);
-                    
-                    // Retorna a visibilidade dos botões para o modo de visualização
-                    editAddressBtn.style.display = 'block';
-                    clearAddressBtn.style.display = 'block';
-                    cancelAddressBtn.style.display = 'none';
-                    saveAddressBtn.style.display = 'none';
-                    
-                    hideAddressMessages(); // Esconde quaisquer erros de CEP
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message || 'Perfil atualizado com sucesso!');
+                    toggleEditMode(false);
+                } else {
+                    alert(`Erro ao salvar perfil: ${result.error || 'Verifique os dados e tente novamente.'}`);
                 }
+            } catch (error) {
+                console.error('Erro na requisição de perfil:', error);
+                alert('Erro de conexão com o servidor ao salvar o perfil.');
+            }
+        });
+
+        // ----------------------------------------------------
+        // LÓGICA DO MODAL ALTERAR SENHA (Open/Close e Submission)
+        // ----------------------------------------------------
+        
+        const passwordModalOverlay = document.getElementById('password-modal-overlay');
+
+        // Abrir Modal
+        document.querySelector('.change-password-btn').addEventListener('click', () => {
+            if (passwordModalOverlay) {
+                passwordModalOverlay.classList.add('show');
+            }
+        });
+
+        // Fechar Modal (botão Cancelar e X)
+        document.querySelectorAll('#password-modal-overlay .close-modal, #password-modal-overlay .modal-cancel-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                passwordModalOverlay.classList.remove('show');
             });
+        });
 
-            // Lógica do Salvar Endereço (modificada para voltar ao modo de leitura após salvar)
-            document.getElementById('saveAddress').addEventListener('click', function() {
-                const addressData = {
-                    cep: cepField.value,
-                    logradouro: addressFields.logradouro.value,
-                    numero: addressFields.numero.value,
-                    complemento: addressFields.complemento.value,
-                    bairro: addressFields.bairro.value,
-                    localidade: addressFields.localidade.value,
-                    uf: addressFields.uf.value,
-                };
+        // LÓGICA DE ENVIO DE SENHA 
+        const savePasswordBtn = document.querySelector('#password-modal-overlay .modal-save-btn'); 
 
-                // Validação básica
-                if (!addressData.cep || !addressData.logradouro || !addressData.numero) {
-                    alert('Por favor, preencha pelo menos CEP, Logradouro e Número.');
+        if (savePasswordBtn) {
+            savePasswordBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+
+                const oldPassword = document.getElementById('current-password').value; 
+                const newPassword = document.getElementById('new-password').value;     
+                const confirmPassword = document.getElementById('confirm-password').value; 
+
+                if (newPassword !== confirmPassword) {
+                    alert('A nova senha e a confirmação de senha não coincidem.');
+                    return;
+                }
+                
+                if (!oldPassword || !newPassword || !confirmPassword) {
+                    alert('Por favor, preencha todos os campos de senha.');
                     return;
                 }
 
-                // Simular salvamento
-                console.log('Dados do endereço:', addressData);
-                alert('Endereço salvo com sucesso!');
-                
-                // Mudar de volta para o modo de leitura
-                setAddressFieldsReadOnly(true);
-                editAddressBtn.style.display = 'block';
-                clearAddressBtn.style.display = 'block';
-                cancelAddressBtn.style.display = 'none';
-                saveAddressBtn.style.display = 'none';
+                try {
+                    const response = await fetch('/meuperfil/senha', { 
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            senhaAntiga: oldPassword, 
+                            senhaNova: newPassword 
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        alert(result.message || 'Senha alterada com sucesso!');
+                        // Fechar o modal
+                        passwordModalOverlay.classList.remove('show');
+                        // Limpar campos
+                        document.getElementById('current-password').value = ''; 
+                        document.getElementById('new-password').value = '';
+                        document.getElementById('confirm-password').value = '';
+                    } else {
+                        alert(`Erro ao alterar senha: ${result.error || 'Verifique as senhas e tente novamente.'}`);
+                    }
+                } catch (error) {
+                    console.error('Erro na requisição de alteração de senha:', error);
+                    alert('Erro de conexão com o servidor ao tentar alterar a senha.');
+                }
+            });
+        }
+
+
+        // ----------------------------------------------------
+        // LÓGICA DE EDIÇÃO DO ENDEREÇO (Com Rua/Avenida Editável)
+        // ----------------------------------------------------
+
+        function toggleAddressEditMode(isEditing) {
+            // Campos de endereço (CEP, Rua/Avenida, Bairro, Cidade)
+            const addressFields = document.querySelectorAll('#cep, #logradouro, #bairro, #cidade'); 
+            const editAddressBtn = document.querySelector('.edit-address-btn');
+            const saveAddressBtn = document.querySelector('.save-address');
+            const clearAddressBtn = document.querySelector('.clear-address');
+            const cepSearchBtn = document.getElementById('searchCep');
+
+            addressFields.forEach(field => {
+                // CORRIGIDO: Agora todos os campos, incluindo logradouro (Rua/Avenida), ficam editáveis.
+                field.readOnly = !isEditing;
             });
             
-            // Lógica do Limpar Endereço (mantida, agora só deve ser acessível no modo de leitura)
-            document.getElementById('clearAddress').addEventListener('click', function() {
-                if (confirm('Tem certeza que deseja limpar todos os campos do endereço?')) {
-                    clearAddressFields();
-                    hideAddressMessages();
-                    cepField.focus();
-                    
-                    // O valor original é agora o estado limpo se estiver no modo de edição (embora este botão esteja escondido no modo de edição)
-                }
-            });
+            // Ajustar visibilidade e estado dos botões
+            if (isEditing) {
+                editAddressBtn.style.display = 'none';
+                saveAddressBtn.style.display = 'inline-block';
+                clearAddressBtn.style.display = 'inline-block'; 
+                cepSearchBtn.disabled = false;
+            } else {
+                editAddressBtn.style.display = 'inline-block';
+                saveAddressBtn.style.display = 'none';
+                clearAddressBtn.style.display = 'none';
+                cepSearchBtn.disabled = true;
+            }
+        }
+
+        // 3. Ação do botão "Editar Endereço"
+        document.querySelector('.edit-address-btn').addEventListener('click', () => {
+            toggleAddressEditMode(true);
         });
 
+        // 4. Ação do botão "Salvar Endereço" - IMPLEMENTAÇÃO DO FETCH
+        document.querySelector('.save-address').addEventListener('click', async (e) => {
+            e.preventDefault();
 
-        // Validação visual em tempo real para campos obrigatórios (mantido)
-        [cepField, addressFields.logradouro, document.getElementById('numero')].forEach(field => {
-            field.addEventListener('blur', function() {
-                if (!this.value.trim() && !this.readOnly) {
-                    this.style.borderColor = '#e74c3c';
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            const logradouro = document.getElementById('logradouro').value;
+            const bairro = document.getElementById('bairro').value;
+            const cidade = document.getElementById('cidade').value;
+            
+            if (!cep || !logradouro || !bairro || !cidade) {
+                alert('Por favor, preencha todos os campos obrigatórios do endereço.');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/meuperfil/endereco', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        cep: cep,
+                        logradouro: logradouro,
+                        bairro: bairro,
+                        localidade: cidade, 
+                        uf: 'XX' // Valor placeholder, deve ser obtido via API do CEP
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message || 'Endereço salvo com sucesso!');
+                    toggleAddressEditMode(false);
                 } else {
-                    this.style.borderColor = '#e0e0e0';
+                    alert(`Erro ao salvar endereço: ${result.error || 'Falha ao conectar com o servidor.'}`);
                 }
-            });
+            } catch (error) {
+                console.error('Erro na requisição de endereço:', error);
+                alert('Erro de conexão ao salvar o endereço.');
+            }
         });
+
+        // 5. Ação do botão "Limpar" (Endereço)
+        document.querySelector('.clear-address').addEventListener('click', () => {
+            document.getElementById('cep').value = '';
+            document.getElementById('logradouro').value = '';
+            document.getElementById('bairro').value = '';
+            document.getElementById('cidade').value = '';
+        });
+        
+        // 6. Lógica de busca de CEP (apenas simulação)
+        document.getElementById('searchCep').addEventListener('click', async () => {
+            const cepField = document.getElementById('cep');
+            const cep = cepField.value.replace(/\D/g, ''); 
+            
+            if (cep.length !== 8) {
+                document.getElementById('cepError').classList.add('show');
+                document.getElementById('cepError').textContent = 'CEP inválido.';
+                return;
+            }
+            
+            document.getElementById('cepError').classList.remove('show');
+            // Simulação de preenchimento após a busca
+            document.getElementById('logradouro').value = 'Rua das Flores (Preenchido)';
+            document.getElementById('bairro').value = 'Centro (Preenchido)';
+            document.getElementById('cidade').value = 'Salvador (Preenchido)';
+            
+            alert(`CEP ${cep} buscado com sucesso!`);
+        });
+
     </script>
 </body>
 </html>
