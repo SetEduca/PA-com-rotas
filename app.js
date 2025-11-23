@@ -48,6 +48,8 @@ app.use(express.json());
  app.set("view engine", "ejs");
  app.set("views", "./views");
  app.use(express.static('public'));
+ app.use(express.json({ limit: '50mb' }));
+ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
  app.use(express.urlencoded({ extended: true }));
 
 
