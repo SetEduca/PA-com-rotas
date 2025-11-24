@@ -1,63 +1,107 @@
 import axios from 'axios';
-import 'dotenv/config';
+import dotenv from 'dotenv';
 
+dotenv.config();
 
-console.log(">>> AMBIENTE ASAAS:", process.env.ASAAS_API_URL);
-// Mostra só os 10 primeiros caracteres da chave para conferir se é a certa
-console.log(">>> CHAVE USADA:", process.env.ASAAS_API_KEY ? process.env.ASAAS_API_KEY.substring(0, 10) + "..." : "SEM CHAVE");
-// ----------------------------------------------------------
+const API_URL = process.env.ASAAS_API_URL || 'https://www.asaas.com/api/v3';
+const API_KEY = process.env.ASAAS_API_KEY;
 
-const asaasAPI = axios.create({
-    // Forçando a URL de produção direto aqui:
-    baseURL: 'https://www.asaas.com/api/v3', 
-    headers: { 'access_token': process.env.ASAAS_API_KEY }
+// Configuração do Axios
+const api = axios.create({
+    baseURL: API_URL,
+    headers: {
+        'access_token': API_KEY,
+        'Content-Type': 'application/json'
+    }
 });
 
-export default asaasAPI; // ou export { ... } dependendo do seu arquivo
-
-// Troca "module.exports" por "export"
-export const getClientes = async () => {
+// ============================================================
+// 1. LISTAR COBRANÇAS (Para o Dashboard e Tabela Geral)
+// ============================================================
+export const listarCobrancas = async (filtros = {}) => {
     try {
-        const response = await asaasAPI.get('/customers');
+        // Filtros podem ser: { status: 'RECEIVED', datePaymentAfter: '2023-01-01' }
+        const response = await api.get('/payments', { params: filtros });
         return response.data.data;
-    } catch (error) { 
-        console.error("Erro no Asaas (getClientes):", error.message);
-        return []; 
-    }
-};
-
-export const getCobrancas = async () => {
-    try {
-        const response = await asaasAPI.get('/payments');
-        return response.data.data;
-    } catch (error) { 
-        console.error("Erro no Asaas (getCobrancas):", error.message);
-        return []; 
-    }
-};
-
-export const criarCobranca = async (dadosCobranca) => {
-    try {
-        const response = await asaasAPI.post('/payments', dadosCobranca);
-        return response.data;
-    } catch (error) { 
-        console.error("Erro no Asaas (criarCobranca):", error.response?.data || error.message);
-        throw error; 
-    }
-};
-
-// ADICIONE ESTA NOVA FUNÇÃO:
-export const criarCliente = async (dadosCliente) => {
-    // O Asaas espera um objeto com: { name, cpfCnpj, email, mobilePhone, ... }
-    try {
-        console.log(">>> Enviando cliente para o Asaas:", dadosCliente);
-        const response = await asaasAPI.post('/customers', dadosCliente);
-        
-        // Retorna o cliente criado (onde estará o ID 'cus_...')
-        return response.data; 
     } catch (error) {
-        console.error("Erro ao criar cliente no Asaas:", error.response?.data || error.message);
-        // É importante lançar o erro para o seu sistema saber que falhou
+        console.error("Erro ao listar cobranças no Asaas:", error.message);
         throw error;
     }
+};
+
+// Atalho para 'getCobrancas' (já que usamos esse nome em alguns lugares)
+export const getCobrancas = async () => {
+    return await listarCobrancas({ limit: 50 });
+};
+
+// ============================================================
+// 2. LISTAR POR CLIENTE (Para ver se o aluno está devendo)
+// ============================================================
+export const listarCobrancasPorCliente = async (clienteId) => {
+    try {
+        const response = await api.get('/payments', {
+            params: { customer: clienteId }
+        });
+        return response.data.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// ============================================================
+// 3. CRIAR COBRANÇA (Boleto, Pix, etc)
+// ============================================================
+export const criarCobranca = async (dados) => {
+    try {
+        const response = await api.post('/payments', dados);
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao criar cobrança:", error.response ? error.response.data : error.message);
+        throw error;
+    }
+};
+
+// ============================================================
+// 4. CLIENTES (Criar e Buscar)
+// ============================================================
+export const criarCliente = async (dadosCliente) => {
+    try {
+        const response = await api.post('/customers', dadosCliente);
+        return response.data;
+    } catch (error) {
+        console.error("Erro ao criar cliente:", error.message);
+        throw error;
+    }
+};
+
+export const buscarClientePorCpf = async (cpf) => {
+    try {
+        const response = await api.get('/customers', { params: { cpfCnpj: cpf } });
+        return response.data.data; // Retorna array
+    } catch (error) {
+        return [];
+    }
+};
+
+// ============================================================
+// 5. DELETAR / CANCELAR
+// ============================================================
+export const removerCobranca = async (idCobranca) => {
+    try {
+        const response = await api.delete(`/payments/${idCobranca}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Exporta tudo como um objeto padrão também (para garantir compatibilidade)
+export default {
+    listarCobrancas,
+    getCobrancas,
+    listarCobrancasPorCliente,
+    criarCobranca,
+    criarCliente,
+    buscarClientePorCpf,
+    removerCobranca
 };

@@ -1,4 +1,6 @@
 import express from 'express';
+import axios from 'axios';
+import supabase from '../supabase.js';
 // Use "export named" do asaasService
 import * as asaasService from '../services/asaasService.js';
 // Use a extensão .js
@@ -50,6 +52,9 @@ router.get('/transacoes', async (req, res) => {
         try {
             // Busca cobranças do Asaas
             const dadosAsaas = await asaasService.getCobrancas(); 
+            const transacoesBanco = await Transacao.findAll({ 
+    where: { ativo: true } // <--- ESSE É O FILTRO MÁGICO
+});
             
             if(Array.isArray(dadosAsaas)) {
                 receitasAsaas = dadosAsaas.map(c => {
@@ -411,6 +416,54 @@ router.post('/responsavel/:id/sincronizar', async (req, res) => {
     } catch (error) {
         console.error("Erro ao sincronizar:", error.response ? error.response.data : error.message);
         res.status(500).json({ message: "Erro ao tentar sincronizar." });
+    }
+});
+
+// =================================================================
+// 🕵️ ROTA DE EXCLUSÃO - MODO DETETIVE (DEBUG)
+// =================================================================
+// =================================================================
+// ROTA DELETE "METRALHADORA" (Tenta todos os nomes de tabela possíveis)
+// =================================================================
+// =================================================================
+// ROTA DELETE DEBUG (VAI MOSTRAR O ERRO REAL NA TELA)
+// =================================================================
+// =================================================================
+// ROTA DE EXCLUSÃO (TENTATIVA CORRIGIDA)
+// =================================================================
+// =================================================================
+// ROTA EXCLUSIVA: ARQUIVAR APENAS DESPESAS (BANCO DE DADOS)
+// =================================================================
+router.delete('/transacoes/:id', async (req, res) => {
+    const { id } = req.params;
+    console.log(`>>> Arquivando Despesa ID: ${id}`);
+
+    try {
+        // Validação: Se não for número, nem tenta (porque despesa tem ID numérico)
+        if (!/^\d+$/.test(id)) {
+            return res.status(400).json({ 
+                message: "Este item não é uma despesa do banco (ID inválido)." 
+            });
+        }
+
+        const idInt = parseInt(id);
+
+        // Vai direto na tabela 'Transacaos' e desativa
+        const { error } = await supabase
+            .from('Transacaos') // Nome exato que vimos na sua foto
+            .update({ ativo: false })
+            .eq('id', idInt);
+
+        if (error) {
+            console.error("Erro Supabase:", error);
+            return res.status(500).json({ message: "Erro no banco: " + error.message });
+        }
+
+        return res.json({ message: 'Despesa arquivada com sucesso!' });
+
+    } catch (error) {
+        console.error("Erro:", error);
+        res.status(500).json({ message: "Erro interno." });
     }
 });
 // ... (o restante do seu arquivo routes/api.js)

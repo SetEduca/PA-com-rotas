@@ -1,8 +1,18 @@
 import express from 'express';
 import supabase from '../supabase.js';
+import axios from 'axios';
 
 const router = express.Router();
 
+// CONFIGURAÇÃO DO ASAAS (Igual fizemos no Financeiro)
+// =================================================================
+const asaasAPI = axios.create({
+    baseURL: process.env.ASAAS_API_URL || 'https://www.asaas.com/api/v3',
+    headers: {
+        'access_token': process.env.ASAAS_API_KEY,
+        'Content-Type': 'application/json'
+    }
+});
 // 1. LISTAR ALUNOS (GET /)
 router.get('/', async (req, res) => {
     try {
@@ -264,6 +274,41 @@ router.post('/cadastrar', async (req, res) => {
             });
         }
 
+        // 3. O GRANDE SEGREDO: CRIA O CLIENTE NO ASAAS AGORA!
+        // =================================================================
+        try {
+            // Limpeza de dados para o Asaas
+            let emailAsaas = email;
+            if (!emailAsaas || !emailAsaas.includes('@')) emailAsaas = `cliente.${cpfRespClean}@seteeducca.com`;
+            let foneAsaas = telLimpo.length >= 10 ? telLimpo : undefined;
+            let cepAsaas = cep ? cep.replace(/\D/g, '') : '40000000'; // Padrão se faltar
+
+            console.log(`>>> Cadastrando responsável no Asaas: ${nomeResp}`);
+            
+            const novoClienteAsaas = await asaasAPI.post('/customers', {
+                name: nomeResp,
+                cpfCnpj: cpfRespClean,
+                email: emailAsaas,
+                mobilePhone: foneAsaas,
+                address: logradouro,
+                addressNumber: numero || 'S/N',
+                province: bairro,
+                postalCode: cepAsaas
+            });
+
+            // SALVA O ID DO ASAAS DE VOLTA NO BANCO (VITAL!)
+            if (novoClienteAsaas.data && novoClienteAsaas.data.id) {
+                await supabase.from('responsavel')
+                    .update({ asaasCustomerId: novoClienteAsaas.data.id })
+                    .eq('id', responsavelId);
+                console.log(`>>> Sucesso! ID Asaas vinculado: ${novoClienteAsaas.data.id}`);
+            }
+
+        } catch (erroAsaas) {
+            // Se der erro no Asaas, NÃO trava o cadastro do aluno, mas avisa no console
+            console.error("Aviso: Não foi possível criar no Asaas agora (será corrigido na auto-correção do financeiro):", 
+                erroAsaas.response ? erroAsaas.response.data : erroAsaas.message);
+        }
         // 3. Criança (INCLUINDO A FOTO)
         const { data: novaCrianca, error: errCrianca } = await supabase.from('cadastro_crianca')
             .insert({
