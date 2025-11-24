@@ -81,7 +81,8 @@ app.use(express.json());
 //INICIO
 
 app.get("/", (req, res) => {
-  res.render("INICIO/inicial");
+  // Envia o arquivo site.html que agora está na pasta public
+  res.sendFile(process.cwd() + "/public/site.html");
 });
 
 //LOGIN
