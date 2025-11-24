@@ -6,12 +6,16 @@
   <title>Sete Educa - Acessar PROFESSORES</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --sidebar-width: 280px;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #e8e8e8; min-height: 100vh; display: flex; }
 
-    /* Sidebar igual à do acessar.ejs */
+    /* Sidebar */
     .sidebar {
-      width: 280px;
+      width: var(--sidebar-width);
       background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
       display: flex;
       flex-direction: column;
@@ -19,6 +23,10 @@
       box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
       min-height: 100vh;
       flex-shrink: 0;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 1000;
     }
 
     .logo {
@@ -61,92 +69,59 @@
     }
 
     .menu-item span { z-index: 2; font-size: 15px; }
-
     .menu-item:hover { background-color: #6c757d21; }
 
     .menu-item.active {
-                        background-color: rgba(128, 128, 128, 0.356);
-                        color: #333;
-                        font-weight: 600;
-                }
-
-                /* Adiciona indicador visual no item ativo */
-                .menu-item.active::before {
-                        content: '';
-                        position: absolute;
-                        right: 15px;
-                        top: 50%;
-                        transform: translateY(-50%);
-                        width: 8px;
-                        height: 8px;
-                        border-radius: 50%;
-                        background-color: currentColor;
-                        z-index: 2;
-                }
-
-                /* Cria uma pequena linha decorativa abaixo do item do menu */
-                .menu-item::after {
-                        padding: 0 10px;
-                        content: '';
-                        position: absolute;
-                        bottom: -3px;
-                        left: 20px;
-                        height: 2px;
-                        width: 0px;
-                        /* Começa com largura 0 */
-                        transition: width 0.3s ease;
-                        /* Anima a largura */
-                        border-radius: 1px;
-                }
-
-                /* Expande a linha quando o mouse passa por cima ou se o item está ativo */
-                .menu-item:hover::after,
-                .menu-item.active::after {
-                        width: calc(100% - 40px);
-                }
-
-                /* Cores diferentes da linha para cada item do menu */
-                .menu-item:nth-child(1)::after {
-                        background-color: #F4BF27;
-                }
-
-                .menu-item:nth-child(2)::after {
-                        background-color: #306bc2;
-                }
-
-                .menu-item:nth-child(3)::after {
-                        background-color: #9747FF;
-                }
-
-                .menu-item:nth-child(4)::after {
-                        background-color: #F88C12;
-                }
-
-                .menu-item:nth-child(5)::after {
-                        background-color: #D22A2A;
-                }
-
-                .menu-item:nth-child(6)::after {
-                        background-color: #59C631;
-                }
-
-
-    .seteeduca {
+      background-color: rgba(128, 128, 128, 0.356);
       color: #333;
-      text-align: center;
-      margin-bottom: 10px;
+      font-weight: 600;
     }
+
+    .menu-item.active::before {
+      content: '';
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: currentColor;
+      z-index: 2;
+    }
+
+    .menu-item::after {
+      padding: 0 10px;
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 20px;
+      height: 2px;
+      width: 0px;
+      transition: width 0.3s ease;
+      border-radius: 1px;
+    }
+
+    .menu-item:hover::after,
+    .menu-item.active::after {
+      width: calc(100% - 40px);
+    }
+
+    .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+    .menu-item:nth-child(2)::after { background-color: #306bc2; }
+    .menu-item:nth-child(3)::after { background-color: #9747FF; }
+    .menu-item:nth-child(4)::after { background-color: #F88C12; }
+    .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+    .menu-item:nth-child(6)::after { background-color: #59C631; }
 
     .sidebar-footer {
       padding: 20px 18px;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-   /* --- Estilo do Botão Sair --- */
- /* --- Botão Sair: Estrutura solicitada + Cores ajustadas --- */
-.logout-button {
-     border: none; /* Sem borda */
-    font-family: 'Poppins', sans-serif; /* Mantendo a fonte */
+    .logout-button {
+      border: none;
+      font-family: 'Poppins', sans-serif;
       padding: 16px 20px;
       border-radius: 8px;
       cursor: pointer;
@@ -156,9 +131,8 @@
       font-weight: 500;
       color: #333;
       width: 100%;
-      border: none;
       background: transparent;
-      
+      text-decoration: none;
     }
 
     .logout-button i {
@@ -180,6 +154,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      margin-left: var(--sidebar-width);
     }
 
     .header {
@@ -259,6 +234,7 @@
       gap: 8px;
       cursor: pointer;
       transition: transform 0.2s ease;
+      text-decoration: none;
     }
 
     .new-button:hover { transform: translateY(-2px); }
@@ -328,6 +304,13 @@
       border-bottom: 1px solid #eee;
     }
 
+    .operations {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
     .btn-action {
       display: inline-flex;
       align-items: center;
@@ -342,15 +325,31 @@
       transition: all 0.3s ease;
       white-space: nowrap;
     }
- .btn-edit { 
-    background: #e3f2fd;
-    color: #1976d2;
-    border: 2px solid #bbdefb;
-       }
 
-        .btn-edit:hover { background: #bbdefb; }
+    .btn-edit { 
+      background: #e3f2fd;
+      color: #1976d2;
+      border: 2px solid #bbdefb;
+    }
 
-   
+    .btn-edit:hover { background: #bbdefb; }
+
+    .btn-archive {
+      background: #fce4ec;
+      color: #c01e26;
+      border: 2px solid #f8bbd9;
+    }
+
+    .btn-archive:hover { background: #f8bbd9; }
+
+    .btn-view {
+      background: #e8f5e8;
+      color: #2e7d32;
+      border: 2px solid #c8e6c9;
+    }
+
+    .btn-view:hover { background: #c8e6c9; }
+
     .empty-state {
       text-align: center;
       padding: 40px;
@@ -363,313 +362,512 @@
       margin-bottom: 15px;
     }
 
-.table-container {
-    background: white;
-    border-radius: 12px;
-    /* Mantendo a cor laranja do professor */
-    border-top: 5px solid #ef7215; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-}
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
+    .modal-overlay.show {
+      display: flex;
+    }
 
-.table-header {
-    background: #f8f9fa;
-    color: #666;
-    font-weight: 600;
-    /* Fonte um pouco menor para o cabeçalho, como em turmas */
-    font-size: 14px; 
-    text-transform: uppercase;
-}
+    .modal-caixa {
+      background: #fff;
+      width: 90%;
+      max-width: 700px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      border-top: 5px solid #ef7215;
+      transform: scale(0.95);
+      opacity: 0;
+      transition: all 0.2s ease-out;
+    }
 
-.table th, .table td {
-    /* Diminuímos o padding para caber mais colunas */
-    padding: 16px 10px; 
-    text-align: center;
-    border-bottom: 1px solid #eee;
-    /* Fonte menor no corpo da tabela para tudo caber */
-    font-size: 15px; 
-    white-space: nowrap; /* Impede que o texto quebre em duas linhas */
-}
+    .modal-overlay.show .modal-caixa {
+      transform: scale(1);
+      opacity: 1;
+    }
 
-/* --- Estilos dos Botões de Ação (como em acessar.ejs) --- */
+    .modal-header {
+      display: flex;
+      align-items: center;
+      padding: 15px 25px;
+      border-bottom: 1px solid #eee;
+      font-size: 1.25rem;
+      color: #333;
+    }
 
-/* Container para os botões */
-.operations {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
+    .modal-header i {
+      margin-right: 12px;
+      color: #ef7215;
+    }
 
-/* Estilo base do botão de ação */
-.btn-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 10px 14px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
+    .modal-fechar {
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      font-weight: 300;
+      color: #aaa;
+      cursor: pointer;
+      line-height: 1;
+    }
 
-/* Botão Editar (azul) [cite: 274] */
-.btn-edit {
-    background: #e3f2fd;
-    color: #1976d2;
-    border: 2px solid #bbdefb;
-}
-.btn-edit:hover {
-    background: #bbdefb;
-    transform: translateY(-2px);
-}
+    .modal-fechar:hover {
+      color: #333;
+    }
 
-/* Botão Arquivar (vermelho/rosa) [cite: 276] */
-.btn-archive {
-    background: #fce4ec;
-    color: #c01e26; /* Cor vermelha do tema de turmas */
-    border: 2px solid #f8bbd9;
-}
-.btn-archive:hover {
-    background: #f8bbd9;
-    transform: translateY(-2px);
-}
-/* Botão Ver (verde, copiado do seu arquivo de turmas) */
-.btn-view {
-    background: #e8f5e8; /* [cite: 201] */
-    color: #2e7d32; /* [cite: 201] */
-    border: 2px solid #c8e6c9; /* [cite: 201] */
-}
-.btn-view:hover {
-    background: #c8e6c9; /* [cite: 202] */
-}
+    .modal-conteudo {
+      padding: 25px 30px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
 
-/* --- ESTILOS DO MODAL DE DETALHES --- */
-.modal-overlay {
-    display: none; /* Começa escondido */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(3px);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-.modal-overlay.show {
-    display: flex; /* Mostra o modal */
-}
-.modal-caixa {
-    background: #fff;
-    width: 90%;
-    max-width: 700px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    border-top: 5px solid #ef7215;
-    /* Animação de entrada */
-    transform: scale(0.95);
-    opacity: 0;
-    transition: all 0.2s ease-out;
-}
-.modal-overlay.show .modal-caixa {
-    transform: scale(1);
-    opacity: 1;
-}
-.modal-header {
-    display: flex;
-    align-items: center;
-    padding: 15px 25px;
-    border-bottom: 1px solid #eee;
-    font-size: 1.25rem;
-    color: #333;
-}
-.modal-header i {
-    margin-right: 12px;
-    color: #ef7215;
-}
-.modal-fechar {
-    margin-left: auto;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    font-weight: 300;
-    color: #aaa;
-    cursor: pointer;
-    line-height: 1;
-}
-.modal-fechar:hover {
-    color: #333;
-}
-.modal-conteudo {
-    padding: 25px 30px;
-    max-height: 70vh;
-    overflow-y: auto;
-}
-/* Estilos dos detalhes (copiados do verp.ejs) */
-.detalhe-grupo {
-    margin-bottom: 20px;
-}
-.detalhe-grupo:last-child {
-    margin-bottom: 0;
-}
-.detalhe-grupo h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #ef7215;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 6px;
-    margin-bottom: 12px;
-}
-.detalhe-item {
-    display: flex;
-    font-size: 0.95rem;
-    margin-bottom: 10px;
-}
-.detalhe-item label {
-    font-weight: 600;
-    color: #333;
-    width: 130px;
-    flex-shrink: 0;
-}
-.detalhe-item span {
-    color: #555;
-}
+    .detalhe-grupo {
+      margin-bottom: 20px;
+    }
 
-@media (max-width: 768px) {
-    :root { --sidebar-width: 70px; } /* 1. Diminui a largura da barra */
-    
-    /* 2. ESCONDE O TEXTO (Aqui é o segredo) */
-    .menu-item span, .logout-button span, .seteeduca { display: none; }
-    
-    /* 3. Ajusta o ícone para ficar centralizado */
-    .menu-item i, .logout-button i { margin-right: 0; }
-    
-    .sidebar .logo { padding: 0 10px; } 
-    .sidebar .logo img { max-width: 50px; } 
-    .sidebar-footer { padding: 10px 5px; } 
-    .menu { padding: 10px 5px; } 
-    
-    /* 4. Centraliza o conteúdo (que agora é só o ícone) */
-    .menu-item { padding: 15px 5px; justify-content: center; } 
-    
-    .menu-item::after { display: none; } 
-    .menu-item.active::before { right: 5px; } 
-    
-    /* Ajusta o resto do site para acompanhar a sidebar menor */
-    .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
-    /* ... resto do código ... */
-}
+    .detalhe-grupo:last-child {
+      margin-bottom: 0;
+    }
 
+    .detalhe-grupo h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ef7215;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .detalhe-item {
+      display: flex;
+      font-size: 0.95rem;
+      margin-bottom: 10px;
+    }
+
+    .detalhe-item label {
+      font-weight: 600;
+      color: #333;
+      width: 130px;
+      flex-shrink: 0;
+    }
+
+    .detalhe-item span {
+      color: #555;
+    }
+
+    /* Profile dropdown */
+    .profile {
+      position: relative;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      padding: 5px;
+      border-radius: 50px;
+      transition: background-color 0.2s ease;
+    }
+
+    .profile-header:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-icon {
+      font-size: 38px;
+      color: white;
+    }
+
+    .profile-arrow {
+      font-size: 14px;
+      margin-left: 8px;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 200px;
+      z-index: 1001;
+      overflow: hidden;
+      padding: 8px 0;
+      border: 1px solid #eee;
+    }
+
+    .profile-dropdown.show {
+      display: block;
+    }
+
+    .profile-dropdown a {
+      display: flex;
+      align-items: center;
+      padding: 12px 18px;
+      text-decoration: none;
+      color: #444;
+      font-size: 15px;
+      transition: background-color 0.2s ease;
+    }
+
+    .profile-dropdown a:hover {
+      background-color: #f5f5f5;
+    }
+
+    .profile-dropdown a i {
+      width: 20px;
+      margin-right: 15px;
+      color: #666;
+      text-align: center;
+    }
+
+    /* ========================================
+       RESPONSIVIDADE - MEDIA QUERIES
+    ======================================== */
+
+    /* Tablets e telas médias */
+    @media (max-width: 1024px) {
+      .content-area {
+        padding: 20px;
+      }
+
+      .search-container {
+        width: 300px;
+      }
+
+      .header-title {
+        font-size: 1.3rem;
+      }
+
+      .table th,
+      .table td {
+        padding: 15px 10px;
+        font-size: 13px;
+      }
+
+      .btn-action {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .operations {
+        min-width: 180px;
+        flex-wrap: wrap;
+      }
+    }
+
+    /* Tablets pequenos */
+    @media (max-width: 768px) {
+      :root {
+        --sidebar-width: 70px;
+      }
+
+      /* Esconde textos da sidebar */
+      .menu-item span,
+      .logout-button span {
+        display: none;
+      }
+
+      .menu-item i,
+      .logout-button i {
+        margin-right: 0;
+      }
+
+      .sidebar .logo {
+        padding: 0 10px;
+      }
+
+      .sidebar .logo img {
+        max-width: 50px;
+      }
+
+      .sidebar-footer {
+        padding: 10px 5px;
+      }
+
+      .menu {
+        padding: 10px 5px;
+      }
+
+      .menu-item {
+        padding: 15px 5px;
+        justify-content: center;
+      }
+
+      .menu-item::after {
+        display: none;
+      }
+
+      .menu-item.active::before {
+        right: 5px;
+      }
+
+      .main-content {
+        margin-left: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
+      }
+
+      /* Header responsivo */
+      .header {
+        padding: 0 15px;
+        height: 70px;
+      }
+
+      .header-title {
+        font-size: 1.1rem;
+      }
+
+      .header-title i {
+        font-size: 22px;
+        margin-right: 8px;
+      }
+
+      .profile-icon {
+        font-size: 32px;
+      }
+
+      /* Área de conteúdo */
+      .content-area {
+        padding: 15px;
+      }
+
+      .search-section {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+      }
+
+      .search-container {
+        width: 100%;
+      }
+
+      .stats-info {
+        text-align: center;
+        font-size: 16px;
+      }
+
+      /* Tabela responsiva - scroll horizontal */
+      .table-container {
+        overflow-x: auto;
+      }
+
+      .table {
+        min-width: 700px;
+      }
+
+      .table th,
+      .table td {
+        padding: 12px 8px;
+        font-size: 12px;
+      }
+
+      .operations {
+        flex-direction: column;
+        gap: 5px;
+        min-width: 100px;
+      }
+
+      .btn-action {
+        width: 100%;
+        justify-content: center;
+      }
+
+      /* Modal responsivo */
+      .modal-caixa {
+        width: 95%;
+        padding: 20px;
+        margin: 20% auto;
+      }
+
+      .modal-header {
+        font-size: 1.1rem;
+      }
+
+      .detalhe-item {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .detalhe-item label {
+        width: 100%;
+      }
+    }
+
+    /* Smartphones */
+    @media (max-width: 480px) {
+      .header {
+        height: 60px;
+      }
+
+      .header-title {
+        font-size: 1rem;
+      }
+
+      .header-title i {
+        font-size: 18px;
+        margin-right: 5px;
+      }
+
+      .profile-icon {
+        font-size: 28px;
+      }
+
+      .content-area {
+        padding: 10px;
+      }
+
+      .search-input {
+        height: 45px;
+        font-size: 14px;
+      }
+
+      .new-button-circle {
+        width: 40px;
+        height: 40px;
+      }
+
+      .new-text {
+        font-size: 12px;
+      }
+
+      .stats-info {
+        font-size: 14px;
+      }
+
+      .table th,
+      .table td {
+        padding: 10px 5px;
+        font-size: 11px;
+      }
+
+      .btn-action {
+        font-size: 11px;
+        padding: 6px 8px;
+      }
+
+      .modal-caixa {
+        padding: 15px;
+      }
+
+      .modal-header {
+        font-size: 1rem;
+        padding: 12px 15px;
+      }
+
+      .modal-conteudo {
+        padding: 15px 20px;
+      }
+
+      .detalhe-grupo h3 {
+        font-size: 0.9rem;
+      }
+
+      .detalhe-item {
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Telas muito pequenas */
+    @media (max-width: 360px) {
+      :root {
+        --sidebar-width: 60px;
+      }
+
+      .header-title span {
+        font-size: 0.9rem;
+      }
+
+      .table {
+        min-width: 600px;
+      }
+    }
   </style>
 </head>
 <body>
 
   <!-- Sidebar -->
   <div class="sidebar">
-      <div>
+    <div>
+      <div class="logo">
+        <img src="logo.png" alt="logo">
+      </div>
 
-            <div class="logo">
+      <div class="menu">
+        <a href="/home" class="menu-item">
+          <i class="fas fa-home"></i>
+          <span>INÍCIO</span>
+        </a>
 
-                <img src="logo.png" alt="logo">
+        <a href="/acessar-aluno" class="menu-item">
+          <i class="fas fa-address-card"></i>
+          <span>CADASTRO</span>
+        </a>
 
-    
+        <a href="/matriculas" class="menu-item">
+          <i class="fas fa-user-graduate"></i>
+          <span>MATRÍCULA</span>
+        </a>
 
-        </div>
+        <a href="/professores" class="menu-item active">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>PROFESSOR</span>
+        </a>
 
-             <div class="menu">
+        <a href="/turmas" class="menu-item">
+          <i class="fas fa-users"></i>
+          <span>TURMA</span>
+        </a>
 
-                <a href="/home" class="menu-item" onclick="navegarPara('inicio')">
+        <a href="/financeiro" class="menu-item">
+          <i class="fas fa-dollar-sign"></i>
+          <span>FINANCEIRO</span>
+        </a>
+      </div>
+    </div>
 
-                    <i class="fas fa-home"></i>
-
-                    <span>INÍCIO</span>
-
-                </a>
-
- 
-
-               <a href="/acessar-aluno" class="menu-item" onclick="navegarPara('cadastro')">
-
-                    <i class="fas fa-address-card"></i>
-
-                    <span>CADASTRO</span>
-
-                </a>
-
-                <a href="/matriculas"class="menu-item" onclick="navegarPara('matricula')">
-
-     
-
-               <i class="fas fa-user-graduate"></i>
-
-                    <span>MATRÍCULA</span>
-
-                </a>
-
-                <a href="/professores" class="menu-item active" id="professor-link">
-
-                    <i class="fas fa-chalkboard-teacher"></i>
-
-      
-
-              <span>PROFESSOR</span>
-
-                </a>
-
-   
-
-                <a href="/turmas" class="menu-item" onclick="navegarPara('turmas')">
-
-                    <i class="fas fa-users"></i>
-
-                    <span>TURMA</span>
-
-      
-
-          </a>
-
-                <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
-
-                    <i class="fas fa-dollar-sign"></i>
-
-                    <span>FINANCEIRO</span>
-
-                </a>
-
-            
-
-</div>
-
-        </div>
-
-        <div class="sidebar-footer">
-
-    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
-
+    <div class="sidebar-footer">
+      <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
         <i class="fa-solid fa-right-from-bracket"></i>
-
         <span>Sair</span>
-
-    </a>
-
-</div>
+      </a>
+    </div>
   </div>
 
   <!-- Main -->
   <div class="main-content">
     <div class="header">
-      <div class="header-title"><i class="fas fa-users"></i><span>Acessar <b>PROFESSORES</b></span></div>
+      <div class="header-title">
+        <i class="fas fa-users"></i>
+        <span>Acessar <b>PROFESSORES</b></span>
+      </div>
+      <div class="profile" id="profile-toggle">
+        <div class="profile-header">
+          <i class="fas fa-user-circle profile-icon"></i>
+          <i class="fas fa-chevron-down profile-arrow"></i>
+        </div>
+        <div class="profile-dropdown" id="profile-dropdown-menu">
+          <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a>
+          <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+          <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
+        </div>
+      </div>
     </div>
 
     <div class="content-area">
@@ -678,10 +876,10 @@
           <div class="search-icon"><i class="fas fa-search"></i></div>
           <input type="text" class="search-input" placeholder="Pesquisar professor...">
         </div>
-        <div class="new-button" onclick="cadastrarprof()">
+        <a href="/professores/cadastro" class="new-button">
           <div class="new-button-circle"></div>
           <div class="new-text">Novo Professor</div>
-        </div>
+        </a>
         <div class="stats-info" id="totalProfessores">Total de Professores: 0</div>
       </div>
 
@@ -689,15 +887,13 @@
         <table class="table">
           <thead class="table-header">
             <tr>
-              
-      <th>Nome</th>
-      <th>Telefone</th>
-      <th>Email</th>
-      <th>Ações</th>
-   
+              <th>Nome</th>
+              <th>Telefone</th>
+              <th>Email</th>
+              <th>Ações</th>
             </tr>
           </thead>
-          <tbody id="professoresTableBody">
+           <tbody id="professoresTableBody">
             <% if (typeof professores !== 'undefined' && professores.length > 0) { %>
     <% professores.forEach(professor => { %>
        <tr>
@@ -741,123 +937,104 @@
       </td>
     </tr>
   <% } %>
-</tbody>
+  </tbody>
         </table>
       </div>
     </div>
   </div>
 
-   <div class="modal-overlay" id="detalhesModal">
-  <div class="modal-caixa">
-    
-    <div class="modal-header">
-      <i class="fas fa-id-card"></i>
-      <span>Detalhes do <b>PROFESSOR</b></span>
-      <button class="modal-fechar" id="modal-fechar" title="Fechar">&times;</button>
-    </div>
+  <div class="modal-overlay" id="detalhesModal">
+    <div class="modal-caixa">
+      <div class="modal-header">
+        <i class="fas fa-id-card"></i>
+        <span>Detalhes do <b>PROFESSOR</b></span>
+        <button class="modal-fechar" id="modal-fechar" title="Fechar">&times;</button>
+      </div>
 
-    <div class="modal-conteudo">
+      <div class="modal-conteudo">
         <div class="detalhe-grupo">
-            <h3>Informações Pessoais</h3>
-            <div class="detalhe-item">
-                <label>Nome:</label>
-                <span id="modal-nome"></span>
-            </div>
-            <div class="detalhe-item">
-                <label>CPF:</label>
-                <span id="modal-cpf"></span>
-            </div>
-            <div class="detalhe-item">
-                <label>Status:</label>
-                <span id="modal-status"></span>
-            </div>
+          <h3>Informações Pessoais</h3>
+          <div class="detalhe-item">
+            <label>Nome:</label>
+            <span id="modal-nome"></span>
+          </div>
+          <div class="detalhe-item">
+            <label>CPF:</label>
+            <span id="modal-cpf"></span>
+          </div>
+          <div class="detalhe-item">
+            <label>Status:</label>
+            <span id="modal-status"></span>
+          </div>
         </div>
 
         <div class="detalhe-grupo">
-            <h3>Informações de Contato</h3>
-            <div class="detalhe-item">
-                <label>Email:</label>
-                <span id="modal-email"></span>
-            </div>
-            <div class="detalhe-item">
-                <label>Telefone:</label>
-                <span id="modal-telefone"></span>
-            </div>
-            <div class="detalhe-item">
-                <label>Endereço:</label>
-                <span id="modal-endereco"></span>
-            </div>
+          <h3>Informações de Contato</h3>
+          <div class="detalhe-item">
+            <label>Email:</label>
+            <span id="modal-email"></span>
+          </div>
+          <div class="detalhe-item">
+            <label>Telefone:</label>
+            <span id="modal-telefone"></span>
+          </div>
+          <div class="detalhe-item">
+            <label>Endereço:</label>
+            <span id="modal-endereco"></span>
+          </div>
         </div>
 
         <div class="detalhe-grupo">
-            <h3>Informações de Trabalho</h3>
-            <div class="detalhe-item">
-                <label>Classificação:</label>
-                <span id="modal-classificacao"></span>
-            </div>
+          <h3>Informações de Trabalho</h3>
+          <div class="detalhe-item">
+            <label>Classificação:</label>
+            <span id="modal-classificacao"></span>
+          </div>
         </div>
+      </div>
     </div>
   </div>
-</div>
-
 
   <script>
-    function navegarPara(pagina) {
-      const rotas = {
-        'inicio': '/home',
-        'professor': '/professores',
-        'financeiro': '/financeiro',
-        'turmas': '/turmas',
-        'matricula': '/matriculas',
-        'cadastro': '/acessar-aluno'
-      };
-      if (rotas[pagina]) window.location.href = rotas[pagina];
+    // LÓGICA DO MENU DROPDOWN
+    const profileToggle = document.getElementById('profile-toggle');
+    const dropdownMenu = document.getElementById('profile-dropdown-menu');
+    const profileArrow = document.querySelector('.profile-arrow');
+
+    if (profileToggle && dropdownMenu && profileArrow) {
+      profileToggle.addEventListener('click', function (event) {
+        event.stopPropagation();
+        dropdownMenu.classList.toggle('show');
+        profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
+
+      window.addEventListener('click', function () {
+        if (dropdownMenu.classList.contains('show')) {
+          dropdownMenu.classList.remove('show');
+          profileArrow.style.transform = 'rotate(0deg)';
+        }
+      });
     }
 
-    function logout() {
-      if (confirm('Deseja realmente sair do sistema?')) window.location.href = '/login/sair';
-    }
+    // LÓGICA DA BARRA DE PESQUISA
+    const searchInput = document.querySelector('.search-input');
+    const tableBody = document.getElementById('professoresTableBody');
 
-    function cadastrarprof() {
-      window.location.href = '/professores/cadastro';
-    }
-
-     document.addEventListener('DOMContentLoaded', () => {
-
-        // --- LÓGICA DA BARRA DE PESQUISA ---
-        const searchInput = document.querySelector('.search-input');
-        const tableBody = document.getElementById('professoresTableBody');
-        const allRows = tableBody.querySelectorAll('tr'); // Pega todas as linhas
+    if (searchInput && tableBody) {
+      searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const allRows = tableBody.querySelectorAll('tr');
         
-        // Verifica se os elementos existem antes de adicionar o listener
-        if (searchInput && tableBody) {
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                
-                allRows.forEach(row => {
-                    // Garante que é uma linha de dados (não a "Nenhum professor")
-                    if (row.children.length > 1) { 
-                        const rowText = row.textContent.toLowerCase();
-                        
-                        if (rowText.includes(searchTerm)) {
-                            row.style.display = ''; // Mostra
-                        } else {
-                            row.style.display = 'none'; // Esconde
-                        }
-                    }
-                });
-            });
-        }
+        allRows.forEach(row => {
+          if (row.children.length > 1) {
+            const rowText = row.textContent.toLowerCase();
+            row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+          }
+        });
+      });
+    }
 
-        // --- LÓGICA DO CONTADOR DE PROFESSORES ---
-        const totalProfessoresEl = document.getElementById('totalProfessores');
-        if (totalProfessoresEl) {
-            // Usa o valor passado pelo EJS para definir o total
-            totalProfessoresEl.textContent = 'Total de Professores: <%= professores.length %>';
-        }
-
-
-        // --- LÓGICA DO MODAL DE DETALHES (código que você já tinha) ---
+       // --- LÓGICA DO MODAL DE DETALHES (código que você já tinha) ---
         const modalOverlay = document.getElementById('detalhesModal');
         const modalFecharBtn = document.getElementById('modal-fechar');
         const todosBotoesVer = document.querySelectorAll('.btn-view');
@@ -916,20 +1093,16 @@
                 fecharModal();
             }
         });
-        
-    }); // Fim do DOMContentLoaded
-// Esse código verifica se a página foi aberta pelo botão "Voltar" do navegador
-    window.addEventListener( "pageshow", function ( event ) {
-        var historyTraversal = event.persisted || 
-                               ( typeof window.performance != "undefined" && 
-                                window.performance.navigation.type === 2 );
-        if ( historyTraversal ) {
-            // Se for um "Voltar", força o navegador a recarregar a página
-            window.location.reload();
-        }
+
+    // Recarregar página ao voltar
+    window.addEventListener("pageshow", function (event) {
+      var historyTraversal = event.persisted || 
+        (typeof window.performance != "undefined" && 
+        window.performance.navigation.type === 2);
+      if (historyTraversal) {
+        window.location.reload();
+      }
     });
-
-
   </script>
 </body>
 </html>

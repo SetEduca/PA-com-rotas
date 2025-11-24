@@ -25,7 +25,7 @@
       display: flex;
     }
 
-    /* --- CSS da Sidebar (Atualizado) --- */
+    /* --- CSS da Sidebar --- */
     .sidebar {
       width: var(--sidebar-width);
       background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
@@ -183,7 +183,7 @@
       font-weight: 600;
     }
 
-    /* --- CSS do Conteúdo Principal (Idêntico aos outros arquivos) --- */
+    /* --- CSS do Conteúdo Principal --- */
     .main-content {
       flex: 1;
       display: flex;
@@ -398,30 +398,201 @@
       transform: scale(1.05);
     }
 
+    /* ========================================
+       RESPONSIVIDADE - MEDIA QUERIES
+    ======================================== */
+
+    /* Tablets */
+    @media (max-width: 1024px) {
+      .caixa {
+        width: 95%;
+        padding: 30px;
+      }
+
+      label {
+        font-size: 1rem;
+      }
+
+      input,
+      select {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+      }
+
+      .btn-action-form {
+        width: 160px;
+        height: 50px;
+        font-size: 1rem;
+      }
+    }
+
+    /* Tablets pequenos e smartphones grandes */
     @media (max-width: 768px) {
-    :root { --sidebar-width: 70px; } /* 1. Diminui a largura da barra */
-    
-    /* 2. ESCONDE O TEXTO (Aqui é o segredo) */
-    .menu-item span, .logout-button span, .seteeduca { display: none; }
-    
-    /* 3. Ajusta o ícone para ficar centralizado */
-    .menu-item i, .logout-button i { margin-right: 0; }
-    
-    .sidebar .logo { padding: 0 10px; } 
-    .sidebar .logo img { max-width: 50px; } 
-    .sidebar-footer { padding: 10px 5px; } 
-    .menu { padding: 10px 5px; } 
-    
-    /* 4. Centraliza o conteúdo (que agora é só o ícone) */
-    .menu-item { padding: 15px 5px; justify-content: center; } 
-    
-    .menu-item::after { display: none; } 
-    .menu-item.active::before { right: 5px; } 
-    
-    /* Ajusta o resto do site para acompanhar a sidebar menor */
-    .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
-    /* ... resto do código ... */
-}
+      :root {
+        --sidebar-width: 70px;
+      }
+
+      /* Sidebar compacta */
+      .menu-item span,
+      .logout-button span {
+        display: none;
+      }
+
+      .menu-item i,
+      .logout-button i {
+        margin-right: 0;
+      }
+
+      .sidebar .logo {
+        padding: 0 10px;
+      }
+
+      .sidebar .logo img {
+        max-width: 50px;
+      }
+
+      .sidebar-footer {
+        padding: 10px 5px;
+      }
+
+      .menu {
+        padding: 10px 5px;
+      }
+
+      .menu-item {
+        padding: 15px 5px;
+        justify-content: center;
+      }
+
+      .menu-item::after {
+        display: none;
+      }
+
+      .menu-item.active::before {
+        right: 5px;
+      }
+
+      .main-content {
+        margin-left: var(--sidebar-width);
+      }
+
+      /* Header */
+      .header {
+        padding: 0 15px;
+        height: 70px;
+      }
+
+      .header-title {
+        font-size: 1.2rem;
+      }
+
+      .header-title i {
+        font-size: 22px;
+        margin-right: 8px;
+      }
+
+      .profile-icon {
+        font-size: 32px;
+      }
+
+      /* Conteúdo */
+      .content-area {
+        padding: 15px;
+      }
+
+      .caixa {
+        padding: 25px 20px;
+        min-height: auto;
+      }
+
+      form {
+        gap: 20px;
+      }
+
+      label {
+        font-size: 0.95rem;
+      }
+
+      .button-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-action-form {
+        width: 100%;
+        max-width: 250px;
+      }
+    }
+
+    /* Smartphones */
+    @media (max-width: 480px) {
+      .header {
+        height: 60px;
+        padding: 0 10px;
+      }
+
+      .header-title {
+        font-size: 1rem;
+      }
+
+      .header-title i {
+        font-size: 18px;
+        margin-right: 5px;
+      }
+
+      .profile-icon {
+        font-size: 28px;
+      }
+
+      .content-area {
+        padding: 10px;
+      }
+
+      .caixa {
+        padding: 20px 15px;
+        margin-top: 10px;
+      }
+
+      label {
+        font-size: 0.9rem;
+        margin-left: 5px;
+      }
+
+      input,
+      select {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+      }
+
+      .button-container {
+        margin-top: 20px;
+      }
+
+      .btn-action-form {
+        height: 48px;
+        font-size: 1rem;
+      }
+    }
+
+    /* Telas muito pequenas */
+    @media (max-width: 360px) {
+      :root {
+        --sidebar-width: 60px;
+      }
+
+      .header-title span {
+        font-size: 0.9rem;
+      }
+
+      .caixa {
+        padding: 15px 10px;
+      }
+
+      form {
+        gap: 15px;
+      }
+    }
   </style>
 </head>
 
@@ -429,92 +600,49 @@
 
   <aside class="sidebar">
     <div>
+      <div class="logo">
+        <img src="logo.png" alt="logo">
+      </div>
 
-            <div class="logo">
+      <div class="menu">
+        <a href="/home" class="menu-item" onclick="navegarPara('inicio')">
+          <i class="fas fa-home"></i>
+          <span>INÍCIO</span>
+        </a>
 
-                <img src="logo.png" alt="logo">
+        <a href="/acessar-aluno" class="menu-item" onclick="navegarPara('cadastro')">
+          <i class="fas fa-address-card"></i>
+          <span>CADASTRO</span>
+        </a>
 
-    
+        <a href="/matriculas" class="menu-item" onclick="navegarPara('matricula')">
+          <i class="fas fa-user-graduate"></i>
+          <span>MATRÍCULA</span>
+        </a>
 
-        </div>
+        <a href="/professores" class="menu-item" onclick="navegarPara('professores')">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>PROFESSOR</span>
+        </a>
 
-             <div class="menu">
+        <a href="/turmas" class="menu-item active" onclick="navegarPara('turmas')">
+          <i class="fas fa-users"></i>
+          <span>TURMA</span>
+        </a>
 
-                <a href="/home" class="menu-item" onclick="navegarPara('inicio')">
+        <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
+          <i class="fas fa-dollar-sign"></i>
+          <span>FINANCEIRO</span>
+        </a>
+      </div>
+    </div>
 
-                    <i class="fas fa-home"></i>
-
-                    <span>INÍCIO</span>
-
-                </a>
-
- 
-
-               <a href="/acessar-aluno" class="menu-item" onclick="navegarPara('cadastro')">
-
-                    <i class="fas fa-address-card"></i>
-
-                    <span>CADASTRO</span>
-
-                </a>
-
-                <a href="/matriculas"class="menu-item" onclick="navegarPara('matricula')">
-
-     
-
-               <i class="fas fa-user-graduate"></i>
-
-                    <span>MATRÍCULA</span>
-
-                </a>
-
-                <a href="/professores" class="menu-item" id="professor-link">
-
-                    <i class="fas fa-chalkboard-teacher"></i>
-
-      
-
-              <span>PROFESSOR</span>
-
-                </a>
-
-   
-
-                <a href="/turmas" class="menu-item active" onclick="navegarPara('turmas')">
-
-                    <i class="fas fa-users"></i>
-
-                    <span>TURMA</span>
-
-      
-
-          </a>
-
-                <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
-
-                    <i class="fas fa-dollar-sign"></i>
-
-                    <span>FINANCEIRO</span>
-
-                </a>
-
-            
-
-</div>
-
-        </div>
-
-        <div class="sidebar-footer">
-
-    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
-
+    <div class="sidebar-footer">
+      <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
         <i class="fa-solid fa-right-from-bracket"></i>
-
         <span>Sair</span>
-
-    </a>
-
-</div>
+      </a>
+    </div>
   </aside>
 
   <div class="main-content">
@@ -622,17 +750,14 @@
       });
     });
 
-         // Esse código verifica se a página foi aberta pelo botão "Voltar" do navegador
-    window.addEventListener( "pageshow", function ( event ) {
-        var historyTraversal = event.persisted || 
-                               ( typeof window.performance != "undefined" && 
-                                window.performance.navigation.type === 2 );
-        if ( historyTraversal ) {
-            // Se for um "Voltar", força o navegador a recarregar a página
-            window.location.reload();
-        }
+    window.addEventListener("pageshow", function (event) {
+      var historyTraversal = event.persisted ||
+        (typeof window.performance != "undefined" &&
+          window.performance.navigation.type === 2);
+      if (historyTraversal) {
+        window.location.reload();
+      }
     });
-    
   </script>
 </body>
 

@@ -9,6 +9,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <title>Seteeduca - Cadastro de Professor</title>
   <style>
+    :root {
+      --sidebar-width: 280px;
+    }
+
     * { 
       margin: 0; 
       padding: 0; 
@@ -23,14 +27,21 @@
     }
 
     .sidebar {
-      width: 280px;
+      width: var(--sidebar-width);
+      height: 100vh;
       background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+      position: fixed; 
+      left: 0;
+      top: 0;
+      z-index: 1000;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-      min-height: 100vh;
-      flex-shrink: 0;
+    }
+
+    .sidebar a {
+      text-decoration: none;
     }
 
     .logo {
@@ -38,6 +49,11 @@
       text-align: center;
       margin-bottom: 25px;
       margin-top: 30px;
+    }
+
+    .logo img {
+      max-width: 100%;
+      height: auto;
     }
 
     .menu {
@@ -94,7 +110,6 @@
       width: calc(100% - 40px);
     }
 
-
     .menu-item:nth-child(1)::after { background-color: #F4BF27; }
     .menu-item:nth-child(2)::after { background-color: #306bc2; }
     .menu-item:nth-child(3)::after { background-color: #9747FF; }
@@ -117,18 +132,13 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      box-shadow: black;
+      background-color: currentColor;
       z-index: 2;
-    }
-
-    .seteeduca {
-      color: #333;
-      text-align: center;
-      margin-bottom: 10px;
     }
 
     .sidebar-footer {
       padding: 20px 18px;
+      margin-top: 10rem;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
     
@@ -142,6 +152,8 @@
       font-weight: 500;
       color: #333;
       width: 100%;
+      background: transparent;
+      border: none;
     }
 
     .logout-button i {
@@ -158,10 +170,11 @@
     }
 
     .main-content {
-      flex: 1;
-      min-height: 100vh;
+      margin-left: var(--sidebar-width);
+      width: calc(100% - var(--sidebar-width));
       display: flex;
       flex-direction: column;
+      min-height: 100vh;
     }
 
     .header {
@@ -188,30 +201,6 @@
     .header-title i {
       margin-right: 15px;
       font-size: 28px;
-    }
-
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      cursor: pointer;
-    }
-
-    .profile-pic {
-      width: 45px;
-      height: 45px;
-      background: #333;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 18px;
-    }
-
-    .profile-arrow {
-      color: white;
-      font-size: 16px;
     }
 
     .content-area {
@@ -277,7 +266,7 @@
     input:focus, select:focus {
       outline: none;
       border-color: #ef7215;
-      box-shadow: 0 0 0 3px rgba(193, 39, 45, 0.2);
+      box-shadow: 0 0 0 3px rgba(239, 114, 21, 0.2);
     }
     
     .link-cadastrar {
@@ -293,7 +282,7 @@
       cursor: pointer; 
       margin: 30px auto 0;
       transition: all 0.3s; 
-      box-shadow: 0 4px 8px rgba(193, 39, 45, 0.3);
+      box-shadow: 0 4px 8px rgba(239, 114, 21, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -301,9 +290,9 @@
     }
     
     .link-cadastrar:hover { 
-      background-color: #ef7215; 
+      background-color: #d66314; 
       transform: scale(1.05); 
-      box-shadow: 0 6px 12px rgba(193, 39, 45, 0.4);
+      box-shadow: 0 6px 12px rgba(239, 114, 21, 0.4);
     }
     
     .link-cadastrar::before {
@@ -313,219 +302,379 @@
       display: inline-block;
     }
   
-    .modal {
-      display: none; 
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      right: 0; 
-      bottom: 0;
-      background-color: rgba(0,0,0,0.5); 
-      justify-content: center; 
-      align-items: center; 
-      z-index: 9999;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      backdrop-filter: blur(3px);
-    }
-    
-    .modal-content {
-      background: #fff; 
-      padding: 40px; 
-      border-radius: 12px; 
+    .alerta-erro {
+      padding: 15px;
+      margin: 15px auto; 
+      border-radius: 8px; 
+      background-color: #ffe0e0;
+      color: #cc0000;
+      border: 1px solid #cc0000; 
+      font-weight: bold;
       text-align: center;
-      max-width: 400px; 
-      width: 90%;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      border-top: 5px solid #4CAF50;
-      animation: modalFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      position: relative;
+      max-width: 400px;
     }
-    
-    .modal-content::before {
-      content: "";
-      position: absolute;
-      top: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 80px;
-      background-color: #4CAF50;
-      border-radius: 50%;
+
+    /* Profile dropdown */
+    .profile {
+      position: relative;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .profile-header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 40px;
-      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+      padding: 5px;
+      border-radius: 50px;
+      transition: background-color 0.2s ease;
     }
-    
-    .modal-content p {
-      font-size: 1.2rem;
-      margin: 30px 0 25px;
-      color: #333;
-      font-weight: 500;
-      line-height: 1.5;
+
+    .profile-header:hover {
+      background-color: rgba(255, 255, 255, 0.1);
     }
-    
-    .modal-content strong {
-      color: #ef7215;
-      font-weight: 700;
-    }
-    
-    .modal-buttons { 
-      margin-top: 20px; 
-      display: flex; 
-      justify-content: center;
-    }
-    
-    .modal-buttons button {
-      padding: 12px 30px; 
-      border: none; 
-      border-radius: 8px; 
-      cursor: pointer;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background-color: #ef7215; 
+
+    .profile-icon {
+      font-size: 38px;
       color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: all 0.3s;
-      box-shadow: 0 4px 8px rgba(193, 39, 45, 0.3);
     }
-    
-    .modal-buttons button:hover { 
-      background-color: #ef7215; 
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(193, 39, 45, 0.4);
+
+    .profile-arrow {
+      font-size: 14px;
+      margin-left: 8px;
+      color: white;
+      transition: transform 0.3s ease;
     }
-    
-    @keyframes modalFadeIn {
-      from { 
-        opacity: 0; 
-        transform: translateY(20px) scale(0.95); 
+
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 200px;
+      z-index: 1001;
+      overflow: hidden;
+      padding: 8px 0;
+      border: 1px solid #eee;
+    }
+
+    .profile-dropdown.show {
+      display: block;
+    }
+
+    .profile-dropdown a {
+      display: flex;
+      align-items: center;
+      padding: 12px 18px;
+      text-decoration: none;
+      color: #444;
+      font-size: 15px;
+      transition: background-color 0.2s ease;
+    }
+
+    .profile-dropdown a:hover {
+      background-color: #f5f5f5;
+    }
+
+    .profile-dropdown a i {
+      width: 20px;
+      margin-right: 15px;
+      color: #666;
+      text-align: center;
+    }
+
+    /* ========================================
+       RESPONSIVIDADE - MEDIA QUERIES
+    ======================================== */
+
+    /* Tablets e telas médias */
+    @media (max-width: 1024px) {
+      .content-area {
+        padding: 20px;
       }
-      to { 
-        opacity: 1; 
-        transform: translateY(0) scale(1); 
+
+      .caixa {
+        padding: 30px;
+      }
+
+      .header-title {
+        font-size: 1.3rem;
+      }
+
+      label {
+        font-size: 1rem;
+      }
+
+      input, select {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+      }
+
+      .link-cadastrar {
+        width: 200px;
+        height: 50px;
+        font-size: 1rem;
       }
     }
 
+    /* Tablets pequenos */
     @media (max-width: 768px) {
-      .sidebar { 
-        width: 70px; 
+      :root {
+        --sidebar-width: 70px;
       }
-      
-      .menu-item span, .logout-button span { 
-        display: none; 
+
+      /* Esconde textos da sidebar */
+      .menu-item span,
+      .logout-button span {
+        display: none;
       }
-      
-      .menu-item i, .logout-button i { 
-        margin-right: 0; 
+
+      .menu-item i,
+      .logout-button i {
+        margin-right: 0;
+      }
+
+      .sidebar .logo {
+        padding: 0 10px;
+      }
+
+      .sidebar .logo img {
+        max-width: 50px;
+      }
+
+      .sidebar-footer {
+        padding: 10px 5px;
+        margin-top: 2rem;
+      }
+
+      .menu {
+        padding: 10px 5px;
+      }
+
+      .menu-item {
+        padding: 15px 5px;
+        justify-content: center;
+      }
+
+      .menu-item::after {
+        display: none;
+      }
+
+      .menu-item.active::before {
+        right: 5px;
+      }
+
+      .main-content {
+        margin-left: var(--sidebar-width);
+        width: calc(100% - var(--sidebar-width));
+      }
+
+      /* Header responsivo */
+      .header {
+        padding: 0 15px;
+        height: 70px;
+      }
+
+      .header-title {
+        font-size: 1.1rem;
+      }
+
+      .header-title i {
+        font-size: 22px;
+        margin-right: 8px;
+      }
+
+      .profile-icon {
+        font-size: 32px;
+      }
+
+      /* Área de conteúdo */
+      .content-area {
+        padding: 15px;
+      }
+
+      .caixa {
+        width: 95%;
+        padding: 25px;
+      }
+
+      form {
+        gap: 20px;
+      }
+
+      .campo {
+        gap: 8px;
+      }
+
+      label {
+        font-size: 1rem;
+        margin-left: 5px;
+      }
+
+      input, select {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+      }
+
+      .link-cadastrar {
+        width: 100%;
+        max-width: 250px;
       }
     }
-  .alerta-erro {
-    padding: 15px;
-    margin: 15px auto; 
-    border-radius: 8px; 
-    background-color: #ffe0e0; /* Fundo vermelho claro */
-    color: #cc0000;           /* Texto vermelho escuro */
-    border: 1px solid #cc0000; 
-    font-weight: bold;
-    text-align: center;
-    max-width: 400px;
-}
-@media (max-width: 768px) {
-    :root { --sidebar-width: 70px; } /* 1. Diminui a largura da barra */
-    
-    /* 2. ESCONDE O TEXTO (Aqui é o segredo) */
-    .menu-item span, .logout-button span, .seteeduca { display: none; }
-    
-    /* 3. Ajusta o ícone para ficar centralizado */
-    .menu-item i, .logout-button i { margin-right: 0; }
-    
-    .sidebar .logo { padding: 0 10px; } 
-    .sidebar .logo img { max-width: 50px; } 
-    .sidebar-footer { padding: 10px 5px; } 
-    .menu { padding: 10px 5px; } 
-    
-    /* 4. Centraliza o conteúdo (que agora é só o ícone) */
-    .menu-item { padding: 15px 5px; justify-content: center; } 
-    
-    .menu-item::after { display: none; } 
-    .menu-item.active::before { right: 5px; } 
-    
-    /* Ajusta o resto do site para acompanhar a sidebar menor */
-    .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
-    /* ... resto do código ... */
-}
+
+    /* Smartphones */
+    @media (max-width: 480px) {
+      .header {
+        height: 60px;
+      }
+
+      .header-title {
+        font-size: 1rem;
+      }
+
+      .header-title i {
+        font-size: 18px;
+        margin-right: 5px;
+      }
+
+      .profile-icon {
+        font-size: 28px;
+      }
+
+      .content-area {
+        padding: 10px;
+      }
+
+      .caixa {
+        width: 100%;
+        padding: 20px;
+        margin-top: 10px;
+      }
+
+      form {
+        gap: 18px;
+      }
+
+      label {
+        font-size: 0.95rem;
+      }
+
+      input, select {
+        padding: 11px 14px;
+        font-size: 0.9rem;
+      }
+
+      .link-cadastrar {
+        width: 100%;
+        height: 48px;
+        font-size: 0.95rem;
+        margin-top: 20px;
+      }
+
+      .alerta-erro {
+        font-size: 0.9rem;
+        padding: 12px;
+      }
+    }
+
+    /* Telas muito pequenas */
+    @media (max-width: 360px) {
+      :root {
+        --sidebar-width: 60px;
+      }
+
+      .header-title span {
+        font-size: 0.9rem;
+      }
+
+      .caixa {
+        padding: 15px;
+      }
+
+      label {
+        font-size: 0.9rem;
+      }
+
+      input, select {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+      }
+    }
   </style>
 </head>
 <body>
   
+  <!-- Sidebar -->
   <div class="sidebar">
     <div>
       <div class="logo">
-        <img src="imagem/logo.png" alt="logo">
+        <img src="/logo.png" alt="logo">
       </div>
+
       <div class="menu">
-                <div class="menu-item" onclick="navegarPara('inicio')">
-                    <i class="fas fa-home"></i>
-                    <span>INÍCIO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('cadastro')">
-                    <i class="fas fa-address-card"></i>
-                    <span>CADASTRO</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('matricula')">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>MATRÍCULA</span>
-                </div>
-                <div class="menu-item active">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>PROFESSOR</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('turmas')"> 
-                    <i class="fas fa-users"></i>
-                    <span>TURMA</span>
-                </div>
-                <div class="menu-item" onclick="navegarPara('financeiro')">
-                    <i class="fas fa-dollar-sign"></i>
-                    <span>FINANCEIRO</span>
-                </div>
-            </div>
-        </div>
-    <div>
-      <div class="seteeduca">
-        <p></p>
+        <a href="/home" class="menu-item">
+          <i class="fas fa-home"></i>
+          <span>INÍCIO</span>
+        </a>
+
+        <a href="/acessar-aluno" class="menu-item">
+          <i class="fas fa-address-card"></i>
+          <span>CADASTRO</span>
+        </a>
+
+        <a href="/matriculas" class="menu-item">
+          <i class="fas fa-user-graduate"></i>
+          <span>MATRÍCULA</span>
+        </a>
+
+        <a href="/professores" class="menu-item active">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>PROFESSOR</span>
+        </a>
+
+        <a href="/turmas" class="menu-item">
+          <i class="fas fa-users"></i>
+          <span>TURMA</span>
+        </a>
+
+        <a href="/financeiro" class="menu-item">
+          <i class="fas fa-dollar-sign"></i>
+          <span>FINANCEIRO</span>
+        </a>
       </div>
-      <div class="sidebar-footer">
-        <div class="logout-button">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span>Sair</span>
-        </div>
-      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Sair</span>
+      </a>
     </div>
   </div>
 
   <!-- Main Content -->
   <div class="main-content">
-    <!-- Header -->
     <div class="header">
       <div class="header-title">
-        <i class="fas fa-user-plus"></i>
-        <span>Cadastro <b>PROFESSOR</b></span>      </div>
-      <div class="user-profile">
-        <div class="profile-pic">
-          <i class="fas fa-user"></i>
+        <i class="fas fa-users"></i>
+        <span>Cadastrar <b>PROFESSORES</b></span>
+      </div>
+      <div class="profile" id="profile-toggle">
+        <div class="profile-header">
+          <i class="fas fa-user-circle profile-icon"></i>
+          <i class="fas fa-chevron-down profile-arrow"></i>
         </div>
-        <div class="profile-arrow">
-          <i class="fas fa-chevron-down"></i>
+        <div class="profile-dropdown" id="profile-dropdown-menu">
+          <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a>
+          <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+          <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
         </div>
       </div>
     </div>
 
-    <!-- Content Area -->
+      <!-- Content Area -->
     <div class="content-area">
       <div class="caixa">
 
@@ -590,58 +739,35 @@
       </div>
     </div>
   </div>
-
-
   <script>
+    // LÓGICA DO MENU DROPDOWN
+    const profileToggle = document.getElementById('profile-toggle');
+    const dropdownMenu = document.getElementById('profile-dropdown-menu');
+    const profileArrow = document.querySelector('.profile-arrow');
 
-    // Função para navegação entre páginas
-        function navegarPara(pagina) {
-            // Rotas baseadas no seu servidor Express
-            const rotas = {
-                'inicio': '/home',                    // Rota para home
-                'professor': '/professores',     // Adicione esta rota no seu servidor se necessário
-                'financeiro': '/financeiro',   // Rota existente para financeiro
-                'turmas': '/turmas',      // Rota existente para turmas
-                'matricula': '/matriculas',            // Página atual
-                'cadastro': '/acessar-aluno'           // Rota existente para cadastro de aluno
-            };
+    if (profileToggle && dropdownMenu && profileArrow) {
+      profileToggle.addEventListener('click', function (event) {
+        event.stopPropagation();
+        dropdownMenu.classList.toggle('show');
+        profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+      });
 
-            // Navegar para a página correspondente
-            if (rotas[pagina]) {
-                window.location.href = rotas[pagina];
-            } else {
-                console.warn(`Rota não encontrada para: ${pagina}`);
-                // Fallback - mostrar modal informativo
-                showModal(`Página "${pagina.toUpperCase()}" em desenvolvimento.\nEm breve estará disponível!`);
-            }
-        }
-    document.addEventListener('DOMContentLoaded', function() {
-      const logoutButton = document.querySelector('.logout-button');
-      logoutButton.addEventListener('click', function() {
-        if (confirm('Tem certeza que deseja sair?')) {
-          window.location.href = '/login/sair'; // Redireciona para a página de login
+      window.addEventListener('click', function () {
+        if (dropdownMenu.classList.contains('show')) {
+          dropdownMenu.classList.remove('show');
+          profileArrow.style.transform = 'rotate(0deg)';
         }
       });
-    });
-    // Menu interativo
-    document.querySelectorAll('.menu-item').forEach(item => {
-      item.addEventListener('click', function() {
-        document.querySelectorAll('.menu-item').forEach(i => {
-          i.classList.remove('active');
-        });
-        this.classList.add('active');
-      });
-    });
+    }
 
-         // Esse código verifica se a página foi aberta pelo botão "Voltar" do navegador
-    window.addEventListener( "pageshow", function ( event ) {
-        var historyTraversal = event.persisted || 
-                               ( typeof window.performance != "undefined" && 
-                                window.performance.navigation.type === 2 );
-        if ( historyTraversal ) {
-            // Se for um "Voltar", força o navegador a recarregar a página
-            window.location.reload();
-        }
+    // Recarregar página ao voltar
+    window.addEventListener("pageshow", function (event) {
+      var historyTraversal = event.persisted || 
+        (typeof window.performance != "undefined" && 
+        window.performance.navigation.type === 2);
+      if (historyTraversal) {
+        window.location.reload();
+      }
     });
   </script>
 </body>

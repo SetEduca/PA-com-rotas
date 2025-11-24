@@ -654,32 +654,270 @@
             background-color: #a01820;
         }
 
-             @media (max-width: 768px) {
-    :root { --sidebar-width: 70px; } /* 1. Diminui a largura da barra */
-   
-    /* 2. ESCONDE O TEXTO (Aqui é o segredo) */
-    .menu-item span, .logout-button span, .seteeduca { display: none; }
-   
-    /* 3. Ajusta o ícone para ficar centralizado */
-    .menu-item i, .logout-button i { margin-right: 0; }
-   
-    .sidebar .logo { padding: 0 10px; }
-    .sidebar .logo img { max-width: 50px; }
-    .sidebar-footer { padding: 10px 5px; }
-    .menu { padding: 10px 5px; }
-   
-    /* 4. Centraliza o conteúdo (que agora é só o ícone) */
-    .menu-item { padding: 15px 5px; justify-content: center; }
-   
-    .menu-item::after { display: none; }
-    .menu-item.active::before { right: 5px; }
-   
-    /* Ajusta o resto do site para acompanhar a sidebar menor */
-    .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
-    /* ... resto do código ... */
-}
+        /* ========================================
+           RESPONSIVIDADE - MEDIA QUERIES
+        ======================================== */
 
-        
+        /* Tablets e telas médias */
+        @media (max-width: 1024px) {
+            .content-area {
+                padding: 20px;
+            }
+
+            .search-container {
+                width: 300px;
+            }
+
+            .header-title {
+                font-size: 1.3rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 15px 10px;
+                font-size: 13px;
+            }
+
+            .btn-action {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .operations {
+                min-width: 180px;
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Tablets pequenos */
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 70px;
+            }
+
+            /* Esconde textos da sidebar */
+            .menu-item span,
+            .logout-button span {
+                display: none;
+            }
+
+            .menu-item i,
+            .logout-button i {
+                margin-right: 0;
+            }
+
+            .sidebar .logo {
+                padding: 0 10px;
+            }
+
+            .sidebar .logo img {
+                max-width: 50px;
+            }
+
+            .sidebar-footer {
+                padding: 10px 5px;
+            }
+
+            .menu {
+                padding: 10px 5px;
+            }
+
+            .menu-item {
+                padding: 15px 5px;
+                justify-content: center;
+            }
+
+            .menu-item::after {
+                display: none;
+            }
+
+            .menu-item.active::before {
+                right: 5px;
+            }
+
+            .main-content {
+                margin-left: var(--sidebar-width);
+                width: calc(100% - var(--sidebar-width));
+            }
+
+            /* Header responsivo */
+            .header {
+                padding: 0 15px;
+                height: 70px;
+            }
+
+            .header-title {
+                font-size: 1.1rem;
+            }
+
+            .header-title i {
+                font-size: 22px;
+                margin-right: 8px;
+            }
+
+            .profile-icon {
+                font-size: 32px;
+            }
+
+            /* Área de conteúdo */
+            .content-area {
+                padding: 15px;
+            }
+
+            .search-section {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .stats-info {
+                text-align: center;
+                font-size: 16px;
+            }
+
+            /* Tabela responsiva - scroll horizontal */
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 700px;
+            }
+
+            .table th,
+            .table td {
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+
+            .operations {
+                flex-direction: column;
+                gap: 5px;
+                min-width: 100px;
+            }
+
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* Modal responsivo */
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+                margin: 20% auto;
+            }
+
+            .modal-content h3 {
+                font-size: 1.2rem;
+            }
+
+            .modal-content p {
+                font-size: 14px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .modal-btn {
+                width: 100%;
+            }
+        }
+
+        /* Smartphones */
+        @media (max-width: 480px) {
+            .header {
+                height: 60px;
+            }
+
+            .header-title {
+                font-size: 1rem;
+            }
+
+            .header-title i {
+                font-size: 18px;
+                margin-right: 5px;
+            }
+
+            .profile-icon {
+                font-size: 28px;
+            }
+
+            .content-area {
+                padding: 10px;
+            }
+
+            .search-input {
+                height: 45px;
+                font-size: 14px;
+            }
+
+            .new-button-circle {
+                width: 40px;
+                height: 40px;
+            }
+
+            .new-text {
+                font-size: 12px;
+            }
+
+            .stats-info {
+                font-size: 14px;
+            }
+
+            .table th,
+            .table td {
+                padding: 10px 5px;
+                font-size: 11px;
+            }
+
+            .vagas-status {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
+
+            .btn-action {
+                font-size: 11px;
+                padding: 6px 8px;
+            }
+
+            .modal-content {
+                padding: 15px;
+            }
+
+            .modal-icon {
+                font-size: 40px;
+            }
+
+            .modal-content h3 {
+                font-size: 1.1rem;
+            }
+
+            .modal-content p {
+                font-size: 13px;
+            }
+        }
+
+        /* Telas muito pequenas */
+        @media (max-width: 360px) {
+            :root {
+                --sidebar-width: 60px;
+            }
+
+            .header-title span {
+                font-size: 0.9rem;
+            }
+
+            .table {
+                min-width: 600px;
+            }
+        }
     </style>
 </head>
 
@@ -716,7 +954,7 @@
                 </a>
 
 
-                <a href="/professores" class="menu-item" id="professor-link">
+                <a href="/professores" class="menu-item" onclick="navegarPara('professores')">
 
 
                     <i class="fas fa-chalkboard-teacher"></i>

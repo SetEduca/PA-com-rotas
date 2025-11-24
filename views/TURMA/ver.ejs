@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* Importando estilos básicos dos seus outros arquivos */
         :root {
             --sidebar-width: 280px;
         }
@@ -382,109 +381,282 @@
             color: #5a6268;
         }
 
+        /* ========================================
+           RESPONSIVIDADE - MEDIA QUERIES
+        ======================================== */
+
+        /* Tablets */
+        @media (max-width: 1024px) {
+            .caixa {
+                width: 95%;
+                padding: 30px;
+            }
+
+            .turma-header h1 {
+                font-size: 2rem;
+            }
+
+            .turma-header p {
+                font-size: 1.1rem;
+            }
+
+            .lista-alunos h2 {
+                font-size: 1.3rem;
+            }
+
+            .lista-alunos li {
+                font-size: 1rem;
+                padding: 12px 16px;
+            }
+        }
+
+        /* Tablets pequenos e smartphones grandes */
         @media (max-width: 768px) {
-    :root { --sidebar-width: 70px; } /* 1. Diminui a largura da barra */
-    
-    /* 2. ESCONDE O TEXTO (Aqui é o segredo) */
-    .menu-item span, .logout-button span, .seteeduca { display: none; }
-    
-    /* 3. Ajusta o ícone para ficar centralizado */
-    .menu-item i, .logout-button i { margin-right: 0; }
-    
-    .sidebar .logo { padding: 0 10px; } 
-    .sidebar .logo img { max-width: 50px; } 
-    .sidebar-footer { padding: 10px 5px; } 
-    .menu { padding: 10px 5px; } 
-    
-    /* 4. Centraliza o conteúdo (que agora é só o ícone) */
-    .menu-item { padding: 15px 5px; justify-content: center; } 
-    
-    .menu-item::after { display: none; } 
-    .menu-item.active::before { right: 5px; } 
-    
-    /* Ajusta o resto do site para acompanhar a sidebar menor */
-    .main-content { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); }
-    /* ... resto do código ... */
-}
+            :root {
+                --sidebar-width: 70px;
+            }
+
+            /* Sidebar compacta */
+            .menu-item span,
+            .logout-button span {
+                display: none;
+            }
+
+            .menu-item i,
+            .logout-button i {
+                margin-right: 0;
+            }
+
+            .sidebar .logo {
+                padding: 0 10px;
+            }
+
+            .sidebar .logo img {
+                max-width: 50px;
+            }
+
+            .sidebar-footer {
+                padding: 10px 5px;
+            }
+
+            .menu {
+                padding: 10px 5px;
+            }
+
+            .menu-item {
+                padding: 15px 5px;
+                justify-content: center;
+            }
+
+            .menu-item::after {
+                display: none;
+            }
+
+            .menu-item.active::before {
+                right: 5px;
+            }
+
+            .main-content {
+                margin-left: var(--sidebar-width);
+            }
+
+            /* Header */
+            .header {
+                padding: 0 15px;
+                height: 70px;
+            }
+
+            .header-title {
+                font-size: 1.2rem;
+            }
+
+            .header-title i {
+                font-size: 22px;
+                margin-right: 8px;
+            }
+
+            .profile-icon {
+                font-size: 32px;
+            }
+
+            /* Conteúdo */
+            .content-area {
+                padding: 15px;
+            }
+
+            .caixa {
+                padding: 25px 20px;
+                min-height: auto;
+            }
+
+            .turma-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .turma-header p {
+                font-size: 1rem;
+            }
+
+            .lista-alunos h2 {
+                font-size: 1.2rem;
+            }
+
+            .lista-alunos li {
+                font-size: 0.95rem;
+                padding: 10px 14px;
+            }
+
+            .btn-voltar {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Smartphones */
+        @media (max-width: 480px) {
+            .header {
+                height: 60px;
+                padding: 0 10px;
+            }
+
+            .header-title {
+                font-size: 1rem;
+            }
+
+            .header-title i {
+                font-size: 18px;
+                margin-right: 5px;
+            }
+
+            .profile-icon {
+                font-size: 28px;
+            }
+
+            .content-area {
+                padding: 10px;
+            }
+
+            .caixa {
+                padding: 20px 15px;
+                margin-top: 10px;
+            }
+
+            .turma-header {
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+            }
+
+            .turma-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .turma-header p {
+                font-size: 0.9rem;
+                margin-top: 8px;
+            }
+
+            .lista-alunos h2 {
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+            }
+
+            .lista-alunos li {
+                font-size: 0.9rem;
+                padding: 10px 12px;
+                margin-bottom: 6px;
+            }
+
+            .lista-alunos .no-alunos {
+                font-size: 1rem;
+            }
+
+            .btn-voltar {
+                font-size: 0.9rem;
+                padding: 10px 16px;
+                margin-top: 20px;
+            }
+        }
+
+        /* Telas muito pequenas */
+        @media (max-width: 360px) {
+            :root {
+                --sidebar-width: 60px;
+            }
+
+            .header-title span {
+                font-size: 0.9rem;
+            }
+
+            .caixa {
+                padding: 15px 10px;
+            }
+
+            .turma-header h1 {
+                font-size: 1.2rem;
+            }
+
+            .turma-header p {
+                font-size: 0.85rem;
+            }
+
+            .lista-alunos h2 {
+                font-size: 1rem;
+            }
+
+            .lista-alunos li {
+                font-size: 0.85rem;
+                padding: 8px 10px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <aside class="sidebar">
         <div>
-
             <div class="logo">
-
                 <img src="logo.png" alt="logo">
-        </div>
+            </div>
 
-             <div class="menu">
-
+            <div class="menu">
                 <a href="/home" class="menu-item" onclick="navegarPara('inicio')">
-
                     <i class="fas fa-home"></i>
-
                     <span>INÍCIO</span>
-
                 </a>
 
-               <a href="/acessar-aluno" class="menu-item" onclick="navegarPara('cadastro')">
-
+                <a href="/acessar-aluno" class="menu-item" onclick="navegarPara('cadastro')">
                     <i class="fas fa-address-card"></i>
-
                     <span>CADASTRO</span>
-
                 </a>
 
-                <a href="/matriculas"class="menu-item" onclick="navegarPara('matricula')">
-
-     
-
-               <i class="fas fa-user-graduate"></i>
-
+                <a href="/matriculas" class="menu-item" onclick="navegarPara('matricula')">
+                    <i class="fas fa-user-graduate"></i>
                     <span>MATRÍCULA</span>
-
                 </a>
 
-                <a href="/professores" class="menu-item active" id="professor-link">
-
+                <a href="/professores" class="menu-item" onclick="navegarPara('professores')">
                     <i class="fas fa-chalkboard-teacher"></i>
-
-              <span>PROFESSOR</span>
-
+                    <span>PROFESSOR</span>
                 </a>
-                <a href="/turmas" class="menu-item" onclick="navegarPara('turmas')">
 
+                <a href="/turmas" class="menu-item active" onclick="navegarPara('turmas')">
                     <i class="fas fa-users"></i>
-
                     <span>TURMA</span>
-          </a>
+                </a>
 
                 <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
-
                     <i class="fas fa-dollar-sign"></i>
-
                     <span>FINANCEIRO</span>
-
                 </a>
-
-            
-
-</div>
-
+            </div>
         </div>
 
         <div class="sidebar-footer">
-
-    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
-
-        <i class="fa-solid fa-right-from-bracket"></i>
-
-        <span>Sair</span>
-
-    </a>
-
-</div>
+            <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Sair</span>
+            </a>
+        </div>
     </aside>
 
     <div class="main-content">
@@ -509,7 +681,6 @@
 
         <div class="content-area">
             <div class="caixa">
-
                 <% if (typeof turma !=='undefined' && turma) { %>
                     <div class="turma-header">
                         <h1>
@@ -549,7 +720,6 @@
 
                             <a href="/turmas" class="btn-voltar"><i class="fas fa-arrow-left"></i> Voltar para
                                 Turmas</a>
-
             </div>
         </div>
     </div>
@@ -568,7 +738,6 @@
                 event.stopPropagation();
                 dropdownMenu.classList.toggle('show');
                 profileArrow.style.transform = dropdownMenu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-
             });
             window.addEventListener('click', function () {
                 if (dropdownMenu.classList.contains('show')) {
@@ -578,17 +747,14 @@
             });
         });
 
-             // Esse código verifica se a página foi aberta pelo botão "Voltar" do navegador
-    window.addEventListener( "pageshow", function ( event ) {
-        var historyTraversal = event.persisted || 
-                               ( typeof window.performance != "undefined" && 
-                                window.performance.navigation.type === 2 );
-        if ( historyTraversal ) {
-            // Se for um "Voltar", força o navegador a recarregar a página
-            window.location.reload();
-        }
-    });
-    
+        window.addEventListener("pageshow", function (event) {
+            var historyTraversal = event.persisted ||
+                (typeof window.performance != "undefined" &&
+                    window.performance.navigation.type === 2);
+            if (historyTraversal) {
+                window.location.reload();
+            }
+        });
     </script>
 </body>
 
