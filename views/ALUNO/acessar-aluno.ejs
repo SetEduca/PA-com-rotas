@@ -1,1253 +1,398 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SeteEduca - Painel de Cadastramento</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sete Educa - Acessar Alunos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #e8e8e8; min-height: 100vh; display: flex; }
+   .sidebar { width: 280px; background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1); min-height: 100vh; flex-shrink: 0;   
+    a {
+    text-decoration: none;
+                } }
+    .logo { padding: 0 40px; text-align: center; margin: 30px 0 25px 0; }
+    .logo { padding: 0 40px; text-align: center; margin: 30px 0 25px 0; }
+    .menu { flex: 1; padding: 20px 18px; overflow-y: auto; }
+    .menu-item { padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; position: relative; display: flex; align-items: center; font-weight: 500; color: black; }
+    .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
+    .menu-item span { z-index: 2; font-size: 15px; }
+    .menu-item:hover { background-color: #6c757d21; }
+   /* Configuração da Linha (Traço) */
+.menu-item::after {
+    content: '';
+    position: absolute;
+    bottom: 10px; /* Altura da linha em relação ao botão */
+    left: 20px;   /* Alinhamento a esquerda (igual ao ícone) */
+    height: 3px;  /* Espessura da linha */
+    width: 25px;  /* LARGURA FIXA (Para aparecer sempre) */
+    border-radius: 2px;
 }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-background: #fafafa;
-            min-height: 100vh;
-            color: #2d3748;
+/* Removemos a animação de crescer, para ficar fixo */
+.menu-item:hover::after, .menu-item.active::after {
+    width: 25px; /* Mantém o tamanho fixo mesmo ao passar o mouse */
+}
+
+/* --- CORES DE CADA ITEM --- */
+
+/* 1. Início (Amarelo) */
+.menu-item:nth-child(1)::after {
+    background-color: #F4BF27;
+}
+
+/* 2. Cadastro (Cinza/Bege no print, mas aqui está azul. Ajuste a cor se quiser) */
+/* Se quiser a cor do print original (bege escuro): use #C4C4C4 ou similar */
+.menu-item:nth-child(2)::after {
+    background-color: #A0A0A0; /* Ajustei para cinza para testar */
+}
+
+/* 3. Matrícula (Roxo) */
+.menu-item:nth-child(3)::after {
+    background-color: #9747FF;
+}
+
+/* 4. Professor (Laranja) */
+.menu-item:nth-child(4)::after {
+    background-color: #F88C12;
+}
+
+/* 5. Turma (Vermelho) */
+.menu-item:nth-child(5)::after {
+    background-color: #D22A2A;
+}
+
+/* 6. Financeiro (Verde) */
+.menu-item:nth-child(6)::after {
+    background-color: #59C631;
+
         }
-
-        .sidebar {
-            width: 280px;
-height: 100vh;
-            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
-            color: white;
-            padding: 20px 0;
-            position: fixed;
-            left: 0;
-            top: 0;
-display: flex;
-            flex-direction: column;
-            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
-            z-index: 100;
-            transition: transform 0.3s ease;
-}
-
-        .sidebar.mobile-hidden {
-            transform: translateX(-100%);
-}
-
-        .logo {
-            padding: 0px 40px;
-text-align: center;
-            margin-bottom: 25px;
-            margin-top: 30px;
-        }
-
-        .logo img {
-            max-width: 100%;
-height: auto;
-        }
-
-        .menu {
-            flex: 1;
-padding: 10px 18px;
-            margin-top: 35px;
-        }
-
-        .menu-item {
-            padding: 30px 20px;
-margin-bottom: 6px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            display: flex;
-            align-items: center;
-            font-weight: 500;
-            overflow: visible;
-color: black;
-        }
-
-        .menu-item i {
-            margin-right: 15px;
-font-size: 18px;
-            width: 24px;
-            text-align: center;
-            z-index: 2;
-        }
-
-        .menu-item span {
-            z-index: 2;
-font-size: 15px;
-        }
-
-        .menu-item:hover {
-            background-color: #6c757d21;
-}
-
-        .menu-item::after {
-            padding: 0 10px;
-content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 20px;
-            height: 2px;
-            width: 0px;
-            transition: width 0.3s ease;
-            border-radius: 1px;
-}
-
-        .menu-item:hover::after,
-        .menu-item.active::after {
-            width: calc(100% - 40px);
-}
-
-        .menu-item:nth-child(1)::after { background-color: #F4BF27;
-}
-        .menu-item:nth-child(2)::after { background-color: #306bc2;
-}
-        .menu-item:nth-child(3)::after { background-color: #9747FF;
-}
-        .menu-item:nth-child(4)::after { background-color: #F88C12;
-}
-        .menu-item:nth-child(5)::after { background-color: #D22A2A;
-}
-        .menu-item:nth-child(6)::after { background-color: #59C631;
-}
-
-        .menu-item.active {
-            background-color: rgba(128, 128, 128, 0.356);
-color: #333;
-            font-weight: 600;
-        }
-
-        .menu-item.active::before {
+    .menu-item:nth-child(2)::after { background-color: #306bc2; } 
+    .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
+     .menu-item.active::before {
             content: '';
-position: absolute;
+            position: absolute;
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            box-shadow: black;
+            background-color: currentColor;
             z-index: 2;
-}
-
-        .seteeduca {
-            color: #333;
-margin-top: 90px;
-            position: absolute;
-            margin-left: 70px;
         }
+     .sidebar-footer { padding: 20px 18px; border-top: 1px solid rgba(0, 0, 0, 0.1); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+    .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; border: none; background: transparent; }
+    .logout-button:hover { background-color: rgba(210, 42, 42, 0.1); color: #c01e26; font-weight: 600; }
+    .main-content { flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .header { background: #306bc2; height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; color: white; width: 100%; }
+    .header-title { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; color: white; font-family: 'Kodchasan', sans-serif; }
+    .profile { position: relative; cursor: pointer; margin-left: auto; }
+    .profile-header { display: flex; align-items: center; gap: 12px; color: white; padding: 5px; border-radius: 8px; transition: background 0.2s; }
+    .profile-header:hover { background: rgba(255, 255, 255, 0.1); }
+    .profile-dropdown { display: none; position: absolute; top: 130%; right: 0; background: white; border-radius: 8px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); width: 200px; padding: 8px 0; z-index: 1000; flex-direction: column; border: 1px solid #edf2f7; }
+    .profile-dropdown.active { display: flex; }
+    .profile-dropdown a { padding: 12px 20px; text-decoration: none; color: #4a5568; display: flex; align-items: center; gap: 12px; font-size: 14px; transition: all 0.2s; }
+    .profile-dropdown a:hover { background: #f7fafc; color: #306bc2; }
+    .content-area { padding: 30px; background: #fcf8f2; flex: 1; width: 100%; }
+    .search-section { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+    .search-container { position: relative; width: 400px; }
+    .search-input { width: 100%; height: 50px; background: white; border: 2px solid #ddd; border-radius: 25px; padding: 0 20px 0 50px; font-size: 16px; outline: none; }
+    .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #999; }
+    .new-button { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: transform 0.2s ease; }
+    .new-button:hover { transform: translateY(-2px); }
+    .new-button-circle { width: 45px; height: 45px; background: #306bc2; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; font-weight: 200; }
+    .stats-info { font-weight: 600; color: #333; }
+    .table-container { background: white; border-radius: 12px; border-top: 5px solid #306bc2; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); overflow: hidden; }
+    .table { width: 100%; border-collapse: collapse; }
+    .table-header { background: #f8f9fa; color: #666; font-weight: 600; font-size: 14px; text-transform: uppercase; }
+    .table th, .table td { padding: 16px 10px; text-align: center; border-bottom: 1px solid #eee; font-size: 15px; vertical-align: middle; }
+    .avatar-placeholder { width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0; color: #a0aec0; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 18px; overflow: hidden; }
+    .operations { display: flex; justify-content: center; gap: 8px; }
+    .btn-action { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; text-decoration: none; }
+    .btn-view { background: #e8f5e8; color: #2e7d32; border: 2px solid #c8e6c9; }
+    .btn-edit { background: #e3f2fd; color: #1976d2; border: 2px solid #bbdefb; }
+    .btn-archive { background: #fce4ec; color: #c01e26; border: 2px solid #f8bbd9; }
+    
+    
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; }
+    .modal-overlay.show { display: flex; }
+    .modal-caixa { background: #fff; width: 90%; max-width: 700px; border-radius: 12px; border-top: 5px solid #306bc2; padding: 20px; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px; color: #306bc2; font-size: 1.2rem; }
+    .modal-conteudo { max-height: 70vh; overflow-y: auto; }
+    .detalhe-grupo h3 { font-size: 1rem; color: #306bc2; border-bottom: 1px solid #eee; margin: 15px 0 10px 0; }
+    .detalhe-item { display: flex; margin-bottom: 5px; align-items: baseline; }
+    .detalhe-item label { font-weight: bold; width: 140px; flex-shrink: 0; }
+    .modal-fechar { background: none; border: none; font-size: 20px; cursor: pointer; }
 
-        .sidebar-footer {
-            padding: 20px 18px;
-border-top: 1px solid rgba(0, 0, 0, 0.1);
-        }
+    
+    @media (max-width: 1024px) {
         
+        /* 1. Sidebar Fina */
+        .sidebar {
+            width: 70px;
+        }
+
+        /* 2. Esconde Textos */
+        .menu-item span,
+        .logout-button span,
+        .profile-header span, /* Nome do perfil */
+        .header-title span {  /* Texto do topo se tiver */
+            display: none !important;
+        }
+
+        /* 3. Centraliza Ícones */
+        .menu-item, 
         .logout-button {
-            padding: 16px 20px;
-border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            font-weight: 500;
-            color: #333;
-            width: 100%;
-}
+            justify-content: center;
+            padding: 20px 0;
+        }
 
+        .menu-item i, 
         .logout-button i {
-            margin-right: 15px;
-font-size: 18px;
-            width: 24px;
-            text-align: center;
+            margin-right: 0;
+            font-size: 22px;
         }
 
-        .logout-button:hover {
-            background-color: rgba(210, 42, 42, 0.1);
-color: #D22A2A; 
-            font-weight: 600;
+        /* 4. Ajuste da Logo */
+        .logo {
+            padding: 0 10px;
+            margin-top: 20px;
+        }
+        .logo img {
+            max-width: 40px;
         }
 
-        .mobile-menu-toggle {
-            display: none;
-position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 101;
-            background: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar-overlay {
-            display: none;
-position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 99;
-}
-
-        .sidebar-overlay.active {
-            display: block;
-}
-
-        .main-content {
-            margin-left: 280px;
-min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: margin-left 0.3s ease;
-}
-
-        .header {
-            background: #306bc2;
-height: 80px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 0 30px; 
-            color: white;
-            width: 100%;
-}
-
-        .header-title {
-            display: flex;
-align-items: center;
-            position: relative; 
-            top: 0.7vh;
-            gap: 10px; 
-            font-size: 1.5rem; 
-            color: rgb(255, 255, 255); 
-            font-family: 'Kodchasan', sans-serif;
-}
-
-        .header-title i {
-            font-size: 20px;
-}
-
-        .user-profile {
-            display: flex;
-align-items: center;
-            gap: 15px;
-            cursor: pointer;
-        }
-
-        .profile-pic {
-            width: 45px;
-height: 45px;
-            background: #333;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-}
-
-        .profile-arrow {
-            color: white;
-font-size: 16px;
-        }
-
-        .content-area {
-            padding: 40px;
-background: #fafafa;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-}
-
-        .registration-panel {
-            width: 100%;
-max-width: 900px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-}
-
-        .panel-header {
-            background: white;
-border-radius: 12px; 
-            border-top: 5px solid #306bc2; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
-            overflow: hidden;
-}
-
-        .panel-content {
-            padding: 40px;
-}
-
-        .form-section {
-            margin-bottom: 32px;
-}
-
-        .section-title {
-            font-size: 16px;
-font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-}
-
-        .section-title i {
-            color: #306bc2;
-font-size: 14px;
-        }
-
-        .form-grid {
-            display: grid;
-gap: 20px;
-        }
-
-        .form-grid.two-columns {
-            grid-template-columns: 1fr 1fr;
-}
-
-        .form-field {
-            display: flex;
-flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-field.full-width {
-            grid-column: 1 / -1;
-}
-
-        .form-label {
-            font-size: 13px;
-font-weight: 500;
-            color: #4a5568;
-            letter-spacing: -0.01em;
-        }
-
-        .form-input,
-        .form-select,
-        .form-textarea {
-            padding: 12px 16px;
-border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: all 0.2s ease;
-            background: #fafafa;
-}
-
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
-            outline: none;
-border-color: #306bc2;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(3, 75, 207, 0.1);
-}
-
-        .form-textarea {
-            resize: vertical;
-min-height: 80px;
-        }
-
-        .form-input::placeholder,
-        .form-textarea::placeholder {
-            color: #a0aec0;
-}
-
-        .radio-group {
-            display: flex;
-gap: 20px;
-            margin-top: 4px;
-        }
-
-        .radio-item {
-            display: flex;
-align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .radio-item input[type="radio"] {
-            width: 16px;
-height: 16px;
-            accent-color: #306bc2;
-        }
-
-        .radio-item label {
-            font-size: 14px;
-color: #4a5568;
-            cursor: pointer;
-        }
-
-        .photo-upload-section {
-            text-align: center;
-padding: 24px;
-            border: 2px dashed #e2e8f0;
-            border-radius: 12px;
-            margin-bottom: 32px;
-            transition: all 0.3s ease;
-}
-
-        .photo-upload-section:hover {
-            border-color: #306bc2;
-background: rgba(3, 75, 207, 0.02);
-        }
-
-        .photo-preview {
-            width: 80px;
-height: 80px;
-            border-radius: 50%;
-            background: #f7fafc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 24px;
-            color: #cbd5e0;
-}
-
-        .photo-preview img {
-            width: 100%;
-height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .upload-btn {
-            padding: 8px 20px;
-background: #306bc2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-}
-
-        .upload-btn:hover {
-            background: #2557a0;
-transform: translateY(-1px);
-        }
-
-        .action-buttons {
-            display: flex;
-justify-content: center;
-            gap: 16px;
-            padding-top: 32px;
-            margin-top: 32px;
-            border-top: 1px solid #f7fafc;
-}
-
-        .btn {
-            padding: 12px 32px;
-border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-}
-
-        .btn-primary {
-            background: #306bc2;
-color: white;
-        }
-
-        .btn-primary:hover {
-            background: #2557a0;
-transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: #f7fafc;
-color: #4a5568;
-            border: 1px solid #e2e8f0;
-        }
-
-        .btn-secondary:hover {
-            background: #edf2f7;
-}
-
-        .modal {
-            display: none;
-position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            justify-content: center;
-align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-padding: 32px;
-            border-radius: 16px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-animation: modalSlideIn 0.3s ease;
-        }
+        /* 5. Ajustes Visuais (Remove linhas coloridas no modo mini) */
+        .menu-item::after { display: none; }
         
-        /* Classe para modal de ERRO */
-        .modal-content.error::before {
-            content: "✕";
-            background: #D22A2A;
-            margin-top: -16px;
+        /* Ajuste da bolinha preta de ativo */
+        .menu-item.active::before {
+            right: 5px;
         }
 
-        .modal-content::before {
-            content: "✓";
-display: block;
-            width: 60px;
-            height: 60px;
-            background: #48bb78;
-            color: white;
-            border-radius: 50%;
-            font-size: 24px;
-            font-weight: bold;
-            line-height: 60px;
-margin: -16px auto 20px;
-        }
-
-        .modal-content h3 {
-            font-size: 18px;
-font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 8px;
-        }
-
-        .modal-content p {
-            font-size: 14px;
-color: #718096;
-            margin-bottom: 24px;
-            line-height: 1.5;
-        }
-
-        .modal-btn {
-            padding: 10px 24px;
-background: #306bc2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-}
-
-        .modal-btn:hover {
-            background: #2557a0;
-}
+        /* 6. Ajustes do Conteúdo */
+        .content-area { padding: 15px; }
+        .header { padding: 0 15px; }
         
-        /* Botão de erro */
-        .modal-btn.error-btn {
-            background: #D22A2A;
-        }
-        .modal-btn.error-btn:hover {
-            background: #a02121;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-transform: translateY(-20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-transform: translateY(0) scale(1);
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 240px;
-}
-
-            .main-content {
-                margin-left: 240px;
-}
-
-            .menu-item {
-                padding: 20px 15px;
-}
-
-            .content-area {
-                padding: 30px;
-}
-        }
-
-        @media (max-width: 768px) {
-           
-
-            .sidebar {
-                width: 280px;
-}
-
-            .sidebar.mobile-hidden {
-                transform: translateX(-100%);
-}
-
-            .main-content {
-                margin-left: 0;
-}
-
-            .header {
-                padding: 0 20px 0 70px;
-}
-
-            .header-title {
-                font-size: 16px;
-}
-
-            .header-title span {
-                display: none;
-}
-
-            .content-area {
-                padding: 20px;
-}
-
-            .panel-content {
-                padding: 24px;
-}
-
-            .form-grid.two-columns {
-                grid-template-columns: 1fr;
-}
-
-            .form-field.full-width {
-                grid-column: 1;
-}
-
-            .action-buttons {
-                flex-direction: column;
-}
-
-            .btn {
-                width: 100%;
-}
-
-            .seteeduca {
-                display: none;
-}
-
-            .profile-arrow {
-                display: none;
-}
-        }
-
-        @media (max-width: 480px) {
-            .header {
-                height: 60px;
-padding: 0 15px 0 60px;
-            }
-
-            .header-title i {
-                font-size: 18px;
-}
-
-            .content-area {
-                padding: 15px;
-}
-
-            .panel-content {
-                padding: 20px;
-}
-
-            .form-section {
-                margin-bottom: 24px;
-}
-
-            .section-title {
-                font-size: 15px;
-}
-
-            .form-input,
-            .form-select,
-            .form-textarea {
-                padding: 10px 14px;
-font-size: 13px;
-            }
-
-            .radio-group {
-                flex-direction: column;
-gap: 12px;
-            }
-
-            .photo-preview {
-                width: 70px;
-height: 70px;
-            }
-
-            .upload-btn {
-                padding: 8px 16px;
-font-size: 11px;
-            }
-
-            .btn {
-                padding: 10px 24px;
-font-size: 13px;
-            }
-
-            .modal-content {
-                padding: 24px;
-margin: 20px;
-            }
-        }
-
-        @media (min-width: 769px) {
-            .sidebar {
-                transform: translateX(0) !important;
-}
-        }
-
-        
-        /* --- RESPONSIVIDADE (CELULAR E TABLET - MINI BARRA) --- */
-        @media (max-width: 900px) { /* Ajustei para 900px para pegar tablets também */
-            
-            /* 1. Sidebar Fina */
-            .sidebar {
-                width: var(--sidebar-mini); /* Vira 80px */
-            }
-
-            /* 2. Ajuste do Conteúdo Principal */
-            .main-content {
-                margin-left: var(--sidebar-mini) !important;
-                width: calc(100% - var(--sidebar-mini)) !important;
-            }
-
-            /* 3. Esconde os textos */
-            .menu-item span, 
-            .logout-button span, 
-            .seteeduca {
-                display: none !important;
-            }
-
-            /* 4. Centraliza os ícones */
-            .menu-item, .logout-button {
-                justify-content: center !important;
-                padding-left: 0 !important;
-                padding-right: 0 !important;
-            }
-
-            .menu-item i, .logout-button i {
-                margin-right: 0 !important; /* Tira a margem direita do ícone */
-                font-size: 24px; /* Aumenta um pouco o ícone */
-            }
-
-            /* 5. Ajustes Visuais */
-            .logo { padding: 0 10px; margin-top: 20px; }
-            .logo img { max-width: 50px; } /* Logo pequena */
-            
-            /* Tira os detalhes extras no mobile */
-            .menu-item::after { display: none; } 
-            .menu-item.active::before { right: 5px; width: 4px; height: 4px; }
-            .sidebar-footer { padding: 10px 5px; }
-
-            /* Ajustes do Formulário no Mobile */
-            .header { padding: 0 20px; }
-            .content-area { padding: 15px; }
-            .panel-content { padding: 20px; }
-            .form-grid.two-columns { grid-template-columns: 1fr; } /* Coluna única */
-            .profile-arrow { display: none; }
-        }
-
-        /* --- GARANTIA: REMOVE QUALQUER BOTÃO TOGGLE ANTIGO --- */
-        .mobile-menu-toggle, .sidebar-overlay { display: none !important; }
-
-
-    </style>
+        /* Ajuste da busca para caber */
+        .search-container { width: 100%; }
+        .search-section { flex-direction: column; align-items: stretch; }
+        .new-button { flex-direction: row; justify-content: center; margin-bottom: 10px; }
+    }
+  </style>
 </head>
-<body></body>
+<body>
+  <div class="sidebar">
+    <div class="logo">
+        <img src="/imagem/logo.png" alt="logo">
+    </div>
 
-    <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
+    <div class="menu">
+        <a href="/home" class="menu-item">
+            <i class="fas fa-home"></i>
+            <span>INÍCIO</span>
+        </a>
 
-    <div class="sidebar mobile-hidden" id="sidebar">
-        <div class="logo">
-           <img src="imagem/logo.png" alt="logo" onerror="this.style.display='none'">
-        </div>
-        
-        <div class="menu">
-       
-     <div class="menu-item" onclick="navegarPara('inicio')">
-                <i class="fas fa-home"></i>
-                <span>INÍCIO</span>
-            </div>
-            <div class="menu-item active" onclick="navegarPara('cadastro')">
-                <i class="fas fa-address-card"></i>
-              
-  <span>CADASTRO</span>
-            </div>
-            <div class="menu-item" onclick="navegarPara('matricula')">
-                <i class="fas fa-user-graduate"></i>
-                <span>MATRÍCULA</span>
-            </div>
-            <div class="menu-item" onclick="navegarPara('professor')">
-            
-    <i class="fas fa-chalkboard-teacher"></i>
-                <span>PROFESSOR</span>
-            </div>
-            <div class="menu-item" onclick="navegarPara('turmas')"> 
-                <i class="fas fa-users"></i>
-                <span>TURMA</span>
-            </div>
-     
-       <div class="menu-item" onclick="navegarPara('financeiro')">
-                <i class="fas fa-dollar-sign"></i>
-                <span>FINANCEIRO</span>
-            </div>
-        </div>
+        <a href="/acessar-aluno" class="menu-item active">
+            <i class="fas fa-address-card"></i>
+            <span>CADASTRO</span>
+        </a>
 
-        <div class="seteeduca">
-            <p></p>
-        </div>
+        <a href="/matriculas" class="menu-item">
+            <i class="fas fa-user-graduate"></i>
+            <span>MATRÍCULA</span>
+        </a>
 
-        
-<div class="sidebar-footer">
-    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
-        <i class="fa-solid fa-right-from-bracket"></i>
-        <span>Sair</span>
-    </a>
-</div>
-        </div>
-    </div> 
+        <a href="/professores" class="menu-item">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>PROFESSOR</span>
+        </a>
 
+        <a href="/turmas" class="menu-item">
+            <i class="fas fa-users"></i>
+            <span>TURMA</span>
+        </a>
 
-    <div class="main-content">
-        <div class="header">
-            <div 
-class="header-title">
-                <i class="fas fa-address-card"></i>
-                <span>Painel <b>CADASTRAMENTO</b></span>
-            </div>
-            <div class="user-profile">
-                <div class="profile-pic">
-                    <i class="fas fa-user"></i>
- 
-               </div>
-                <div class="profile-arrow">
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-            </div>
-        </div>
+        <a href="/financeiro" class="menu-item">
+            <i class="fas fa-dollar-sign"></i>
+            <span>FINANCEIRO</span>
+        </a>
+    </div>
 
-        <div class="content-area">
- 
-           <div class="registration-panel">
-                <div class="panel-header"></div>
-
-                <div class="panel-content">
-                    
-                    <form id="registrationForm" method="POST" action="/acessar-aluno/cadastrar">
-                        <div class="photo-upload-section">
-        
-                    <div class="photo-preview" id="photoPreview">
-                                <i class="fas fa-camera"></i>
-                            </div>
-                
-            <button type="button" class="upload-btn" onclick="uploadPhoto()">
-                                Adicionar Foto
-                            </button>
-                        
+    <div class="sidebar-footer">
+        <a href="/login" class="logout-button" onclick="return  confirm('Deseja realmente sair do sistema?')">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>SAIR</span>
+        </a>
+    </div>
 </div>
 
-                        <div class="form-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-user"></i>
-            
-                    Informações Pessoais
-                            </h3>
-                            <div class="form-grid two-columns">
-                      
-          <div class="form-field full-width">
-                                    <label class="form-label">Nome Completo</label>
-                                    <input type="text" class="form-input" name="nome" placeholder="Nome completo da criança" required>
-      
-                          </div>
-                                <div class="form-field">
-                                    <label class="form-label">Data de Nascimento</label>
-  
-                                  <input type="date" class="form-input" name="dataNascimento" required>
-                                </div>
-                              
-  <div class="form-field">
-                                    <label class="form-label">CPF</label>
-                                    <input type="text" class="form-input" name="cpf" placeholder="000.000.000-00">
-                    
-            </div>
-                                <div class="form-field">
-                                    <label class="form-label">Sexo</label>
-                  
-                  <div class="radio-group">
-                                        <div class="radio-item">
-                                        
-    <input type="radio" id="feminino" name="sexo" value="feminino" required>
-                                            <label for="feminino">Feminino</label>
-                                        </div>
-      
-                                  <div class="radio-item">
-                                            <input type="radio" id="masculino" name="sexo" value="masculino" required>
-                
-                            <label for="masculino">Masculino</label>
-                                        </div>
-                               
-     </div>
-                                </div>
-                                
-                                <div class="form-field">
-                                    <label class="form-label">Naturalidade</label>
-                                    <input type="text" class="form-input" name="naturalidade" placeholder="Cidade de nascimento" required>
-                                </div>
+  <div class="main-content">
+    <div class="header">
+      <div class="header-title"><i class="fas fa-user-graduate"></i><span>Acessar <b>ALUNOS</b></span></div>
+      <div class="profile" id="profile-toggle">
+        <div class="profile-header"><i class="fas fa-user-circle" style="font-size:28px;"></i> <i class="fas fa-chevron-down"></i></div>
+        <div class="profile-dropdown" id="profile-dropdown-menu">
+            <a href="/meuperfil"><i class="fas fa-user"></i> Meu perfil</a>
+            <a href="/mensalidade"><i class="fas fa-file-invoice-dollar"></i> Mensalidade</a>
+            <a href="/arquivados"><i class="fas fa-archive"></i> Arquivados</a>
+        </div>
+      </div>
+    </div>
 
-                            </div>
-                        </div>
+    <div class="content-area">
+      <div class="search-section">
+        <div class="search-container">
+          <div class="search-icon"><i class="fas fa-search"></i></div>
+          <input type="text" class="search-input" placeholder="Pesquisar aluno...">
+        </div>
+        <div class="new-button" onclick="window.location.href='/cadastro-aluno'">
+          <div class="new-button-circle">+</div>
+          <div class="new-text">Novo Aluno</div>
+        </div>
+        <div class="stats-info">Total de Alunos: <%= (typeof alunos !== 'undefined') ? alunos.length : 0 %></div>
+      </div>
 
-                                     <div class="form-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-phone"></i>
-                       
-         Responsável
-                            </h3>
-                            <div class="form-grid two-columns">
-                                <div 
-class="form-field"> <label class="form-label">Nome do Responsável</label>
-                                    <input type="text" class="form-input" name="responsavel" placeholder="Nome completo" required>
-                  
-              </div>
-
-                                <div class="form-field">
-                                    <label class="form-label">CPF do Responsável</label>
-                                    <input type="text" class="form-input" name="cpf_responsavel" placeholder="000.000.000-00" required>
-                                </div>
-
-                                <div class="form-field">
-                                    <label class="form-label">Telefone</label>
-                
-                    <input type="tel" class="form-input" name="telefone" placeholder="(11) 99999-9999" required>
-                                </div>
-                                <div class="form-field">
-         
-                           <label class="form-label">E-mail</label>
-                                    <input type="email" class="form-input" name="email" placeholder="exemplo@email.com" required>
-                               
- </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                      
-      <h3 class="section-title">
-                                <i class="fas fa-map-marker-alt"></i>
-                                Endereço
-                           
- </h3>
-                            <div class="form-grid two-columns">
-                                <div class="form-field">
-                                    
-<label class="form-label">CEP</label>
-                                    <input type="text" class="form-input" name="cep" placeholder="00000-000" required>
-                                </div>
-                          
-      <div class="form-field">
-                                    <label class="form-label">Cidade</label>
-                                    <input type="text" class="form-input" name="cidade" placeholder="Cidade" required>
-               
-                 </div>
-
-                                <div class="form-field">
-                                    <label class="form-label">Estado</label>
-                                    <input type="text" class="form-input" name="estado" placeholder="Estado" required>
-                                </div>
-
-                                <div class="form-field">
-                                    <label class="form-label">Logradouro</label>
-            
-                        <input type="text" class="form-input" name="logradouro" placeholder="Rua, Avenida, etc."
-required>
-                                </div>
-
-                                <div class="form-field">
-                                   
- <label class="form-label">Número</label>
-                                    <input type="text" class="form-input" name="numero" placeholder="123" required>
-                                </div>
-                         
-       <div class="form-field">
-                                    <label class="form-label">Bairro</label>
-                                    <input type="text" class="form-input" name="bairro" placeholder="Bairro" required>
-              
-                  </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-     
-                       <h3 class="section-title">
-                               <i class="fas fa-address-card"></i>
-                                Informações de Saúde
-         
-                   </h3>
-                            <div class="form-grid two-columns">
-                                <div class="form-field full-width">
-                 
-                   <label class="form-label">Observações</label>
-                                    <textarea class="form-textarea" name="observacoes" placeholder="Informações adicionais, alergias, medicações..."></textarea>
-                                </div>
-      
+      <div class="table-container">
+        <table class="table">
+          <thead class="table-header">
+            <tr>
+                <th style="width: 80px;">Foto</th>
+                <th>Nome</th>
+                <th>Responsável</th>
+                <th style="width: 250px;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="alunosTableBody">
+            <% if (typeof alunos !== 'undefined' && alunos.length > 0) { %>
+              <% alunos.forEach(aluno => { %>
+                <tr>
+                  <td>
+                      <div class="avatar-placeholder">
+                        <% if (aluno.foto) { %>
+                           <img src="<%= aluno.foto %>" alt="Foto" style="width:100%; height:100%; object-fit:cover;">
+                        <% } else { %>
+                           <i class="fas fa-user"></i>
+                        <% } %>
                       </div>
-                        </div>
-
-                        <div class="action-buttons">
-                            <button 
-type="button" class="btn btn-secondary" onclick="resetForm()">
-                                Limpar
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-      
-                          Cadastrar Criança
-                            </button>
-                        </div>
-                    </form>
- 
-               </div>
-            </div>
-        </div>
+                  </td>
+                  <td><%= aluno.nome %></td>
+                  <td><%= aluno.responsavel %></td>
+                  <td>
+                    <div class="operations">
+                      <button class="btn-action btn-view" data-id="<%= aluno.id %>"><i class="fas fa-eye"></i> Ver</button>
+                      <a href="/acessar-aluno/editar/<%= aluno.id %>" class="btn-action btn-edit"><i class="fas fa-edit"></i> Editar</a>
+                      <form action="/acessar-aluno/arquivar/<%= aluno.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Arquivar este aluno?');">
+                        <button type="submit" class="btn-action btn-archive"><i class="fas fa-archive"></i> Arquivar</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr><td colspan="4" style="text-align:center; padding:20px;">Nenhum aluno encontrado.</td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
 
-    <div class="modal" id="successModal">
-        <div class="modal-content">
-            <h3>Cadastro Realizado!</h3>
-            <p id="successMessage">A criança foi cadastrada com sucesso no sistema.</p>
-            <button 
-class="modal-btn" onclick="closeModal('successModal')">Entendi</button>
+  <div class="modal-overlay" id="detalhesModal">
+    <div class="modal-caixa">
+      <div class="modal-header">
+        <span>Detalhes do <b>ALUNO</b></span>
+        <button class="modal-fechar" id="modal-fechar">&times;</button>
+      </div>
+      <div class="modal-conteudo">
+        <div class="detalhe-grupo">
+          <h3>Pessoal</h3>
+          <div class="detalhe-item"><label>Nome:</label><span id="m-nome"></span></div>
+          <div class="detalhe-item"><label>Nascimento:</label><span id="m-nasc"></span></div>
+          <div class="detalhe-item"><label>CPF:</label><span id="m-cpf"></span></div>
+          <div class="detalhe-item"><label>Sexo:</label><span id="m-sexo"></span></div>
+          <div class="detalhe-item"><label>Naturalidade:</label><span id="m-nat"></span></div>
         </div>
-    </div>
-
-    <div class="modal" id="errorModal">
-        <div class="modal-content error">
-            <h3>Ocorreu um Erro!</h3>
-            <p id="errorMessage">Não foi possível completar o cadastro.</p>
-            <button class="modal-btn error-btn" onclick="closeModal('errorModal')">Tentar Novamente</button>
+        <div class="detalhe-grupo">
+          <h3>Responsável</h3>
+          <div class="detalhe-item"><label>Nome:</label><span id="m-resp"></span></div>
+          <div class="detalhe-item"><label>Tel:</label><span id="m-tel"></span></div>
+          <div class="detalhe-item"><label>Email:</label><span id="m-email"></span></div>
         </div>
+        <div class="detalhe-grupo">
+          <h3>Endereço</h3>
+          <div class="detalhe-item"><label>CEP:</label><span id="m-cep"></span></div>
+          <div class="detalhe-item"><label>Cidade:</label><span id="m-cidade"></span></div>
+          <div class="detalhe-item"><label>Estado:</label><span id="m-estado"></span></div>
+          <div class="detalhe-item"><label>Logradouro:</label><span id="m-rua"></span></div>
+          <div class="detalhe-item"><label>Número:</label><span id="m-numero"></span></div>
+          <div class="detalhe-item"><label>Bairro:</label><span id="m-bairro"></span></div>
+        </div>
+        <div class="detalhe-grupo">
+          <h3>Saúde / Observações</h3>
+          <div class="detalhe-item"><label>Observações:</label><span id="m-obs"></span></div>
+        </div>
+      </div>
     </div>
+  </div>
+  <script>
+    const pToggle = document.getElementById('profile-toggle');
+    const pMenu = document.getElementById('profile-dropdown-menu');
+    if(pToggle){ pToggle.onclick = (e) => { e.stopPropagation(); pMenu.classList.toggle('active'); };
+    document.onclick = () => pMenu.classList.remove('active'); }
+    
+    const search = document.querySelector('.search-input');
+    const rows = document.querySelectorAll('#alunosTableBody tr');
+    if(search){ search.oninput = (e) => { const val = e.target.value.toLowerCase();
+    rows.forEach(row => { row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none'; }); }; }
 
-    <script>
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-const overlay = document.querySelector('.sidebar-overlay');
-            
-            sidebar.classList.toggle('mobile-hidden');
-            overlay.classList.toggle('active');
-        }
-
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function() {
-                if (window.innerWidth <= 768) {
-                    toggleMobileMenu();
-                }
-              
-  
-                document.querySelectorAll('.menu-item').forEach(i => {
-                    i.classList.remove('active');
-                });
-                
-                this.classList.add('active');
-            
-});
-        });
-
-        function navegarPara(pagina) {
-            const rotas = {
-                'inicio': '/home',
-                'professor': '/professores',
-                'financeiro': '/financeiro',
-                'turmas': '/turmas',
-      
-          'matricula': '/matriculas',
-                'cadastro': '/acessar-aluno' // CORRIGIDO: O botão "CADASTRO" no menu agora leva para a lista
-            };
-if (rotas[pagina]) {
-                window.location.href = rotas[pagina];
-}
-        }
-
-        function uploadPhoto() {
-            const input = document.createElement('input');
-input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-if (file) {
-                    const reader = new FileReader();
-reader.onload = function(e) {
-                        const preview = document.getElementById('photoPreview');
-preview.innerHTML = `<img src="${e.target.result}" alt="Foto da criança">`;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            };
-input.click();
-        }
-
-        function resetForm() {
-            document.getElementById('registrationForm').reset();
-document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
-        }
-
-        // ========================================================
-        //      FUNÇÃO CLOSEMODAL ATUALIZADA (COM REDIRECT)
-        // ========================================================
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            
-            // SE FOR O MODAL DE SUCESSO, REDIRECIONA PARA A LISTA
-            if (modalId === 'successModal') {
-                // Esta é a rota que você confirmou (acessar-aluno.ejs)
-                window.location.href = '/acessar-aluno'; 
-            }
-        }
-
-        // ========================================================
-        //      SCRIPT DE SUBMISSÃO (FETCH) CORRIGIDO
-        //      (Substitui o script original )
-        // ========================================================
-        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-            e.preventDefault(); // Impede o envio tradicional
-
-            const form = e.target;
-            const formData = new FormData(form);
-            
-            // Converte FormData para um objeto JSON
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-            
-            // Define o URL da action do formulário
-            const url = form.action;
-
+    const modal = document.getElementById('detalhesModal');
+    const closeBtn = document.getElementById('modal-fechar');
+    
+    document.querySelectorAll('.btn-view').forEach(btn => {
+        btn.onclick = async () => {
+            const id = btn.dataset.id;
             try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    
-                    // Mostra o modal de sucesso
-                 document.getElementById('successMessage').textContent = 
-                        `${data.nome} foi cadastrada com sucesso!`;
-                 document.getElementById('successModal').style.display = 'flex';
-                    
-                    // Limpa o formulário
-                    form.reset();
-                    document.getElementById('photoPreview').innerHTML = '<i class="fas fa-camera"></i>';
-
-                } else {
-                    // Se o servidor retornar um erro (ex: 4xx, 5xx)
-                    const errorData = await response.json();
-                    throw new Error(errorData.details || errorData.error || 'Erro desconhecido');
-                }
-
-            } catch (error) {
-                // Se houver um erro de rede ou na lógica acima
-                console.error('Erro no cadastro:', error);
+                // CORREÇÃO: Adicionadas crases (`) no fetch
+                const res = await fetch(`/acessar-aluno/ver/${id}`);
+                const data = await res.json();
                 
-                // Mostra o modal de erro
-                document.getElementById('errorMessage').textContent = 
-                    `Erro: ${error.message}. Por favor, verifique os dados e tente novamente.`;
-                document.getElementById('errorModal').style.display = 'flex';
+                document.getElementById('m-nome').textContent = data.nome;
+                document.getElementById('m-nasc').textContent = data.dataNascimento;
+                document.getElementById('m-cpf').textContent = data.cpf;
+                document.getElementById('m-sexo').textContent = data.sexo;
+                document.getElementById('m-nat').textContent = data.naturalidade;
+                
+                document.getElementById('m-resp').textContent = data.responsavel;
+                document.getElementById('m-tel').textContent = data.telefone;
+                document.getElementById('m-email').textContent = data.email;
+                
+                document.getElementById('m-cep').textContent = data.cep;
+                document.getElementById('m-cidade').textContent = data.cidade;
+                document.getElementById('m-estado').textContent = data.estado;
+                document.getElementById('m-rua').textContent = data.logradouro; 
+                document.getElementById('m-numero').textContent = data.numero;
+                document.getElementById('m-bairro').textContent = data.bairro;
+                
+                let textoObs = data.observacoes;
+                // CORREÇÃO: Adicionadas crases (`) na interpolação das strings
+                if(data.alergias && data.alergias.length > 0) textoObs += ` | Alergias: ${data.alergias}`;
+                if(data.deficiencias && data.deficiencias.length > 0) textoObs += ` | Deficiência: ${data.deficiencias}`;
+                
+                document.getElementById('m-obs').textContent = textoObs;
+                
+                modal.classList.add('show');
+            } catch(e) { 
+                console.error(e);
+                alert('Erro ao carregar detalhes.'); 
             }
-        });
-
-document.querySelector('.logout-button').addEventListener('click', function() {
-            if (confirm('Tem certeza que deseja sair?')) {
-                window.location.href = '/login/sair';
-            }
-        });
-
-        // ========================================================
-        //      MÁSCARAS (COM A NOVA MÁSCARA DE CPF)
-        // ========================================================
-document.querySelector('input[name="cpf"]').addEventListener('input', function() {
-            let value = this.value.replace(/\D/g, '');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            this.value = value;
-        });
-
-        // --- MÁSCARA ADICIONADA ---
-        document.querySelector('input[name="cpf_responsavel"]').addEventListener('input', function() {
-            let value = this.value.replace(/\D/g, '');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            this.value = value;
-        });
-
-document.querySelector('input[name="telefone"]').addEventListener('input', function() {
-            let value = this.value.replace(/\D/g, '');
-            value = value.replace(/(\d{2})(\d)/, '($1) $2');
-            value = value.replace(/(\d{5})(\d)/, '$1-$2');
-            this.value = value;
-        });
-document.querySelector('input[name="cep"]').addEventListener('input', function() {
-            let value = this.value.replace(/\D/g, '');
-            value = value.replace(/(\d{5})(\d)/, '$1-$2');
-            this.value = value;
-        });
-window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
-                document.getElementById('sidebar').classList.remove('mobile-hidden');
-                document.querySelector('.sidebar-overlay').classList.remove('active');
-            } else {
-                document.getElementById('sidebar').classList.add('mobile-hidden');
-            }
-        
-});
-
-        // Fechar modais clicando fora
-        document.getElementById('successModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal('successModal');
-            }
-        });
-        
-        // Listener para o novo modal de erro
-        document.getElementById('errorModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal('errorModal');
-            }
-        });
-    </script>
+        };
+    });
+    
+    closeBtn.onclick = () => modal.classList.remove('show');
+    modal.onclick = (e) => { if(e.target === modal) modal.classList.remove('show'); };
+  </script>
 </body>
 </html>

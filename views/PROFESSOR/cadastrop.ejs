@@ -27,6 +27,7 @@
     }
 
     .sidebar {
+<<<<<<< HEAD
       width: var(--sidebar-width);
       height: 100vh;
       background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
@@ -44,6 +45,27 @@
       text-decoration: none;
     }
 
+=======
+    width: 280px;
+    height: 100vh; /* Ocupa a altura total */
+    background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+    
+    /* Configuração de Posição Fixa */
+    position: fixed; 
+    left: 0;
+    top: 0;
+    z-index: 1000; /* Garante que fique na frente, mas não tanto que quebre modais */
+    
+    /* Organização interna */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinha tudo no topo */
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+     a {
+    text-decoration: none;
+                }
+}
+>>>>>>> 557416a29dca9e3e1d10372f43526b556d2d13b0
     .logo {
       padding: 0px 40px;
       text-align: center;
@@ -136,11 +158,25 @@
       z-index: 2;
     }
 
+<<<<<<< HEAD
     .sidebar-footer {
       padding: 20px 18px;
       margin-top: 10rem;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
+=======
+    .seteeduca {
+      color: #333;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+  .sidebar-footer {
+    padding: 20px 18px;
+    margin-top: 10rem; /* A distância que definimos antes */
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+>>>>>>> 557416a29dca9e3e1d10372f43526b556d2d13b0
     
     .logout-button {
       padding: 16px 20px;
@@ -170,12 +206,23 @@
     }
 
     .main-content {
+<<<<<<< HEAD
       margin-left: var(--sidebar-width);
       width: calc(100% - var(--sidebar-width));
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
+=======
+    /* O SEGREDO: Margem esquerda igual à largura da sidebar */
+    margin-left: 280px; 
+    width: calc(100% - 280px); /* Ocupa o restante da tela */
+    
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+>>>>>>> 557416a29dca9e3e1d10372f43526b556d2d13b0
 
     .header {
       background: #ef7215;
@@ -756,6 +803,20 @@
         if (dropdownMenu.classList.contains('show')) {
           dropdownMenu.classList.remove('show');
           profileArrow.style.transform = 'rotate(0deg)';
+            // Navegar para a página correspondente
+            if (rotas[pagina]) {
+                window.location.href = rotas[pagina];
+            } else {
+                console.warn(`Rota não encontrada para: ${pagina}`);
+                // Fallback - mostrar modal informativo
+                showModal(`Página "${pagina.toUpperCase()}" em desenvolvimento.\nEm breve estará disponível!`);
+            }
+        }
+    document.addEventListener('DOMContentLoaded', function() {
+      const logoutButton = document.querySelector('.logout-button');
+      logoutButton.addEventListener('click', function() {
+        if ( confirm('Deseja realmente sair do sistema?')) {
+          window.location.href = '/login/sair'; // Redireciona para a página de login
         }
       });
     }

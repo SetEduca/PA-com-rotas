@@ -1,389 +1,312 @@
 import express from 'express';
 import supabase from '../supabase.js';
-import crypto from 'crypto'; // Importa o módulo crypto
-import * as asaasService from '../services/asaasService.js';
-import Responsavel from '../models/Responsavel.js';
 
 const router = express.Router();
 
-// -------------------------------------------------------------------------
-// 1. ROTA PARA EXIBIR A PÁGINA (LISTAGEM INICIAL)
-// -------------------------------------------------------------------------
-// Rota: /acessar-aluno/
+// 1. LISTAR ALUNOS (GET /)
 router.get('/', async (req, res) => {
     try {
-        // A página 'acessar-aluno.ejs' [cite: 1-234] faz sua própria chamada fetch [cite: 169-173],
-        // então não precisamos passar os 'alunos' aqui.
-        // Apenas renderizamos a página base.
-        res.render('ALUNO/acessar-aluno', { alunos: [] }); // Passa array vazio
-
-    } catch (error) {
-        console.error("Erro geral ao renderizar página:", error.message);
-        res.status(500).send('Erro ao carregar página. Verifique o console do servidor.');
-    }
-});
-
-// -------------------------------------------------------------------------
-// 2. API PARA LISTAR TODAS AS CRIANÇAS
-// -------------------------------------------------------------------------
-// Rota: /acessar-aluno/api/listar
-router.get('/api/listar', async (req, res) => {
-    try {
         const { data, error } = await supabase
-            .from('cadastro_crianca') // <-- CORRIGIDO
+            .from('cadastro_crianca')
             .select(`
-                id, 
-                nome, 
-                data_nascimento,
-                ativo,
-                sexo, 
-                naturalidade, 
-                responsavel_principal, 
-                responsavel_secundario,
-                endereco_crianca(rua, numero, bairro, cidade, estado, cep), 
-                saude_crianca(observacoes)
-            `) // <-- CORRIGIDO
+                id, nome, foto_crianca,
+                responsavel:responsavel_id (
+                    nome,
+                    tel_resp (ddd, numero)
+                )
+            `)
             .eq('ativo', true)
             .order('nome', { ascending: true });
 
         if (error) throw error;
-        
-        // Normaliza os dados para o que o EJS espera [cite: 161-162]
-        const alunosNormalizados = data.map(aluno => ({
-            ...aluno,
-            ENDERECO_CRIANCA: aluno.endereco_crianca || [], 
-            SAUDE_CRIANCA: aluno.saude_crianca || []
-        }));
-        
-        res.json(alunosNormalizados); // O EJS pega esse JSON
 
-    } catch (error) {
-        console.error("Erro ao listar crianças:", error.message);
-        res.status(500).json({ error: 'Erro ao buscar dados.' });
-    }
-});
-
-// -------------------------------------------------------------------------
-// 3. API PARA BUSCAR CRIANÇAS POR NOME
-// -------------------------------------------------------------------------
-// Rota: /acessar-aluno/api/buscar
-router.get('/api/buscar', async (req, res) => {
-    const { termo } = req.query;
-    
-    if (!termo || termo.trim().length === 0) {
-        return res.status(400).json({ error: 'Termo de busca inválido' });
-    }
-
-    try {
-        const { data, error } = await supabase
-            .from('cadastro_crianca') // <-- CORRIGIDO
-            .select(`
-                id, 
-                nome, 
-                data_nascimento,
-                ativo,
-                sexo, 
-                naturalidade, 
-                responsavel_principal, 
-                responsavel_secundario,
-                endereco_crianca(rua, numero, bairro, cidade, estado, cep), 
-                saude_crianca(observacoes)
-            `) // <-- CORRIGIDO
-            .eq('ativo', true)
-            .ilike('nome', `%${termo}%`)
-            .order('nome', { ascending: true });
-
-        if (error) throw error;
-        
-        const alunosNormalizados = data.map(aluno => ({
-            ...aluno,
-            ENDERECO_CRIANCA: aluno.endereco_crianca || [], 
-            SAUDE_CRIANCA: aluno.saude_crianca || []
-        }));
-        
-        res.json(alunosNormalizados);
-
-    } catch (error) {
-        console.error("Erro ao buscar crianças:", error.message);
-        res.status(500).json({ error: 'Erro ao buscar dados.' });
-    }
-});
-
-// -------------------------------------------------------------------------
-// 4. API PARA BUSCAR DETALHES DE UMA CRIANÇA
-// -------------------------------------------------------------------------
-// Rota: /acessar-aluno/api/detalhes/:id
-router.get('/api/detalhes/:id', async (req, res) => {
-    const { id } = req.params;
-    
-    try {
-        const { data, error } = await supabase
-            .from('cadastro_crianca') // <-- CORRIGIDO
-            .select(`
-                id,
-                nome,
-                data_nascimento,
-                ativo,
-                sexo,
-                naturalidade,
-                responsavel_principal,
-                responsavel_secundario,
-                endereco_crianca(rua, numero, bairro, cidade, estado, cep),
-                saude_crianca(observacoes)
-            `) // <-- CORRIGIDO
-            .eq('id', id)
-            .eq('ativo', true)
-            .single(); 
-
-        if (error) {
-            if (error.code === 'PGRST116') {
-                return res.status(404).json({ error: 'Criança não encontrada' });
+        const alunosFormatados = data.map(aluno => {
+            let telefoneFormatado = '-';
+            if (aluno.responsavel?.tel_resp && aluno.responsavel.tel_resp.length > 0) {
+                const t = aluno.responsavel.tel_resp[0];
+                // Correção: Adicionadas crases (backticks)
+                telefoneFormatado = `(${t.ddd}) ${t.numero}`;
             }
-            throw error;
-        }
-        
-        if (!data) {
-            return res.status(404).json({ error: 'Criança não encontrada' });
-        }
 
-        // Normalizando para o EJS [cite: 185-189]
-        const criancaNormalizada = {
-            ...data,
-            ENDERECO_CRIANCA: data.endereco_crianca,
-            SAUDE_CRIANCA: data.saude_crianca
-        };
+            return {
+                id: aluno.id,
+                nome: aluno.nome,
+                responsavel: aluno.responsavel ? aluno.responsavel.nome : 'Não informado',
+                telefone: telefoneFormatado,
+                foto: aluno.foto_crianca
+            };
+        });
 
-        res.json(criancaNormalizada);
+        res.render('ALUNO/acessar-aluno', { alunos: alunosFormatados });
 
     } catch (error) {
-        console.error("Erro ao buscar detalhes da criança:", error.message);
+        console.error("Erro ao listar alunos:", error.message);
+        res.render('ALUNO/acessar-aluno', { alunos: [] });
+    }
+});
+
+// 2. VER DETALHES NO MODAL (API JSON)
+router.get('/ver/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const { data: crianca, error: errCrianca } = await supabase
+            .from('cadastro_crianca')
+            // Correção: Ajustado para buscar todos os campos (*) e o relacionamento, removendo a vírgula solta
+            .select('*, responsavel:responsavel_id(*)')
+            .eq('id', id)
+            .single();
+
+        if (errCrianca) throw errCrianca;
+
+        let telData = [];
+        if (crianca.responsavel_id) {
+            const { data: t } = await supabase.from('tel_resp').select('*').eq('responsavel_id', crianca.responsavel_id);
+            telData = t || [];
+        }
+
+        const { data: enderecoData } = await supabase.from('endereco_crianca').select('*').eq('crianca_id', id);
+        const { data: saudeData } = await supabase.from('saude_crianca').select('*').eq('crianca_id', id);
+
+        let tel = '-';
+        // Correção: Adicionadas crases (backticks)
+        if (telData.length > 0) { tel = `(${telData[0].ddd}) ${telData[0].numero}`; }
+
+        let dataFormatada = crianca.data_nascimento || '-';
+        if (dataFormatada && dataFormatada.includes('-')) {
+            const [ano, mes, dia] = dataFormatada.split('-');
+            // Correção: Adicionadas crases (backticks)
+            dataFormatada = `${dia}/${mes}/${ano}`;
+        }
+
+        const end = (enderecoData && enderecoData.length > 0) ? enderecoData[0] : {};
+        const saude = (saudeData && saudeData.length > 0) ? saudeData[0] : {};
+
+        res.json({
+            nome: crianca.nome,
+            dataNascimento: dataFormatada,
+            cpf: crianca.cpf || '-',
+            sexo: crianca.sexo || '-',
+            naturalidade: crianca.naturalidade || '-',
+            responsavel: crianca.responsavel?.nome || '-',
+            cpf_responsavel: crianca.responsavel?.cpf || '-',
+            email: crianca.responsavel?.email || '-',
+            telefone: tel,
+            cep: end.cep || '-',
+            cidade: end.cidade || '-',
+            estado: end.estado || '-',
+            logradouro: end.rua || '-', 
+            numero: end.numero || 'S/N',
+            bairro: end.bairro || '-',
+            observacoes: saude.observacoes || 'Nenhuma observação.',
+            alergias: saude.alergias || '',
+            deficiencias: saude.deficiencias || ''
+        });
+
+    } catch (error) {
+        console.error("Erro API Ver Detalhes:", error);
         res.status(500).json({ error: 'Erro ao buscar detalhes' });
     }
 });
 
-// -------------------------------------------------------------------------
-// 5. ROTA PARA ARQUIVAR (EXCLUSÃO LÓGICA)
-// -------------------------------------------------------------------------
-// Rota: /acessar-aluno/arquivar/:id
-router.post('/arquivar/:id', async (req, res) => {
+// 3. ABRIR TELA DE EDIÇÃO (GET)
+router.get('/editar/:id', async (req, res) => {
     const { id } = req.params;
-    
     try {
-        const { data: criancaExiste, error: erroVerificacao } = await supabase
-            .from('cadastro_crianca') // <-- CORRIGIDO
-            .select('id')
+        const { data: crianca, error } = await supabase
+            .from('cadastro_crianca')
+            .select('*, responsavel:responsavel_id(*)')
             .eq('id', id)
-            .eq('ativo', true)
             .single();
 
-        if (erroVerificacao || !criancaExiste) {
-            return res.status(404).json({ 
-                error: 'Criança não encontrada ou já está arquivada' 
-            });
-        }
+        if (error) throw error;
 
-        const { error } = await supabase
-            .from('cadastro_crianca') // <-- CORRIGIDO
-            .update({ ativo: false })
-            .eq('id', id);
-
-        if (error) {
-            console.error("Erro ao arquivar:", error.message);
-            throw error;
-        }
+        const { data: enderecoData } = await supabase.from('endereco_crianca').select('*').eq('crianca_id', id);
+        const { data: saudeData } = await supabase.from('saude_crianca').select('*').eq('crianca_id', id);
         
-        res.json({ message: 'Cadastro arquivado com sucesso' });
+        let telData = [];
+        if (crianca.responsavel_id) {
+            const { data: t } = await supabase.from('tel_resp').select('*').eq('responsavel_id', crianca.responsavel_id);
+            telData = t;
+        }
+
+        const alunoCompleto = {
+            ...crianca,
+            endereco_crianca: enderecoData || [],
+            saude_crianca: saudeData || [],
+            responsavel: {
+                ...(crianca.responsavel || {}),
+                tel_resp: telData || []
+            }
+        };
+
+        res.render('ALUNO/editar-aluno', { aluno: alunoCompleto });
 
     } catch (error) {
-        console.error("Erro geral ao arquivar criança:", error.message);
-        res.status(500).json({ 
-            error: 'Erro ao arquivar cadastro.', 
-            details: error.message 
-        });
+        console.error("Erro ao carregar edição:", error.message);
+        res.redirect('/acessar-aluno');
     }
 });
 
-
-// 6. ROTA POST PARA CADASTRAR NOVO ALUNO (COM INTEGRAÇÃO ASAAS AUTOMÁTICA)
-// ========================================================================
-// Rota: /acessar-aluno/cadastrar
-router.post('/cadastrar', async (req, res) => {
-    
+// 4. SALVAR EDIÇÃO (POST)
+router.post('/editar/:id', async (req, res) => {
+    const { id } = req.params;
     const {
-        nome, dataNascimento: data_nascimento, cpf, sexo, naturalidade,
-        responsavel: responsavel_nome, cpf_responsavel,
-        telefone: responsavel_telefone_completo, email: responsavel_email,
-        logradouro: rua, numero: end_numero, bairro, cidade, estado, cep,
-        observacoes
+        nome, dataNascimento, cpf, sexo, naturalidade,
+        responsavel: nomeResp, cpf_responsavel, telefone, email,
+        cep, cidade, estado, logradouro, numero, bairro,
+        observacoes, alergias, deficiencias,
+        foto_crianca
     } = req.body;
 
-    // Limpeza de CPFs (remove pontos e traços)
-    const cpfCriancaLimpo = cpf ? cpf.replace(/\D/g, '') : null;
-    const cpfResponsavelLimpo = cpf_responsavel ? cpf_responsavel.replace(/\D/g, '') : null;
+    try {
+        // Objeto de atualização da criança
+        const updateCrianca = { 
+            nome, 
+            data_nascimento: dataNascimento, 
+            cpf: cpf.replace(/\D/g, ''), 
+            sexo, 
+            naturalidade 
+        };
 
-    let responsavelId;
-    let criancaId;
-    let responsavelFoiCriado = false; // Flag para rollback
+        // Se enviou foto nova, atualiza
+        if (foto_crianca && foto_crianca.length > 100) {
+            updateCrianca.foto_crianca = foto_crianca;
+        }
+
+        // 1. Atualiza Criança
+        const { data: crianca, error: errC } = await supabase.from('cadastro_crianca')
+            .update(updateCrianca)
+            .eq('id', id)
+            .select('responsavel_id')
+            .single();
+            
+        if (errC) throw errC;
+
+        // 2. Atualiza Responsável
+        if (crianca.responsavel_id) {
+            await supabase.from('responsavel')
+                .update({ nome: nomeResp, cpf: cpf_responsavel.replace(/\D/g, ''), email: email })
+                .eq('id', crianca.responsavel_id);
+
+            const telLimpo = telefone.replace(/\D/g, '');
+            if (telLimpo.length >= 10) {
+                await supabase.from('tel_resp').delete().eq('responsavel_id', crianca.responsavel_id);
+                await supabase.from('tel_resp').insert({ 
+                    ddd: telLimpo.substring(0, 2), 
+                    numero: telLimpo.substring(2), 
+                    responsavel_id: crianca.responsavel_id 
+                });
+            }
+        }
+
+        // 3. Atualiza Endereço
+        const dadosEnd = { rua: logradouro, numero, bairro, cidade, estado, cep, crianca_id: id };
+        const { data: endExistente } = await supabase.from('endereco_crianca').select('id').eq('crianca_id', id).maybeSingle();
+        
+        if (endExistente) {
+            await supabase.from('endereco_crianca').update(dadosEnd).eq('crianca_id', id);
+        } else {
+            await supabase.from('endereco_crianca').insert(dadosEnd);
+        }
+
+        // 4. Atualiza Saúde
+        const dadosSaude = { observacoes, alergias: alergias || '', deficiencias: deficiencias || '', crianca_id: id };
+        const { data: saudeExistente } = await supabase.from('saude_crianca').select('id').eq('crianca_id', id).maybeSingle();
+        if (saudeExistente) {
+            await supabase.from('saude_crianca').update(dadosSaude).eq('crianca_id', id);
+        } else {
+            await supabase.from('saude_crianca').insert(dadosSaude);
+        }
+
+        res.redirect('/acessar-aluno');
+    } catch (error) {
+        console.error("Erro ao salvar edição:", error.message);
+        res.status(500).send("Erro ao salvar alterações: " + error.message);
+    }
+});
+
+// 5. CADASTRAR NOVO (POST)
+router.post('/cadastrar', async (req, res) => {
+    const { 
+        nome, dataNascimento, cpf, sexo, naturalidade, 
+        responsavel: nomeResp, cpf_responsavel, telefone, email, 
+        cep, cidade, estado, logradouro, numero, bairro, 
+        observacoes, foto_crianca 
+    } = req.body;
+
+    const cpfRespClean = cpf_responsavel ? cpf_responsavel.replace(/\D/g, '') : null;
 
     try {
-        
-        // Passo 1: Encontrar ou Criar Responsável
-        const { data: responsavelExistente, error: erroConsulta } = await supabase
-            .from('responsavel')
-            .select('id, asaascustomerid') // <-- Verificamos se já tem ID Asaas
-            .eq('cpf', cpfResponsavelLimpo)
-            .single();
+        let responsavelId;
 
-        if (responsavelExistente) {
-            // Se encontrou, apenas usa o ID
-            responsavelId = responsavelExistente.id;
-            console.log("Responsável já existe. ID:", responsavelId);
-        
-        } else if (erroConsulta && erroConsulta.code === 'PGRST116') {
-            // ---------------------------------------------------------
-            // MUDANÇA AQUI: CRIAR NO ASAAS PRIMEIRO
-            // ---------------------------------------------------------
-            console.log(">>> Criando cliente no Asaas...");
-            let idAsaas = null;
+        // 1. Responsável
+        const { data: respExistente } = await supabase.from('responsavel').select('id').eq('cpf', cpfRespClean).maybeSingle();
 
-            try {
-                const clienteAsaas = await asaasService.criarCliente({
-                    name: responsavel_nome,
-                    cpfCnpj: cpfResponsavelLimpo,
-                    email: responsavel_email,
-                    mobilePhone: responsavel_telefone_completo
-                });
-                idAsaas = clienteAsaas.id; // Ex: 'cus_12345'
-                console.log(">>> ID Asaas gerado com sucesso:", idAsaas);
-            } catch (erroAsaas) {
-                console.error(">>> ALERTA: Falha ao criar no Asaas. O cadastro seguirá sem sincronia.", erroAsaas.message);
-                // Decisão: Continuamos o cadastro mesmo se o Asaas falhar? 
-                // Geralmente sim, para não travar a matrícula. O ID ficará null.
-                idAsaas = null; 
-            }
-
-            // ---------------------------------------------------------
-            // CRIAR NO BANCO (COM O ID DO ASAAS)
-            // ---------------------------------------------------------
-            const { data: responsavelData, error: responsavelError } = await supabase
-                .from('responsavel')
-                .insert({
-                    nome: responsavel_nome,
-                    email: responsavel_email,
-                    cpf: cpfResponsavelLimpo,
-                    // AQUI ESTÁ A MÁGICA: Salvamos o ID que veio do Asaas
-                    asaascustomerid: idAsaas 
-                })
+        if (respExistente) {
+            responsavelId = respExistente.id;
+        } else {
+            const { data: novoResp, error: errResp } = await supabase.from('responsavel')
+                .insert({ nome: nomeResp, cpf: cpfRespClean, email })
                 .select('id')
                 .single();
-
-            if (responsavelError) {
-                throw new Error(`Erro ao criar responsável: ${responsavelError.message}`);
-            }
-            
-            responsavelId = responsavelData.id;
-            responsavelFoiCriado = true;
-
-        } else if (erroConsulta) {
-            throw new Error(`Erro ao consultar responsável: ${erroConsulta.message}`);
+            if (errResp) throw errResp;
+            responsavelId = novoResp.id;
         }
-        
-        // Passo 2: Inserir Telefone do Responsável
-        if (responsavel_telefone_completo) {
-            const telLimpo = responsavel_telefone_completo.replace(/\D/g, '');
-            const ddd = telLimpo.substring(0, 2);
-            const numeroTel = telLimpo.substring(2);
-            
-            const { error: telError } = await supabase
-                .from('tel_resp')
-                .insert({
-                    ddd: ddd,
-                    numero: numeroTel,
-                    responsavel_id: responsavelId
-                });
-            
-            if (telError) {
-                console.warn("Erro ao inserir telefone do responsável:", telError.message);
-            }
+
+        // 2. Telefone
+        const telLimpo = telefone ? telefone.replace(/\D/g, '') : '';
+        if (telLimpo.length >= 10) {
+            await supabase.from('tel_resp').delete().eq('responsavel_id', responsavelId);
+            await supabase.from('tel_resp').insert({ 
+                ddd: telLimpo.substring(0, 2), 
+                numero: telLimpo.substring(2), 
+                responsavel_id: responsavelId 
+            });
         }
-        
-        // Passo 3: Inserir a Criança
-        const { data: criancaData, error: criancaError } = await supabase
-            .from('cadastro_crianca')
+
+        // 3. Criança (INCLUINDO A FOTO)
+        const { data: novaCrianca, error: errCrianca } = await supabase.from('cadastro_crianca')
             .insert({
-                cpf: cpfCriancaLimpo, 
-                nome: nome,
-                data_nascimento: data_nascimento,
-                sexo: sexo,
-                naturalidade: naturalidade,
-                responsavel_id: responsavelId,
-                ativo: true
-                
+                nome, 
+                data_nascimento: dataNascimento, 
+                cpf: cpf?.replace(/\D/g, ''), 
+                sexo, 
+                naturalidade, 
+                responsavel_id: responsavelId, 
+                ativo: true,
+                foto_crianca: foto_crianca || null 
             })
             .select('id')
             .single();
 
-        if (criancaError) {
-            console.error("Erro ao inserir criança:", criancaError.message);
-            
-            // Rollback: Só deleta o responsável se ele foi criado AGORA
-            if (responsavelFoiCriado) {
-                await supabase.from('responsavel').delete().eq('id', responsavelId);
-            }
-            
-            if (criancaError.code === '23505') {
-                 throw new Error(`O CPF ${cpf} da criança já está cadastrado.`);
-            }
-            throw new Error(`Erro ao cadastrar criança: ${criancaError.message}`);
-        }
-        criancaId = criancaData.id;
+        if (errCrianca) throw errCrianca;
 
-        // Passo 4: Inserir Endereço da Criança
-        if (rua && end_numero && bairro && cidade && cep && estado) {
-            const { error: endError } = await supabase
-                .from('endereco_crianca')
-                .insert({
-                    rua: rua,
-                    numero: end_numero,
-                    bairro: bairro,
-                    cidade: cidade,
-                    cep: cep,
-                    estado: estado,
-                    crianca_id: criancaId
-                });
-            
-            if (endError) {
-                console.warn("Erro ao inserir endereço da criança:", endError.message);
-            }
-        }
-
-        // Passo 5: Inserir Saúde da Criança
-        if (observacoes && observacoes.trim() !== '') {
-            const { error: saudeError } = await supabase
-                .from('saude_crianca')
-                .insert({
-                    observacoes: observacoes,
-                    crianca_id: criancaId
-                });
-
-            if (saudeError) {
-                console.warn("Erro ao inserir dados de saúde:", saudeError.message);
-            }
-        }
-
-        // Se tudo deu certo
-        res.status(201).json({ 
-            message: 'Criança cadastrada com sucesso!', 
-            criancaId: criancaId, 
-            responsavelId: responsavelId 
+        // 4. Endereço
+        const { error: errEnd } = await supabase.from('endereco_crianca').insert({
+            rua: logradouro, numero, bairro, cidade, estado, cep, crianca_id: novaCrianca.id
         });
+
+        if (errEnd) throw new Error("Erro endereço: " + errEnd.message);
+
+        // 5. Saúde
+        if (observacoes) {
+            await supabase.from('saude_crianca').insert({ observacoes, crianca_id: novaCrianca.id });
+        }
+
+        res.status(200).json({ message: 'Sucesso' });
 
     } catch (error) {
-        console.error("Erro geral no cadastro:", error.message);
-        res.status(500).json({ 
-            error: 'Erro interno ao processar cadastro.', 
-            details: error.message 
-        });
+        console.error("Erro Fatal no Cadastro:", error);
+        if (error.code === '23505' || (error.message && error.message.includes('duplicate key'))) {
+             return res.status(400).json({ error: 'Este CPF já está cadastrado.' });
+        }
+        res.status(500).json({ error: error.message || "Erro interno." });
     }
 });
+
+router.post('/arquivar/:id', async (req, res) => {
+    try { await supabase.from('cadastro_crianca').update({ ativo: false }).eq('id', req.params.id); res.redirect('/acessar-aluno'); }
+    catch (error) { res.status(500).send("Erro ao arquivar."); }
+});
+
 export default router;

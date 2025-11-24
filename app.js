@@ -48,6 +48,8 @@ app.use(express.json());
  app.set("view engine", "ejs");
  app.set("views", "./views");
  app.use(express.static('public'));
+ app.use(express.json({ limit: '50mb' }));
+ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
  app.use(express.urlencoded({ extended: true }));
 
 
@@ -92,14 +94,14 @@ app.use('/cadastro', cadastroRouter);
 
 //PERFIL
 
-app.get("/meuperfil", privateRoute, (req, res) => { 
-  res.render("PERFIL/meuperfil");});
+// PERFIL - Rotas do perfil (ATUALIZADO)
+app.use('/meuperfil', privateRoute, perfilRouter);
+app.use('/api/perfil', privateRoute, perfilRouter);
 
+// Outras rotas protegidas
 app.use('/mensalidade', privateRoute, mensalidadeRouter); 
-
 app.use('/arquivados', privateRoute, arquivadosRouter); 
-
-app.use('/api/perfil', privateRoute, perfilRouter); 
+ 
 
 //HOME
 

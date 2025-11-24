@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seteeduca - Editar Aluno</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Allerta&family=Kodchasan:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #e8e8e8; min-height: 100vh; display: flex; }
+    .sidebar {
+            width: 280px; 
+            height: 100vh;
+            /* Largura definida pela variável CSS */
+            background: linear-gradient(180deg, #FFF4DF 0%, #f8f0e3 100%);
+            /* Fundo com um gradiente suave */
+            display: flex;
+            /* Habilita o Flexbox para os itens internos */
+            flex-direction: column;
+            /* Organiza os itens em coluna (logo/menu em cima, footer embaixo) */
+            justify-content: space-between;
+            /* Distribui o espaço entre os itens */
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            /* Sombra sutil para dar profundidade */
+            min-height: 100vh;
+            /* Altura mínima de 100% da tela */
+            flex-shrink: 0;
+            /* Impede que a sidebar encolha se o conteúdo for muito grande */
+            position: fixed;
+            /* Fixa a sidebar na tela, para que não role com a página */
+            left: 0;
+            top: 0;
+            z-index: 1000;
+
+            a {
+    text-decoration: none;
+                }
+            /* Posicionamento e ordem de sobreposição */
+        }
+    .logo { padding: 0px 40px; text-align: center; margin-bottom: 25px; margin-top: 30px; }
+    .menu { flex: 0 0 auto; padding: 20px 18px;overflow: visible; flex-grow: 0 !important; height: auto !important; margin-bottom: 20px; height: auto;}
+    .menu-item { padding: 30px 20px; margin-bottom: 6px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; position: relative; display: flex; align-items: center; font-weight: 500; color: black; }
+    .menu-item i { margin-right: 15px; font-size: 18px; width: 24px; text-align: center; z-index: 2; }
+    .menu-item span { z-index: 2; font-size: 15px; }
+    .menu-item:hover { background-color: #6c757d21; }
+    .menu-item::after { padding: 0 10px; content: ''; position: absolute; bottom: -3px; left: 20px; height: 2px; width: 0px; transition: width 0.3s ease; border-radius: 1px; }
+    .menu-item:hover::after, .menu-item.active::after { width: calc(100% - 40px); }
+    .menu-item:nth-child(2)::after { background-color: #306bc2; }
+    .menu-item.active { background-color: rgba(128, 128, 128, 0.356); color: #333; font-weight: 600; }
+    .menu-item.active::before {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            z-index: 2;
+        }
+     .menu-item:nth-child(1)::after { background-color: #F4BF27; }
+        .menu-item:nth-child(2)::after { background-color: #306bc2; }
+        .menu-item:nth-child(3)::after { background-color: #9747FF; }
+        .menu-item:nth-child(4)::after { background-color: #F88C12; }
+        .menu-item:nth-child(5)::after { background-color: #D22A2A; }
+        .menu-item:nth-child(6)::after { background-color: #59C631; }
+     .sidebar-footer {
+            padding: 20px 18px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        
+}
+    .logout-button { padding: 16px 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; font-weight: 500; color: #333; width: 100%; gap: 15px; padding-left: 20px; color: inherit; text-decoration: none; cursor: pointer;  }
+    .logout-button:hover { background-color: rgba(210, 42, 42, 0.1); color: #ef7215; font-weight: 600; }
+    .main-content { flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+    .header { background: #306bc2; height: 80px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; color: white; width: 100%; }
+    .header-title { display: flex; align-items: center; gap: 10px; font-size: 1.5rem; color: white; font-family: 'Kodchasan', sans-serif; }
+    .content-area { padding: 30px; background: #fcf8f2; flex: 1; display: flex; justify-content: center; align-items: flex-start; width: 100%; }
+    .caixa { width: 90%; max-width: 800px; background-color: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); padding: 40px; margin-top: 20px; border-top: 5px solid #306bc2; }
+    form { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+    .campo { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    label { font-weight: 600; font-size: 1.1rem; color: #333; margin-left: 10px; }
+    input, select, textarea { padding: 14px 18px; border: 2px solid #ddd; border-radius: 8px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1rem; width: 100%; background-color: #fff; transition: all 0.3s; }
+    input:focus { border-color: #306bc2; outline: none; }
+    .button-container { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+    .btn-action-form { width: 180px; height: 55px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: white; }
+    .btn-save { background-color: #28a745; }
+    .btn-cancel { background-color: #6c757d; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+    
+    /* CSS NOVO PARA FOTO */
+    .photo-upload-section { text-align: center; padding: 20px; margin-bottom: 20px; border: 2px dashed #ddd; border-radius: 10px; }
+    .photo-preview { width: 100px; height: 100px; border-radius: 50%; background: #f0f0f0; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .upload-btn { padding: 8px 15px; background: #306bc2; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    /* --- RESPONSIVIDADE DA SIDEBAR (Adicione ao final do seu CSS) --- */
+@media (max-width: 768px) {
+    /* 1. Reduz a largura da barra */
+    .sidebar {
+        width: 70px;
+        display: flex; /* Força ela a aparecer (antes estava 'none') */
+    }
+
+    /* 2. Esconde os textos (Nome dos menus e Sair) */
+    .menu-item span, 
+    .logout-button span {
+        display: none;
+    }
+
+    /* 3. Centraliza os ícones */
+    .menu-item, 
+    .logout-button {
+        justify-content: center; /* Centraliza o conteúdo horizontalmente */
+        padding: 20px 0;         /* Ajusta o espaço vertical */
+    }
+
+    .menu-item i, 
+    .logout-button i {
+        margin-right: 0;         /* Remove o espaço à direita do ícone */
+    }
+
+    /* 4. Ajusta o tamanho da Logo para caber na barra fina */
+    .logo {
+        padding: 0 5px;
+        margin-top: 20px;
+    }
+    .logo img {
+        max-width: 40px; /* Logo pequena */
+    }
+
+    /* 5. Ajustes visuais finos (bolinha e linhas) */
+    .menu-item::after { display: none; } /* Remove as linhas coloridas embaixo */
+    
+    .menu-item.active::before {
+        right: 5px; /* Ajusta a posição da bolinha de ativo */
+    }
+
+    .sidebar-footer {
+        padding: 10px 5px;
+    }
+
+    /* 6. Ajuste IMPORTANTE do conteúdo principal */
+    /* Se a barra diminuiu, o conteúdo tem que voltar um pouco para a esquerda */
+    .main-content {
+        margin-left: 70px; /* Mesma largura da sidebar pequena */
+        width: calc(100% - 70px);
+    }
+}
+
+/* Ajuste para celulares muito pequenos (Opcional) */
+@media (max-width: 480px) {
+    .main-content {
+        margin-left: 0; /* Em telas muito pequenas, talvez seja melhor esconder a barra ou jogar o conteúdo por cima */
+        width: 100%;
+    }
+    .sidebar {
+        display: none; /* Oculta a barra em celulares minúsculos se preferir */
+    }
+}
+  </style>
+</head>
+<body>
+ <div class="sidebar-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="sidebar mobile-hidden" id="sidebar">
+         <div>
+
+
+            <div class="logo">
+
+
+                <img src="/logo.png" alt="logo">
+
+        </div>
+
+             <div class="menu">
+                <a href="/home" class="menu-item" onclick="navegarPara('inicio')">
+
+
+                    <i class="fas fa-home"></i>
+
+                    <span>INÍCIO</span>
+                </a>
+
+               <a href="/acessar-aluno" class="menu-item active" onclick="navegarPara('cadastro')">
+                    <i class="fas fa-address-card"></i>
+                    <span>CADASTRO</span>
+                </a>
+                <a href="/matriculas"class="menu-item" onclick="navegarPara('matricula')">
+
+               <i class="fas fa-user-graduate"></i>
+                    <span>MATRÍCULA</span>
+                </a>
+
+
+                <a href="/professores" class="menu-item" id="professor-link">
+
+
+                    <i class="fas fa-chalkboard-teacher"></i>
+
+              <span>PROFESSOR</span>
+                </a>
+
+                <a href="/turmas" class="menu-item" onclick="navegarPara('turmas')">
+                    <i class="fas fa-users"></i>
+                    <span>TURMA</span>
+          </a>
+
+
+                <a href="/financeiro" class="menu-item" onclick="navegarPara('financeiro')">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>FINANCEIRO</span>
+                </a>
+</div>
+
+
+        </div>
+
+
+        <div class="sidebar-footer">
+
+
+    <a href="/login/sair" class="logout-button" onclick="return confirm('Deseja realmente sair do sistema?')">
+
+
+        <i class="fa-solid fa-right-from-bracket"></i>
+
+
+        <span>Sair</span>
+    </a>
+</div>
+        </div> 
+
+  <div class="main-content">
+    <div class="header">
+       <div class="header-title"><i class="fas fa-user-edit"></i><span>Editar <b>ALUNO</b></span></div>
+    </div>
+
+    <div class="content-area">
+      <div class="caixa">
+         <form action="/acessar-aluno/editar/<%= aluno.id %>" method="POST">
+            
+            <input type="hidden" name="foto_crianca" id="campoFotoBase64">
+            <div class="photo-upload-section">
+                <div class="photo-preview" id="photoPreview">
+                    <% if(aluno.foto_crianca) { %>
+                        <img src="<%= aluno.foto_crianca %>" alt="Foto Atual">
+                    <% } else { %>
+                        <i class="fas fa-camera" style="font-size: 24px; color: #ccc;"></i>
+                    <% } %>
+                </div>
+                <button type="button" class="upload-btn" onclick="uploadPhoto()">Alterar Foto</button>
+            </div>
+
+            <h3 style="color: #306bc2; border-bottom: 1px solid #ddd; padding-bottom: 10px;">Informações Pessoais</h3>
+            <div class="campo"><label>Nome Completo:</label><input type="text" name="nome" value="<%= aluno.nome || '' %>" required></div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div class="campo" style="flex: 1;"><label>Data de Nascimento:</label><input type="date" name="dataNascimento" value="<%= aluno.data_nascimento || '' %>" required></div>
+                <div class="campo" style="flex: 1;"><label>CPF:</label><input type="text" name="cpf" value="<%= aluno.cpf || '' %>"></div>
+            </div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div class="campo" style="flex: 1;">
+                    <label>Sexo:</label>
+                    <select name="sexo" required>
+                        <% const sexo = aluno.sexo ? aluno.sexo.toLowerCase() : ''; %>
+                        <option value="Masculino" <%= sexo === 'masculino' ? 'selected' : '' %>>Masculino</option>
+                        <option value="Feminino" <%= sexo === 'feminino' ? 'selected' : '' %>>Feminino</option>
+                    </select>
+                </div>
+                <div class="campo" style="flex: 1;"><label>Naturalidade:</label><input type="text" name="naturalidade" value="<%= aluno.naturalidade || '' %>" required></div>
+            </div>
+
+            <h3 style="color: #306bc2; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 20px;">Responsável</h3>
+            <div class="campo"><label>Nome do Responsável:</label><input type="text" name="responsavel" value="<%= aluno.responsavel ? aluno.responsavel.nome : '' %>" required></div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div class="campo" style="flex: 1;"><label>CPF Responsável:</label><input type="text" name="cpf_responsavel" value="<%= aluno.responsavel ? aluno.responsavel.cpf : '' %>" required></div>
+                <div class="campo" style="flex: 1;">
+                    <label>Telefone:</label>
+                    <% let tel = ''; 
+                       if(aluno.responsavel && aluno.responsavel.tel_resp && aluno.responsavel.tel_resp.length > 0) { 
+                           /* CORREÇÃO AQUI: Adicionadas crases */
+                           tel = `(${aluno.responsavel.tel_resp[0].ddd}) ${aluno.responsavel.tel_resp[0].numero}`; 
+                       } 
+                    %>
+                    <input type="text" name="telefone" value="<%= tel %>" required>
+                </div>
+            </div>
+            <div class="campo"><label>Email:</label><input type="email" name="email" value="<%= aluno.responsavel ? aluno.responsavel.email : '' %>" required></div>
+
+            <h3 style="color: #306bc2; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 20px;">Endereço</h3>
+            
+            <% const end = (aluno.endereco_crianca && aluno.endereco_crianca.length > 0) ? aluno.endereco_crianca[0] : {}; %>
+            
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div class="campo" style="flex: 1;"><label>CEP:</label><input type="text" name="cep" value="<%= end.cep || '' %>" required></div>
+                <div class="campo" style="flex: 2;"><label>Cidade:</label><input type="text" name="cidade" value="<%= end.cidade || '' %>" required></div>
+                <div class="campo" style="flex: 1;"><label>Estado:</label><input type="text" name="estado" value="<%= end.estado || '' %>" required></div>
+            </div>
+            <div class="campo">
+                <label>Logradouro:</label>
+                <input type="text" name="logradouro" value="<%= end.rua || '' %>" required>
+            </div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div class="campo" style="flex: 1;"><label>Número:</label><input type="text" name="numero" value="<%= end.numero || '' %>" required></div>
+                <div class="campo" style="flex: 2;"><label>Bairro:</label><input type="text" name="bairro" value="<%= end.bairro || '' %>" required></div>
+            </div>
+
+            <h3 style="color: #306bc2; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 20px;">Saúde / Observações</h3>
+            <% const saude = (aluno.saude_crianca && aluno.saude_crianca.length > 0) ? aluno.saude_crianca[0] : {}; %>
+            <div class="campo"><label>Observações:</label>
+            <textarea name="observacoes" rows="3"><%= saude.observacoes || '' %></textarea></div>
+            
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                 <div class="campo" style="flex: 1;"><label>Alergias:</label><input type="text" name="alergias" value="<%= saude.alergias || '' %>"></div>
+                 <div class="campo" style="flex: 1;"><label>Deficiências:</label><input type="text" name="deficiencias" value="<%= saude.deficiencias || '' %>"></div>
+            </div>
+
+            <div class="button-container">
+                <button type="submit" class="btn-action-form btn-save">Salvar alterações</button>
+                <a href="/acessar-aluno" class="btn-action-form btn-cancel">Cancelar</a>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+        document.querySelector('input[name="cpf"]').addEventListener('input', function() { let v = this.value.replace(/\D/g, ''); v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); this.value = v; });
+        document.querySelector('input[name="cpf_responsavel"]').addEventListener('input', function() { let v = this.value.replace(/\D/g, ''); v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d)/, '$1.$2'); v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); this.value = v; });
+        document.querySelector('input[name="telefone"]').addEventListener('input', function() { let v = this.value.replace(/\D/g, ''); v = v.replace(/(\d{2})(\d)/, '($1) $2'); v = v.replace(/(\d{5})(\d)/, '$1-$2'); this.value = v; });
+        document.querySelector('input[name="cep"]').addEventListener('input', function() { let v = this.value.replace(/\D/g, ''); v = v.replace(/(\d{5})(\d)/, '$1-$2'); this.value = v; });
+
+        // JS PARA UPLOAD DE FOTO (ADICIONADO)
+        function uploadPhoto() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 2 * 1024 * 1024) { alert('Imagem muito grande (Max: 2MB).'); return; }
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('photoPreview');
+                        /* CORREÇÃO AQUI: Adicionadas crases */
+                        preview.innerHTML = `<img src="${e.target.result}" alt="Foto Nova">`;
+                        document.getElementById('campoFotoBase64').value = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        }
+  </script>
+</body>
+</html>

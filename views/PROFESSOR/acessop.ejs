@@ -102,21 +102,51 @@
       border-radius: 1px;
     }
 
-    .menu-item:hover::after,
-    .menu-item.active::after {
-      width: calc(100% - 40px);
-    }
+                /* Expande a linha quando o mouse passa por cima ou se o item está ativo */
+                .menu-item:hover::after,
+                .menu-item.active::after {
+                        width: calc(100% - 40px);
+                }
 
-    .menu-item:nth-child(1)::after { background-color: #F4BF27; }
-    .menu-item:nth-child(2)::after { background-color: #306bc2; }
-    .menu-item:nth-child(3)::after { background-color: #9747FF; }
-    .menu-item:nth-child(4)::after { background-color: #F88C12; }
-    .menu-item:nth-child(5)::after { background-color: #D22A2A; }
-    .menu-item:nth-child(6)::after { background-color: #59C631; }
+                /* Cores diferentes da linha para cada item do menu */
+                .menu-item:nth-child(1)::after {
+                        background-color: #F4BF27;
+                }
+
+                .menu-item:nth-child(2)::after {
+                        background-color: #306bc2;
+                }
+
+                .menu-item:nth-child(3)::after {
+                        background-color: #9747FF;
+                }
+
+                .menu-item:nth-child(4)::after {
+                        background-color: #F88C12;
+                }
+
+                .menu-item:nth-child(5)::after {
+                        background-color: #D22A2A;
+                }
+
+                .menu-item:nth-child(6)::after {
+                        background-color: #59C631;
+                }
+
+
+    .seteeduca {
+      color: #333;
+      text-align: center;
+      margin-bottom: 10px;
+    }
 
     .sidebar-footer {
       padding: 20px 18px;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
+      a {
+    text-decoration: none;
+                }
+
     }
 
     .logout-button {

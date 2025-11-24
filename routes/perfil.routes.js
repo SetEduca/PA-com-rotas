@@ -1,79 +1,149 @@
-// perfil.routes.js
-
-// Certifique-se de que os caminhos de importação estão corretos em relação ao seu arquivo app.js
 import express from 'express';
 import bcrypt from 'bcrypt';
-import supabase from '../supabase.js'; // Ajuste o caminho conforme a localização do seu supabase.js
+import supabase from '../supabase.js';
 
 const router = express.Router();
-const SALT_ROUNDS = 10; // Fator de segurança do bcrypt
+const SALT_ROUNDS = 10;
 
 // -------------------------------------------------------------------
-// MIDDLEWARE DE AUTENTICAÇÃO (MOCK)
-// Em um sistema real, esta função deve validar um token JWT ou sessão.
+// MIDDLEWARE DE AUTENTICAÇÃO
 // -------------------------------------------------------------------
 const ensureAuthenticated = (req, res, next) => {
-    // Para fins de modularidade e teste, usamos o ID do parâmetro da rota.
-    const crecheId = req.params.id; 
-    if (crecheId && !isNaN(parseInt(crecheId))) {
-        // ID da creche logada, usado nas queries
-        req.crecheId = parseInt(crecheId); 
+    if (req.session && req.session.userId) {
         next();
     } else {
-        // 403 - Forbidden
-        res.status(403).json({ error: 'Acesso negado. ID da creche ausente ou inválido.' });
+        res.status(403).json({ error: 'Acesso negado. Usuário não autenticado.' });
     }
 };
 
-
 // -------------------------------------------------------------------
-// ROTAS DE API PARA SALVAMENTO
-// Estas rotas devem ser montadas em '/api/perfil' no seu app.js.
-// Exemplo: app.use('/api/perfil', perfilRouter);
+// ROTA PARA RENDERIZAR A PÁGINA DE PERFIL
+// GET /meuperfil
 // -------------------------------------------------------------------
-
-// ROTA NOVA: BUSCAR INFORMAÇÕES COMPLETAS POR E-MAIL (GET)
-// GET /api/perfil/dados-cadastro?email=exemplo@email.com
-router.get('/dados-cadastro', async (req, res) => {
-    const { email } = req.query; // Pega o e-mail da query string
-
-    if (!email) {
-        return res.status(400).json({ error: 'O parâmetro de e-mail é obrigatório.' });
-    }
-
+router.get('/', async (req, res) => {
     try {
-        // Busca todas as colunas da tabela CADASTRO_CRECHE que correspondem ao email
-        // A coluna 'senha' é explicitamente omitida por segurança.
-        const { data, error } = await supabase
-            .from('CADASTRO_CRECHE')
-            .select('id, nome, cnpj, email, url_foto, created_at') // Selecione apenas as colunas necessárias e seguras
-            .eq('email', email)
-            .single(); // Espera apenas um registro
+        if (!req.session || !req.session.userId) {
+            console.log('❌ Usuário não autenticado, redirecionando para login');
+            return res.redirect('/login');
+        }
 
-        if (error && error.code !== 'PGRST116') { // PGRST116 é quando não encontra o registro (equivalente ao .single())
+        const userId = req.session.userId;
+        console.log(`🔍 Buscando dados do perfil para ID: ${userId}`);
+
+        // 1. Buscar dados da creche - CORRIGIDO: nome_creche -> nome
+        const { data: dadosCreche, error: errCreche } = await supabase
+            .from('cadastro_creche')
+            .select('id, nome, cnpj, email, url_foto') // Coluna 'nome'
+            .eq('id', userId)
+            .single();
+
+        if (errCreche && errCreche.code !== 'PGRST116') {
+            console.error('❌ Erro ao buscar dados da creche:', errCreche);
+            return res.redirect('/login');
+        }
+
+        if (!dadosCreche) {
+            console.error('❌ Creche não encontrada');
+            return res.redirect('/login');
+        }
+
+        // CORRIGIDO: nome_creche -> nome
+        console.log(`✅ Dados da creche encontrados: ${dadosCreche.nome}`); 
+
+        // 2. Buscar endereço da creche
+        const { data: dadosEndereco, error: errEndereco } = await supabase
+            .from('endereco_creche')
+            .select('cep, rua, numero, complemento, bairro, cidade, estado')
+            .eq('cadastro_id', dadosCreche.id)
+            .single();
+
+        if (errEndereco && errEndereco.code !== 'PGRST116') {
+            console.error('⚠️ Erro ao buscar endereço:', errEndereco);
+        }
+
+        console.log(`✅ Endereço ${dadosEndereco ? 'encontrado' : 'não cadastrado'}`);
+
+        // Renderizar com estrutura correta para o EJS
+        res.render('PERFIL/meuperfil', {
+            perfil: {
+                creche: {
+                    id: dadosCreche.id,
+                    nome: dadosCreche.nome, // CORRIGIDO
+                    email: dadosCreche.email,
+                    cnpj: dadosCreche.cnpj || '',
+                    foto_url: dadosCreche.url_foto || null
+                },
+                endereco: dadosEndereco ? {
+                    cep: dadosEndereco.cep || '',
+                    rua: dadosEndereco.rua || '',
+                    numero: dadosEndereco.numero || '',
+                    complemento: dadosEndereco.complemento || '',
+                    bairro: dadosEndereco.bairro || '',
+                    cidade: dadosEndereco.cidade || '',
+                    estado: dadosEndereco.estado || ''
+                } : {
+                    cep: '',
+                    rua: '',
+                    numero: '',
+                    complemento: '',
+                    bairro: '',
+                    cidade: '',
+                    estado: ''
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('💥 Erro ao carregar perfil:', error);
+        res.redirect('/login');
+    }
+});
+
+// -------------------------------------------------------------------
+// ROTA: BUSCAR INFORMAÇÕES COMPLETAS (GET)
+// GET /meuperfil/dados-cadastro
+// -------------------------------------------------------------------
+router.get('/dados-cadastro', ensureAuthenticated, async (req, res) => {
+    try {
+        const userId = req.session.userId;
+
+        const { data, error } = await supabase
+            .from('cadastro_creche')
+            .select('id, nome, cnpj, email, url_foto') // CORRIGIDO: nome_creche -> nome
+            .eq('id', userId)
+            .single();
+
+        if (error) {
             throw error;
         }
 
         if (!data) {
-            return res.status(404).json({ error: 'Creche não encontrada com este e-mail.' });
+            return res.status(404).json({ error: 'Creche não encontrada.' });
         }
 
-        // Retorna os dados da creche (exceto a senha)
-        res.json({ creche: data });
+        // Retornar com o nome correto
+        res.json({ 
+            creche: {
+                id: data.id,
+                nome: data.nome, // CORRIGIDO: nome_creche -> nome
+                cnpj: data.cnpj,
+                email: data.email,
+                url_foto: data.url_foto
+            }
+        });
 
     } catch (e) {
-        console.error('Erro ao buscar dados de cadastro por e-mail:', e.message);
+        console.error('Erro ao buscar dados de cadastro:', e.message);
         res.status(500).json({ error: 'Erro interno do servidor ao buscar dados de cadastro.' });
     }
 });
-// -------------------------------------------------------------------
-// As rotas PUT existentes (ATUALIZAR INFORMAÇÕES BÁSICAS, ALTERAR SENHA, ATUALIZAR ENDEREÇO) seguem abaixo...
-// -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
 // ROTA 1: ATUALIZAR INFORMAÇÕES BÁSICAS (Nome, Email)
-// PUT /api/perfil/:id/info
-router.put('/:id/info', ensureAuthenticated, async (req, res) => {
-    const crecheId = req.params.id;
+// PUT /meuperfil/info
+// -------------------------------------------------------------------
+router.put('/info', ensureAuthenticated, async (req, res) => {
+    const userId = req.session.userId;
     const { nome, email } = req.body;
 
     if (!nome || !email) {
@@ -82,13 +152,12 @@ router.put('/:id/info', ensureAuthenticated, async (req, res) => {
 
     try {
         const { data, error } = await supabase
-            .from('CADASTRO_CRECHE')
-            .update({ nome: nome, email: email })
-            .eq('id', crecheId)
+            .from('cadastro_creche')
+            .update({ nome: nome, email: email }) // CORRIGIDO: nome_creche -> nome
+            .eq('id', userId)
             .select();
 
         if (error) {
-            // Verifica violação de restrição única (ex: e-mail duplicado - código 23505 no Postgres)
             if (error.code === '23505') { 
                 return res.status(409).json({ error: 'Este e-mail já está em uso por outra conta.' });
             }
@@ -99,7 +168,16 @@ router.put('/:id/info', ensureAuthenticated, async (req, res) => {
             return res.status(404).json({ error: 'Creche não encontrada.' });
         }
 
-        res.json({ message: 'Informações básicas atualizadas com sucesso!', creche: data[0] });
+        res.json({ 
+            message: 'Informações básicas atualizadas com sucesso!', 
+            creche: {
+                id: data[0].id,
+                nome: data[0].nome, // CORRIGIDO: nome_creche -> nome
+                email: data[0].email,
+                cnpj: data[0].cnpj,
+                url_foto: data[0].url_foto
+            }
+        });
 
     } catch (e) {
         console.error('Erro ao atualizar informações:', e.message);
@@ -107,23 +185,25 @@ router.put('/:id/info', ensureAuthenticated, async (req, res) => {
     }
 });
 
-
+// -------------------------------------------------------------------
 // ROTA 2: ALTERAR SENHA (SEGURA COM BCRYPT)
-// PUT /api/perfil/:id/senha
-router.put('/:id/senha', ensureAuthenticated, async (req, res) => {
-    const crecheId = req.params.id;
-    const { currentPassword, newPassword } = req.body;
+// PUT /meuperfil/senha
+// -------------------------------------------------------------------
+router.put('/senha', ensureAuthenticated, async (req, res) => {
+    const userId = req.session.userId;
+    // CORRIGIDO: Mudar para senhaAntiga e senhaNova para bater com o frontend
+    const { senhaAntiga, senhaNova } = req.body; 
 
-    if (!currentPassword || !newPassword || newPassword.length < 8) {
+    if (!senhaAntiga || !senhaNova || senhaNova.length < 8) {
         return res.status(400).json({ error: 'Senha atual e nova senha (mínimo 8 caracteres) são obrigatórias.' });
     }
 
     try {
         // 1. Buscar o hash da senha atual
         let { data, error } = await supabase
-            .from('CADASTRO_CRECHE')
+            .from('cadastro_creche')
             .select('senha')
-            .eq('id', crecheId)
+            .eq('id', userId)
             .single();
 
         if (error || !data) {
@@ -132,20 +212,21 @@ router.put('/:id/senha', ensureAuthenticated, async (req, res) => {
         
         const storedHash = data.senha;
 
-        // 2. Comparar a senha atual (do formulário) com o hash armazenado
-        const isMatch = await bcrypt.compare(currentPassword, storedHash);
+        // 2. Comparar a senha atual com o hash armazenado
+        // CORRIGIDO: Usar a variável do frontend
+        const isMatch = await bcrypt.compare(senhaAntiga, storedHash); 
 
         if (!isMatch) {
-            return res.status(401).json({ error: 'Senha atual incorreta.' }); // 401 - Unauthorized
+            return res.status(401).json({ error: 'Senha atual incorreta.' });
         }
 
         // 3. Gerar o novo hash e atualizar
-        const newHash = await bcrypt.hash(newPassword, SALT_ROUNDS);
+        const newHash = await bcrypt.hash(senhaNova, SALT_ROUNDS); // CORRIGIDO: Usar a variável do frontend
 
         const { error: updateError } = await supabase
-            .from('CADASTRO_CRECHE')
+            .from('cadastro_creche')
             .update({ senha: newHash })
-            .eq('id', crecheId);
+            .eq('id', userId);
 
         if (updateError) throw updateError;
 
@@ -157,35 +238,37 @@ router.put('/:id/senha', ensureAuthenticated, async (req, res) => {
     }
 });
 
-
+// -------------------------------------------------------------------
 // ROTA 3: ATUALIZAR ENDEREÇO (UPSERT)
-// PUT /api/perfil/:id/endereco
-router.put('/:id/endereco', ensureAuthenticated, async (req, res) => {
-    const crecheId = req.params.id;
-    const { cep, logradouro, numero, complemento, bairro, localidade, uf } = req.body;
+// PUT /meuperfil/endereco
+// -------------------------------------------------------------------
+router.put('/endereco', ensureAuthenticated, async (req, res) => {
+    const userId = req.session.userId;
+    // Mantendo número, complemento e estado no backend, mas relaxando a validação de acordo com o frontend
+    const { cep, logradouro, bairro, localidade } = req.body; 
     
-    if (!cep || !logradouro || !numero || !localidade || !uf) {
-        return res.status(400).json({ error: 'CEP, Logradouro, Número, Cidade e Estado são obrigatórios.' });
+    // CORRIGIDO: Validação relaxada (removendo numero e estado)
+    if (!cep || !logradouro || !bairro || !localidade) {
+        return res.status(400).json({ error: 'CEP, Logradouro, Bairro e Cidade são obrigatórios.' });
     }
     
-    // Limpa o CEP para VARCHAR(8)
     const cepLimpo = cep.replace(/\D/g, '').substring(0, 8); 
 
     try {
         const addressData = {
-            cadastro_id: crecheId, // Chave única para o UPSERT
+            cadastro_id: userId,
             rua: logradouro,
-            numero: numero,
-            complemento: complemento || null,
+            // Valores que podem não vir do frontend
+            numero: req.body.numero || null, 
+            complemento: req.body.complemento || null,
             bairro: bairro,
             cidade: localidade,
-            estado: uf,
+            estado: req.body.uf || 'XX', // Usando 'XX' como placeholder se UF não for fornecido
             cep: cepLimpo
         };
 
-        // Usa o método upsert do Supabase, que resolve o conflito na coluna 'cadastro_id'
         const { data, error } = await supabase
-            .from('ENDERECO_CRECHE')
+            .from('endereco_creche')
             .upsert(addressData, { onConflict: 'cadastro_id' })
             .select();
 
